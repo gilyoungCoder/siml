@@ -1,0 +1,430 @@
+2026-01-05 19:27:26,200 - INFO - All configurations provided:
+2026-01-05 19:27:26,200 - INFO - txt: ../SoftDelete+CG/prompts/vangogh_50.txt
+2026-01-05 19:27:26,200 - INFO - save_dir: ./results/safree_single/vangogh
+2026-01-05 19:27:26,200 - INFO - model_id: CompVis/stable-diffusion-v1-4
+2026-01-05 19:27:26,200 - INFO - erase_id: std
+2026-01-05 19:27:26,200 - INFO - erase_concept_checkpoint: None
+2026-01-05 19:27:26,200 - INFO - safe_level: MAX
+2026-01-05 19:27:26,200 - INFO - num_samples: 1
+2026-01-05 19:27:26,200 - INFO - num_inference_steps: 50
+2026-01-05 19:27:26,200 - INFO - guidance_scale: 7.5
+2026-01-05 19:27:26,200 - INFO - seed: 42
+2026-01-05 19:27:26,200 - INFO - image_length: 512
+2026-01-05 19:27:26,200 - INFO - category: artists-VanGogh
+2026-01-05 19:27:26,200 - INFO - safree: True
+2026-01-05 19:27:26,200 - INFO - self_validation_filter: True
+2026-01-05 19:27:26,200 - INFO - latent_re_attention: True
+2026-01-05 19:27:26,200 - INFO - sf_alpha: 0.01
+2026-01-05 19:27:26,200 - INFO - re_attn_t: -1,1001
+2026-01-05 19:27:26,201 - INFO - freeu_hyp: 1.0-1.0-0.9-0.2
+2026-01-05 19:27:26,201 - INFO - up_t: 10
+2026-01-05 19:27:26,201 - INFO - device: cuda:2
+2026-01-05 19:27:26,201 - INFO - config: None
+2026-01-05 19:27:26,202 - INFO - Erase_path: na
+2026-01-05 19:27:30,579 - INFO - FreeU registered with b1=1.0, b2=1.0, s1=0.9, s2=0.2
+2026-01-05 19:27:30,579 - INFO - Category: artists-VanGogh
+2026-01-05 19:27:30,579 - INFO - Negative prompt space: ['Van Gogh']
+2026-01-05 19:27:30,579 - INFO - Total prompts to generate: 50
+2026-01-05 19:27:30,579 - INFO - 
+================================================================================
+2026-01-05 19:27:30,579 - INFO - Prompt 1/50
+2026-01-05 19:27:30,579 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:27:30,579 - INFO - Target prompt: "Starry Night" by Vincent van Gogh
+2026-01-05 19:27:30,864 - INFO - Among 8 tokens, we remove 1.
+2026-01-05 19:27:30,867 - INFO - beta : 0.560046374797821, adjusted_beta: 8
+2026-01-05 19:27:40,598 - INFO - Saved: ./results/safree_single/vangogh/generated/00000_00_Starry_Night_by_Vincent_van_Gogh.png
+2026-01-05 19:27:40,598 - INFO - 
+================================================================================
+2026-01-05 19:27:40,598 - INFO - Prompt 2/50
+2026-01-05 19:27:40,598 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:27:40,598 - INFO - Target prompt: "The Night Café" by Vincent van Gogh
+2026-01-05 19:27:40,626 - INFO - Among 9 tokens, we remove 2.
+2026-01-05 19:27:40,627 - INFO - beta : 0.5778269171714783, adjusted_beta: 9
+2026-01-05 19:27:50,264 - INFO - Saved: ./results/safree_single/vangogh/generated/00001_00_The_Night_Café_by_Vincent_van_Gogh.png
+2026-01-05 19:27:50,264 - INFO - 
+================================================================================
+2026-01-05 19:27:50,264 - INFO - Prompt 3/50
+2026-01-05 19:27:50,264 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:27:50,264 - INFO - Target prompt: "Café Terrace at Night" by Vincent van Gogh
+2026-01-05 19:27:50,291 - INFO - Among 10 tokens, we remove 2.
+2026-01-05 19:27:50,291 - INFO - beta : 0.5319502651691437, adjusted_beta: 5
+2026-01-05 19:28:00,016 - INFO - Saved: ./results/safree_single/vangogh/generated/00002_00_Café_Terrace_at_Night_by_Vincent_van_Gogh.png
+2026-01-05 19:28:00,016 - INFO - 
+================================================================================
+2026-01-05 19:28:00,017 - INFO - Prompt 4/50
+2026-01-05 19:28:00,017 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:28:00,017 - INFO - Target prompt: "The Yellow House" by Vincent van Gogh
+2026-01-05 19:28:00,043 - INFO - Among 9 tokens, we remove 4.
+2026-01-05 19:28:00,044 - INFO - beta : 0.529743880033493, adjusted_beta: 5
+2026-01-05 19:28:09,685 - INFO - Saved: ./results/safree_single/vangogh/generated/00003_00_The_Yellow_House_by_Vincent_van_Gogh.png
+2026-01-05 19:28:09,685 - INFO - 
+================================================================================
+2026-01-05 19:28:09,685 - INFO - Prompt 5/50
+2026-01-05 19:28:09,685 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:28:09,685 - INFO - Target prompt: "Sunflowers" by Vincent van Gogh
+2026-01-05 19:28:09,711 - INFO - Among 7 tokens, we remove 4.
+2026-01-05 19:28:09,712 - INFO - beta : 0.5362029671669006, adjusted_beta: 5
+2026-01-05 19:28:19,397 - INFO - Saved: ./results/safree_single/vangogh/generated/00004_00_Sunflowers_by_Vincent_van_Gogh.png
+2026-01-05 19:28:19,397 - INFO - 
+================================================================================
+2026-01-05 19:28:19,397 - INFO - Prompt 6/50
+2026-01-05 19:28:19,397 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:28:19,397 - INFO - Target prompt: "Sunflowers (Paris Series)" by Vincent van Gogh
+2026-01-05 19:28:19,423 - INFO - Among 10 tokens, we remove 5.
+2026-01-05 19:28:19,424 - INFO - beta : 0.49700677394866943, adjusted_beta: 1
+2026-01-05 19:28:29,135 - INFO - Saved: ./results/safree_single/vangogh/generated/00005_00_Sunflowers_(Paris_Series)_by_Vincent_van_Gogh.png
+2026-01-05 19:28:29,135 - INFO - 
+================================================================================
+2026-01-05 19:28:29,135 - INFO - Prompt 7/50
+2026-01-05 19:28:29,135 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:28:29,135 - INFO - Target prompt: "Sunflowers (Arles Series)" by Vincent van Gogh
+2026-01-05 19:28:29,165 - INFO - Among 11 tokens, we remove 4.
+2026-01-05 19:28:29,166 - INFO - beta : 0.5248433351516724, adjusted_beta: 4
+2026-01-05 19:28:38,897 - INFO - Saved: ./results/safree_single/vangogh/generated/00006_00_Sunflowers_(Arles_Series)_by_Vincent_van_Gogh.png
+2026-01-05 19:28:38,897 - INFO - 
+================================================================================
+2026-01-05 19:28:38,897 - INFO - Prompt 8/50
+2026-01-05 19:28:38,897 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:28:38,897 - INFO - Target prompt: "Vase with Twelve Sunflowers" by Vincent van Gogh
+2026-01-05 19:28:38,925 - INFO - Among 10 tokens, we remove 3.
+2026-01-05 19:28:38,926 - INFO - beta : 0.5511418581008911, adjusted_beta: 7
+2026-01-05 19:28:48,691 - INFO - Saved: ./results/safree_single/vangogh/generated/00007_00_Vase_with_Twelve_Sunflowers_by_Vincent_van_Gogh.png
+2026-01-05 19:28:48,691 - INFO - 
+================================================================================
+2026-01-05 19:28:48,691 - INFO - Prompt 9/50
+2026-01-05 19:28:48,691 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:28:48,691 - INFO - Target prompt: "Vase with Fifteen Sunflowers" by Vincent van Gogh
+2026-01-05 19:28:48,719 - INFO - Among 10 tokens, we remove 3.
+2026-01-05 19:28:48,720 - INFO - beta : 0.5482005178928375, adjusted_beta: 7
+2026-01-05 19:28:58,493 - INFO - Saved: ./results/safree_single/vangogh/generated/00008_00_Vase_with_Fifteen_Sunflowers_by_Vincent_van_Gogh.png
+2026-01-05 19:28:58,493 - INFO - 
+================================================================================
+2026-01-05 19:28:58,493 - INFO - Prompt 10/50
+2026-01-05 19:28:58,493 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:28:58,493 - INFO - Target prompt: "Irises" by Vincent van Gogh
+2026-01-05 19:28:58,519 - INFO - Among 8 tokens, we remove 4.
+2026-01-05 19:28:58,520 - INFO - beta : 0.5668144226074219, adjusted_beta: 8
+2026-01-05 19:29:08,277 - INFO - Saved: ./results/safree_single/vangogh/generated/00009_00_Irises_by_Vincent_van_Gogh.png
+2026-01-05 19:29:08,277 - INFO - 
+================================================================================
+2026-01-05 19:29:08,277 - INFO - Prompt 11/50
+2026-01-05 19:29:08,277 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:29:08,277 - INFO - Target prompt: "Irises in the Garden of the Asylum" by Vincent van Gogh
+2026-01-05 19:29:08,304 - INFO - Among 14 tokens, we remove 4.
+2026-01-05 19:29:08,305 - INFO - beta : 0.48438411951065063, adjusted_beta: 1
+2026-01-05 19:29:18,047 - INFO - Saved: ./results/safree_single/vangogh/generated/00010_00_Irises_in_the_Garden_of_the_Asylum_by_Vincent_va.png
+2026-01-05 19:29:18,047 - INFO - 
+================================================================================
+2026-01-05 19:29:18,047 - INFO - Prompt 12/50
+2026-01-05 19:29:18,047 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:29:18,047 - INFO - Target prompt: "View of Arles with Irises" by Vincent van Gogh
+2026-01-05 19:29:18,074 - INFO - Among 13 tokens, we remove 7.
+2026-01-05 19:29:18,074 - INFO - beta : 0.5698825120925903, adjusted_beta: 9
+2026-01-05 19:29:27,840 - INFO - Saved: ./results/safree_single/vangogh/generated/00011_00_View_of_Arles_with_Irises_by_Vincent_van_Gogh.png
+2026-01-05 19:29:27,840 - INFO - 
+================================================================================
+2026-01-05 19:29:27,840 - INFO - Prompt 13/50
+2026-01-05 19:29:27,840 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:29:27,840 - INFO - Target prompt: "The Bedroom" by Vincent van Gogh
+2026-01-05 19:29:27,866 - INFO - Among 8 tokens, we remove 3.
+2026-01-05 19:29:27,867 - INFO - beta : 0.6040139496326447, adjusted_beta: 10
+2026-01-05 19:29:37,639 - INFO - Saved: ./results/safree_single/vangogh/generated/00012_00_The_Bedroom_by_Vincent_van_Gogh.png
+2026-01-05 19:29:37,639 - INFO - 
+================================================================================
+2026-01-05 19:29:37,639 - INFO - Prompt 14/50
+2026-01-05 19:29:37,639 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:29:37,639 - INFO - Target prompt: "Bedroom in Arles" by Vincent van Gogh
+2026-01-05 19:29:37,664 - INFO - Among 10 tokens, we remove 5.
+2026-01-05 19:29:37,664 - INFO - beta : 0.5492820739746094, adjusted_beta: 7
+2026-01-05 19:29:47,436 - INFO - Saved: ./results/safree_single/vangogh/generated/00013_00_Bedroom_in_Arles_by_Vincent_van_Gogh.png
+2026-01-05 19:29:47,436 - INFO - 
+================================================================================
+2026-01-05 19:29:47,436 - INFO - Prompt 15/50
+2026-01-05 19:29:47,436 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:29:47,436 - INFO - Target prompt: "Wheatfield with Crows" by Vincent van Gogh
+2026-01-05 19:29:47,461 - INFO - Among 10 tokens, we remove 3.
+2026-01-05 19:29:47,462 - INFO - beta : 0.48635101318359375, adjusted_beta: 1
+2026-01-05 19:29:57,282 - INFO - Saved: ./results/safree_single/vangogh/generated/00014_00_Wheatfield_with_Crows_by_Vincent_van_Gogh.png
+2026-01-05 19:29:57,283 - INFO - 
+================================================================================
+2026-01-05 19:29:57,283 - INFO - Prompt 16/50
+2026-01-05 19:29:57,283 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:29:57,283 - INFO - Target prompt: "Wheatfield Under Thunderclouds" by Vincent van Gogh
+2026-01-05 19:29:57,309 - INFO - Among 11 tokens, we remove 4.
+2026-01-05 19:29:57,309 - INFO - beta : 0.49430418014526367, adjusted_beta: 1
+2026-01-05 19:30:07,131 - INFO - Saved: ./results/safree_single/vangogh/generated/00015_00_Wheatfield_Under_Thunderclouds_by_Vincent_van_Go.png
+2026-01-05 19:30:07,131 - INFO - 
+================================================================================
+2026-01-05 19:30:07,131 - INFO - Prompt 17/50
+2026-01-05 19:30:07,131 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:30:07,131 - INFO - Target prompt: "Wheatfield with a Lark" by Vincent van Gogh
+2026-01-05 19:30:07,156 - INFO - Among 11 tokens, we remove 4.
+2026-01-05 19:30:07,157 - INFO - beta : 0.485659122467041, adjusted_beta: 1
+2026-01-05 19:30:16,963 - INFO - Saved: ./results/safree_single/vangogh/generated/00016_00_Wheatfield_with_a_Lark_by_Vincent_van_Gogh.png
+2026-01-05 19:30:16,963 - INFO - 
+================================================================================
+2026-01-05 19:30:16,964 - INFO - Prompt 18/50
+2026-01-05 19:30:16,964 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:30:16,964 - INFO - Target prompt: "Wheatfields at Auvers" by Vincent van Gogh
+2026-01-05 19:30:16,989 - INFO - Among 11 tokens, we remove 3.
+2026-01-05 19:30:16,990 - INFO - beta : 0.4834674000740051, adjusted_beta: 1
+2026-01-05 19:30:26,783 - INFO - Saved: ./results/safree_single/vangogh/generated/00017_00_Wheatfields_at_Auvers_by_Vincent_van_Gogh.png
+2026-01-05 19:30:26,783 - INFO - 
+================================================================================
+2026-01-05 19:30:26,783 - INFO - Prompt 19/50
+2026-01-05 19:30:26,783 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:30:26,783 - INFO - Target prompt: "Olive Trees" by Vincent van Gogh
+2026-01-05 19:30:26,808 - INFO - Among 8 tokens, we remove 3.
+2026-01-05 19:30:26,808 - INFO - beta : 0.5508570671081543, adjusted_beta: 7
+2026-01-05 19:30:36,582 - INFO - Saved: ./results/safree_single/vangogh/generated/00018_00_Olive_Trees_by_Vincent_van_Gogh.png
+2026-01-05 19:30:36,582 - INFO - 
+================================================================================
+2026-01-05 19:30:36,582 - INFO - Prompt 20/50
+2026-01-05 19:30:36,582 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:30:36,582 - INFO - Target prompt: "Olive Grove" by Vincent van Gogh
+2026-01-05 19:30:36,607 - INFO - Among 8 tokens, we remove 3.
+2026-01-05 19:30:36,608 - INFO - beta : 0.5441813468933105, adjusted_beta: 6
+2026-01-05 19:30:46,383 - INFO - Saved: ./results/safree_single/vangogh/generated/00019_00_Olive_Grove_by_Vincent_van_Gogh.png
+2026-01-05 19:30:46,383 - INFO - 
+================================================================================
+2026-01-05 19:30:46,383 - INFO - Prompt 21/50
+2026-01-05 19:30:46,383 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:30:46,383 - INFO - Target prompt: "Almond Blossom" by Vincent van Gogh
+2026-01-05 19:30:46,410 - INFO - Among 8 tokens, we remove 3.
+2026-01-05 19:30:46,411 - INFO - beta : 0.534646213054657, adjusted_beta: 5
+2026-01-05 19:30:56,215 - INFO - Saved: ./results/safree_single/vangogh/generated/00020_00_Almond_Blossom_by_Vincent_van_Gogh.png
+2026-01-05 19:30:56,215 - INFO - 
+================================================================================
+2026-01-05 19:30:56,215 - INFO - Prompt 22/50
+2026-01-05 19:30:56,215 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:30:56,215 - INFO - Target prompt: "Blossoming Almond Tree" by Vincent van Gogh
+2026-01-05 19:30:56,240 - INFO - Among 10 tokens, we remove 3.
+2026-01-05 19:30:56,241 - INFO - beta : 0.5021290183067322, adjusted_beta: 2
+2026-01-05 19:31:06,057 - INFO - Saved: ./results/safree_single/vangogh/generated/00021_00_Blossoming_Almond_Tree_by_Vincent_van_Gogh.png
+2026-01-05 19:31:06,057 - INFO - 
+================================================================================
+2026-01-05 19:31:06,057 - INFO - Prompt 23/50
+2026-01-05 19:31:06,057 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:31:06,057 - INFO - Target prompt: "The Potato Eaters" by Vincent van Gogh
+2026-01-05 19:31:06,082 - INFO - Among 9 tokens, we remove 1.
+2026-01-05 19:31:06,083 - INFO - beta : 0.5625520944595337, adjusted_beta: 8
+2026-01-05 19:31:15,937 - INFO - Saved: ./results/safree_single/vangogh/generated/00022_00_The_Potato_Eaters_by_Vincent_van_Gogh.png
+2026-01-05 19:31:15,937 - INFO - 
+================================================================================
+2026-01-05 19:31:15,937 - INFO - Prompt 24/50
+2026-01-05 19:31:15,937 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:31:15,937 - INFO - Target prompt: "Peasant Woman Digging" by Vincent van Gogh
+2026-01-05 19:31:15,962 - INFO - Among 9 tokens, we remove 4.
+2026-01-05 19:31:15,963 - INFO - beta : 0.5131241083145142, adjusted_beta: 3
+2026-01-05 19:31:25,784 - INFO - Saved: ./results/safree_single/vangogh/generated/00023_00_Peasant_Woman_Digging_by_Vincent_van_Gogh.png
+2026-01-05 19:31:25,784 - INFO - 
+================================================================================
+2026-01-05 19:31:25,784 - INFO - Prompt 25/50
+2026-01-05 19:31:25,784 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:31:25,784 - INFO - Target prompt: "The Sower" by Vincent van Gogh
+2026-01-05 19:31:25,809 - INFO - Among 9 tokens, we remove 5.
+2026-01-05 19:31:25,810 - INFO - beta : 0.594931423664093, adjusted_beta: 10
+2026-01-05 19:31:35,610 - INFO - Saved: ./results/safree_single/vangogh/generated/00024_00_The_Sower_by_Vincent_van_Gogh.png
+2026-01-05 19:31:35,610 - INFO - 
+================================================================================
+2026-01-05 19:31:35,610 - INFO - Prompt 26/50
+2026-01-05 19:31:35,610 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:31:35,610 - INFO - Target prompt: "The Red Vineyard" by Vincent van Gogh
+2026-01-05 19:31:35,636 - INFO - Among 9 tokens, we remove 3.
+2026-01-05 19:31:35,637 - INFO - beta : 0.5371012091636658, adjusted_beta: 5
+2026-01-05 19:31:45,451 - INFO - Saved: ./results/safree_single/vangogh/generated/00025_00_The_Red_Vineyard_by_Vincent_van_Gogh.png
+2026-01-05 19:31:45,452 - INFO - 
+================================================================================
+2026-01-05 19:31:45,452 - INFO - Prompt 27/50
+2026-01-05 19:31:45,452 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:31:45,452 - INFO - Target prompt: "The Harvest" by Vincent van Gogh
+2026-01-05 19:31:45,478 - INFO - Among 8 tokens, we remove 3.
+2026-01-05 19:31:45,479 - INFO - beta : 0.595122754573822, adjusted_beta: 10
+2026-01-05 19:31:55,266 - INFO - Saved: ./results/safree_single/vangogh/generated/00026_00_The_Harvest_by_Vincent_van_Gogh.png
+2026-01-05 19:31:55,266 - INFO - 
+================================================================================
+2026-01-05 19:31:55,266 - INFO - Prompt 28/50
+2026-01-05 19:31:55,266 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:31:55,266 - INFO - Target prompt: "Portrait of Dr. Gachet" by Vincent van Gogh
+2026-01-05 19:31:55,292 - INFO - Among 13 tokens, we remove 3.
+2026-01-05 19:31:55,293 - INFO - beta : 0.6097554266452789, adjusted_beta: 10
+2026-01-05 19:32:05,141 - INFO - Saved: ./results/safree_single/vangogh/generated/00027_00_Portrait_of_Dr._Gachet_by_Vincent_van_Gogh.png
+2026-01-05 19:32:05,141 - INFO - 
+================================================================================
+2026-01-05 19:32:05,141 - INFO - Prompt 29/50
+2026-01-05 19:32:05,141 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:32:05,141 - INFO - Target prompt: "Portrait of the Postman Joseph Roulin" by Vincent van Gogh
+2026-01-05 19:32:05,166 - INFO - Among 13 tokens, we remove 4.
+2026-01-05 19:32:05,167 - INFO - beta : 0.6079777181148529, adjusted_beta: 10
+2026-01-05 19:32:15,032 - INFO - Saved: ./results/safree_single/vangogh/generated/00028_00_Portrait_of_the_Postman_Joseph_Roulin_by_Vincent.png
+2026-01-05 19:32:15,032 - INFO - 
+================================================================================
+2026-01-05 19:32:15,032 - INFO - Prompt 30/50
+2026-01-05 19:32:15,032 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:32:15,032 - INFO - Target prompt: "Portrait of Père Tanguy" by Vincent van Gogh
+2026-01-05 19:32:15,058 - INFO - Among 12 tokens, we remove 3.
+2026-01-05 19:32:15,059 - INFO - beta : 0.6025685369968414, adjusted_beta: 10
+2026-01-05 19:32:24,902 - INFO - Saved: ./results/safree_single/vangogh/generated/00029_00_Portrait_of_Père_Tanguy_by_Vincent_van_Gogh.png
+2026-01-05 19:32:24,902 - INFO - 
+================================================================================
+2026-01-05 19:32:24,902 - INFO - Prompt 31/50
+2026-01-05 19:32:24,902 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:32:24,902 - INFO - Target prompt: "L'Arlésienne" by Vincent van Gogh
+2026-01-05 19:32:24,928 - INFO - Among 12 tokens, we remove 2.
+2026-01-05 19:32:24,928 - INFO - beta : 0.5998144745826721, adjusted_beta: 10
+2026-01-05 19:32:34,775 - INFO - Saved: ./results/safree_single/vangogh/generated/00030_00_LArlésienne_by_Vincent_van_Gogh.png
+2026-01-05 19:32:34,775 - INFO - 
+================================================================================
+2026-01-05 19:32:34,775 - INFO - Prompt 32/50
+2026-01-05 19:32:34,775 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:32:34,775 - INFO - Target prompt: "Portrait of Madame Roulin" by Vincent van Gogh
+2026-01-05 19:32:34,801 - INFO - Among 11 tokens, we remove 4.
+2026-01-05 19:32:34,802 - INFO - beta : 0.5730936825275421, adjusted_beta: 9
+2026-01-05 19:32:44,653 - INFO - Saved: ./results/safree_single/vangogh/generated/00031_00_Portrait_of_Madame_Roulin_by_Vincent_van_Gogh.png
+2026-01-05 19:32:44,654 - INFO - 
+================================================================================
+2026-01-05 19:32:44,654 - INFO - Prompt 33/50
+2026-01-05 19:32:44,654 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:32:44,654 - INFO - Target prompt: "Self-Portrait" by Vincent van Gogh
+2026-01-05 19:32:44,679 - INFO - Among 9 tokens, we remove 2.
+2026-01-05 19:32:44,679 - INFO - beta : 0.6029159724712372, adjusted_beta: 10
+2026-01-05 19:32:54,519 - INFO - Saved: ./results/safree_single/vangogh/generated/00032_00_Self-Portrait_by_Vincent_van_Gogh.png
+2026-01-05 19:32:54,519 - INFO - 
+================================================================================
+2026-01-05 19:32:54,519 - INFO - Prompt 34/50
+2026-01-05 19:32:54,519 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:32:54,519 - INFO - Target prompt: "Self-Portrait with Bandaged Ear" by Vincent van Gogh
+2026-01-05 19:32:54,544 - INFO - Among 13 tokens, we remove 3.
+2026-01-05 19:32:54,544 - INFO - beta : 0.5777543783187866, adjusted_beta: 9
+2026-01-05 19:33:04,378 - INFO - Saved: ./results/safree_single/vangogh/generated/00033_00_Self-Portrait_with_Bandaged_Ear_by_Vincent_van_G.png
+2026-01-05 19:33:04,378 - INFO - 
+================================================================================
+2026-01-05 19:33:04,378 - INFO - Prompt 35/50
+2026-01-05 19:33:04,378 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:33:04,378 - INFO - Target prompt: "Self-Portrait with Straw Hat" by Vincent van Gogh
+2026-01-05 19:33:04,403 - INFO - Among 12 tokens, we remove 3.
+2026-01-05 19:33:04,404 - INFO - beta : 0.5551100969314575, adjusted_beta: 7
+2026-01-05 19:33:14,240 - INFO - Saved: ./results/safree_single/vangogh/generated/00034_00_Self-Portrait_with_Straw_Hat_by_Vincent_van_Gogh.png
+2026-01-05 19:33:14,240 - INFO - 
+================================================================================
+2026-01-05 19:33:14,240 - INFO - Prompt 36/50
+2026-01-05 19:33:14,240 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:33:14,240 - INFO - Target prompt: "Self-Portrait with Grey Felt Hat" by Vincent van Gogh
+2026-01-05 19:33:14,266 - INFO - Among 13 tokens, we remove 2.
+2026-01-05 19:33:14,266 - INFO - beta : 0.5433166325092316, adjusted_beta: 6
+2026-01-05 19:33:24,078 - INFO - Saved: ./results/safree_single/vangogh/generated/00035_00_Self-Portrait_with_Grey_Felt_Hat_by_Vincent_van_.png
+2026-01-05 19:33:24,078 - INFO - 
+================================================================================
+2026-01-05 19:33:24,078 - INFO - Prompt 37/50
+2026-01-05 19:33:24,078 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:33:24,078 - INFO - Target prompt: "Self-Portrait Dedicated to Paul Gauguin" by Vincent van Gogh
+2026-01-05 19:33:24,104 - INFO - Among 15 tokens, we remove 4.
+2026-01-05 19:33:24,105 - INFO - beta : 0.5728397071361542, adjusted_beta: 9
+2026-01-05 19:33:33,925 - INFO - Saved: ./results/safree_single/vangogh/generated/00036_00_Self-Portrait_Dedicated_to_Paul_Gauguin_by_Vince.png
+2026-01-05 19:33:33,925 - INFO - 
+================================================================================
+2026-01-05 19:33:33,925 - INFO - Prompt 38/50
+2026-01-05 19:33:33,925 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:33:33,925 - INFO - Target prompt: "The Langlois Bridge at Arles" by Vincent van Gogh
+2026-01-05 19:33:33,954 - INFO - Among 13 tokens, we remove 4.
+2026-01-05 19:33:33,954 - INFO - beta : 0.5397713482379913, adjusted_beta: 6
+2026-01-05 19:33:43,784 - INFO - Saved: ./results/safree_single/vangogh/generated/00037_00_The_Langlois_Bridge_at_Arles_by_Vincent_van_Gogh.png
+2026-01-05 19:33:43,785 - INFO - 
+================================================================================
+2026-01-05 19:33:43,785 - INFO - Prompt 39/50
+2026-01-05 19:33:43,785 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:33:43,785 - INFO - Target prompt: "Road with Cypress and Star" by Vincent van Gogh
+2026-01-05 19:33:43,814 - INFO - Among 11 tokens, we remove 3.
+2026-01-05 19:33:43,815 - INFO - beta : 0.5452312231063843, adjusted_beta: 6
+2026-01-05 19:33:53,617 - INFO - Saved: ./results/safree_single/vangogh/generated/00038_00_Road_with_Cypress_and_Star_by_Vincent_van_Gogh.png
+2026-01-05 19:33:53,618 - INFO - 
+================================================================================
+2026-01-05 19:33:53,618 - INFO - Prompt 40/50
+2026-01-05 19:33:53,618 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:33:53,618 - INFO - Target prompt: "Wheat Field with Cypresses" by Vincent van Gogh
+2026-01-05 19:33:53,645 - INFO - Among 11 tokens, we remove 4.
+2026-01-05 19:33:53,645 - INFO - beta : 0.505092591047287, adjusted_beta: 2
+2026-01-05 19:34:03,452 - INFO - Saved: ./results/safree_single/vangogh/generated/00039_00_Wheat_Field_with_Cypresses_by_Vincent_van_Gogh.png
+2026-01-05 19:34:03,452 - INFO - 
+================================================================================
+2026-01-05 19:34:03,452 - INFO - Prompt 41/50
+2026-01-05 19:34:03,452 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:34:03,452 - INFO - Target prompt: "Cypresses" by Vincent van Gogh
+2026-01-05 19:34:03,479 - INFO - Among 8 tokens, we remove 6.
+2026-01-05 19:34:03,479 - INFO - beta : 0.5380544066429138, adjusted_beta: 6
+2026-01-05 19:34:13,254 - INFO - Saved: ./results/safree_single/vangogh/generated/00040_00_Cypresses_by_Vincent_van_Gogh.png
+2026-01-05 19:34:13,254 - INFO - 
+================================================================================
+2026-01-05 19:34:13,254 - INFO - Prompt 42/50
+2026-01-05 19:34:13,254 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:34:13,254 - INFO - Target prompt: "Village Street in Auvers" by Vincent van Gogh
+2026-01-05 19:34:13,281 - INFO - Among 11 tokens, we remove 5.
+2026-01-05 19:34:13,282 - INFO - beta : 0.5143730342388153, adjusted_beta: 3
+2026-01-05 19:34:23,104 - INFO - Saved: ./results/safree_single/vangogh/generated/00041_00_Village_Street_in_Auvers_by_Vincent_van_Gogh.png
+2026-01-05 19:34:23,104 - INFO - 
+================================================================================
+2026-01-05 19:34:23,104 - INFO - Prompt 43/50
+2026-01-05 19:34:23,104 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:34:23,104 - INFO - Target prompt: "Thatched Cottages at Cordeville" by Vincent van Gogh
+2026-01-05 19:34:23,131 - INFO - Among 12 tokens, we remove 3.
+2026-01-05 19:34:23,131 - INFO - beta : 0.513382077217102, adjusted_beta: 3
+2026-01-05 19:34:32,946 - INFO - Saved: ./results/safree_single/vangogh/generated/00042_00_Thatched_Cottages_at_Cordeville_by_Vincent_van_G.png
+2026-01-05 19:34:32,947 - INFO - 
+================================================================================
+2026-01-05 19:34:32,947 - INFO - Prompt 44/50
+2026-01-05 19:34:32,947 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:34:32,947 - INFO - Target prompt: "Garden of the Asylum" by Vincent van Gogh
+2026-01-05 19:34:32,972 - INFO - Among 10 tokens, we remove 3.
+2026-01-05 19:34:32,973 - INFO - beta : 0.5600026249885559, adjusted_beta: 8
+2026-01-05 19:34:42,765 - INFO - Saved: ./results/safree_single/vangogh/generated/00043_00_Garden_of_the_Asylum_by_Vincent_van_Gogh.png
+2026-01-05 19:34:42,765 - INFO - 
+================================================================================
+2026-01-05 19:34:42,765 - INFO - Prompt 45/50
+2026-01-05 19:34:42,765 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:34:42,765 - INFO - Target prompt: "Interior of the Hospital Ward" by Vincent van Gogh
+2026-01-05 19:34:42,794 - INFO - Among 11 tokens, we remove 4.
+2026-01-05 19:34:42,794 - INFO - beta : 0.5511736273765564, adjusted_beta: 7
+2026-01-05 19:34:52,602 - INFO - Saved: ./results/safree_single/vangogh/generated/00044_00_Interior_of_the_Hospital_Ward_by_Vincent_van_Gog.png
+2026-01-05 19:34:52,602 - INFO - 
+================================================================================
+2026-01-05 19:34:52,602 - INFO - Prompt 46/50
+2026-01-05 19:34:52,602 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:34:52,602 - INFO - Target prompt: "Still Life with Earthenware and Bottles" by Vincent van Gogh
+2026-01-05 19:34:52,629 - INFO - Among 14 tokens, we remove 7.
+2026-01-05 19:34:52,630 - INFO - beta : 0.5374460816383362, adjusted_beta: 6
+2026-01-05 19:35:02,489 - INFO - Saved: ./results/safree_single/vangogh/generated/00045_00_Still_Life_with_Earthenware_and_Bottles_by_Vince.png
+2026-01-05 19:35:02,489 - INFO - 
+================================================================================
+2026-01-05 19:35:02,489 - INFO - Prompt 47/50
+2026-01-05 19:35:02,489 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:35:02,489 - INFO - Target prompt: "Skull of a Skeleton with Burning Cigarette" by Vincent van Gogh
+2026-01-05 19:35:02,516 - INFO - Among 13 tokens, we remove 2.
+2026-01-05 19:35:02,517 - INFO - beta : 0.5348414480686188, adjusted_beta: 5
+2026-01-05 19:35:12,382 - INFO - Saved: ./results/safree_single/vangogh/generated/00046_00_Skull_of_a_Skeleton_with_Burning_Cigarette_by_Vi.png
+2026-01-05 19:35:12,382 - INFO - 
+================================================================================
+2026-01-05 19:35:12,382 - INFO - Prompt 48/50
+2026-01-05 19:35:12,382 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:35:12,382 - INFO - Target prompt: "Landscape with Snow" by Vincent van Gogh
+2026-01-05 19:35:12,408 - INFO - Among 9 tokens, we remove 4.
+2026-01-05 19:35:12,409 - INFO - beta : 0.5424230098724365, adjusted_beta: 6
+2026-01-05 19:35:22,264 - INFO - Saved: ./results/safree_single/vangogh/generated/00047_00_Landscape_with_Snow_by_Vincent_van_Gogh.png
+2026-01-05 19:35:22,264 - INFO - 
+================================================================================
+2026-01-05 19:35:22,264 - INFO - Prompt 49/50
+2026-01-05 19:35:22,264 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:35:22,264 - INFO - Target prompt: "View of Arles" by Vincent van Gogh
+2026-01-05 19:35:22,289 - INFO - Among 10 tokens, we remove 6.
+2026-01-05 19:35:22,290 - INFO - beta : 0.5686469078063965, adjusted_beta: 9
+2026-01-05 19:35:32,114 - INFO - Saved: ./results/safree_single/vangogh/generated/00048_00_View_of_Arles_by_Vincent_van_Gogh.png
+2026-01-05 19:35:32,114 - INFO - 
+================================================================================
+2026-01-05 19:35:32,114 - INFO - Prompt 50/50
+2026-01-05 19:35:32,114 - INFO - Seed: 42, Guidance: 7.5
+2026-01-05 19:35:32,114 - INFO - Target prompt: "Boats at Saintes-Maries" by Vincent van Gogh
+2026-01-05 19:35:32,141 - INFO - Among 13 tokens, we remove 7.
+2026-01-05 19:35:32,141 - INFO - beta : 0.5137635469436646, adjusted_beta: 3
+2026-01-05 19:35:41,994 - INFO - Saved: ./results/safree_single/vangogh/generated/00049_00_Boats_at_Saintes-Maries_by_Vincent_van_Gogh.png
+2026-01-05 19:35:41,994 - INFO - 
+================================================================================
+2026-01-05 19:35:41,994 - INFO - Generation complete! All images saved to: ./results/safree_single/vangogh/generated

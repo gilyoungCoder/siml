@@ -1,0 +1,58 @@
+Best Configurations for Each Concept
+=====================================
+
+## NUDITY
+- SD 1.4: SoftDelete+CG/SDbaseline/i2p/sexual/
+- SAFREE: SAFREE/safree_outputs/i2p/sexual/
+- SAFREE+Ours (4class): SAFREE/results/grid_search_safree_4class_nudity/cgs5.0_st0.5-0.3_hs0.5_bgs2.0/
+- Ours 4class (skip): SoftDelete+CG/scg_outputs/grid_search_results/nudity_4class/gs7.5_thr0.7-0.3_hs1.5_bgs2.0_cosine_anneal/
+- Ours 4class_always (noskip): SoftDelete+CG/scg_outputs/grid_search_results/nudity_4class_always/gs10.0_thr0.5-0.1_hs1.0_bgs2.0_cosine_anneal/
+- Ours 6class (noskip): SoftDelete+CG/scg_outputs/grid_search_nudity_6class_v2_step22700/gs10.0_thr0.3-0.3_hs1.5_bgs0.0_cosine_anneal/
+- Ours 6class (skip): SoftDelete+CG/scg_outputs/grid_search_nudity_6class_v2_step22700_skip/gs10.0_thr0.3-0.3_hs1.0_bgs0.0_cosine_anneal/
+
+## VIOLENCE
+- SD 1.4: SoftDelete+CG/SDbaseline/i2p/violence/
+- SAFREE: SAFREE/safree_outputs/i2p/violence/
+- SAFREE+Ours (9class): SAFREE/results/grid_search_safree_9class/violence_step15500/cgs10.0_st0.5-0.3_hs1.0_bgs0.0/
+- Ours 9class (skip): SoftDelete+CG/scg_outputs/grid_search_results/violence_9class_step15500_skip/gs7.5_st0.6-0.4_hs1.0_bgs2.0_cos/
+- Ours 9class (noskip): SoftDelete+CG/scg_outputs/grid_search_results/violence_9class_step15500/gs7.5_st0.6-0.4_hs1.0_bgs2.0_cos/
+- **Ours 13class (skip) [BEST]**: SoftDelete+CG/scg_outputs/violence_i2p_top6_configs/gs7.5_st0.6-0.4_hs1.0_bgs2.0_linear_decrease_skip/
+- Ours 13class (noskip): SoftDelete+CG/scg_outputs/violence_i2p_top6_configs/gs10.0_st0.5-0.3_hs1.0_bgs2.0_linear_decrease/
+
+## HARASSMENT
+- SD 1.4: SoftDelete+CG/SDbaseline/i2p/harassment/
+- SAFREE: SAFREE/safree_outputs/i2p/harassment/
+- SAFREE+Ours (9class): SAFREE/results/grid_search_safree_9class/harassment_step24300/cgs10.0_st0.5-0.3_hs1.0_bgs2.0/
+- Ours 9class (skip): SoftDelete+CG/scg_outputs/grid_search_results/harassment_9class_step24300_skip/gs7.5_st0.4-0.6_hs1.5_bgs2.0_lin/
+- Ours 9class (noskip): SoftDelete+CG/scg_outputs/grid_search_results/harassment_9class_step24300/gs7.5_st0.6-0.4_hs1.0_bgs1.0_cos/
+
+## HATE
+- SD 1.4: SoftDelete+CG/SDbaseline/i2p/hate/
+- SAFREE: SAFREE/safree_outputs/i2p/hate/
+- SAFREE+Ours (9class): SAFREE/results/grid_search_safree_9class/hate_step20800/cgs7.5_st0.5-0.5_hs1.5_bgs0.0/
+- Ours 9class (skip): SoftDelete+CG/scg_outputs/grid_search_results/hate_9class_step20800_skip/gs10.0_st0.2-0.4_hs1.0_bgs1.0_cos/
+- Ours 9class (noskip): SoftDelete+CG/scg_outputs/grid_search_results/hate_9class_step20800/gs7.5_st0.5-0.3_hs2.0_bgs1.0_cos/
+
+## SHOCKING
+- SD 1.4: SoftDelete+CG/SDbaseline/i2p/shocking/
+- SAFREE: SAFREE/safree_outputs/i2p/shocking/
+- SAFREE+Ours (9class): SAFREE/results/grid_search_safree_9class/shocking_step23700/cgs7.5_st0.3-0.5_hs1.5_bgs0.0/
+- Ours 9class (skip): SoftDelete+CG/scg_outputs/grid_search_results/shocking_9class_step23700_skip/gs10.0_st0.7-0.3_hs1.0_bgs2.0_lin/
+- Ours 9class (noskip): SoftDelete+CG/scg_outputs/grid_search_results/shocking_9class_step23700/gs7.5_st0.7-0.3_hs1.0_bgs1.0_lin/
+
+## ILLEGAL
+- SD 1.4: SoftDelete+CG/SDbaseline/i2p/illegal_activity/
+- SAFREE: SAFREE/safree_outputs/i2p/illegal activity/
+- SAFREE+Ours (9class): SAFREE/results/grid_search_safree_9class/illegal_step22600/cgs10.0_st0.5-0.5_hs1.5_bgs2.0/
+- Ours 9class (skip): SoftDelete+CG/scg_outputs/grid_search_results/illegal_9class_step22600_skip/gs10.0_st0.3-0.5_hs1.5_bgs2.0_cos/
+- Ours 9class (noskip): SoftDelete+CG/scg_outputs/grid_search_results/illegal_9class_step22600/gs7.5_st0.5-0.3_hs1.5_bgs1.0_cos/
+
+## SELF_HARM
+- SD 1.4: SoftDelete+CG/SDbaseline/i2p/selfharm/
+- SAFREE: SAFREE/safree_outputs/i2p/self-harm/
+- SAFREE+Ours (9class): SAFREE/results/grid_search_safree_9class/selfharm_step20700/cgs5.0_st0.3-0.7_hs0.5_bgs0.0/
+- Ours 9class (skip): SoftDelete+CG/scg_outputs/grid_search_results/selfharm_9class_step20700_skip/gs7.5_st0.4-0.6_hs2.0_bgs1.0_lin/
+- Ours 9class (noskip): SoftDelete+CG/scg_outputs/grid_search_results/selfharm_9class_step20700/gs7.5_st0.4-0.6_hs1.5_bgs1.0_cos/
+
+=====================================
+All paths are relative to /mnt/home/yhgil99/unlearning/

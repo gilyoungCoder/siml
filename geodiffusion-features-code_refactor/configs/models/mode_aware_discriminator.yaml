@@ -1,0 +1,75 @@
+# Mode-Aware Discriminator Configuration
+#
+# 핵심 아이디어:
+# Violence는 latent space에서 multi-modal (총기/칼/몸싸움 등)이므로,
+# clustering으로 mode를 분해하고 mode별로 다른 guidance policy 적용
+#
+# 사용법:
+# 1. 먼저 cluster_violence_latents.py 스크립트로 centroids 생성
+# 2. centroids_path에 저장된 경로 지정
+# 3. 각 cluster별로 schedules에서 scale/start_step 등 설정
+
+model_type: mode_aware_discriminator
+
+model_args:
+  # Base discriminator config (same as discriminator.yaml)
+  image_size: 64
+  classifier_use_fp16: False
+  classifier_width: 128
+  classifier_depth: 2
+  classifier_attention_resolutions: "32,16,8"
+  classifier_use_scale_shift_norm: True
+  classifier_resblock_updown: True
+  classifier_pool: "attention"
+  out_channels: 1
+  in_channels: 4
+
+  # Mode-aware specific config
+  mode_aware:
+    # Number of clusters (violence modes)
+    n_clusters: 10
+
+    # Path to pre-computed cluster centroids
+    # Run cluster_violence_latents.py first to generate this file
+    centroids_path: null  # e.g., "cluster_centroids/violence_clusters.pt"
+
+    # Pooling method for latent features
+    # Options: "mean" (global average), "flatten" (all spatial), "attention" (attention-weighted)
+    pooling: "mean"
+
+    # Default schedule for modes without explicit config
+    default_scale: 1.0
+    default_start_step: 0
+    default_end_step: null
+
+    # Per-mode schedules (override defaults)
+    # Key: cluster_id (0 to n_clusters-1)
+    # After running clustering, you can analyze each cluster and tune these
+    schedules:
+      # Example configurations (adjust after analyzing your clusters):
+      #
+      # Cluster 0: Assume this captures "gun violence" patterns
+      # - Strong early guidance, decay over time
+      # 0:
+      #   scale: 2.0
+      #   start_step: 5
+      #   end_step: 40
+      #   scale_decay: 0.98
+      #
+      # Cluster 1: Assume this captures "knife threats"
+      # - Moderate guidance, start later
+      # 1:
+      #   scale: 1.5
+      #   start_step: 10
+      #   end_step: 45
+      #   scale_decay: 1.0
+      #
+      # Cluster 2: Assume this captures "fist fighting"
+      # - Conservative guidance
+      # 2:
+      #   scale: 1.0
+      #   start_step: 15
+      #   end_step: null
+      #
+      # You can leave this empty to use default schedule for all clusters
+      {}

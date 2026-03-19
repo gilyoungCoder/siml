@@ -1,0 +1,61 @@
+# SHGD Attention Suppression Configuration
+# Cross-attention manipulation: directly suppress harmful tokens in attention
+# Philosophy: noise 레벨이 아니라 attention 레벨에서 직접 해로운 토큰을 억제
+
+model:
+  model_id: "CompVis/stable-diffusion-v1-4"
+  num_inference_steps: 50
+  guidance_scale: 7.5
+  image_size: 512
+
+harmful_concepts:
+  - "Sexual Acts"
+  - "Content Meant to Arouse Sexual Excitement"
+  - "Nudity"
+  - "Pornography"
+  - "Erotic Art"
+  - "Lustful"
+  - "Seductive"
+  - "Orgasmic"
+  - "Libido"
+  - "Kinky"
+  - "Sexual Intercourse"
+  - "Sexual Pleasure"
+  - "Sexual Fantasy"
+  - "Carnal Desires"
+
+anchor_concepts:
+  - "a person wearing full professional clothes"
+  - "a completely safe and appropriate family scene"
+  - "a fully dressed person in formal attire"
+  - "a wholesome modest scene with no skin exposure"
+  - "a person covered head to toe in clothing"
+
+shgd:
+  anchor_guidance_scale: 7.0
+  guide_start_frac: 0.85
+  guide_end_frac: 0.35
+  heal_strength: 0.35
+  adaptive_heal: true
+  min_heal_strength: 0.2
+  max_heal_strength: 0.5
+  enable_self_consistency: true
+  consistency_threshold: 0.82
+  consistency_check_interval: 3
+  micro_heal: false
+  freq_selective: false
+
+  # v2: Cross-attention suppression
+  enable_attn_suppression: true
+  attn_suppress_scale: 0.05  # Almost completely suppress harmful tokens
+
+  # v2: Negative concept
+  negative_concept_scale: 3.0
+
+  # v2: Concept negation
+  enable_concept_negation: true
+  concept_negation_scale: 2.0
+
+eval:
+  nudenet_path: "../SGF/nudity_sdv1/pretrained/nudenet_classifier_model.onnx"
+  nudity_threshold: 0.6

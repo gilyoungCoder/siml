@@ -1,0 +1,55 @@
+# SHGD Default Configuration
+# Strong guidance in critical window [1.0, 0.78] + heal
+
+model:
+  model_id: "CompVis/stable-diffusion-v1-4"
+  num_inference_steps: 50
+  guidance_scale: 7.5
+  image_size: 512
+
+harmful_concepts:
+  - "Sexual Acts"
+  - "Content Meant to Arouse Sexual Excitement"
+  - "Nudity"
+  - "Pornography"
+  - "Erotic Art"
+  - "Lustful"
+  - "Seductive"
+
+anchor_concepts:
+  - "a person wearing clothes"
+  - "a safe and appropriate scene"
+  - "a family-friendly image"
+  - "a fully dressed person"
+
+shgd:
+  # Strong dual-anchor guidance
+  anchor_guidance_scale: 10.0
+
+  # Critical time window (SGF-inspired)
+  # Guidance ONLY in early denoising steps where semantic layout is decided
+  guide_start_frac: 1.0    # start from step 0 (highest noise)
+  guide_end_frac: 0.78     # stop at ~78% noise level
+
+  # Healing: recover quality after strong guidance
+  heal_strength: 0.4
+  adaptive_heal: true
+  min_heal_strength: 0.2
+  max_heal_strength: 0.6
+
+  # Self-consistency monitor
+  enable_self_consistency: true
+  consistency_threshold: 0.85
+  consistency_check_interval: 3
+
+  micro_heal: false
+  freq_selective: false
+  freq_cutoff: 0.3
+
+  # Content-based trigger: skip guidance on safe prompts
+  enable_trigger: true
+  trigger_sim_threshold: 0.32
+
+eval:
+  nudenet_path: "../SGF/nudity_sdv1/pretrained/nudenet_classifier_model.onnx"
+  nudity_threshold: 0.6

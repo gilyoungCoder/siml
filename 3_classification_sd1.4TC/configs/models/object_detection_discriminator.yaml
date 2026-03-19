@@ -1,0 +1,15 @@
+model_type: object_detection_discriminator
+model_args:
+  # pretrained_yolo_model: /mnt/home/jeongjun/layout_diffusion/yolov11/disc_guidance_to_unlabeled/cycle_0/weights/best.pt
+  pretrained_yolo_model: /home/djfelrl11/cycle_0_best.pt
+  discriminator_args:
+    image_size: 64
+    classifier_use_fp16: False
+    classifier_width: 128
+    classifier_depth: 2
+    classifier_attention_resolutions: "32,16,8"
+    classifier_use_scale_shift_norm: True
+    classifier_resblock_updown: True
+    classifier_pool: "attention"
+    out_channels: 1
+    in_channels: 432

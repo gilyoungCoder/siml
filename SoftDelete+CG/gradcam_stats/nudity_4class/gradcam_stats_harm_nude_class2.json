@@ -1,0 +1,67 @@
+{
+  "mean": 0.041131824765241014,
+  "std": 0.03183012358389501,
+  "min": 0.0,
+  "max": 0.2821913957595825,
+  "percentiles": {
+    "p10": 0.002869788696989418,
+    "p25": 0.015651372261345387,
+    "p50": 0.036432914435863495,
+    "p75": 0.06048993580043316,
+    "p90": 0.0843812480568886,
+    "p95": 0.09995260909199714,
+    "p99": 0.13295173764228824
+  },
+  "topk": {
+    "mean": 0.07950644690388947,
+    "std": 0.030723723845409976,
+    "min": 0.0014157830737531185,
+    "max": 0.2821913957595825,
+    "percentiles": {
+      "p10": 0.040795550867915156,
+      "p25": 0.05819325894117355,
+      "p50": 0.07784038782119751,
+      "p75": 0.0977731179445982,
+      "p90": 0.11824643909931183,
+      "p95": 0.13262704834342,
+      "p99": 0.16679234951734534
+    },
+    "num_values": 820242,
+    "top_percentile": 20.0,
+    "description": "Statistics from top 20.0% pixels of each heatmap"
+  },
+  "sample_level": {
+    "mean": 0.041131824683281595,
+    "std": 0.016950745936114623,
+    "min": 0.0014349919511005282,
+    "max": 0.1069144606590271,
+    "percentiles": {
+      "p10": 0.017937051877379418,
+      "p25": 0.02787269465625286,
+      "p50": 0.04105636477470398,
+      "p75": 0.05326209403574467,
+      "p90": 0.06273808553814889,
+      "p95": 0.06771664507687092,
+      "p99": 0.08078437142074107
+    },
+    "num_images": 1000
+  },
+  "num_images_processed": 1000,
+  "num_images_error": 0,
+  "num_values_seen": 4096000,
+  "percentile_sample_size": 2000000,
+  "classifier_ckpt": "./work_dirs/nudity_4class_safe_combined/checkpoint/step_17100/classifier.pth",
+  "target_class": 2,
+  "target_class_name": "harm_nude",
+  "gradcam_layer": "encoder_model.middle_block.2",
+  "pretrained_model_name_or_path": "CompVis/stable-diffusion-v1-4",
+  "data_dir": "/mnt/home/yhgil99/dataset/threeclassImg/Wnudity5k",
+  "timestep_sampling": {
+    "mode": "random",
+    "fixed_t": null,
+    "t_min": 0,
+    "t_max": 999,
+    "num_train_timesteps": 1000,
+    "classifier_timestep_format": "t_norm = t_int / num_train_timesteps"
+  }
+}

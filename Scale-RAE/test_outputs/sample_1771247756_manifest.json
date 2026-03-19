@@ -1,0 +1,10 @@
+{
+  "mode": "t2i",
+  "model_path": "nyu-visionx/Scale-RAE-Qwen1.5B_DiT2.4B",
+  "prompt": "a photo of a cat sitting on a windowsill",
+  "guidance_level": 1.0,
+  "skip_decoder": false,
+  "output_images": [],
+  "latent_path": null,
+  "output_text": "I'm sorry, but I am not able to generate a photo of a cat sitting on a windowsill as I am a text-based AI language model and do not have the capability to generate visual content. However, I can provide you with a description of a photo of a cat sitting on a windowsill."
+}

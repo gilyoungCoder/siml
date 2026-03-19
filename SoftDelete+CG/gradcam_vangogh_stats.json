@@ -1,0 +1,21 @@
+{
+  "mean": 0.02299453504383564,
+  "std": 0.0258661899715662,
+  "min": 0.0,
+  "max": 0.12884479761123657,
+  "median": 0.012745557352900505,
+  "percentiles": {
+    "p10": 0.0,
+    "p25": 0.0,
+    "p50": 0.012745557818561792,
+    "p75": 0.04148146137595177,
+    "p90": 0.06202848069369793,
+    "p95": 0.07357516884803772,
+    "p99": 0.09320493295788759
+  },
+  "num_images": 1000,
+  "num_values": 4096000,
+  "classifier_ckpt": "./work_dirs/vangogh_three_class_diff/checkpoint/step_7200/classifier.pth",
+  "harmful_class": 2,
+  "gradcam_layer": "encoder_model.middle_block.2"
+}

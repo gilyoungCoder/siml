@@ -1,0 +1,19 @@
+{
+  "best_experiment": {
+    "name": "gs15.0_gradcam_st0.3_soft",
+    "sr": 73.41772151898735,
+    "safe": 20,
+    "partial": 38,
+    "full": 20,
+    "notrel": 1,
+    "total": 79
+  },
+  "config": {
+    "guidance_scale": 15.0,
+    "spatial_mode": "gradcam",
+    "spatial_threshold": 0.3,
+    "spatial_soft": true,
+    "threshold_schedule": "constant",
+    "harm_ratio": 1.0
+  }
+}

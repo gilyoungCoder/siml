@@ -1,0 +1,222 @@
+# Soft Spatial CG Hyperparameter Tuning Configuration
+# 방법: spatial CG만 사용하여 guidance를 soft하게 적용
+
+# ==========================================
+# 1. Soft Masking Parameters (마스크 적용 방법)
+# ==========================================
+soft_masking:
+  # Soft masking 사용 여부
+  use_soft_mask: true
+
+  # Temperature parameter (낮을수록 sharp, 높을수록 soft)
+  soft_mask_temperature_options:
+    - 0.1   # Very sharp (거의 binary)
+    - 0.5   # Moderately sharp
+    - 1.0   # Default (적당한 softness)
+    - 2.0   # Soft
+    - 5.0   # Very soft
+
+  # Gaussian smoothing sigma (0이면 사용 안함)
+  gaussian_sigma_options:
+    - 0.0   # No smoothing
+    - 0.5   # Slight smoothing
+    - 1.0   # Moderate smoothing
+    - 2.0   # Heavy smoothing
+
+  # Spatial threshold (soft sigmoid의 중심점)
+  spatial_threshold_options:
+    - 0.3
+    - 0.5
+    - 0.7
+
+# ==========================================
+# 2. Weight Scheduling (스케줄 조정)
+# ==========================================
+weight_scheduling:
+  # 스케줄링 전략
+  strategy_options:
+    - "constant"           # 일정하게 유지
+    - "linear_increase"    # 점점 증가 (처음 약하게 -> 나중 강하게)
+    - "linear_decrease"    # 점점 감소 (처음 강하게 -> 나중 약하게)
+    - "cosine_anneal"      # Cosine annealing (부드럽게 감소)
+    - "exponential_decay"  # 지수 감소 (빠르게 감소)
+
+  # Guidance 시작/종료 스텝
+  start_step: 0
+  end_step: 50
+
+  # 시작/종료 weight
+  start_weight_options:
+    - 0.5   # 약하게 시작
+    - 1.0   # 보통으로 시작
+    - 2.0   # 강하게 시작
+    - 5.0   # 매우 강하게 시작
+
+  end_weight_options:
+    - 0.1   # 거의 없앰
+    - 0.5   # 약하게 끝
+    - 1.0   # 보통으로 끝
+    - 2.0   # 강하게 끝
+
+  # Exponential decay rate
+  decay_rate_options:
+    - 0.05
+    - 0.1
+    - 0.2
+
+# ==========================================
+# 3. Guidance Scale (얼마나 쎄게 적용할지)
+# ==========================================
+guidance:
+  # Base guidance scale
+  guidance_scale_options:
+    - 1.0
+    - 3.0
+    - 5.0
+    - 7.0
+    - 10.0
+
+  # Harmful scale (bidirectional guidance에서 harmful 방향 밀어내는 강도)
+  harmful_scale_options:
+    - 0.5
+    - 1.0
+    - 1.5
+    - 2.0
+
+  # Harmful detection threshold
+  harmful_threshold_options:
+    - 0.3
+    - 0.5
+    - 0.7
+
+# ==========================================
+# 4. Gradient Normalization (안정성)
+# ==========================================
+normalization:
+  # Gradient normalization 사용 여부
+  normalize_gradient_options:
+    - false
+    - true
+
+  # Normalization 타입
+  gradient_norm_type_options:
+    - "l2"     # L2 normalization
+    - "layer"  # Layer-wise normalization
+
+# ==========================================
+# 5. Recommended Preset Configurations
+# ==========================================
+presets:
+  # Preset 1: 매우 부드럽게 시작해서 점점 강하게
+  gentle_increase:
+    use_soft_mask: true
+    soft_mask_temperature: 2.0
+    gaussian_sigma: 1.0
+    spatial_threshold: 0.5
+    strategy: "linear_increase"
+    start_weight: 0.5
+    end_weight: 2.0
+    guidance_scale: 3.0
+    harmful_scale: 1.0
+    normalize_gradient: true
+    gradient_norm_type: "l2"
+
+  # Preset 2: 강하게 시작해서 점점 부드럽게 (cosine)
+  strong_decay:
+    use_soft_mask: true
+    soft_mask_temperature: 1.0
+    gaussian_sigma: 0.5
+    spatial_threshold: 0.5
+    strategy: "cosine_anneal"
+    start_weight: 5.0
+    end_weight: 0.5
+    guidance_scale: 5.0
+    harmful_scale: 1.5
+    normalize_gradient: true
+    gradient_norm_type: "l2"
+
+  # Preset 3: 일정하게 중간 강도로 soft하게
+  constant_soft:
+    use_soft_mask: true
+    soft_mask_temperature: 1.0
+    gaussian_sigma: 1.0
+    spatial_threshold: 0.5
+    strategy: "constant"
+    start_weight: 1.0
+    end_weight: 1.0
+    guidance_scale: 3.0
+    harmful_scale: 1.0
+    normalize_gradient: true
+    gradient_norm_type: "l2"
+
+  # Preset 4: 매우 강하게 빠르게 decay
+  aggressive_decay:
+    use_soft_mask: true
+    soft_mask_temperature: 0.5
+    gaussian_sigma: 0.0
+    spatial_threshold: 0.5
+    strategy: "exponential_decay"
+    start_weight: 10.0
+    end_weight: 0.1
+    guidance_scale: 7.0
+    harmful_scale: 2.0
+    normalize_gradient: true
+    gradient_norm_type: "l2"
+    decay_rate: 0.1
+
+  # Preset 5: Sharp mask + linear decrease
+  sharp_linear:
+    use_soft_mask: true
+    soft_mask_temperature: 0.1
+    gaussian_sigma: 0.0
+    spatial_threshold: 0.5
+    strategy: "linear_decrease"
+    start_weight: 3.0
+    end_weight: 0.5
+    guidance_scale: 5.0
+    harmful_scale: 1.0
+    normalize_gradient: false
+
+# ==========================================
+# 6. Testing Matrix (조합 테스트)
+# ==========================================
+# 아래는 체계적으로 테스트할 조합들
+test_matrix:
+  # Temperature 효과 테스트 (다른 변수 고정)
+  temperature_test:
+    fixed:
+      strategy: "constant"
+      start_weight: 1.0
+      guidance_scale: 5.0
+      gaussian_sigma: 0.0
+    varying:
+      soft_mask_temperature: [0.1, 0.5, 1.0, 2.0, 5.0]
+
+  # Scheduling 전략 테스트
+  schedule_test:
+    fixed:
+      soft_mask_temperature: 1.0
+      guidance_scale: 5.0
+      gaussian_sigma: 0.5
+    varying:
+      strategy: ["constant", "linear_increase", "linear_decrease", "cosine_anneal", "exponential_decay"]
+
+  # Guidance scale 테스트
+  scale_test:
+    fixed:
+      soft_mask_temperature: 1.0
+      strategy: "constant"
+      start_weight: 1.0
+      gaussian_sigma: 0.5
+    varying:
+      guidance_scale: [1.0, 3.0, 5.0, 7.0, 10.0]
+
+  # 시작 weight 테스트 (linear_decrease 전략)
+  start_weight_test:
+    fixed:
+      soft_mask_temperature: 1.0
+      strategy: "linear_decrease"
+      end_weight: 0.5
+      guidance_scale: 5.0
+    varying:
+      start_weight: [0.5, 1.0, 2.0, 5.0]

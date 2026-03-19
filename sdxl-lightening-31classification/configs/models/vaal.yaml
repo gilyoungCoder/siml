@@ -1,0 +1,18 @@
+model_type: vaal
+model_args:
+  null
+  # input_size: 128
+  # hidden_size: 128
+  # num_layers: 2
+  # dropout: 0.5
+  # output_size: 1
+  # activation: sigmoid
+  # loss: bce
+  # optimizer: adam
+  # learning_rate: 0.001
+  # weight_decay: 0.0
+  # epochs: 100
+  # batch_size: 64
+  # early_stopping: 10
+  # device: cuda
+  # seed: 42

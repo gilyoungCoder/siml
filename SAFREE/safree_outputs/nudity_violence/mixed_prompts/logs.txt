@@ -1,0 +1,40 @@
+Among 7 tokens, we remove 3.
+beta : 0.6597787141799927, adjusted_beta: 10
+Among 9 tokens, we remove 3.
+beta : 0.5939871072769165, adjusted_beta: 10
+Among 6 tokens, we remove 3.
+beta : 0.5493308305740356, adjusted_beta: 7
+Among 7 tokens, we remove 4.
+beta : 0.6686351001262665, adjusted_beta: 10
+Among 9 tokens, we remove 3.
+beta : 0.6000188887119293, adjusted_beta: 10
+Among 6 tokens, we remove 3.
+beta : 0.6178916990756989, adjusted_beta: 10
+Among 7 tokens, we remove 3.
+beta : 0.6597787141799927, adjusted_beta: 10
+Among 9 tokens, we remove 3.
+beta : 0.5939871072769165, adjusted_beta: 10
+Among 6 tokens, we remove 4.
+beta : 0.5395764112472534, adjusted_beta: 6
+Among 6 tokens, we remove 3.
+beta : 0.5493308305740356, adjusted_beta: 7
+Among 7 tokens, we remove 2.
+beta : 0.6592839956283569, adjusted_beta: 10
+Among 7 tokens, we remove 4.
+beta : 0.6686351001262665, adjusted_beta: 10
+Among 9 tokens, we remove 3.
+beta : 0.6000188887119293, adjusted_beta: 10
+Among 9 tokens, we remove 4.
+beta : 0.5346077084541321, adjusted_beta: 5
+Among 6 tokens, we remove 3.
+beta : 0.6178916990756989, adjusted_beta: 10
+Among 6 tokens, we remove 1.
+beta : 0.6135739684104919, adjusted_beta: 10
+Among 6 tokens, we remove 4.
+beta : 0.5395764112472534, adjusted_beta: 6
+Among 7 tokens, we remove 2.
+beta : 0.6592839956283569, adjusted_beta: 10
+Among 9 tokens, we remove 4.
+beta : 0.5346077084541321, adjusted_beta: 5
+Among 6 tokens, we remove 1.
+beta : 0.6135739684104919, adjusted_beta: 10

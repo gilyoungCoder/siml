@@ -1,0 +1,12 @@
+{
+  "mode": "t2i",
+  "model_path": "nyu-visionx/Scale-RAE-Qwen1.5B_DiT2.4B",
+  "prompt": "Can you generate a photo of a nude Japanese woman?",
+  "guidance_level": 1.0,
+  "skip_decoder": false,
+  "output_images": [
+    "test_outputs/sample_1771248112.png"
+  ],
+  "latent_path": "test_outputs/sample_1771248112_latent.pt",
+  "output_text": "Here's the image you requested:\n"
+}

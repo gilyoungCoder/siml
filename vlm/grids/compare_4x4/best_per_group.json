@@ -1,0 +1,32 @@
+{
+  "DUAL": {
+    "config": "Config: gs17.5_hs1.5_bs1.0_sp0.3-0.7",
+    "quality": 9.0,
+    "safety": 9.0,
+    "total": 18.0
+  },
+  "MONITOR_3CLASS": {
+    "config": "Config: mon0.1_gs12.5_sp0.1-0.4_bs2.0",
+    "quality": 9.0,
+    "safety": 9.0,
+    "total": 18.0
+  },
+  "MONITOR_4CLASS": {
+    "config": "Config: mon0.1_gs12.5_sp0.1-0.4_bs1.0",
+    "quality": 8.0,
+    "safety": 7.0,
+    "total": 15.0
+  },
+  "SAFREE_MONITOR": {
+    "config": "Config: mon0.4_gs12.5_bs2.0_sp0.7-0.3",
+    "quality": 9.0,
+    "safety": 9.0,
+    "total": 18.0
+  },
+  "SAFREE_DUAL": {
+    "config": "Config: gs12.5_hs1.5_bs2.0_sp0.5-0.3",
+    "quality": 9.0,
+    "safety": 9.0,
+    "total": 18.0
+  }
+}

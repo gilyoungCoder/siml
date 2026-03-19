@@ -1,0 +1,55 @@
+# SHGD Brutal Configuration
+# 미친듯이 강한 가이던스 → healing으로 복구
+# "nude/nudity 지우고 clothed/covered 세게" 컨셉
+
+model:
+  model_id: "CompVis/stable-diffusion-v1-4"
+  num_inference_steps: 50
+  guidance_scale: 7.5
+  image_size: 512
+
+harmful_concepts:
+  - "Sexual Acts"
+  - "Content Meant to Arouse Sexual Excitement"
+  - "Nudity"
+  - "Pornography"
+  - "Erotic Art"
+  - "Lustful"
+  - "Seductive"
+  - "Orgasmic"
+  - "Libido"
+  - "Kinky"
+  - "Sexual Intercourse"
+  - "Sexual Pleasure"
+  - "Sexual Fantasy"
+  - "Carnal Desires"
+  - "Sexual Gratification"
+  - "naked body"
+  - "exposed skin"
+  - "undressed"
+
+anchor_concepts:
+  - "a person fully covered in thick winter clothing"
+  - "a person in a heavy formal suit covering entire body"
+  - "a person wrapped in a blanket from head to toe"
+  - "a fully clothed modest person with no skin visible"
+  - "a person in military uniform covering everything"
+  - "a person in a hazmat suit covering all skin"
+
+shgd:
+  anchor_guidance_scale: 25.0
+  guide_start_frac: 1.0
+  guide_end_frac: 0.78
+  heal_strength: 0.6
+  adaptive_heal: true
+  min_heal_strength: 0.3
+  max_heal_strength: 0.8
+  enable_self_consistency: true
+  consistency_threshold: 0.75
+  consistency_check_interval: 2
+  micro_heal: false
+  freq_selective: false
+
+eval:
+  nudenet_path: "../SGF/nudity_sdv1/pretrained/nudenet_classifier_model.onnx"
+  nudity_threshold: 0.6

@@ -1,0 +1,211 @@
+#!/bin/bash
+# ============================================================================
+# Grid Search for Nudity 6-Class Dynamic Spatial Classifier Guidance
+#
+# Classes:
+#   0: benign (no people)
+#   1: safe_clothed (casual clothes) - target safe class
+#   2: harm_full_nude (completely naked)
+#   3: harm_topless (topless with jeans)
+#   4: harm_lingerie (underwear/lingerie)
+#   5: harm_swimwear (revealing bikini)
+# ============================================================================
+
+set -u   # undefined variable 방지 (set -e는 사용 안 함)
+
+# ============================================================================
+# STEP / GPU (args or default)
+# ============================================================================
+STEP=${1:-28000}
+GPU=${2:-6}
+
+export CUDA_VISIBLE_DEVICES=$GPU
+
+ROOT_DIR="/mnt/home/yhgil99/unlearning/SoftDelete+CG"
+cd "$ROOT_DIR" || exit 1
+
+# ============================================================================
+# Colors
+# ============================================================================
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+# ============================================================================
+# Paths
+# ============================================================================
+CKPT_PATH="CompVis/stable-diffusion-v1-4"
+CLASSIFIER_PATH="./work_dirs/nudity_6class/checkpoint/step_${STEP}/classifier.pth"
+GRADCAM_STATS_DIR="./gradcam_stats/nudity_6class"
+OUTPUT_BASE_DIR="./scg_outputs/grid_search_nudity_6class_step${STEP}"
+PROMPT_FILE="./prompts/sexual_50.txt"  # TODO: Set your prompt file
+
+# ============================================================================
+# Fixed Params
+# ============================================================================
+NUM_INFERENCE_STEPS=50
+CFG_SCALE=7.5
+NSAMPLES=1
+SEED=1234
+NUM_CLASSES=6
+
+# ============================================================================
+# Grid Params
+# ============================================================================
+GUIDANCE_SCALES=(7.5 10.0 12.5)
+SPATIAL_THRESHOLDS=(
+  "0.6,0.4"
+  "0.5,0.3"
+  "0.4,0.6"
+  "0.3,0.5"
+)
+HARMFUL_SCALES=(1.0 1.5 2.0)
+BASE_GUIDANCE_SCALES=(1.0 0.0)
+
+# ============================================================================
+# Utils
+# ============================================================================
+print_header () {
+  echo -e "${GREEN}============================================================${NC}"
+  echo -e "${GREEN}$1${NC}"
+  echo -e "${GREEN}============================================================${NC}"
+}
+
+print_info () {
+  echo -e "${YELLOW}$1${NC}"
+}
+
+print_error () {
+  echo -e "${RED}[ERROR] $1${NC}"
+}
+
+print_kv () {
+  echo -e "${CYAN}$1:${NC} $2"
+}
+
+# ============================================================================
+# Pre-flight Checks
+# ============================================================================
+print_header "Nudity 6-Class Dynamic Spatial CG - Grid Search"
+
+print_kv "STEP" "$STEP"
+print_kv "GPU" "$GPU"
+print_kv "Classifier" "$CLASSIFIER_PATH"
+print_kv "GradCAM Stats Dir" "$GRADCAM_STATS_DIR"
+print_kv "Output Base" "$OUTPUT_BASE_DIR"
+print_kv "Prompt File" "$PROMPT_FILE"
+echo ""
+
+if [ ! -f "generate_nudity_6class_spatial_cg.py" ]; then
+  print_error "generate_nudity_6class_spatial_cg.py not found"
+  exit 1
+fi
+
+if [ ! -f "$CLASSIFIER_PATH" ]; then
+  print_error "Classifier not found: $CLASSIFIER_PATH"
+  exit 1
+fi
+
+if [ ! -d "$GRADCAM_STATS_DIR" ]; then
+  print_error "GradCAM stats dir not found: $GRADCAM_STATS_DIR"
+  exit 1
+fi
+
+# Check GradCAM stats files
+for f in \
+  gradcam_stats_full_nude_class2.json \
+  gradcam_stats_topless_class3.json \
+  gradcam_stats_lingerie_class4.json \
+  gradcam_stats_swimwear_class5.json
+do
+  if [ ! -f "$GRADCAM_STATS_DIR/$f" ]; then
+    print_error "Missing GradCAM stats file: $f"
+    exit 1
+  fi
+done
+
+if [ ! -f "$PROMPT_FILE" ]; then
+  print_error "Prompt file not found: $PROMPT_FILE"
+  exit 1
+fi
+
+mkdir -p "$OUTPUT_BASE_DIR"
+
+# ============================================================================
+# Count experiments
+# ============================================================================
+total_experiments=0
+for GS in "${GUIDANCE_SCALES[@]}"; do
+  for ST in "${SPATIAL_THRESHOLDS[@]}"; do
+    for HS in "${HARMFUL_SCALES[@]}"; do
+      for BGS in "${BASE_GUIDANCE_SCALES[@]}"; do
+        total_experiments=$((total_experiments + 1))
+      done
+    done
+  done
+done
+
+print_info "Total experiments to run: $total_experiments"
+echo ""
+
+# ============================================================================
+# Run Grid
+# ============================================================================
+current_experiment=0
+
+for GS in "${GUIDANCE_SCALES[@]}"; do
+  for ST in "${SPATIAL_THRESHOLDS[@]}"; do
+    IFS=',' read -r ST_START ST_END <<< "$ST"
+
+    for HS in "${HARMFUL_SCALES[@]}"; do
+      for BGS in "${BASE_GUIDANCE_SCALES[@]}"; do
+        current_experiment=$((current_experiment + 1))
+
+        OUTPUT_DIR="${OUTPUT_BASE_DIR}/gs${GS}_st${ST_START}-${ST_END}_hs${HS}_bgs${BGS}"
+        mkdir -p "$OUTPUT_DIR"
+
+        print_header "Experiment ${current_experiment}/${total_experiments}"
+        print_kv "GUIDANCE_SCALE" "$GS"
+        print_kv "SPATIAL_THRESHOLD" "${ST_START} -> ${ST_END}"
+        print_kv "HARMFUL_SCALE" "$HS"
+        print_kv "BASE_GUIDANCE_SCALE" "$BGS"
+        echo ""
+
+        python generate_nudity_6class_spatial_cg.py \
+          "$CKPT_PATH" \
+          --prompt_file "$PROMPT_FILE" \
+          --output_dir "$OUTPUT_DIR" \
+          --nsamples $NSAMPLES \
+          --cfg_scale $CFG_SCALE \
+          --num_inference_steps $NUM_INFERENCE_STEPS \
+          --seed $SEED \
+          --classifier_ckpt "$CLASSIFIER_PATH" \
+          --num_classes $NUM_CLASSES \
+          --gradcam_stats_dir "$GRADCAM_STATS_DIR" \
+          --guidance_scale $GS \
+          --spatial_threshold_start $ST_START \
+          --spatial_threshold_end $ST_END \
+          --threshold_strategy cosine_anneal \
+          --harmful_scale $HS \
+          --base_guidance_scale $BGS \
+          --use_bidirectional \
+          --gradcam_layer "encoder_model.middle_block.2"
+
+        ret=$?
+        if [ $ret -ne 0 ]; then
+          print_error "Experiment failed (exit code=$ret)"
+          exit $ret
+        fi
+
+        print_info "Completed: $OUTPUT_DIR"
+        echo ""
+      done
+    done
+  done
+done
+
+print_header "Grid Search Complete"
+echo "Results saved to: $OUTPUT_BASE_DIR"
+exit 0

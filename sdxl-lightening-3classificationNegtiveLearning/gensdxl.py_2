@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# generate_sdxl_guidance.py
+
+import os
+import json
+import torch
+from argparse import ArgumentParser
+from functools import partial
+from PIL import Image
+from transformers import CLIPTokenizer, CLIPTextModel
+from diffusers import AutoencoderKL, UNet2DConditionModel, DDIMScheduler
+from geo_utils.custom_sdxl_lightning import CustomStableDiffusionXLPipeline
+from geo_utils.guidance_utils import GuidanceModel
+
+def parse_args():
+    p = ArgumentParser("SDXL + Classifier Guidance")
+    p.add_argument("--sdxl_base",        required=True,
+                   help="SDXL 체크포인트 (예: stabilityai/stable-diffusion-xl-base-1.0)")
+    p.add_argument("--prompt_file",      required=True,
+                   help=".txt/.json/.csv 형식의 프롬프트 파일")
+    p.add_argument("--output_dir",       required=True,
+                   help="이미지 저장 디렉터리")
+    p.add_argument("--nsamples",         type=int, default=4,
+                   help="프롬프트 당 생성 이미지 수")
+    p.add_argument("--num_inference_steps", type=int, default=50,
+                   help="추론 스텝 수 (DDIM 기본 50)")
+    p.add_argument("--cfg_scale",        type=float, default=7.5,
+                   help="Text guidance scale")
+    p.add_argument("--freedom",          action="store_true",
+                   help="Classifier Guidance 활성화")
+    p.add_argument("--freedom_model_args", default="configs/models/classifier.yaml",
+                   help="GuidanceModel 설정 파일 (.yaml)")
+    p.add_argument("--freedom_model_ckpt", required=False,
+                   help="Guidance classifier .pth 체크포인트")
+    p.add_argument("--freedom_scale",    type=float, default=10.0,
+                   help="Classifier Guidance 세기")
+    p.add_argument("--guide_start",      type=int, default=1,
+                   help="몇 번째 스텝부터 classifier guidance 적용")
+    p.add_argument("--target_class",     type=int, default=1,
+                   help="GuidanceModel 타깃 클래스 인덱스")
+    p.add_argument("--device",           default="cuda:0",
+                   help="연산 디바이스")
+    p.add_argument("--seed",             type=int, default=None,
+                   help="랜덤 시드 (고정 시 지정)")
+    return p.parse_args()
+
+def load_prompts(path: str):
+    if path.endswith(".txt"):
+        return [l.strip() for l in open(path, encoding="utf-8") if l.strip()]
+    if path.endswith(".json"):
+        js = json.load(open(path, encoding="utf-8"))
+        return js["prompts"] if isinstance(js, dict) else [x["prompt"] for x in js]
+    import pandas as pd
+    df = pd.read_csv(path)
+    return df["prompt"].astype(str).tolist()
+
+def save_image(img: Image.Image, out_dir: str, idx: int):
+    os.makedirs(out_dir, exist_ok=True)
+    img.save(os.path.join(out_dir, f"{idx:06d}.png"))
+
+def main():
+    args = parse_args()
+    device = torch.device(args.device)
+    torch.set_default_dtype(torch.float32)
+
+    # 1) SDXL-base 컴포넌트 모두 FP32 로 로드
+    vae = AutoencoderKL.from_pretrained(
+        args.sdxl_base, subfolder="vae"
+    ).to(device, torch.float32)
+    tokenizer = CLIPTokenizer.from_pretrained(
+        args.sdxl_base, subfolder="tokenizer"
+    )
+    text_encoder = CLIPTextModel.from_pretrained(
+        args.sdxl_base, subfolder="text_encoder"
+    ).to(device, torch.float32)
+    unet = UNet2DConditionModel.from_pretrained(
+        args.sdxl_base, subfolder="unet"
+    ).to(device, torch.float32)
+
+    # 2) Custom 파이프라인 로드 & 강제 교체
+    pipe = CustomStableDiffusionXLPipeline.from_pretrained(
+        args.sdxl_base,
+        safety_checker=None
+    ).to(device, torch.float32)
+    pipe.vae = vae
+    pipe.tokenizer = tokenizer
+    pipe.text_encoder = text_encoder
+    pipe.unet = unet
+    pipe.feature_extractor = None
+
+    # 3) DDIM 스케줄러 세팅
+    pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler.set_timesteps(args.num_inference_steps, device=device)
+
+    # 4) Optional: classifier guidance 콜백 준비
+    if args.freedom:
+        guide = GuidanceModel(
+            pipe,
+            args.freedom_model_args,
+            args.freedom_model_ckpt,
+            target_class=args.target_class,
+            device=device
+        )
+        # classifier 도 FP32 로 강제
+        guide.gradient_model.model = guide.gradient_model.model.to(device, torch.float32)
+
+        def cb_fn(pipeline, step, timestep, cb_kwargs):
+            if step >= args.guide_start:
+                return guide.guidance(
+                    pipeline,
+                    cb_kwargs,
+                    step,
+                    timestep,
+                    scale=args.freedom_scale,
+                    target_class=args.target_class
+                )
+            return cb_kwargs
+
+        cb_tensors = pipe._callback_tensor_inputs
+    else:
+        cb_fn = None
+        cb_tensors = None
+
+    # 5) Generation loop
+    prompts = load_prompts(args.prompt_file)
+    gen = torch.Generator(device=device)
+    if args.seed is not None:
+        gen.manual_seed(args.seed)
+
+    idx = 0
+    for prompt in prompts:
+        # 매번 timesteps 초기화
+        pipe.scheduler.set_timesteps(args.num_inference_steps, device=device)
+        pipe.scheduler._step_index = 0
+
+        out = pipe(
+            prompt=[prompt],
+            height=1024,
+            width=1024,
+            num_inference_steps=args.num_inference_steps,
+            guidance_scale=args.cfg_scale,
+            num_images_per_prompt=args.nsamples,
+            generator=gen,
+            callback_on_step_end=cb_fn,
+            callback_on_step_end_tensor_inputs=cb_tensors,
+            callback_steps=1,
+        )
+        for img in out.images:
+            save_image(img, args.output_dir, idx)
+            idx += 1
+
+    # prompts.txt 함께 기록
+    with open(os.path.join(args.output_dir, "prompts.txt"), "w", encoding="utf-8") as f:
+        for p in prompts:
+            f.write(p + "\n")
+
+if __name__ == "__main__":
+    main()

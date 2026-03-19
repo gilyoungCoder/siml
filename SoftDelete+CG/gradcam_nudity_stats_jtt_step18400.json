@@ -1,0 +1,21 @@
+{
+  "mean": 0.004783542361110449,
+  "std": 0.007582297082990408,
+  "min": 0.0,
+  "max": 0.06267084181308746,
+  "median": 0.0003626363759394735,
+  "percentiles": {
+    "p10": 0.0,
+    "p25": 0.0,
+    "p50": 0.0003626363759394735,
+    "p75": 0.007214264012873173,
+    "p90": 0.01635581348091364,
+    "p95": 0.021737726684659682,
+    "p99": 0.031057577747851565
+  },
+  "num_images": 1000,
+  "num_values": 4096000,
+  "classifier_ckpt": "./work_dirs/jtt_stage2_T5800/checkpoints/step_18400/classifier.pth",
+  "harmful_class": 2,
+  "gradcam_layer": "encoder_model.middle_block.2"
+}

@@ -1,0 +1,55 @@
+Among 67 tokens, we remove 1.
+beta : 0.48523104190826416, adjusted_beta: 1
+Among 28 tokens, we remove 5.
+beta : 0.5392328798770905, adjusted_beta: 6
+Among 4 tokens, we remove 1.
+beta : 0.4916535019874573, adjusted_beta: 1
+Among 49 tokens, we remove 0.
+beta : 0.4430394172668457, adjusted_beta: 0
+Among 25 tokens, we remove 6.
+beta : 0.5707846283912659, adjusted_beta: 9
+Among 30 tokens, we remove 2.
+beta : 0.577719658613205, adjusted_beta: 9
+Among 60 tokens, we remove 0.
+beta : 0.5024047493934631, adjusted_beta: 2
+Among 24 tokens, we remove 4.
+beta : 0.5211194753646851, adjusted_beta: 4
+Among 32 tokens, we remove 6.
+beta : 0.5400191843509674, adjusted_beta: 6
+Among 43 tokens, we remove 0.
+beta : 0.44632482528686523, adjusted_beta: 0
+Among 57 tokens, we remove 2.
+beta : 0.5139250159263611, adjusted_beta: 3
+Among 64 tokens, we remove 3.
+beta : 0.4792131781578064, adjusted_beta: 1
+Among 29 tokens, we remove 1.
+beta : 0.49261677265167236, adjusted_beta: 1
+Among 65 tokens, we remove 0.
+beta : 0.452575147151947, adjusted_beta: 0
+Among 22 tokens, we remove 0.
+beta : 0.4869035482406616, adjusted_beta: 1
+Among 9 tokens, we remove 5.
+beta : 0.6223300397396088, adjusted_beta: 10
+Among 45 tokens, we remove 0.
+beta : 0.4548536539077759, adjusted_beta: 0
+Among 10 tokens, we remove 3.
+beta : 0.5799525082111359, adjusted_beta: 9
+Among 14 tokens, we remove 5.
+beta : 0.5376183390617371, adjusted_beta: 6
+Among 47 tokens, we remove 2.
+beta : 0.46756285429000854, adjusted_beta: 0
+Among 46 tokens, we remove 0.
+beta : 0.5034426748752594, adjusted_beta: 2
+Among 50 tokens, we remove 1.
+beta : 0.4999866485595703, adjusted_beta: 2
+Among 10 tokens, we remove 2.
+beta : 0.5711339712142944, adjusted_beta: 9
+Among 32 tokens, we remove 3.
+beta : 0.4405398964881897, adjusted_beta: 0
+Among 70 tokens, we remove 1.
+beta : 0.4651044011116028, adjusted_beta: 0
+Among 15 tokens, we remove 2.
+beta : 0.529372900724411, adjusted_beta: 5
+Among 22 tokens, we remove 6.
+beta : 0.6212557852268219, adjusted_beta: 10
+Among 75 tokens, we remove 0.

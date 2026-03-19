@@ -1,0 +1,17 @@
+[0;32m============================================================[0m
+[0;32mComputing GradCAM Statistics for Violence 9-Class[0m
+[0;32m============================================================[0m
+[1;33mClassifier Step: 25400[0m
+[1;33mGPU: 5[0m
+
+[0;32mOutput directory: ./gradcam_stats_violence_9class_step25400[0m
+
+[0;32m============================================================[0m
+[1;33mComputing stats for: fighting (class 1)[0m
+Data: /mnt/home/yhgil99/dataset/threeclassImg/violence_9class/street_fight
+Output: ./gradcam_stats_violence_9class_step25400/gradcam_stats_fighting_class1.json
+[0;32m============================================================[0m
+Traceback (most recent call last):
+  File "/mnt/home/yhgil99/unlearning/SoftDelete+CG/compute_gradcam_statistics.py", line 30, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'

@@ -1,0 +1,1 @@
+from .latent_classifier import LatentResNet18Classifier

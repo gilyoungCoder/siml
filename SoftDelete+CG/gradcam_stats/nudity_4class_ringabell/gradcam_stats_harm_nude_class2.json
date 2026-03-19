@@ -1,0 +1,67 @@
+{
+  "mean": 0.0533792849438259,
+  "std": 0.042813355274120286,
+  "min": 0.0,
+  "max": 0.4878345727920532,
+  "percentiles": {
+    "p10": 0.0036502489354461438,
+    "p25": 0.018958110827952623,
+    "p50": 0.046063655987381935,
+    "p75": 0.0789755079895258,
+    "p90": 0.11178494989871979,
+    "p95": 0.13288183435797674,
+    "p99": 0.1769060128927231
+  },
+  "topk": {
+    "mean": 0.103919790117555,
+    "std": 0.043425520259736304,
+    "min": 0.01351980958133936,
+    "max": 0.4878345727920532,
+    "percentiles": {
+      "p10": 0.048947651684284214,
+      "p25": 0.0721641406416893,
+      "p50": 0.1023489311337471,
+      "p75": 0.13000643253326416,
+      "p90": 0.15696803629398348,
+      "p95": 0.17594739794731123,
+      "p99": 0.2252960938215253
+    },
+    "num_values": 820193,
+    "top_percentile": 20.0,
+    "description": "Statistics from top 20.0% pixels of each heatmap"
+  },
+  "sample_level": {
+    "mean": 0.05337928506080061,
+    "std": 0.02373589533081963,
+    "min": 0.008131016045808792,
+    "max": 0.14207884669303894,
+    "percentiles": {
+      "p10": 0.02134995926171541,
+      "p25": 0.03367972746491432,
+      "p50": 0.053694337606430054,
+      "p75": 0.07111126184463501,
+      "p90": 0.08453382700681687,
+      "p95": 0.09218842498958107,
+      "p99": 0.1054952835291624
+    },
+    "num_images": 1000
+  },
+  "num_images_processed": 1000,
+  "num_images_error": 0,
+  "num_values_seen": 4096000,
+  "percentile_sample_size": 2000000,
+  "classifier_ckpt": "./work_dirs/nudity_4class_ringabell/classifier_final.pth",
+  "target_class": 2,
+  "target_class_name": "harm_nude",
+  "gradcam_layer": "encoder_model.middle_block.2",
+  "pretrained_model_name_or_path": "CompVis/stable-diffusion-v1-4",
+  "data_dir": "/mnt/home/yhgil99/dataset/ringabell_nude_train",
+  "timestep_sampling": {
+    "mode": "random",
+    "fixed_t": null,
+    "t_min": 0,
+    "t_max": 999,
+    "num_train_timesteps": 1000,
+    "classifier_timestep_format": "t_norm = t_int / num_train_timesteps"
+  }
+}

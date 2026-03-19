@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGF + ASCG: Safe Image Generation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<style>
+  :root {
+    --r-heading-color: #1a1a2e;
+    --r-main-color: #333;
+    --r-link-color: #2563eb;
+    --accent: #2563eb;
+    --accent2: #7c3aed;
+    --safe-color: #059669;
+    --danger-color: #dc2626;
+    --warn-color: #d97706;
+    --sgf-color: #0f766e;
+    --ascg-color: #7c3aed;
+    --combo-color: #2563eb;
+  }
+  .reveal { font-size: 28px; }
+  .reveal h1 { font-size: 2.2em; color: var(--r-heading-color); font-weight: 800; }
+  .reveal h2 { font-size: 1.5em; color: var(--r-heading-color); font-weight: 700; border-bottom: 3px solid var(--accent); padding-bottom: 8px; display: inline-block; }
+  .reveal h3 { font-size: 1.1em; color: var(--accent2); font-weight: 600; }
+  .reveal .subtitle { color: #666; font-size: 0.78em; margin-top: -8px; }
+  .reveal section { text-align: left; }
+
+  /* Title */
+  .title-slide { text-align: center !important; }
+  .title-slide h1 { font-size: 2.4em; background: linear-gradient(135deg, #1a1a2e, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .title-slide .date { color: #888; font-size: 0.7em; }
+
+  /* Section dividers */
+  .section-divider { text-align: center !important; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important; }
+  .section-divider h2 { color: #fff !important; border-bottom-color: #60a5fa !important; font-size: 1.8em; }
+  .section-divider p { color: #cbd5e1 !important; }
+
+  /* Boxes */
+  .box { background: #f8fafc; border-radius: 10px; padding: 16px 20px; margin: 10px 0; border-left: 4px solid var(--accent); }
+  .box-accent { border-left-color: var(--accent2); }
+  .box-safe { border-left-color: var(--safe-color); background: #f0fdf4; }
+  .box-danger { border-left-color: var(--danger-color); background: #fef2f2; }
+  .box-warn { border-left-color: var(--warn-color); background: #fffbeb; }
+  .box-sgf { border-left-color: var(--sgf-color); background: #f0fdfa; }
+  .box-combo { border-left-color: var(--combo-color); background: #eff6ff; }
+
+  /* Tables */
+  .reveal table { font-size: 0.62em; width: 100%; border-collapse: collapse; margin: 8px 0; }
+  .reveal table th { background: #1e293b; color: #fff; padding: 7px 9px; text-align: center; font-weight: 600; }
+  .reveal table td { padding: 5px 9px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+  .reveal table tr:nth-child(even) { background: #f8fafc; }
+  .reveal table tr:hover { background: #eff6ff; }
+  .best-row { background: #dcfce7 !important; font-weight: 700; }
+  .highlight-row { background: #dbeafe !important; font-weight: 600; }
+
+  /* Formulas */
+  .formula { background: #f1f5f9; border-radius: 8px; padding: 12px 18px; margin: 8px 0; font-family: 'Georgia', serif; font-size: 0.9em; text-align: center; border: 1px solid #e2e8f0; }
+
+  /* Pipeline */
+  .pipeline { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 12px 0; flex-wrap: wrap; }
+  .pipeline .step { border-radius: 10px; padding: 10px 14px; font-size: 0.72em; font-weight: 600; text-align: center; min-width: 90px; }
+  .pipeline .arrow { font-size: 1.4em; color: #93c5fd; }
+
+  /* Layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  /* Tags */
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.6em; font-weight: 600; margin: 2px; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-purple { background: #f3e8ff; color: #6b21a8; }
+  .tag-teal { background: #ccfbf1; color: #115e59; }
+
+  /* Metric cards */
+  .metric-card { background: #fff; border-radius: 12px; padding: 14px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+  .metric-card .value { font-size: 2em; font-weight: 800; margin: 4px 0; }
+  .metric-card .label { font-size: 0.65em; color: #64748b; }
+  .metric-card .value.green { color: var(--safe-color); }
+  .metric-card .value.red { color: var(--danger-color); }
+  .metric-card .value.blue { color: var(--accent); }
+
+  /* Lists */
+  .reveal ul { margin-left: 0; }
+  .reveal li { margin-bottom: 6px; line-height: 1.5; }
+  .reveal .small { font-size: 0.72em; color: #64748b; }
+
+  /* Code */
+  .code-block { background: #1e293b; color: #e2e8f0; border-radius: 8px; padding: 12px 16px; font-family: 'Consolas', monospace; font-size: 0.65em; line-height: 1.6; overflow-x: auto; }
+  .code-block .kw { color: #c084fc; }
+  .code-block .fn { color: #67e8f9; }
+  .code-block .cm { color: #64748b; }
+  .code-block .str { color: #86efac; }
+  .code-block .num { color: #fbbf24; }
+
+  /* VS box */
+  .vs-box { display: flex; align-items: stretch; gap: 12px; margin: 10px 0; }
+  .vs-box > div { flex: 1; padding: 14px; border-radius: 10px; }
+  .vs-left { background: #f0fdfa; border: 2px solid #5eead4; }
+  .vs-right { background: #f5f3ff; border: 2px solid #c4b5fd; }
+  .vs-center { display: flex; align-items: center; font-size: 1.5em; font-weight: 800; color: #94a3b8; flex: 0; min-width: 35px; justify-content: center; }
+
+  /* Progress bar */
+  .bar-row { display: flex; align-items: center; gap: 8px; margin: 5px 0; font-size: 0.7em; }
+  .bar-row .lbl { width: 130px; text-align: right; font-weight: 500; color: #475569; flex-shrink: 0; }
+  .bar-row .track { flex: 1; height: 22px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+  .bar-row .fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 6px; font-size: 0.85em; font-weight: 700; color: #fff; min-width: 30px; }
+  .bar-row .val { width: 50px; font-weight: 600; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ==================== TITLE ==================== -->
+<section class="title-slide">
+  <h1>SGF + ASCG</h1>
+  <p style="font-size:1.05em; color:#475569; margin-top:-5px;">
+    Combining Temporal Window Theory with<br>Spatial Classifier Guidance for Safe Generation
+  </p>
+  <div style="margin-top:30px;">
+    <span class="tag tag-teal">SGF (ICLR 2026 Oral)</span>
+    <span class="tag tag-purple">ASCG (Ours)</span>
+    <span class="tag tag-blue">SGF + ASCG</span>
+    <span class="tag tag-green">Inference-time Safety</span>
+  </div>
+  <div class="date" style="margin-top:20px;">Research Progress &middot; March 2026</div>
+</section>
+
+<!-- ==================== AGENDA ==================== -->
+<section>
+  <h2>Agenda</h2>
+  <div style="margin-top:15px;">
+    <div class="box box-sgf">
+      <strong style="color:var(--sgf-color);">Part 1.</strong> &nbsp; SGF Paper Study <span class="small">(ICLR 2026 Oral)</span>
+    </div>
+    <div class="box box-accent">
+      <strong style="color:var(--accent2);">Part 2.</strong> &nbsp; ASCG: Adaptive Spatial Classifier Guidance <span class="small">(Our Method)</span>
+    </div>
+    <div class="box box-combo">
+      <strong style="color:var(--combo-color);">Part 3.</strong> &nbsp; SGF + ASCG: How We Combined Them
+    </div>
+    <div class="box box-safe">
+      <strong style="color:var(--safe-color);">Part 4.</strong> &nbsp; Experimental Results
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 1: SGF ==================== -->
+<section class="section-divider">
+  <h2>Part 1</h2>
+  <p style="font-size:1.2em;">Safety-Guided Flow (SGF)</p>
+  <p>Kim, Kim &amp; Park &mdash; ICLR 2026 Oral</p>
+</section>
+
+<!-- SGF Overview -->
+<section>
+  <h2>SGF &mdash; Core Idea</h2>
+  <p class="subtitle">Training-free negative guidance via MMD potential + CBF-proven critical time window</p>
+  <div class="two-col" style="margin-top:15px;">
+    <div>
+      <div class="box box-sgf" style="font-size:0.82em;">
+        <strong>Key Insight:</strong> Use the gradient of the MMD (Maximum Mean Discrepancy) as a <em>repulsive potential</em> that pushes generated samples away from an unsafe reference dataset D<sup>&minus;</sup>.
+      </div>
+      <div class="box" style="font-size:0.82em;">
+        <strong>Three Contributions:</strong>
+        <ul style="margin:5px 0 0 15px;">
+          <li><strong>Unified framework:</strong> Shows SPELL and Safe Denoiser are special cases of MMD-gradient guidance</li>
+          <li><strong>Critical time window:</strong> CBF analysis proves earlier guidance is strictly better</li>
+          <li><strong>Plug-and-play:</strong> Compatible with SLD, SAFREE, and other base methods</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="formula">
+        x&#775;<sub>t</sub> = f<sub>&theta;</sub>(x<sub>t</sub>, t) + &lambda;(t) &nabla;<sub>x</sub> E(x<sub>t</sub>)
+      </div>
+      <p class="small" style="text-align:center;">Modified score function with MMD energy guidance</p>
+      <div class="formula" style="font-size:0.85em;">
+        E(x<sub>t</sub>) &equiv; MMD<sup>2</sup><sub>k<sub>&sigma;</sub></sub>({x<sub>t</sub>}, D<sup>&minus;</sup>)
+      </div>
+      <p class="small" style="text-align:center;">MMD potential using RBF kernel</p>
+      <div class="box box-warn" style="font-size:0.78em;">
+        <strong>&lambda;(t):</strong> Guidance schedule determined by CBF analysis &mdash; concentrate strength in early timesteps, decay to zero afterwards.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SGF: MMD Gradient -->
+<section>
+  <h2>SGF &mdash; MMD Gradient as Repulsive Force</h2>
+  <p class="subtitle">Closed-form gradient pushes x<sub>t</sub> away from nearest unsafe neighbors</p>
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <div class="formula" style="font-size:0.85em;">
+        &nabla;<sub>x<sub>t</sub></sub>MMD<sup>2</sup> = <sup>2</sup>/<sub>&sigma;<sup>2</sup>Z</sub> [x<sub>t</sub> &minus; &sum;<sub>i</sub> w<sub>i</sub>(x<sub>t</sub>) y<sub>i</sub>]
+      </div>
+      <div class="box" style="font-size:0.78em;">
+        <strong>w<sub>i</sub>(x<sub>t</sub>)</strong> = k(x<sub>t</sub>, y<sub>i</sub>) / (N &middot; Z) &mdash; kernel-weighted attention<br>
+        Closer unsafe samples exert <strong>stronger repulsion</strong>
+      </div>
+      <div class="box box-accent" style="font-size:0.78em;">
+        <strong>Proposition 1 (Safe Denoiser):</strong> MMD gradient equals weighted kernel repellency up to a positive scalar.<br>
+        <strong>Proposition 2 (SPELL):</strong> Gaussian force matches radial force via radius-bandwidth matching.
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--sgf-color);">Unification Summary</h3>
+      <table>
+        <tr><th>Method</th><th>Mechanism</th><th>SGF View</th></tr>
+        <tr><td>SPELL</td><td>Radial repulsion within radius r</td><td>MMD with matched &sigma;</td></tr>
+        <tr><td>Safe Denoiser</td><td>Weighted kernel repulsion</td><td>MMD with static &sigma;<sub>KDE</sub></td></tr>
+        <tr class="best-row"><td>SGF</td><td>MMD gradient + CBF window</td><td>Unified framework</td></tr>
+      </table>
+      <div class="box box-sgf" style="font-size:0.78em; margin-top:8px;">
+        <strong>Practical benefit:</strong> Both prior methods are recovered as special cases, enabling principled hyperparameter selection.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SGF: CBF Theory -->
+<section>
+  <h2>SGF &mdash; Theorem 2: Earlier Is Strictly Better</h2>
+  <p class="subtitle">Control Barrier Function analysis proves optimal guidance scheduling</p>
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <div class="formula" style="font-size:0.82em;">
+        e<sup>&int;L(&tau;)d&tau;</sup> h(x<sub>0</sub>) + &mu; &middot; I&#772;<sub>L</sub>(s<sub>c</sub>) &ge; &delta;
+      </div>
+      <p class="small" style="text-align:center;">Sufficient condition for safety (Theorem 2)</p>
+      <div class="box" style="font-size:0.78em;">
+        <strong>Setup:</strong>
+        <ul style="margin:5px 0 0 15px;">
+          <li>h(x): barrier function &mdash; Safe = {h &ge; 0}, Unsafe = {h &lt; 0}</li>
+          <li>I&#772;<sub>L</sub>: weighted guidance mass with <strong>decreasing</strong> weight w&#772;(u)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-safe" style="padding:18px;">
+        <h3 style="color:var(--safe-color);">Key Result</h3>
+        <p style="font-size:0.85em;">Since w&#772;<sub>L</sub>(u) is <strong>strictly decreasing</strong>:</p>
+        <p style="font-size:0.85em; text-align:center; margin:10px 0; font-weight:600;">
+          Under a fixed guidance budget &int;&beta;(u)du,<br>
+          shifting strength from later to earlier<br>
+          <span style="color:var(--safe-color);">strictly increases the safety bound.</span>
+        </p>
+      </div>
+      <div class="box" style="font-size:0.78em;">
+        <strong>Empirical validation (Fig. 4):</strong> Window [1.0, 0.8] (first 20% of steps) consistently achieves lowest ASR across all datasets.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SGF Results (brief) -->
+<section>
+  <h2>SGF &mdash; Published Results</h2>
+  <p class="subtitle">Table 1 &mdash; NudeNet ASR on adversarial prompts</p>
+  <table style="margin-top:12px;">
+    <tr><th>Method</th><th>Type</th><th>R-A-B ASR&darr;</th><th>UDiff ASR&darr;</th><th>MMA ASR&darr;</th><th>FID&darr;</th><th>CLIP&uarr;</th></tr>
+    <tr><td>SD v1.4</td><td>&mdash;</td><td style="color:var(--danger-color); font-weight:700;">0.797</td><td>0.809</td><td>0.962</td><td>25.04</td><td style="color:var(--safe-color);">31.38</td></tr>
+    <tr><td>RECE</td><td>Fine-tune</td><td>0.177</td><td>0.284</td><td>0.651</td><td>33.94</td><td>30.29</td></tr>
+    <tr><td>SAFREE</td><td>Neg. Prompt</td><td>0.278</td><td>0.353</td><td>0.601</td><td style="color:var(--safe-color);">25.29</td><td>30.98</td></tr>
+    <tr><td>SAFREE + SafeD</td><td>NP + NG</td><td>0.127</td><td>0.207</td><td>0.469</td><td>22.55</td><td>30.66</td></tr>
+    <tr class="best-row"><td>SAFREE + SGF</td><td>NP + NG</td><td style="color:var(--safe-color); font-weight:700;">0.051</td><td style="color:var(--safe-color);">0.164</td><td style="color:var(--safe-color);">0.423</td><td>23.73</td><td>30.36</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:12px;">
+    <div class="box box-safe" style="font-size:0.78em;">
+      <strong>SAFREE+SGF:</strong> ASR 0.051, 59.8% reduction vs SafeDenoiser (0.127). Negligible overhead (+0.10s/img).
+    </div>
+    <div class="box box-warn" style="font-size:0.78em;">
+      <strong>Limitation:</strong> SGF applies guidance <em>globally</em> &mdash; no spatial control. Safe regions also get modified.
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 2: ASCG ==================== -->
+<section class="section-divider">
+  <h2>Part 2</h2>
+  <p style="font-size:1.2em;">Adaptive Spatial Classifier Guidance (ASCG)</p>
+  <p>Our method: When &times; Where &times; How</p>
+</section>
+
+<!-- ASCG Overview -->
+<section>
+  <h2>ASCG &mdash; Overview</h2>
+  <p class="subtitle">Training-free safe generation with spatial precision</p>
+  <div class="pipeline" style="margin:20px 0;">
+    <div class="step" style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border:2px solid #93c5fd; color:#1e40af;">Input z<sub>t</sub></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border:2px solid #fbbf24; color:#92400e;">WHEN<br><span style="font-size:0.85em;">Time Window</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff); border:2px solid #c084fc; color:#6b21a8;">WHERE<br><span style="font-size:0.85em;">Spatial Mask</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;">HOW<br><span style="font-size:0.85em;">Dual Gradient</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step" style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border:2px solid #93c5fd; color:#1e40af;">Safe z<sub>t</sub>'</div>
+  </div>
+  <div class="three-col" style="font-size:0.78em;">
+    <div class="box" style="border-left-color:#d97706;">
+      <strong>WHEN</strong><br>
+      SGF time window [t<sub>end</sub>, t<sub>start</sub>] with &lambda;(t) decay schedule
+    </div>
+    <div class="box box-accent">
+      <strong>WHERE</strong><br>
+      GradCAM CDF &rarr; binary mask isolating harmful regions only
+    </div>
+    <div class="box box-safe">
+      <strong>HOW</strong><br>
+      Dual gradient: &nabla;safe &minus; &nabla;harm via 4-class classifier
+    </div>
+  </div>
+</section>
+
+<!-- ASCG: Classifier + Spatial -->
+<section>
+  <h2>ASCG &mdash; Classifier &amp; Spatial Mask</h2>
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <h3 style="color:var(--accent2);">4-Class Classifier</h3>
+      <table>
+        <tr><th>Class</th><th>ID</th><th>Role</th></tr>
+        <tr><td>Benign</td><td>0</td><td><span class="tag tag-green">Ignore</span></td></tr>
+        <tr><td>Safe Clothed</td><td>1</td><td><span class="tag tag-green">Target</span></td></tr>
+        <tr><td>Harm Nude</td><td>2</td><td><span class="tag tag-red">Repel</span></td></tr>
+        <tr><td>Harm Color</td><td>3</td><td><span class="tag tag-red">Repel</span></td></tr>
+      </table>
+      <div class="formula" style="font-size:0.82em; margin-top:8px;">
+        g<sub>t</sub> = &nabla;<sub>z</sub> log p(y=1 | z<sub>t</sub>) &minus; &nabla;<sub>z</sub> log p(y&isin;{2,3} | z<sub>t</sub>)
+      </div>
+      <p class="small" style="text-align:center;">Simultaneously attract safe + repel harm</p>
+    </div>
+    <div>
+      <h3 style="color:var(--accent2);">Spatial Mask M<sub>t</sub></h3>
+      <div class="formula" style="font-size:0.82em;">
+        M(p) = 1[ &Phi;((H<sub>p</sub> &minus; &mu;) / &sigma;) &ge; &tau;(t) ]
+      </div>
+      <div class="box" style="font-size:0.78em;">
+        <strong>GradCAM mode:</strong> Classifier gradient heatmap &rarr; z-score &rarr; CDF percentile &rarr; binary mask
+      </div>
+      <div class="box box-accent" style="font-size:0.78em;">
+        <strong>Attention mode:</strong> Cross-attention maps for harmful tokens at 16&times;16, 32&times;32
+      </div>
+      <div class="box box-safe" style="font-size:0.78em;">
+        <strong>Threshold schedule:</strong> Cosine annealing &tau;<sub>start</sub> &rarr; &tau;<sub>end</sub><br>
+        <span class="small">Early: strict (preserve structure) &rarr; Later: broader (refine details)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 3: COMBINATION ==================== -->
+<section class="section-divider">
+  <h2>Part 3</h2>
+  <p style="font-size:1.2em;">SGF + ASCG: Combination Experiments</p>
+  <p>Testing complementary strengths &amp; finding what works</p>
+</section>
+
+<!-- Combination: Motivation -->
+<section>
+  <h2>Complementary Strengths</h2>
+  <p class="subtitle">SGF answers "when", ASCG answers "where" and "how"</p>
+  <div class="vs-box" style="margin-top:15px;">
+    <div class="vs-left">
+      <h3 style="color:var(--sgf-color);">SGF</h3>
+      <ul style="font-size:0.78em;">
+        <li><strong>When:</strong> CBF-proven time window</li>
+        <li><strong>How:</strong> MMD repulsion (undirected)</li>
+        <li><strong>Where:</strong> Global (entire latent)</li>
+        <li>Requires unsafe dataset D<sup>&minus;</sup></li>
+      </ul>
+    </div>
+    <div class="vs-center">+</div>
+    <div class="vs-right">
+      <h3 style="color:var(--accent2);">ASCG</h3>
+      <ul style="font-size:0.78em;">
+        <li><strong>When:</strong> CDF monitoring (heuristic)</li>
+        <li><strong>How:</strong> Dual gradient (directed)</li>
+        <li><strong>Where:</strong> GradCAM spatial mask</li>
+        <li>Requires trained classifier</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box box-combo" style="font-size:0.85em; text-align:center;">
+    <strong>Hypothesis:</strong> &nbsp; Combine SGF's <em>CBF window + MMD repulsion</em> &nbsp;+&nbsp; ASCG's <em>spatial mask + dual CG</em> for best of both worlds.
+  </div>
+  <div class="box box-warn" style="font-size:0.78em; text-align:center; margin-top:6px;">
+    <strong>Research question:</strong> Does MMD repulsion add value on top of directed classifier guidance? Does x<sub>0</sub>-space guidance improve over z<sub>t</sub>-space?
+  </div>
+</section>
+
+<!-- Combination: Implementation -->
+<section>
+  <h2>SGF + ASCG &mdash; Experiments</h2>
+  <p class="subtitle">Three approaches tested: SGF x<sub>0</sub>-space + ASCG z<sub>t</sub>-space, schedule variants, ablations</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <div class="code-block" style="font-size:0.52em;">
+<span class="cm"># Hybrid pipeline (generate_std_sgf_ascg.py)</span>
+<span class="kw">for</span> step, t <span class="kw">in</span> <span class="fn">enumerate</span>(timesteps):
+    noise = <span class="fn">unet</span>(latents, t, prompt_embeds)  <span class="cm"># CFG</span>
+
+    <span class="kw">if</span> t_end &le; t &le; t_start:
+        w = &lambda;(t)  <span class="cm"># schedule weight</span>
+
+        <span class="cm"># SGF: x0-space MMD repellency</span>
+        x0 = <span class="fn">scheduler.step</span>(noise,t,z).pred_original_sample
+        x0 += w * <span class="fn">sgf.repellency</span>(x0)
+        latents = <span class="fn">add_noise</span>(x0, &epsilon;, t)
+
+    <span class="cm"># DDIM step</span>
+    latents = <span class="fn">scheduler.step</span>(noise, t, latents)
+
+    <span class="kw">if</span> t_end &le; t &le; t_start:
+        <span class="cm"># ASCG: z_{t-1}-space classifier guidance</span>
+        ascg_grad = <span class="fn">guidance.compute_gradient</span>(
+            latents, t, harm=[<span class="num">2</span>,<span class="num">3</span>],
+            thr=<span class="fn">get_thr</span>(step), scale=w*s_g)
+        latents += ascg_grad
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--combo-color);">Tested Configurations</h3>
+      <table style="font-size:0.68em; margin-top:8px;">
+        <tr><th>Variant</th><th>SGF</th><th>ASCG</th><th>Schedule</th></tr>
+        <tr><td>Hybrid</td><td>x<sub>0</sub>-space MMD</td><td>z<sub>t-1</sub>-space CG</td><td>&sigma;(t)/const</td></tr>
+        <tr><td>ASCG only (&sigma;)</td><td>&mdash;</td><td>z<sub>t-1</sub>-space CG</td><td>&sigma;(t)</td></tr>
+        <tr class="best-row"><td>ASCG only (linear)</td><td>&mdash;</td><td>z<sub>t-1</sub>-space CG</td><td>linear</td></tr>
+      </table>
+      <div class="box box-combo" style="font-size:0.72em; margin-top:8px;">
+        <strong>Key design:</strong> SGF operates in x<sub>0</sub>-space (as in paper) while ASCG operates in z<sub>t-1</sub>-space (after DDIM step), because the classifier was trained on noisy latents.
+      </div>
+      <div class="box box-warn" style="font-size:0.72em; margin-top:6px;">
+        <strong>Sweep:</strong> 18 configs total &mdash; 3 window sizes &times; 2 scale sets &times; schedule variants + ablations. 79 adversarial prompts per config.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Results: v2 Ablation Study -->
+<section>
+  <h2>Ablation: SGF + ASCG Combination</h2>
+  <p class="subtitle">Does MMD repellency help on top of directed classifier guidance?</p>
+  <table style="margin-top:10px;">
+    <tr><th>Config</th><th>SGF</th><th>Schedule</th><th>Window</th><th>SR&uarr;</th><th>Full&darr;</th><th>NR</th></tr>
+    <tr class="best-row"><td><strong>ASCG v2 (best)</strong></td><td>&mdash;</td><td>linear</td><td>[1000,400]</td><td style="color:var(--safe-color); font-weight:700;">87.3%</td><td style="color:var(--safe-color); font-weight:700;">1.3%</td><td>11.4%</td></tr>
+    <tr><td>ASCG v1</td><td>&mdash;</td><td>linear</td><td>[1000,400]</td><td>82.3%</td><td>3.8%</td><td>13.9%</td></tr>
+    <tr><td>ASCG only (&sigma;)</td><td>&mdash;</td><td>&sigma;(t)</td><td>[1000,400]</td><td>78.5%</td><td>16.5%</td><td>5.1%</td></tr>
+    <tr><td>SGF+ASCG narrow</td><td>0.003</td><td>&sigma;(t)</td><td>[1000,800]</td><td style="color:var(--danger-color);">60.8%</td><td>35.4%</td><td>3.8%</td></tr>
+    <tr><td>SGF+ASCG wide</td><td>0.003</td><td>&sigma;(t)</td><td>[1000,400]</td><td style="color:var(--danger-color);">50.6%</td><td>48.1%</td><td>1.3%</td></tr>
+    <tr><td>SGF+ASCG (0.001)</td><td>0.001</td><td>&sigma;(t)</td><td>[1000,400]</td><td style="color:var(--danger-color);">51.9%</td><td>46.8%</td><td>1.3%</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:10px; font-size:0.78em;">
+    <div class="box box-danger">
+      <strong>Finding 1:</strong> SGF's MMD repellency <em>hurts</em> when combined with ASCG &mdash; even at 1/30th scale. The x<sub>0</sub>-space re-noising disrupts the denoising trajectory. More SGF steps = worse results.
+    </div>
+    <div class="box box-safe">
+      <strong>Finding 2:</strong> ASCG alone in <strong>z<sub>t-1</sub>-space</strong> (post-DDIM) with linear schedule achieves best results: <strong>SR 87.3%, Full 1.3%</strong>. The less-noisy z<sub>t-1</sub> provides better classifier gradients.
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 4: RESULTS ==================== -->
+<section class="section-divider">
+  <h2>Part 4</h2>
+  <p style="font-size:1.2em;">Results &amp; Analysis</p>
+  <p>Ring-A-Bell &middot; 79 adversarial prompts &middot; SD v1.4</p>
+</section>
+
+<!-- Baselines -->
+<section>
+  <h2>Baseline Comparison (VLM)</h2>
+  <p class="subtitle">Qwen3-VL 4-category &mdash; SR (Safety Rate) = Safe + Partial &uarr;</p>
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <h3 style="color:var(--safe-color);">VLM Safety Rate (SR&uarr;)</h3>
+      <div style="margin-top:8px;">
+        <div class="bar-row"><div class="lbl">SD v1.4</div><div class="track"><div class="fill" style="width:30.4%;background:linear-gradient(90deg,#dc2626,#f87171);">30.4%</div></div><div class="val" style="color:var(--danger-color);">30.4%</div></div>
+        <div class="bar-row"><div class="lbl">SD + SGF</div><div class="track"><div class="fill" style="width:31.6%;background:linear-gradient(90deg,#dc2626,#f87171);">31.6%</div></div><div class="val" style="color:var(--danger-color);">31.6%</div></div>
+        <div class="bar-row"><div class="lbl">SAFREE</div><div class="track"><div class="fill" style="width:65.8%;background:linear-gradient(90deg,#d97706,#fbbf24);">65.8%</div></div><div class="val">65.8%</div></div>
+        <div class="bar-row"><div class="lbl">SAFREE + SGF</div><div class="track"><div class="fill" style="width:74.7%;background:linear-gradient(90deg,#059669,#34d399);">74.7%</div></div><div class="val" style="color:var(--safe-color);">74.7%</div></div>
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--safe-color);">Category Breakdown</h3>
+      <table>
+        <tr><th>Method</th><th>Safe&uarr;</th><th>Partial</th><th>Full&darr;</th><th>NR</th><th>SR&uarr;</th></tr>
+        <tr><td>SD v1.4</td><td>13.9%</td><td>16.5%</td><td style="color:var(--danger-color); font-weight:700;">64.6%</td><td>5.1%</td><td>30.4%</td></tr>
+        <tr><td>SD + SGF</td><td>12.7%</td><td>19.0%</td><td>64.6%</td><td>3.8%</td><td>31.6%</td></tr>
+        <tr><td>SAFREE</td><td>48.1%</td><td>17.7%</td><td>29.1%</td><td>5.1%</td><td>65.8%</td></tr>
+        <tr class="best-row"><td>SAFREE + SGF</td><td style="font-weight:700;">63.3%</td><td>11.4%</td><td>20.3%</td><td>5.1%</td><td style="color:var(--safe-color); font-weight:700;">74.7%</td></tr>
+      </table>
+      <div class="box box-warn" style="font-size:0.72em; margin-top:8px;">
+        <strong>NudeNet vs VLM:</strong> NudeNet (pixel skin detector) misses semantic nudity. VLM-based evaluation is essential for fair comparison.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cross-method Comparison -->
+<section>
+  <h2>Cross-Method Comparison</h2>
+  <p class="subtitle">VLM evaluation on Ring-A-Bell 79 prompts &mdash; SR = Safe + Partial &uarr;</p>
+  <table style="margin-top:10px;">
+    <tr><th>Method</th><th>Safe&uarr;</th><th>Partial</th><th>Full&darr;</th><th>NR</th><th>SR&uarr;</th><th>Defense</th></tr>
+    <tr><td>SD v1.4</td><td>13.9%</td><td>16.5%</td><td style="color:var(--danger-color); font-weight:700;">64.6%</td><td>5.1%</td><td>30.4%</td><td>&mdash;</td></tr>
+    <tr><td>SD + SGF</td><td>12.7%</td><td>19.0%</td><td>64.6%</td><td>3.8%</td><td>31.6%</td><td>MMD only</td></tr>
+    <tr><td>SAFREE</td><td>48.1%</td><td>17.7%</td><td>29.1%</td><td>5.1%</td><td>65.8%</td><td>Text proj.</td></tr>
+    <tr><td>SAFREE + SGF</td><td>63.3%</td><td>11.4%</td><td>20.3%</td><td>5.1%</td><td>74.7%</td><td>Text + MMD</td></tr>
+    <tr><td>ASCG v1 (Ours)</td><td>49.4%</td><td>32.9%</td><td>3.8%</td><td>13.9%</td><td>82.3%</td><td>Spatial CG + Window</td></tr>
+    <tr class="best-row"><td><strong>ASCG v2 (Ours)</strong></td><td style="color:var(--safe-color); font-weight:700;">45.6%</td><td>41.8%</td><td style="color:var(--safe-color); font-weight:700;">1.3%</td><td>11.4%</td><td style="color:var(--safe-color); font-weight:700;">87.3%</td><td>Post-DDIM Spatial CG</td></tr>
+  </table>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:12px;">
+    <div class="metric-card">
+      <div class="label">Safety Rate (SR)</div>
+      <div class="value green">87.3%</div>
+      <div class="label">vs SAFREE+SGF 74.7% (+12.6pp)</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Full Nudity</div>
+      <div class="value green">1.3%</div>
+      <div class="label">vs SAFREE+SGF 20.3% (&minus;19.0pp)</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">NotRelevant</div>
+      <div class="value blue">11.4%</div>
+      <div class="label">vs v1 13.9% (&minus;2.5pp)</div>
+    </div>
+  </div>
+  <div class="two-col" style="margin-top:10px; font-size:0.78em;">
+    <div class="box box-safe">
+      <strong>ASCG v2: SR 87.3%, Full 1.3%.</strong> Post-DDIM guidance on cleaner z<sub>t-1</sub> improves both safety and nudity removal vs v1. Surpasses SAFREE+SGF by +12.6pp SR.
+    </div>
+    <div class="box box-warn">
+      <strong>Trade-off:</strong> NR 11.4% &mdash; improved from v1's 13.9%. Still some image distortion on certain prompts.
+    </div>
+  </div>
+</section>
+
+<!-- NudeNet vs VLM Discrepancy -->
+<section>
+  <h2>NudeNet vs VLM: Evaluation Gap</h2>
+  <p class="subtitle">SD v1.4 + SGF (no SAFREE) &mdash; 14 images where NudeNet score &lt; 0.3 but VLM judges "Full Nudity"</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <!-- NOTE: Place nn_safe_vlm_full_grid.png in the same folder as this HTML file -->
+      <img src="nn_safe_vlm_full_grid.png" style="width:100%; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <div class="box box-danger" style="font-size:0.68em; margin-top:6px;">
+        <strong>Required file:</strong> <code>nn_safe_vlm_full_grid.png</code> &mdash; place this image in the same folder as the HTML file.
+      </div>
+    </div>
+    <div>
+      <div class="box box-danger" style="font-size:0.78em;">
+        <strong>Problem:</strong> NudeNet (pixel-level skin detector) completely misses these images &mdash; scores as low as <strong>0.025</strong>. But Qwen3-VL semantically classifies them as Full Nudity.
+      </div>
+      <table style="margin-top:8px;">
+        <tr><th>Method</th><th>NN ASR</th><th>VLM Full</th><th>Discrepancies</th></tr>
+        <tr><td>SD v1.4 + SGF</td><td>7.6%</td><td>20.3%</td><td style="color:var(--danger-color); font-weight:700;">13</td></tr>
+        <tr><td>SAFREE</td><td>27.8%</td><td>29.1%</td><td style="color:var(--danger-color);">17</td></tr>
+        <tr><td>SD v1.4 (vanilla)</td><td>81.0%</td><td>64.6%</td><td>7</td></tr>
+        <tr><td>Std SGF</td><td>50.6%</td><td>64.6%</td><td style="color:var(--danger-color); font-weight:700;">23</td></tr>
+      </table>
+      <div class="box box-warn" style="font-size:0.78em; margin-top:8px;">
+        <strong>Implication:</strong> NudeNet ASR is <em>unreliable</em> for methods that alter pixel-level appearance without removing semantic nudity. VLM-based evaluation is essential.
+      </div>
+      <div class="box" style="font-size:0.72em; margin-top:8px;">
+        <strong>Recurring indices:</strong> Images 7, 14, 67, 69, 74 &mdash; prompts that consistently evade NudeNet detection.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASCG v1 vs v2: What Changed -->
+<section>
+  <h2>ASCG v1 &rarr; v2: Key Improvement</h2>
+  <p class="subtitle">Post-DDIM guidance on z<sub>t-1</sub> outperforms pre-DDIM guidance on z<sub>t</sub></p>
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <div class="box box-combo" style="font-size:0.78em;">
+        <h3 style="color:var(--combo-color); font-size:1em;">v1: Guidance on z<sub>t</sub></h3>
+        <ul style="margin:5px 0 0 15px;">
+          <li>ASCG modifies z<sub>t</sub> &rarr; then DDIM step</li>
+          <li>z<sub>t</sub> is <strong>noisier</strong> &rarr; classifier gradient less precise</li>
+          <li>Linear schedule &lambda;(t) in [t<sub>end</sub>, t<sub>start</sub>]</li>
+          <li>SR 82.3%, Full 3.8%, NR 13.9%</li>
+        </ul>
+      </div>
+      <div class="box box-danger" style="font-size:0.78em;">
+        <h3 style="color:var(--danger-color); font-size:1em;">Tested but failed: SGF x<sub>0</sub>-space MMD</h3>
+        <ul style="margin:5px 0 0 15px;">
+          <li>MMD repellency in x<sub>0</sub>-space <strong>hurts</strong> ASCG</li>
+          <li>&sigma;(t) schedule <strong>worse</strong> than linear</li>
+          <li>Re-noising disrupts denoising trajectory</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-safe" style="font-size:0.78em;">
+        <h3 style="color:var(--safe-color); font-size:1em;">v2: Guidance on z<sub>t-1</sub> (Post-DDIM)</h3>
+        <ol style="margin:5px 0 0 15px;">
+          <li><strong>DDIM step first</strong>: z<sub>t</sub> &rarr; z<sub>t-1</sub></li>
+          <li><strong>ASCG on z<sub>t-1</sub></strong>: less noisy &rarr; sharper classifier gradient</li>
+          <li>Linear schedule retained (empirically superior)</li>
+          <li><strong>SR 87.3%, Full 1.3%, NR 11.4%</strong></li>
+        </ol>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+        <div class="metric-card">
+          <div class="label">SR Improvement</div>
+          <div class="value green">+5.0pp</div>
+          <div class="label">82.3% &rarr; 87.3%</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Full Nudity</div>
+          <div class="value green">&minus;2.5pp</div>
+          <div class="label">3.8% &rarr; 1.3%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- v2 Pipeline Detail -->
+<section>
+  <h2>ASCG v2 Pipeline</h2>
+  <p class="subtitle">Per-timestep flow &mdash; DDIM first, then ASCG on cleaner z<sub>t-1</sub></p>
+  <div class="pipeline" style="margin:16px 0;">
+    <div class="step" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border:2px solid #fbbf24; color:#92400e;">UNet + CFG<br><span style="font-size:0.8em;">&epsilon;<sub>&theta;</sub> prediction</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step" style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border:2px solid #93c5fd; color:#1e40af;">DDIM Step<br><span style="font-size:0.8em;">z<sub>t</sub> &rarr; z<sub>t&minus;1</sub></span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff); border:2px solid #c084fc; color:#6b21a8;">ASCG CG<br><span style="font-size:0.8em;">GradCAM &times; (&nabla;s&minus;&nabla;h)</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;">Safe z<sub>t&minus;1</sub>'<br><span style="font-size:0.8em;">next step</span></div>
+  </div>
+  <div class="formula" style="font-size:0.82em;">
+    z<sub>t&minus;1</sub>' &larr; z<sub>t&minus;1</sub> + <span style="color:var(--accent);">&lambda;(t)</span> &middot; <span style="color:var(--accent2);">M<sub>t</sub></span> &middot; s<sub>g</sub> &middot; <span style="color:var(--safe-color);">g<sub>CG</sub></span>(z<sub>t&minus;1</sub>)
+  </div>
+  <div class="two-col" style="margin-top:10px; font-size:0.78em;">
+    <div>
+      <table>
+        <tr><th>Component</th><th>v1</th><th>v2</th></tr>
+        <tr><td>ASCG space</td><td>z<sub>t</sub> (before DDIM)</td><td class="best-row"><strong>z<sub>t-1</sub> (after DDIM)</strong></td></tr>
+        <tr><td>Schedule &lambda;(t)</td><td>linear</td><td>linear (best)</td></tr>
+        <tr><td>Spatial mask</td><td>GradCAM + CDF</td><td>GradCAM + CDF</td></tr>
+        <tr><td>Gradient</td><td>&nabla;safe &minus; &nabla;harm</td><td>&nabla;safe &minus; &nabla;harm</td></tr>
+        <tr><td>SR</td><td>82.3%</td><td class="best-row"><strong>87.3%</strong></td></tr>
+        <tr><td>Full Nudity</td><td>3.8%</td><td class="best-row"><strong>1.3%</strong></td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="box box-safe">
+        <strong>Why z<sub>t-1</sub> is better:</strong><br>
+        After the DDIM step, z<sub>t-1</sub> is <em>less noisy</em> than z<sub>t</sub>. The classifier produces sharper, more accurate gradients on cleaner latents, leading to more precise guidance.
+      </div>
+      <div class="box box-danger" style="margin-top:6px;">
+        <strong>What did NOT help:</strong><br>
+        SGF MMD repellency (x<sub>0</sub>-space re-noising), &sigma;(t) CBF schedule. Directed classifier guidance alone outperforms undirected MMD repulsion.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Key Findings Summary -->
+<section>
+  <h2>Key Findings &amp; Takeaways</h2>
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <div class="box box-safe" style="font-size:0.82em;">
+        <h3 style="color:var(--safe-color); font-size:1em;">What worked</h3>
+        <ul style="margin:5px 0 0 15px;">
+          <li><strong>Post-DDIM ASCG</strong>: Applying guidance on z<sub>t-1</sub> instead of z<sub>t</sub> &rarr; +5pp SR</li>
+          <li><strong>Linear schedule</strong>: Outperforms CBF-derived &sigma;(t) schedule</li>
+          <li><strong>SGF time window concept</strong>: [1000, 400] range is effective</li>
+          <li><strong>Spatial mask + dual gradient</strong>: Core ASCG components</li>
+        </ul>
+      </div>
+      <div class="box box-danger" style="font-size:0.82em;">
+        <h3 style="color:var(--danger-color); font-size:1em;">What did NOT work</h3>
+        <ul style="margin:5px 0 0 15px;">
+          <li><strong>SGF MMD repellency</strong>: Hurts even at 1/30th scale &mdash; undirected repulsion conflicts with directed CG</li>
+          <li><strong>x<sub>0</sub>-space re-noising</strong>: Injects noise that degrades trajectory</li>
+          <li><strong>&sigma;(t) schedule</strong>: Too aggressive early-weighting for spatial CG</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-combo" style="font-size:0.82em;">
+        <h3 style="color:var(--combo-color); font-size:1em;">Remaining Tasks</h3>
+        <ol style="margin:5px 0 0 15px;">
+          <li><strong>Quality evaluation:</strong> COCO-30K FID / CLIP-Score for benign prompts</li>
+          <li><strong>Multi-attack:</strong> UnlearnDiff, MMA-Diffusion, P4D-Nudity</li>
+          <li><strong>Generalization:</strong> SD v2.1, SDXL, other concepts (violence, copyright)</li>
+          <li><strong>Reduce NR:</strong> 11.4% &rarr; target &lt;5%</li>
+          <li><strong>ASCG + SAFREE:</strong> Test combining with text projection</li>
+        </ol>
+      </div>
+      <div class="box" style="font-size:0.82em; margin-top:6px;">
+        <strong>Insight:</strong> Directed classifier guidance with spatial precision is more effective than undirected energy-based repulsion. The classifier already encodes richer semantics than kernel distance from reference images.
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- slides -->
+</div><!-- reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: true,
+    transition: 'slide',
+    width: 1280,
+    height: 720,
+    margin: 0.08,
+    center: false,
+  });
+</script>
+</body>
+</html>

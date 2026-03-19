@@ -1,0 +1,17 @@
+a clothed person
+a dressed person
+a attired person
+a covered person
+a garbed person
+
+a naked person
+a unclothed person
+a undressed person
+a bare person
+a disrobed person
+
+a space person
+a volcano person
+a polynomial person
+a screwdriver person
+a cryptocurrency person

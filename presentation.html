@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCG - Research Presentation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<style>
+  :root {
+    --r-heading-color: #1a1a2e;
+    --r-main-color: #333;
+    --r-link-color: #2563eb;
+    --accent: #2563eb;
+    --accent2: #7c3aed;
+    --safe-color: #059669;
+    --danger-color: #dc2626;
+    --warn-color: #d97706;
+  }
+  .reveal { font-size: 28px; }
+  .reveal h1 { font-size: 2.2em; color: var(--r-heading-color); font-weight: 800; }
+  .reveal h2 { font-size: 1.6em; color: var(--r-heading-color); font-weight: 700; border-bottom: 3px solid var(--accent); padding-bottom: 10px; display: inline-block; }
+  .reveal h3 { font-size: 1.2em; color: var(--accent2); font-weight: 600; }
+  .reveal .subtitle { color: #666; font-size: 0.8em; margin-top: -10px; }
+  .reveal section { text-align: left; }
+
+  /* Title slide */
+  .title-slide { text-align: center !important; }
+  .title-slide h1 { font-size: 2.5em; background: linear-gradient(135deg, #1a1a2e, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  /* Section dividers */
+  .section-divider { text-align: center !important; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important; }
+  .section-divider h2 { color: #fff !important; border-bottom-color: #60a5fa !important; font-size: 2em; }
+  .section-divider p { color: #cbd5e1 !important; }
+
+  /* Boxes */
+  .box { background: #f8fafc; border-radius: 12px; padding: 16px 20px; margin: 10px 0; border-left: 4px solid var(--accent); }
+  .box-accent { border-left-color: var(--accent2); }
+  .box-safe { border-left-color: var(--safe-color); background: #f0fdf4; }
+  .box-danger { border-left-color: var(--danger-color); background: #fef2f2; }
+  .box-warn { border-left-color: var(--warn-color); background: #fffbeb; }
+
+  /* Tables */
+  .reveal table { font-size: 0.65em; width: 100%; border-collapse: collapse; margin: 10px 0; }
+  .reveal table th { background: #1e293b; color: #fff; padding: 8px 10px; text-align: center; font-weight: 600; }
+  .reveal table td { padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+  .reveal table tr:nth-child(even) { background: #f8fafc; }
+  .reveal table tr:hover { background: #eff6ff; }
+  .highlight-row { background: #dbeafe !important; font-weight: 700; }
+  .best-row { background: #dcfce7 !important; font-weight: 700; }
+
+  /* Formulas */
+  .formula { background: #f1f5f9; border-radius: 8px; padding: 14px 20px; margin: 10px 0; font-family: 'Georgia', serif; font-size: 0.95em; text-align: center; border: 1px solid #e2e8f0; }
+  .formula-small { font-size: 0.82em; padding: 10px 16px; }
+
+  /* Pipeline / Flow */
+  .pipeline { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
+  .pipeline .step { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 2px solid #93c5fd; border-radius: 10px; padding: 10px 16px; font-size: 0.75em; font-weight: 600; color: #1e40af; text-align: center; min-width: 100px; }
+  .pipeline .arrow { font-size: 1.5em; color: #93c5fd; }
+
+  /* Two column */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+
+  /* Tags */
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.65em; font-weight: 600; margin: 2px; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-purple { background: #f3e8ff; color: #6b21a8; }
+
+  /* Metric cards */
+  .metric-card { background: #fff; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
+  .metric-card .value { font-size: 2.2em; font-weight: 800; margin: 5px 0; }
+  .metric-card .label { font-size: 0.7em; color: #64748b; }
+  .metric-card .value.green { color: var(--safe-color); }
+  .metric-card .value.red { color: var(--danger-color); }
+  .metric-card .value.blue { color: var(--accent); }
+
+  .reveal ul { margin-left: 0; }
+  .reveal li { margin-bottom: 8px; line-height: 1.5; }
+  .reveal .small { font-size: 0.75em; color: #64748b; }
+
+  /* VS comparison */
+  .vs-box { display: flex; align-items: stretch; gap: 15px; margin: 10px 0; }
+  .vs-box > div { flex: 1; padding: 14px; border-radius: 10px; }
+  .vs-left { background: #fef2f2; border: 2px solid #fca5a5; }
+  .vs-right { background: #f0fdf4; border: 2px solid #86efac; }
+  .vs-center { display: flex; align-items: center; font-size: 1.5em; font-weight: 800; color: #94a3b8; flex: 0; min-width: 40px; justify-content: center; }
+
+  /* Progress bar */
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin: 5px 0; }
+  .progress-bar .fill { height: 100%; border-radius: 4px; }
+  .fill-green { background: linear-gradient(90deg, #059669, #34d399); }
+  .fill-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .fill-blue { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+
+  /* Algorithm pseudocode */
+  .algo-box { background: #fff; border: 2px solid #334155; border-radius: 8px; overflow: hidden; margin: 10px 0; font-size: 0.72em; }
+  .algo-header { background: #334155; color: #fff; padding: 8px 16px; font-weight: 700; font-size: 1.05em; }
+  .algo-body { padding: 12px 16px; line-height: 2.0; font-family: 'Georgia', serif; }
+  .algo-body .kw { color: #2563eb; font-weight: 700; }
+  .algo-body .fn { color: #7c3aed; font-weight: 600; }
+  .algo-body .cmt { color: #64748b; font-size: 0.9em; float: right; }
+  .algo-body .indent { margin-left: 30px; }
+  .algo-body .indent2 { margin-left: 60px; }
+  .algo-io { padding: 6px 16px; font-size: 0.92em; border-bottom: 1px solid #e2e8f0; }
+  .algo-io b { font-weight: 700; }
+
+  /* Weakness highlight */
+  .weakness-highlight { position: relative; }
+  .weakness-highlight::after { content: "Limitation"; position: absolute; top: -8px; right: 10px; background: #dc2626; color: #fff; font-size: 0.55em; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+
+  /* Idea card */
+  .idea-card { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #fbbf24; border-radius: 12px; padding: 18px; margin: 10px 0; }
+  .idea-card h3 { color: #92400e; margin-top: 0; }
+
+  /* Numbered circle */
+  .num-circle { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: 0.8em; margin-right: 8px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================ -->
+<!-- TITLE SLIDE -->
+<!-- ============================================ -->
+<section class="title-slide">
+  <h1>ASCG</h1>
+  <p style="font-size:1.1em; color:#475569; margin-top:-5px;">Adaptive Spatial Classifier Guidance<br>for Safe Diffusion-based Image Generation</p>
+  <div style="margin-top:30px; color:#555; font-size:0.85em;">
+    Research Progress Sharing
+  </div>
+  <div style="margin-top:10px; color:#888; font-size:0.7em;">March 2026</div>
+  <div style="margin-top:25px;">
+    <span class="tag tag-blue">Inference-time Safety</span>
+    <span class="tag tag-purple">Classifier Guidance</span>
+    <span class="tag tag-green">Spatial Control</span>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- AGENDA -->
+<!-- ============================================ -->
+<section>
+  <h2>Agenda</h2>
+  <div style="margin-top:15px;">
+    <div class="box" style="border-left-color:#2563eb; display:flex; align-items:center;">
+      <span class="num-circle">1</span>
+      <div><strong>ASCG Methodology</strong> — When / Where / How framework <span class="small">(Our Method)</span></div>
+    </div>
+    <div class="box" style="border-left-color:#dc2626; display:flex; align-items:center;">
+      <span class="num-circle" style="background:#dc2626;">2</span>
+      <div><strong>Current Limitation</strong> — "When" monitoring is the bottleneck</div>
+    </div>
+    <div class="box" style="border-left-color:#7c3aed; display:flex; align-items:center;">
+      <span class="num-circle" style="background:#7c3aed;">3</span>
+      <div><strong>SDErasure (ICLR 2026)</strong> — SSScore: a better "When" signal?</div>
+    </div>
+    <div class="box" style="border-left-color:#d97706; display:flex; align-items:center;">
+      <span class="num-circle" style="background:#d97706;">4</span>
+      <div><strong>SSScore + ASCG</strong> — Combining ideas & experimental results</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 1: ASCG METHOD -->
+<!-- ============================================ -->
+<section class="section-divider">
+  <h2>Part 1</h2>
+  <p style="font-size:1.2em;">ASCG — Adaptive Spatial Classifier Guidance</p>
+</section>
+
+<!-- Motivation -->
+<section>
+  <h2>Motivation</h2>
+  <div class="two-col" style="margin-top:15px;">
+    <div>
+      <h3>Problem</h3>
+      <ul>
+        <li>T2I diffusion models generate <strong>harmful content</strong></li>
+        <li>Fine-tuning methods <strong>permanently alter</strong> weights</li>
+        <li>Existing inference-time methods lack <strong>spatial awareness</strong></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Our Goal</h3>
+      <ul>
+        <li><strong>Training-free</strong> — no weight modification</li>
+        <li><strong>Adaptive</strong> — detect <em>when</em> to intervene</li>
+        <li><strong>Spatially precise</strong> — target only harmful regions</li>
+        <li><strong>Quality-preserving</strong> — safe areas untouched</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box-warn box" style="margin-top:15px; font-size:0.85em;">
+    <strong>Key Insight:</strong> Harmful content is spatially localized. By targeting only the harmful regions at the right timesteps, we erase concepts while preserving quality.
+  </div>
+</section>
+
+<!-- ASCG 3-Question Framework -->
+<section>
+  <h2>ASCG — Three-Question Framework</h2>
+  <div class="pipeline" style="margin:20px 0;">
+    <div class="step" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);">z<sub>t</sub><br><span style="font-size:0.8em;">Noisy Latent</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="step" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border-color:#fbbf24; color:#92400e;">WHEN<br><span style="font-size:0.8em;">Monitoring</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="step" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff); border-color:#c084fc; color:#6b21a8;">WHERE<br><span style="font-size:0.8em;">Spatial Mask</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="step" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border-color:#86efac; color:#166534;">HOW<br><span style="font-size:0.8em;">Gradient Guidance</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="step" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);">z<sub>t</sub>'<br><span style="font-size:0.8em;">Safe Latent</span></div>
+  </div>
+  <div class="three-col" style="font-size:0.78em;">
+    <div class="box" style="border-left-color:#d97706;">
+      <strong>WHEN</strong><br>
+      GradCAM saliency &#8594; CDF against training stats &#8594; P(harm) > threshold?
+    </div>
+    <div class="box box-accent">
+      <strong>WHERE</strong><br>
+      Per-pixel CDF normalization &#8594; binary spatial mask isolating harmful regions
+    </div>
+    <div class="box box-safe">
+      <strong>HOW</strong><br>
+      Bidirectional classifier gradient: pull safe + push harmful, applied through mask
+    </div>
+  </div>
+</section>
+
+<!-- 4-Class Classifier -->
+<section>
+  <h2>Latent-Space 4-Class Classifier</h2>
+  <p class="subtitle">Trained on SD v1.4 denoising trajectories</p>
+  <div class="two-col" style="margin-top:15px;">
+    <div>
+      <table>
+        <tr><th>Class</th><th>ID</th><th>Description</th><th>Role</th></tr>
+        <tr><td>Benign</td><td>0</td><td>Non-human / landscape</td><td><span class="tag tag-green">Safe</span></td></tr>
+        <tr><td>Safe Clothed</td><td>1</td><td>Clothed people</td><td><span class="tag tag-green">Safe (Target)</span></td></tr>
+        <tr><td>Harm Nude</td><td>2</td><td>Nude people</td><td><span class="tag tag-red">Harmful</span></td></tr>
+        <tr><td>Harm Color</td><td>3</td><td>Color-biased FP</td><td><span class="tag tag-red">Harmful</span></td></tr>
+      </table>
+      <div class="box" style="font-size:0.8em; margin-top:10px;">
+        <strong>Input:</strong> z<sub>t</sub> (4&times;64&times;64) + t/1000<br>
+        <strong>Output:</strong> logits [B, 4] &#8594; softmax
+      </div>
+    </div>
+    <div>
+      <div class="box box-safe" style="font-size:0.82em;">
+        <strong>Dual-purpose design:</strong>
+        <ul style="margin:5px 0 0 15px;">
+          <li><strong>Classification</strong>: P(class | z<sub>t</sub>) &#8594; detection</li>
+          <li><strong>Gradient</strong>: &#8706;logits/&#8706;z<sub>t</sub> &#8594; guidance direction</li>
+        </ul>
+      </div>
+      <div class="box" style="font-size:0.82em;">
+        <strong>Guidance direction:</strong><br>
+        &#8593; Pull toward class 1 (clothed) <br>
+        &#8595; Push from class 2,3 (nude/color)
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHEN + WHERE -->
+<section>
+  <h2>WHEN &amp; WHERE — CDF-based Detection</h2>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3 style="color:#d97706;">WHEN: Global Monitoring</h3>
+      <div class="formula-small formula">
+        P&#772;(harm | z<sub>t</sub>) = &Phi;( (&mu;<sub>heatmap</sub> &minus; &mu;<sub>train</sub>) / &sigma;<sub>train</sub> )
+      </div>
+      <div style="font-size:0.82em; margin-top:8px;">
+        <ol style="line-height:1.7;">
+          <li>GradCAM heatmap H(z<sub>t</sub>, c<sub>harm</sub>)</li>
+          <li>Z-score against training statistics</li>
+          <li>Gaussian CDF &#8594; P(harm) &isin; [0,1]</li>
+          <li>If P&#772; &gt; &tau;&#772; &#8594; <strong>activate guidance</strong></li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <h3 style="color:#7c3aed;">WHERE: Spatial Mask</h3>
+      <div class="formula-small formula">
+        M(p) = &#x1D7D9;[ &Phi;( (H<sub>p</sub> &minus; &mu;<sub>topk</sub>) / &sigma;<sub>topk</sub> ) &ge; &tau;<sub>spatial</sub> ]
+      </div>
+      <div style="font-size:0.82em; margin-top:8px;">
+        <ul>
+          <li><strong>Per-pixel</strong> CDF normalization</li>
+          <li>Binary mask: harmful=1, safe=0</li>
+          <li>Cosine threshold schedule:<br>
+            &tau;<sub>start</sub>=0.5 &#8594; &tau;<sub>end</sub>=0.1<br>
+            <span class="small">Strict early (structure) &#8594; Broad late (details)</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section>
+  <h2>HOW — Bidirectional Gradient Injection</h2>
+  <div class="formula" style="margin-top:15px;">
+    z<sub>t</sub>' = z<sub>t</sub> + &lambda; &middot; w(t) &middot; M(z<sub>t</sub>) &odot; ( &nabla;<sub>safe</sub> &minus; &alpha; &middot; &nabla;<sub>harm</sub> )
+  </div>
+  <div class="two-col" style="margin-top:15px;">
+    <div>
+      <div class="box box-safe" style="font-size:0.82em;">
+        <strong style="color:var(--safe-color);">&nabla;<sub>safe</sub></strong> = &nabla;<sub>z<sub>t</sub></sub> log p<sub>&phi;</sub>(c<sub>safe</sub> | z<sub>t</sub>)<br>
+        <span class="small">Pull toward safe_clothed (class 1)</span>
+      </div>
+      <div class="box box-danger" style="font-size:0.82em;">
+        <strong style="color:var(--danger-color);">&nabla;<sub>harm</sub></strong> = &nabla;<sub>z<sub>t</sub></sub> log p<sub>&phi;</sub>(c<sub>harm</sub> | z<sub>t</sub>)<br>
+        <span class="small">Push from nude + color classes (2,3)</span>
+      </div>
+    </div>
+    <div>
+      <table style="font-size:0.78em;">
+        <tr><th>Symbol</th><th>Meaning</th><th>Default</th></tr>
+        <tr><td>&lambda;</td><td>Guidance scale</td><td>10.0</td></tr>
+        <tr><td>w(t)</td><td>Cosine weight schedule</td><td>10&#8594;0.5</td></tr>
+        <tr><td>&alpha;</td><td>Harmful repulsion scale</td><td>1.0</td></tr>
+        <tr><td>M(&middot;)</td><td>Spatial mask (GradCAM CDF)</td><td>—</td></tr>
+      </table>
+      <div class="box" style="font-size:0.78em; padding:8px 14px; margin-top:6px;">
+        <strong>Key:</strong> Gradient injected into <em>noise estimate</em> &epsilon;&#770;<sub>t</sub>, not directly into latent
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Algorithm Figure -->
+<section>
+  <h2>ASCG Algorithm</h2>
+  <div class="algo-box">
+    <div class="algo-header">Algorithm 1 &nbsp; Denoising step of Latent DDIM incorporating ASCG</div>
+    <div class="algo-io">
+      <b>Input:</b> Latent z<sub>t</sub>, ratio &alpha;<sub>t</sub>, denoiser &epsilon;<sub>&theta;</sub>, prompt p, latent classifier p<sub>&phi;</sub>
+    </div>
+    <div class="algo-io">
+      <b>Output:</b> Latent z<sub>t&minus;1</sub> at time t &minus; 1
+    </div>
+    <div class="algo-body">
+      <div>1: &nbsp; P&#772;<sub>t,c</sub> , P<sub>t,c</sub> &larr; <span class="fn">ComputeSaliency</span>(z<sub>t</sub> ; p<sub>&phi;</sub>) <span class="cmt">&#9655; Equations 2-4</span></div>
+      <div>2: &nbsp; <span class="kw">if</span> P&#772;<sub>t,c</sub> &gt; &tau;&#772; <span class="kw">then</span> <span class="cmt" style="color:#d97706; font-weight:600;">&#9655; WHEN to guide</span></div>
+      <div class="indent">3: &nbsp; m<sub>t</sub> &larr; <span class="fn">ComputeMask</span>(P<sub>t,c</sub>) <span class="cmt" style="color:#7c3aed; font-weight:600;">&#9655; WHERE to guide (Eq. 5)</span></div>
+      <div class="indent">4: &nbsp; g<sub>t</sub> &larr; &nabla;<sub>z<sub>t</sub></sub> log p<sub>&phi;</sub>(c<sub>safe</sub> | z<sub>t</sub>) &minus; &lambda;<sub>rep</sub> &middot; &nabla;<sub>z<sub>t</sub></sub> log p<sub>&phi;</sub>(c<sub>harm</sub> | z<sub>t</sub>) <span class="cmt" style="color:#059669; font-weight:600;">&#9655; HOW (Eq. 6)</span></div>
+      <div class="indent">5: &nbsp; g<sub>t</sub><sup>spatial</sup> &larr; <span class="fn">ComputeSpatial</span>(g<sub>t</sub> , m<sub>t</sub>) <span class="cmt">&#9655; Equation 7</span></div>
+      <div class="indent">6: &nbsp; &epsilon;&#770;<sub>t</sub> &larr; &epsilon;<sub>&theta;</sub>(z<sub>t</sub>, t, p) &minus; &radic;(1 &minus; &alpha;<sub>t</sub>) &middot; g<sub>t</sub><sup>spatial</sup> <span class="cmt">&#9655; Equation 8</span></div>
+      <div>7: &nbsp; <span class="kw">else</span></div>
+      <div class="indent">8: &nbsp; &epsilon;&#770;<sub>t</sub> &larr; &epsilon;<sub>&theta;</sub>(z<sub>t</sub>, t, p)</div>
+      <div>9: &nbsp; <span class="kw">end if</span></div>
+      <div>10: z<sub>t&minus;1</sub> &larr; <span class="fn">DDIM</span>(z<sub>t</sub>, &alpha;<sub>t</sub>, &epsilon;&#770;<sub>t</sub>) <span class="cmt">&#9655; Equation 1</span></div>
+    </div>
+  </div>
+  <div style="font-size:0.72em; color:#64748b; margin-top:6px; text-align:center;">
+    Guidance is injected into the noise estimate &epsilon;&#770;<sub>t</sub> (line 6), not directly into z<sub>t</sub>. Standard DDIM step follows (line 10).
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 2: WHEN IS THE BOTTLENECK -->
+<!-- ============================================ -->
+<section class="section-divider">
+  <h2>Part 2</h2>
+  <p style="font-size:1.2em;">Current Limitation of ASCG</p>
+  <p>"When" monitoring is the performance bottleneck</p>
+</section>
+
+<!-- Current WHEN problem -->
+<section>
+  <h2>The "When" Problem</h2>
+  <p class="subtitle">WHERE and HOW work well, but WHEN holds back performance</p>
+  <div class="three-col" style="margin-top:15px;">
+    <div class="box box-safe" style="text-align:center;">
+      <h3 style="color:var(--safe-color);">WHERE &#10003;</h3>
+      <p style="font-size:0.8em;">GradCAM spatial mask accurately localizes harmful regions</p>
+    </div>
+    <div class="box box-safe" style="text-align:center;">
+      <h3 style="color:var(--safe-color);">HOW &#10003;</h3>
+      <p style="font-size:0.8em;">Bidirectional gradient effectively pushes toward safety</p>
+    </div>
+    <div class="box box-danger weakness-highlight" style="text-align:center;">
+      <h3 style="color:var(--danger-color);">WHEN &#10007;</h3>
+      <p style="font-size:0.8em;">CDF monitoring has limited discriminability in noisy latent space</p>
+    </div>
+  </div>
+  <div class="box box-warn" style="margin-top:15px; font-size:0.82em;">
+    <strong>Evidence from experiments:</strong> Even with optimal WHERE/HOW parameters, ASCG on vanilla SD v1.4 achieves only ~49% SR. The monitoring often fails to detect harmful content forming in early-to-mid timesteps, or triggers guidance at the wrong moments.
+  </div>
+</section>
+
+<!-- Current Monitoring Modes -->
+<section>
+  <h2>Current Monitoring Approaches</h2>
+  <p class="subtitle">Multiple "When" algorithms explored, none fully satisfactory</p>
+  <table style="font-size:0.7em; margin-top:12px;">
+    <tr><th>Mode</th><th>Mechanism</th><th>Pros</th><th>Cons</th></tr>
+    <tr>
+      <td><strong>GradCAM CDF</strong></td>
+      <td>P(harm) via heatmap z-score per step</td>
+      <td>Per-step adaptivity</td>
+      <td>Noisy at high t, threshold-sensitive</td>
+    </tr>
+    <tr>
+      <td><strong>Z0-Trigger</strong></td>
+      <td>Predict x&#770;<sub>0</sub>, classify at t=0</td>
+      <td>Cleaner signal (denoised)</td>
+      <td>x&#770;<sub>0</sub> prediction noisy at early steps</td>
+    </tr>
+    <tr>
+      <td><strong>Z0-Sticky</strong></td>
+      <td>Once triggered, guide all remaining</td>
+      <td>No missed steps</td>
+      <td>Over-guides, quality degradation</td>
+    </tr>
+    <tr>
+      <td><strong>Dual</strong></td>
+      <td>Z0-sticky + GradCAM refinement</td>
+      <td>Combined signal</td>
+      <td>Complex, many hyperparameters</td>
+    </tr>
+  </table>
+  <div class="idea-card" style="margin-top:15px;">
+    <h3 style="font-size:0.95em;">Research Question</h3>
+    <p style="font-size:0.85em; margin:5px 0 0 0;">Can we find a <strong>better "When" signal</strong> that reliably identifies the critical timesteps where harmful concepts crystallize in the denoising trajectory?</p>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 3: SDErasure & SSScore -->
+<!-- ============================================ -->
+<section class="section-divider">
+  <h2>Part 3</h2>
+  <p style="font-size:1.2em;">SDErasure (ICLR 2026)</p>
+  <p>A promising "When" signal: SSScore</p>
+</section>
+
+<!-- SDErasure Overview -->
+<section>
+  <h2>SDErasure — Overview</h2>
+  <p class="subtitle">Concept erasure via adaptive denoising trajectory shifting</p>
+  <div class="box" style="margin-top:10px; font-size:0.88em;">
+    <strong>Core idea:</strong> Instead of erasing concept everywhere, identify <em>critical timesteps</em> where the model distinguishes target from anchor, and shift trajectory only there.
+  </div>
+  <div class="pipeline" style="margin:15px 0;">
+    <div class="step" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border-color:#fbbf24; color:#92400e;"><strong>SSScore</strong><br><span style="font-size:0.8em;">When to erase</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="step" style="background:linear-gradient(135deg,#fee2e2,#fecaca); border-color:#f87171; color:#991b1b;"><strong>Rematching</strong><br><span style="font-size:0.8em;">Trajectory shift</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="step" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border-color:#86efac; color:#166534;"><strong>Quality Reg.</strong><br><span style="font-size:0.8em;">Preserve others</span></div>
+  </div>
+  <div class="two-col" style="font-size:0.82em;">
+    <div class="box box-danger">
+      <strong>Target c<sub>t</sub>:</strong> "nudity" &mdash; concept to erase
+    </div>
+    <div class="box box-safe">
+      <strong>Anchor c<sub>a</sub>:</strong> "a person wearing clothes" &mdash; redirect destination
+    </div>
+  </div>
+  <div class="small" style="margin-top:8px;">* SDErasure is a fine-tuning method. We are interested in borrowing its <strong>SSScore</strong> for our inference-time framework.</div>
+</section>
+
+<!-- SSScore Detail -->
+<section>
+  <h2>SSScore — Step Separability Score</h2>
+  <p class="subtitle">Quantifies per-timestep concept discriminability</p>
+  <div class="formula">
+    S<sub>t</sub> = exp(&minus;L<sub>c</sub>) / ( exp(&minus;L<sub>c</sub>) + exp(&minus;L<sub>a</sub>) ) = 1 / (1 + exp(L<sub>c</sub> &minus; L<sub>a</sub>))
+  </div>
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <div class="formula-small formula">
+        L<sub>c</sub> = ||&epsilon;<sub>&theta;</sub>(x<sub>t</sub>, c<sub>target</sub>, t) &minus; &epsilon;||&sup2;<br>
+        L<sub>a</sub> = ||&epsilon;<sub>&theta;</sub>(x<sub>t</sub>, c<sub>anchor</sub>, t) &minus; &epsilon;||&sup2;
+      </div>
+      <div class="box" style="font-size:0.82em; margin-top:8px;">
+        <strong>Interpretation:</strong>
+        <ul style="margin:5px 0 0 15px;">
+          <li>S<sub>t</sub> &asymp; 1.0 &#8594; Model recognizes target at step t</li>
+          <li>S<sub>t</sub> &asymp; 0.5 &#8594; No discrimination &#8594; skip</li>
+          <li>S<sub>t</sub> &asymp; 0.0 &#8594; Anchor dominates</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="idea-card" style="font-size:0.85em;">
+        <h3 style="font-size:0.9em;">Why SSScore for ASCG?</h3>
+        <p style="margin:5px 0 0 0;">SSScore tells us <em>exactly which timesteps</em> the model "decides" to generate harmful content. This is precisely the <strong>"When"</strong> signal ASCG needs!</p>
+      </div>
+      <div class="box box-warn" style="font-size:0.78em;">
+        <strong>Caveat:</strong> Requires semantic anchor. Empty anchor &#8594; S<sub>t</sub> &asymp; 0.5 everywhere (no signal)
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SDErasure Fine-tuning Results (brief) -->
+<section>
+  <h2>SDErasure — Fine-tuning Results</h2>
+  <p class="subtitle">We reproduced SDErasure for nudity erasure on Ring-A-Bell (79 prompts)</p>
+  <table style="font-size:0.58em;">
+    <tr><th>Version</th><th>Anchor</th><th>&eta;</th><th>LR</th><th>Steps</th><th>VLM SR &uarr;</th><th>NudeNet Unsafe &darr;</th></tr>
+    <tr><td>SD v1.4 Baseline</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>35.4%</td><td>~70%</td></tr>
+    <tr><td>v2 (best anchor-free)</td><td>""</td><td>3.0</td><td>2e-5</td><td>1000</td><td>57.0%</td><td>&mdash;</td></tr>
+    <tr style="background:#fee2e2;"><td>v5 (collapsed)</td><td>""</td><td>8.0</td><td>5e-5</td><td>2000</td><td>0%</td><td>&mdash;</td></tr>
+    <tr class="highlight-row"><td>v7 (first anchor)</td><td>clothed</td><td>3.0</td><td>2e-5</td><td>1000</td><td>87.3%</td><td>10.1%</td></tr>
+    <tr><td>v11</td><td>clothed</td><td>5.0</td><td>3e-5</td><td>1500</td><td>89.9%</td><td>&mdash;</td></tr>
+    <tr class="best-row"><td><strong>v12 (multi-target)</strong></td><td><strong>multi*</strong></td><td><strong>3.0</strong></td><td><strong>2e-5</strong></td><td><strong>1000</strong></td><td><strong>92.4%</strong></td><td><strong>6.3%</strong></td></tr>
+  </table>
+  <div style="font-size:0.6em; color:#64748b; margin-top:4px;">* multi-target = "nudity,naked,nude,nsfw" &nbsp;|&nbsp; anchor = "a person wearing clothes" &nbsp;|&nbsp; SGF baseline: 74.7% SR</div>
+  <div class="two-col" style="margin-top:10px; font-size:0.82em;">
+    <div class="box box-danger">
+      <strong>Anchor-free (v1-v6):</strong> Max 57% SR<br>
+      SSScore &asymp; 0.5 &#8594; no learning signal
+    </div>
+    <div class="box box-safe">
+      <strong>Anchor-based (v7-v12):</strong> Up to 92.4% SR<br>
+      Semantic anchor enables SSScore discrimination
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 4: SSScore + ASCG -->
+<!-- ============================================ -->
+<section class="section-divider">
+  <h2>Part 4</h2>
+  <p style="font-size:1.2em;">SSScore + ASCG — Combining Ideas</p>
+  <p>Improving ASCG's "When" with SDErasure's SSScore</p>
+</section>
+
+<!-- The Combination Idea -->
+<section>
+  <h2>Core Idea: SSScore as ASCG Monitor</h2>
+  <p class="subtitle">Replace CDF-based "When" with SSScore-based timestep detection</p>
+  <div class="pipeline" style="margin:15px 0;">
+    <div class="step" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border-color:#fbbf24; color:#92400e;"><strong>SSScore</strong><br><span style="font-size:0.75em;">from SDErasure</span><br><span style="font-size:0.7em; font-weight:400;">(WHEN)</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="step" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff); border-color:#c084fc; color:#6b21a8;"><strong>GradCAM</strong><br><span style="font-size:0.75em;">from ASCG</span><br><span style="font-size:0.7em; font-weight:400;">(WHERE)</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="step" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border-color:#86efac; color:#166534;"><strong>Bidir. CG</strong><br><span style="font-size:0.75em;">from ASCG</span><br><span style="font-size:0.7em; font-weight:400;">(HOW)</span></div>
+  </div>
+  <div class="vs-box">
+    <div class="vs-left" style="font-size:0.8em;">
+      <h3 style="color:#991b1b; margin-top:0;">Before: CDF Monitor</h3>
+      <ul style="margin:5px 0 0 15px;">
+        <li>Per-step heatmap z-score</li>
+        <li>Noisy in high-t regime</li>
+        <li>No concept-aware schedule</li>
+      </ul>
+    </div>
+    <div class="vs-center">&#8594;</div>
+    <div class="vs-right" style="font-size:0.8em;">
+      <h3 style="color:#166534; margin-top:0;">After: SSScore Monitor</h3>
+      <ul style="margin:5px 0 0 15px;">
+        <li>Precomputed per-timestep schedule</li>
+        <li>Concept-specific discrimination</li>
+        <li>Anchor-aware separability</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Approaches -->
+<section>
+  <h2>Integration Approaches</h2>
+  <div class="two-col" style="margin-top:15px;">
+    <div>
+      <div class="idea-card" style="border-color:#2563eb; background:linear-gradient(135deg,#eff6ff,#dbeafe);">
+        <h3 style="color:#1e40af; font-size:0.95em;">A. SSScore-only Monitoring</h3>
+        <p style="font-size:0.8em; margin:5px 0 0 0;">
+          Precompute SSScore schedule &#8594; guide only at S<sub>t</sub> > threshold<br>
+          <strong>Pro:</strong> Focused on critical timesteps<br>
+          <strong>Con:</strong> Schedule from training data, may not generalize to all prompts
+        </p>
+      </div>
+      <div class="idea-card" style="border-color:#7c3aed; background:linear-gradient(135deg,#f5f3ff,#ede9fe);">
+        <h3 style="color:#6b21a8; font-size:0.95em;">B. SSScore + CDF Hybrid</h3>
+        <p style="font-size:0.8em; margin:5px 0 0 0;">
+          SSScore for coarse schedule + CDF for per-image refinement<br>
+          <strong>Pro:</strong> Best of both worlds<br>
+          <strong>Con:</strong> More computation
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="idea-card" style="border-color:#059669; background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
+        <h3 style="color:#166534; font-size:0.95em;">C. SDErasure + ASCG Stack</h3>
+        <p style="font-size:0.8em; margin:5px 0 0 0;">
+          Fine-tuned UNet (v12) + ASCG as safety net<br>
+          <strong>Pro:</strong> 92.4% SR base + catch remaining failures<br>
+          <strong>Con:</strong> Requires fine-tuning (not purely inference-time)
+        </p>
+      </div>
+      <div class="idea-card" style="border-color:#d97706;">
+        <h3 style="font-size:0.95em;">D. SSScore-weighted Guidance</h3>
+        <p style="font-size:0.8em; margin:5px 0 0 0;">
+          &lambda;(t) = &lambda;<sub>base</sub> &middot; S<sub>t</sub> (continuous weighting)<br>
+          <strong>Pro:</strong> Smooth, no hard threshold<br>
+          <strong>Con:</strong> Anchor dependency
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experimental Results -->
+<section>
+  <h2>SSScore + ASCG — Current Results</h2>
+  <p class="subtitle">Inference-time SSScore monitoring on vanilla SD v1.4</p>
+  <table style="margin-top:10px;">
+    <tr><th>Experiment</th><th>CG Scale</th><th>VLM SR &uarr;</th><th>NudeNet Unsafe &darr;</th></tr>
+    <tr><td>SD v1.4 Baseline</td><td>&mdash;</td><td>35.4%</td><td>~70%</td></tr>
+    <tr><td>SCG Baseline (CDF when)</td><td>5.0</td><td>39.2%</td><td>70.9%</td></tr>
+    <tr><td>SSScore Only</td><td>5.0</td><td>35.4%</td><td>67.1%</td></tr>
+    <tr><td>SSScore Boost</td><td>5.0</td><td>40.5%</td><td>69.6%</td></tr>
+    <tr><td>SSScore Adaptive</td><td>5.0</td><td>44.3%</td><td>67.1%</td></tr>
+    <tr class="highlight-row"><td>SSScore Boost High</td><td>10.0</td><td>49.4%</td><td>62.0%</td></tr>
+    <tr><td>SSScore Boost Anchor</td><td>5.0</td><td>40.5%</td><td>&mdash;</td></tr>
+  </table>
+  <div class="box box-warn" style="font-size:0.82em; margin-top:10px;">
+    <strong>Grid search in progress:</strong> 120 experiments across thresholds (0.35&ndash;0.55), guidance scales (10&ndash;20), base scales (0&ndash;3), spatial params. Running on 8&times; RTX A6000.
+  </div>
+</section>
+
+<!-- Full Comparison -->
+<section>
+  <h2>Results Summary — All Methods</h2>
+  <table style="font-size:0.65em; margin-top:10px;">
+    <tr><th>Method</th><th>Type</th><th>VLM SR &uarr;</th><th>NudeNet Unsafe &darr;</th></tr>
+    <tr><td>SD v1.4 Baseline</td><td>&mdash;</td><td>35.4%</td><td>~70%</td></tr>
+    <tr><td>SGF</td><td>Fine-tune</td><td>74.7%</td><td>&mdash;</td></tr>
+    <tr><td>ASCG (CDF monitor, best)</td><td>Inference</td><td>49.4%</td><td>62.0%</td></tr>
+    <tr style="border-top: 2px solid #94a3b8;"><td>SDErasure v7 (anchor)</td><td>Fine-tune</td><td>87.3%</td><td>10.1%</td></tr>
+    <tr class="best-row"><td><strong>SDErasure v12 (multi-target)</strong></td><td><strong>Fine-tune</strong></td><td><strong>92.4%</strong></td><td><strong>6.3%</strong></td></tr>
+    <tr style="border-top: 2px solid #94a3b8; color:#64748b;"><td>ASCG + SSScore (grid search)</td><td>Inference</td><td colspan="2" style="text-align:center;">120 experiments running...</td></tr>
+  </table>
+  <div class="three-col" style="margin-top:15px;">
+    <div class="metric-card">
+      <div class="label">SDErasure v12 (Best)</div>
+      <div class="value green">92.4%</div>
+      <div class="label">VLM Safety Rate</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">ASCG Best So Far</div>
+      <div class="value blue">49.4%</div>
+      <div class="label">VLM Safety Rate</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Gap to Close</div>
+      <div class="value red">43.0%</div>
+      <div class="label">Inference-time goal</div>
+    </div>
+  </div>
+</section>
+
+<!-- v12 Breakdown -->
+<section>
+  <h2>SDErasure v12 — Detailed Breakdown</h2>
+  <div class="two-col" style="margin-top:15px;">
+    <div>
+      <h3>VLM (Qwen3-VL) Classification</h3>
+      <table style="font-size:0.78em;">
+        <tr><th>Category</th><th>Count</th><th>%</th></tr>
+        <tr><td>NotRel</td><td>3</td><td>3.8%</td></tr>
+        <tr style="background:#dcfce7;"><td><strong>Safe</strong></td><td><strong>59</strong></td><td><strong>74.7%</strong></td></tr>
+        <tr style="background:#fef9c3;"><td>Partial</td><td>14</td><td>17.7%</td></tr>
+        <tr style="background:#fee2e2;"><td>Full</td><td>3</td><td>3.8%</td></tr>
+      </table>
+      <div class="formula-small formula" style="margin-top:8px;">
+        SR = (59 + 14) / 79 = <strong>92.4%</strong>
+      </div>
+    </div>
+    <div>
+      <h3>NudeNet</h3>
+      <table style="font-size:0.78em;">
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr style="background:#dcfce7;"><td>Safe</td><td>74 (93.7%)</td></tr>
+        <tr style="background:#fee2e2;"><td>Unsafe (&ge;0.6)</td><td>5 (6.3%)</td></tr>
+        <tr><td>Avg Unsafe Score</td><td>0.112</td></tr>
+      </table>
+      <h3 style="margin-top:12px;">Config</h3>
+      <div class="box" style="font-size:0.75em; padding:8px 12px;">
+        Target: "nudity,naked,nude,nsfw"<br>
+        Anchor: "a person wearing clothes"<br>
+        &eta;=3.0, lr=2e-5, 1000 steps
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Next Steps -->
+<section>
+  <h2>Next Steps</h2>
+  <div style="margin-top:15px;">
+    <div class="box" style="border-left-color:#dc2626; display:flex; align-items:flex-start; gap:12px;">
+      <span class="num-circle" style="background:#dc2626; margin-top:2px;">1</span>
+      <div>
+        <strong>SSScore Grid Search Analysis</strong><br>
+        <span style="font-size:0.82em;">120 experiments completing. Find optimal SSScore threshold &times; guidance scale &times; spatial params for ASCG monitoring.</span>
+      </div>
+    </div>
+    <div class="box" style="border-left-color:#d97706; display:flex; align-items:flex-start; gap:12px;">
+      <span class="num-circle" style="background:#d97706; margin-top:2px;">2</span>
+      <div>
+        <strong>Hybrid Monitor Design</strong><br>
+        <span style="font-size:0.82em;">Combine SSScore schedule with per-image CDF refinement. SSScore provides global schedule, CDF adapts per-prompt.</span>
+      </div>
+    </div>
+    <div class="box" style="border-left-color:#059669; display:flex; align-items:flex-start; gap:12px;">
+      <span class="num-circle" style="background:#059669; margin-top:2px;">3</span>
+      <div>
+        <strong>SDErasure + ASCG Stack</strong><br>
+        <span style="font-size:0.82em;">Apply ASCG on top of v12 fine-tuned UNet to catch remaining 7.6% failures.</span>
+      </div>
+    </div>
+    <div class="box" style="border-left-color:#2563eb; display:flex; align-items:flex-start; gap:12px;">
+      <span class="num-circle" style="background:#2563eb; margin-top:2px;">4</span>
+      <div>
+        <strong>Quality Evaluation</strong><br>
+        <span style="font-size:0.82em;">FID / CLIP score on COCO-30K to quantify generation quality preservation.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final -->
+<section class="section-divider">
+  <h2>Thank You</h2>
+  <p style="font-size:1em; margin-top:20px;">
+    ASCG: Adaptive Spatial Classifier Guidance
+  </p>
+  <p style="font-size:0.8em; margin-top:15px; color:#94a3b8;">
+    Best fine-tuned SR: 92.4% (SDErasure v12) &nbsp;|&nbsp; Best inference-time SR: 49.4% (ASCG)<br>
+    Goal: close the gap with better "When" monitoring
+  </p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  width: 1200,
+  height: 700,
+  margin: 0.08,
+  transition: 'slide',
+  transitionSpeed: 'default',
+  backgroundTransition: 'fade',
+  center: false,
+  controls: true,
+  progress: true,
+});
+</script>
+</body>
+</html>

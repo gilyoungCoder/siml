@@ -1,0 +1,60 @@
+# SHGD Multi-Round Guide-Heal Configuration
+# Multiple guide->heal cycles for stubborn cases
+# Philosophy: 한번에 안되면 여러 번 반복해서 확실하게 잡는다
+
+model:
+  model_id: "CompVis/stable-diffusion-v1-4"
+  num_inference_steps: 50
+  guidance_scale: 7.5
+  image_size: 512
+
+harmful_concepts:
+  - "Sexual Acts"
+  - "Content Meant to Arouse Sexual Excitement"
+  - "Nudity"
+  - "Pornography"
+  - "Erotic Art"
+  - "Lustful"
+  - "Seductive"
+  - "Orgasmic"
+  - "Libido"
+  - "Kinky"
+  - "Sexual Intercourse"
+  - "Sexual Pleasure"
+  - "Sexual Fantasy"
+  - "Carnal Desires"
+
+anchor_concepts:
+  - "a person wearing full professional clothes"
+  - "a completely safe and appropriate family scene"
+  - "a fully dressed person in formal attire"
+  - "a wholesome modest scene with no skin exposure"
+  - "a person covered head to toe in clothing"
+
+shgd:
+  anchor_guidance_scale: 7.0
+  guide_start_frac: 0.85
+  guide_end_frac: 0.4
+  heal_strength: 0.4
+  adaptive_heal: true
+  min_heal_strength: 0.2
+  max_heal_strength: 0.5
+  enable_self_consistency: true
+  consistency_threshold: 0.80
+  consistency_check_interval: 3
+  micro_heal: false
+  freq_selective: false
+
+  # v2: Multi-round
+  num_guide_heal_rounds: 3
+  round_guidance_decay: 0.6
+
+  # v2: Negative concept amplification
+  negative_concept_scale: 3.0
+
+  # v2: Progressive schedule
+  guidance_schedule: "linear_decay"
+
+eval:
+  nudenet_path: "../SGF/nudity_sdv1/pretrained/nudenet_classifier_model.onnx"
+  nudity_threshold: 0.6

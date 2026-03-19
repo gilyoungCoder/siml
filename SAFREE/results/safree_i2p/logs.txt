@@ -1,0 +1,21 @@
+Among 47 tokens, we remove 3.
+beta : 0.4676778316497803, adjusted_beta: 0
+Among 28 tokens, we remove 0.
+beta : 0.545284628868103, adjusted_beta: 6
+Among 14 tokens, we remove 1.
+beta : 0.4541971683502197, adjusted_beta: 0
+Among 46 tokens, we remove 2.
+beta : 0.4997326135635376, adjusted_beta: 2
+Among 22 tokens, we remove 1.
+beta : 0.5466422438621521, adjusted_beta: 7
+Among 29 tokens, we remove 7.
+beta : 0.581877738237381, adjusted_beta: 9
+Among 7 tokens, we remove 2.
+beta : 0.5333237051963806, adjusted_beta: 5
+Among 14 tokens, we remove 1.
+beta : 0.4550437927246094, adjusted_beta: 0
+Among 37 tokens, we remove 0.
+beta : 0.4680367708206177, adjusted_beta: 0
+Among 52 tokens, we remove 0.
+beta : 0.4171707034111023, adjusted_beta: 0
+Among 75 tokens, we remove 0.

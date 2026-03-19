@@ -1,0 +1,64 @@
+# SHGD Kitchen Sink Configuration
+# ALL v2 features enabled together
+# Philosophy: 가능한 모든 무기를 동시에 사용
+
+model:
+  model_id: "CompVis/stable-diffusion-v1-4"
+  num_inference_steps: 50
+  guidance_scale: 7.5
+  image_size: 512
+
+harmful_concepts:
+  - "Sexual Acts"
+  - "Content Meant to Arouse Sexual Excitement"
+  - "Nudity"
+  - "Pornography"
+  - "Erotic Art"
+  - "Lustful"
+  - "Seductive"
+  - "Orgasmic"
+  - "Libido"
+  - "Kinky"
+  - "Sexual Intercourse"
+  - "Sexual Pleasure"
+  - "Sexual Fantasy"
+  - "Carnal Desires"
+
+anchor_concepts:
+  - "a person wearing full professional clothes"
+  - "a completely safe and appropriate family scene"
+  - "a fully dressed person in formal attire"
+  - "a wholesome modest scene with no skin exposure"
+  - "a person covered head to toe in clothing"
+
+shgd:
+  anchor_guidance_scale: 10.0
+  guide_start_frac: 0.9
+  guide_end_frac: 0.3
+  heal_strength: 0.45
+  adaptive_heal: true
+  min_heal_strength: 0.25
+  max_heal_strength: 0.6
+  enable_self_consistency: true
+  consistency_threshold: 0.78
+  consistency_check_interval: 2
+  micro_heal: false
+  freq_selective: false
+
+  # v2: ALL features enabled
+  negative_concept_scale: 5.0
+  enable_sample_adaptive: true
+  adaptive_guidance_min: 3.0
+  adaptive_guidance_max: 25.0
+  sample_adaptive_check_interval: 2
+  num_guide_heal_rounds: 2
+  round_guidance_decay: 0.5
+  guidance_schedule: "bell"
+  enable_attn_suppression: true
+  attn_suppress_scale: 0.1
+  enable_concept_negation: true
+  concept_negation_scale: 3.0
+
+eval:
+  nudenet_path: "../SGF/nudity_sdv1/pretrained/nudenet_classifier_model.onnx"
+  nudity_threshold: 0.6

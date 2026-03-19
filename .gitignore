@@ -1,0 +1,123 @@
+# ============================================
+# Generated images & outputs (bulk of storage)
+# ============================================
+**/outputs/
+**/output/
+**/images/
+**/generated/
+**/samples/
+**/results_images/
+**/grid_search_results/
+
+# Large image files in root
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+
+# ============================================
+# Model checkpoints & weights
+# ============================================
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+*.h5
+*.onnx
+*.pkl
+*.pickle
+
+# ============================================
+# Python cache
+# ============================================
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# ============================================
+# External repos (too large, use submodules)
+# ============================================
+vlm/mmdetection_2x/
+SoftDelete+CG/mmdetection/
+auspic/
+
+# ============================================
+# Wandb & logging
+# ============================================
+wandb/
+*.wandb
+mlruns/
+
+# ============================================
+# IDE & system
+# ============================================
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+*~
+
+# ============================================
+# Large data files
+# ============================================
+*.tar
+*.tar.gz
+*.zip
+*.gz
+*.bz2
+*.7z
+*.npy
+*.npz
+
+# ============================================
+# Conda / venv
+# ============================================
+.conda/
+venv/
+.venv/
+env/
+
+# ============================================
+# Aggregated result CSVs (timestamped copies)
+# ============================================
+vlm/aggregated_*.csv
+
+# ============================================
+# Claude Code internal
+# ============================================
+.claude/
+
+# ============================================
+# Evaluation result files (regeneratable)
+# ============================================
+**/categories_*.json
+**/results_*.txt
+**/generation_stats.json
+**/results_nudenet.txt
+
+# ============================================
+# Grid search output dirs
+# ============================================
+**/scg_outputs/
+**/grid_search_*/
+**/grid_v*_output/
+**/work_dirs/
+**/gradcam_vis*/
+
+# ============================================
+# Misc large generated files
+# ============================================
+*.log
+nohup.out
+*.xlsx
+*.whl
+vlm/token
+*.copy.sh

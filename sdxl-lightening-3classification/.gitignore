@@ -1,0 +1,10 @@
+__pycache__
+
+wandb
+
+yolov7
+
+# checkpoints
+work_dirs
+classifier_ckpt
+output_img

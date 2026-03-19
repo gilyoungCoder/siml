@@ -1,0 +1,15 @@
+concept,tox_level,total,safe_pct,partial_pct,full_pct,sr_pct
+nudity,high_tox,50,28.0,54.0,14.0,82.0
+nudity,low_tox,50,54.0,26.0,14.0,80.0
+violence,high_tox,50,76.0,18.0,2.0,94.0
+violence,low_tox,50,68.0,32.0,0.0,100.0
+harassment,high_tox,50,44.0,34.0,4.0,78.0
+harassment,low_tox,50,50.0,28.0,4.0,78.0
+hate,high_tox,43,32.6,9.3,2.3,41.9
+hate,low_tox,50,36.0,18.0,0.0,54.0
+shocking,high_tox,50,70.0,22.0,2.0,92.0
+shocking,low_tox,50,72.0,18.0,0.0,90.0
+illegal,high_tox,50,56.0,30.0,2.0,86.0
+illegal,low_tox,50,54.0,36.0,0.0,90.0
+selfharm,high_tox,50,6.0,4.0,6.0,10.0
+selfharm,low_tox,50,6.0,6.0,0.0,12.0

@@ -1,0 +1,205 @@
+# evaluate_11class.py
+
+import os
+import torch
+import torch.nn.functional as F
+from torch.utils.data import Dataset, DataLoader, random_split
+from torchvision import transforms
+from diffusers import AutoencoderKL, DDPMScheduler
+from geo_models.classifier.classifier import load_discriminator
+from accelerate.utils import set_seed
+from tqdm.auto import tqdm
+from PIL import Image
+
+class SixteenClassDataset(Dataset):
+    """
+    11-class dataset:
+      0: Not People       (no person)
+      1: fully_clothed
+      2: casual_wear
+      3: summer_casual
+      4: athletic_wear
+      5: one_piece_swimwear
+      6: bikini_swimwear
+      7: lingerie
+      8: topless_with_jeans
+      9: implied_nude
+     10: artistic_full_nude
+     11: monet_full_style
+     12: monet_light_style
+     13: vangogh_full_style
+     14: vangogh_light_style
+     15: benign_arts
+    """
+    def __init__(
+        self,
+        not_people_dir, fully_clothed_dir, casual_wear_dir, summer_casual_dir,
+        athletic_wear_dir, one_piece_swimwear_dir, bikini_swimwear_dir,
+        lingerie_dir, topless_with_jeans_dir, implied_nude_dir, artistic_full_nude_dir,
+        monet_full_style_dir, monet_light_style_dir, vangogh_full_style_dir, vangogh_light_style_dir, benign_arts_dir,
+        transform=None
+    ):
+        self.paths = []
+        self.labels = []
+        dirs = [
+            (not_people_dir,            0),
+            (fully_clothed_dir,         1),
+            (casual_wear_dir,           2),
+            (summer_casual_dir,         3),
+            (athletic_wear_dir,         4),
+            (one_piece_swimwear_dir,    5),
+            (bikini_swimwear_dir,       6),
+            (lingerie_dir,              7),
+            (topless_with_jeans_dir,    8),
+            (implied_nude_dir,          9),
+            (artistic_full_nude_dir,   10),
+            (monet_full_style_dir,     11),
+            (monet_light_style_dir,    12),
+            (vangogh_full_style_dir,   13),
+            (vangogh_light_style_dir,  14),
+            (benign_arts_dir,          15),
+        ]
+        for d, label in dirs:
+            for fname in sorted(os.listdir(d)):
+                if fname.lower().endswith((".png", ".jpg", ".jpeg")):
+                    self.paths.append(os.path.join(d, fname))
+                    self.labels.append(label)
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.paths)
+
+    def __getitem__(self, idx):
+        img = Image.open(self.paths[idx]).convert("RGB")
+        if self.transform:
+            img = self.transform(img)
+        return {"pixel_values": img, "label": self.labels[idx]}
+
+
+def parse_args():
+    import argparse
+    p = argparse.ArgumentParser(description="11-class classifier evaluation with DDPM noise injection")
+    p.add_argument("--pretrained_model_name_or_path", type=str, required=True,
+                   help="Stable Diffusion 체크포인트 경로(VAE & scheduler 포함)")
+    p.add_argument("--classifier_ckpt", type=str, required=True,
+                   help="훈련된 분류기 .pth 파일 경로")
+    # 11개 클래스 디렉토리
+    p.add_argument("--not_people_dir",    type=str, required=True, help="Not People 이미지 디렉토리")
+    p.add_argument("--fully_clothed_dir", type=str, required=True, help="Fully Clothed 이미지 디렉토리")
+    p.add_argument("--casual_wear_dir",   type=str, required=True, help="Casual Wear 이미지 디렉토리")
+    p.add_argument("--summer_casual_dir", type=str, required=True, help="Summer Casual 이미지 디렉토리")
+    p.add_argument("--athletic_wear_dir", type=str, required=True, help="Athletic Wear 이미지 디렉토리")
+    p.add_argument("--one_piece_swimwear_dir", type=str, required=True, help="One Piece Swimwear 디렉토리")
+    p.add_argument("--bikini_swimwear_dir",    type=str, required=True, help="Bikini Swimwear 디렉토리")
+    p.add_argument("--lingerie_dir",           type=str, required=True, help="Lingerie 디렉토리")
+    p.add_argument("--topless_with_jeans_dir", type=str, required=True, help="Topless with Jeans 디렉토리")
+    p.add_argument("--implied_nude_dir",       type=str, required=True, help="Implied Nude 디렉토리")
+    p.add_argument("--artistic_full_nude_dir", type=str, required=True, help="Artistic Full Nude 디렉토리")
+    p.add_argument("--monet_full_style_dir",       type=str, required=True)
+    p.add_argument("--monet_light_style_dir",      type=str, required=True)
+    p.add_argument("--vangogh_full_style_dir",     type=str, required=True)
+    p.add_argument("--vangogh_light_style_dir",    type=str, required=True)
+    p.add_argument("--benign_arts_dir",            type=str, required=True)
+    p.add_argument("--batch_size", type=int, default=32)
+    p.add_argument("--seed", type=int, default=42, help="random seed for split")
+    return p.parse_args()
+
+
+def main():
+    args = parse_args()
+    set_seed(args.seed)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # 데이터셋 & split (90/10)
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Resize((512,512)),
+        transforms.Normalize([0.5]*3, [0.5]*3),
+    ])
+    full_ds = SixteenClassDataset(
+        args.not_people_dir,
+        args.fully_clothed_dir,
+        args.casual_wear_dir,
+        args.summer_casual_dir,
+        args.athletic_wear_dir,
+        args.one_piece_swimwear_dir,
+        args.bikini_swimwear_dir,
+        args.lingerie_dir,
+        args.topless_with_jeans_dir,
+        args.implied_nude_dir,
+        args.artistic_full_nude_dir,
+        args.monet_full_style_dir,
+        args.monet_light_style_dir,
+        args.vangogh_full_style_dir,
+        args.vangogh_light_style_dir,
+        args.benign_arts_dir,
+        transform=transform,
+    )
+    total = len(full_ds)
+    val_size = int(0.1 * total)
+    train_size = total - val_size
+    _, val_ds = random_split(full_ds, [train_size, val_size])
+    val_loader = DataLoader(val_ds, batch_size=args.batch_size, shuffle=False, num_workers=4)
+
+    # VAE & scheduler 로드
+    vae = AutoencoderKL.from_pretrained(args.pretrained_model_name_or_path, subfolder="vae")
+    vae = vae.to(device)
+    vae.requires_grad_(False)
+    scheduler = DDPMScheduler.from_config(args.pretrained_model_name_or_path, subfolder="scheduler")
+
+    # 분류기 로드 (eval 모드, num_classes=11)
+    classifier = load_discriminator(
+        ckpt_path=args.classifier_ckpt,
+        condition=None,
+        eval=True,
+        channel=4,
+        num_classes=16
+    ).to(device)
+    classifier.eval()
+
+    loss_fn = torch.nn.CrossEntropyLoss()
+
+    # Validation loop
+    correct = [0]*16
+    total_cls = [0]*16
+    running_loss = 0.0
+    total = 0
+
+    with torch.no_grad():
+        for batch in tqdm(val_loader, desc="Validating"):
+            imgs   = batch["pixel_values"].to(device)
+            labels = batch["label"].to(device)
+            # VAE encode & noise injection
+            lat = vae.encode(imgs).latent_dist.sample() * 0.18215
+            bsz = lat.shape[0]
+            timesteps = torch.randint(0, scheduler.config.num_train_timesteps, (bsz,), device=device)
+            noise = torch.randn_like(lat)
+            alpha_cumprod = scheduler.alphas_cumprod.to(device)
+            alpha_bar = alpha_cumprod[timesteps].view(bsz, *([1]*(lat.ndim-1)))
+            noisy_lat = torch.sqrt(alpha_bar) * lat + torch.sqrt(1 - alpha_bar) * noise
+
+            # forward + loss
+            norm_ts = timesteps / scheduler.config.num_train_timesteps
+            logits = classifier(noisy_lat, norm_ts)  # [B,11]
+            loss = loss_fn(logits, labels)
+            running_loss += loss.item() * bsz
+
+            preds = logits.argmax(dim=-1)
+            for gt, pr in zip(labels.cpu().tolist(), preds.cpu().tolist()):
+                total_cls[gt] += 1
+                if gt == pr:
+                    correct[gt] += 1
+            total += bsz
+
+    # 결과 출력
+    avg_loss = running_loss / total
+    overall_acc = sum(correct) / total
+    print(f"\nValidation Loss: {avg_loss:.4f}, Overall Acc: {overall_acc*100:.2f}% ({sum(correct)}/{total})")
+    for cls in range(16):
+        acc = correct[cls] / total_cls[cls] if total_cls[cls] > 0 else 0.0
+        print(f"  Class {cls:2d} accuracy: {acc*100:5.2f}%  ({correct[cls]}/{total_cls[cls]})")
+
+
+if __name__ == "__main__":
+    main()

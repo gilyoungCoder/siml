@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDErasure + Spatial Classifier Guidance</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<style>
+  :root {
+    --heading: #1a1a2e;
+    --main: #333;
+    --accent: #2563eb;
+    --accent2: #7c3aed;
+    --safe: #059669;
+    --danger: #dc2626;
+    --warn: #d97706;
+    --teal: #0f766e;
+  }
+  .reveal { font-size: 28px; }
+  .reveal h1 { font-size: 2.2em; color: var(--heading); font-weight: 800; }
+  .reveal h2 { font-size: 1.4em; color: var(--heading); font-weight: 700; border-bottom: 3px solid var(--accent); padding-bottom: 6px; display: inline-block; }
+  .reveal h3 { font-size: 1.0em; color: var(--accent2); font-weight: 600; }
+  .reveal .sub { color: #64748b; font-size: 0.75em; margin-top: -6px; }
+  .reveal section { text-align: left; }
+  .reveal ul { margin-left: 0; }
+  .reveal li { margin-bottom: 4px; line-height: 1.4; }
+  .small { font-size: 0.72em; color: #64748b; }
+
+  .title-slide { text-align: center !important; }
+  .title-slide h1 { font-size: 2.4em; background: linear-gradient(135deg, #1a1a2e, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  .divider { text-align: center !important; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important; }
+  .divider h2 { color: #fff !important; border-bottom-color: #60a5fa !important; font-size: 1.8em; }
+  .divider p { color: #cbd5e1 !important; }
+
+  .box { background: #f8fafc; border-radius: 8px; padding: 12px 16px; margin: 7px 0; border-left: 4px solid var(--accent); font-size: 0.82em; }
+  .box-purple { border-left-color: var(--accent2); }
+  .box-green { border-left-color: var(--safe); background: #f0fdf4; }
+  .box-red { border-left-color: var(--danger); background: #fef2f2; }
+  .box-warn { border-left-color: var(--warn); background: #fffbeb; }
+  .box-teal { border-left-color: var(--teal); background: #f0fdfa; }
+
+  .reveal table { font-size: 0.62em; width: 100%; border-collapse: collapse; margin: 6px 0; }
+  .reveal table th { background: #1e293b; color: #fff; padding: 6px 8px; text-align: center; font-weight: 600; }
+  .reveal table td { padding: 5px 8px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+  .reveal table tr:nth-child(even) { background: #f8fafc; }
+  .best { background: #dcfce7 !important; font-weight: 700; }
+  .hl { background: #dbeafe !important; font-weight: 600; }
+  .bad { background: #fee2e2 !important; }
+
+  .formula { background: #f1f5f9; border-radius: 8px; padding: 12px 16px; margin: 8px 0; font-family: 'Georgia', serif; font-size: 0.88em; text-align: center; border: 1px solid #e2e8f0; }
+
+  .pipe { display: flex; align-items: center; justify-content: center; gap: 5px; margin: 12px 0; flex-wrap: wrap; }
+  .pipe .s { border-radius: 10px; padding: 10px 14px; font-size: 0.7em; font-weight: 600; text-align: center; min-width: 85px; }
+  .pipe .a { font-size: 1.3em; color: #93c5fd; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .tag { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.6em; font-weight: 600; margin: 2px; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-purple { background: #f3e8ff; color: #6b21a8; }
+  .tag-teal { background: #ccfbf1; color: #115e59; }
+
+  .vs { display: flex; align-items: stretch; gap: 10px; margin: 8px 0; }
+  .vs > div { flex: 1; padding: 12px; border-radius: 8px; }
+  .vs-l { background: #fef2f2; border: 2px solid #fca5a5; }
+  .vs-r { background: #f0fdf4; border: 2px solid #86efac; }
+  .vs-m { display: flex; align-items: center; font-size: 1.4em; font-weight: 800; color: #94a3b8; flex: 0; min-width: 30px; justify-content: center; }
+
+  .nc { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: 0.78em; margin-right: 8px; flex-shrink: 0; }
+
+  .algo { background: #fff; border: 2px solid #334155; border-radius: 8px; overflow: hidden; margin: 8px 0; font-size: 0.68em; }
+  .algo-h { background: #334155; color: #fff; padding: 7px 14px; font-weight: 700; }
+  .algo-b { padding: 10px 14px; line-height: 2.0; font-family: 'Georgia', serif; }
+  .algo-b .kw { color: #2563eb; font-weight: 700; }
+  .algo-b .fn { color: #7c3aed; font-weight: 600; }
+  .algo-b .cmt { color: #64748b; font-size: 0.9em; float: right; }
+  .algo-b .in { margin-left: 28px; }
+
+  .weak { position: relative; }
+  .weak::after { content: "Limitation"; position: absolute; top: -8px; right: 10px; background: #dc2626; color: #fff; font-size: 0.52em; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ==================== TITLE ==================== -->
+<section class="title-slide">
+  <h1>SDErasure + Spatial CG</h1>
+  <p style="font-size:1.0em; color:#475569; margin-top:-5px;">
+    Adapting SDErasure's SSScore for<br>Inference-time Concept Erasure with Spatial Guidance
+  </p>
+  <div style="margin-top:30px;">
+    <span class="tag tag-blue">Inference-time</span>
+    <span class="tag tag-purple">Concept Alignment</span>
+    <span class="tag tag-green">Spatial Control</span>
+  </div>
+  <div style="margin-top:20px; color:#888; font-size:0.7em;">Research Progress &middot; March 2026</div>
+</section>
+
+<!-- ==================== AGENDA ==================== -->
+<section>
+  <h2>Agenda</h2>
+  <div style="margin-top:12px;">
+    <div class="box" style="display:flex; align-items:center;">
+      <span class="nc">1</span>
+      <div><strong>SDErasure Recap</strong> &mdash; SSScore and concept erasure via fine-tuning</div>
+    </div>
+    <div class="box box-teal" style="display:flex; align-items:center;">
+      <span class="nc" style="background:var(--teal);">2</span>
+      <div><strong>SGF Review</strong> &mdash; MMD-based negative guidance (ICLR 2026 Oral)</div>
+    </div>
+    <div class="box box-purple" style="display:flex; align-items:center;">
+      <span class="nc" style="background:var(--accent2);">3</span>
+      <div><strong>Concept Alignment Score</strong> &mdash; Online adaptation of SSScore idea</div>
+    </div>
+    <div class="box box-green" style="display:flex; align-items:center;">
+      <span class="nc" style="background:var(--safe);">4</span>
+      <div><strong>Experimental Results</strong> &mdash; TP/FP, COCO quality, grid search</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 1: SDErasure ==================== -->
+<section class="divider">
+  <h2>Part 1</h2>
+  <p style="font-size:1.2em;">SDErasure (ICLR 2026)</p>
+  <p>Concept erasure via adaptive denoising trajectory shifting</p>
+</section>
+
+<!-- SDErasure Overview -->
+<section>
+  <h2>SDErasure Overview</h2>
+  <div class="box" style="margin-top:10px;">
+    <strong>Core idea:</strong> Identify <em>critical timesteps</em> where the model distinguishes target concept from anchor concept, and shift the denoising trajectory only at those timesteps.
+  </div>
+  <div class="pipe" style="margin:14px 0;">
+    <div class="s" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border:2px solid #fbbf24; color:#92400e;"><strong>SSScore</strong><br><span style="font-size:0.85em;">When to erase</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#fee2e2,#fecaca); border:2px solid #f87171; color:#991b1b;"><strong>Rematching</strong><br><span style="font-size:0.85em;">Trajectory shift</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;"><strong>Quality Reg.</strong><br><span style="font-size:0.85em;">Preserve others</span></div>
+  </div>
+  <div class="two-col" style="font-size:0.82em;">
+    <div class="box box-red">
+      <strong>Target c<sub>t</sub>:</strong> "nudity" &mdash; concept to erase
+    </div>
+    <div class="box box-green">
+      <strong>Anchor c<sub>a</sub>:</strong> "a person wearing clothes" &mdash; redirect destination
+    </div>
+  </div>
+  <p class="small" style="margin-top:6px;">SDErasure is a <strong>fine-tuning</strong> method. We borrow its SSScore idea for inference-time use.</p>
+</section>
+
+<!-- SSScore Detail -->
+<section>
+  <h2>SSScore &mdash; Step Separability Score</h2>
+  <p class="sub">Quantifies per-timestep concept discriminability</p>
+  <div class="formula">
+    S<sub>t</sub> = 1 / (1 + exp(L<sub>c</sub> &minus; L<sub>a</sub>))
+  </div>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <div class="formula" style="font-size:0.82em;">
+        L<sub>c</sub> = ||&epsilon;<sub>&theta;</sub>(x<sub>t</sub>, c<sub>target</sub>, t) &minus; &epsilon;||&sup2;<br>
+        L<sub>a</sub> = ||&epsilon;<sub>&theta;</sub>(x<sub>t</sub>, c<sub>anchor</sub>, t) &minus; &epsilon;||&sup2;
+      </div>
+      <div class="box" style="margin-top:6px;">
+        <strong>Interpretation:</strong>
+        <ul style="margin:4px 0 0 15px;">
+          <li>S<sub>t</sub> &asymp; 1.0 &rarr; Model recognizes target at step t</li>
+          <li>S<sub>t</sub> &asymp; 0.5 &rarr; No discrimination &rarr; skip</li>
+          <li>S<sub>t</sub> &asymp; 0.0 &rarr; Anchor dominates</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-warn">
+        <strong>Key property:</strong> SSScore tells us <em>exactly which timesteps</em> the model "decides" to generate the target concept. SDErasure applies fine-tuning loss only at high-SSScore timesteps.
+      </div>
+      <div class="box box-red" style="margin-top:6px;">
+        <strong>Requirement:</strong> Semantic anchor is essential. Empty anchor &rarr; S<sub>t</sub> &asymp; 0.5 everywhere (no signal).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SDErasure Results -->
+<section>
+  <h2>SDErasure Fine-tuning Results</h2>
+  <p class="sub">Reproduced for nudity erasure on Ring-A-Bell (79 prompts)</p>
+  <table style="margin-top:8px;">
+    <tr><th>Version</th><th>Anchor</th><th>&eta;</th><th>LR</th><th>Steps</th><th>VLM SR&uarr;</th><th>NudeNet Unsafe&darr;</th></tr>
+    <tr><td>SD v1.4 Baseline</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>35.4%</td><td>~70%</td></tr>
+    <tr><td>v2 (best anchor-free)</td><td>""</td><td>3.0</td><td>2e-5</td><td>1000</td><td>57.0%</td><td>&mdash;</td></tr>
+    <tr class="bad"><td>v5 (collapsed)</td><td>""</td><td>8.0</td><td>5e-5</td><td>2000</td><td>0%</td><td>&mdash;</td></tr>
+    <tr class="hl"><td>v7 (first anchor)</td><td>clothed</td><td>3.0</td><td>2e-5</td><td>1000</td><td>87.3%</td><td>10.1%</td></tr>
+    <tr class="best"><td><strong>v12 (multi-target)</strong></td><td><strong>multi*</strong></td><td><strong>3.0</strong></td><td><strong>2e-5</strong></td><td><strong>1000</strong></td><td><strong>92.4%</strong></td><td><strong>6.3%</strong></td></tr>
+  </table>
+  <p class="small">* multi-target = "nudity,naked,nude,nsfw" | anchor = "a person wearing clothes"</p>
+  <div class="two-col" style="margin-top:8px;">
+    <div class="box box-red">
+      <strong>Anchor-free (v1-v6):</strong> Max 57% SR. SSScore &asymp; 0.5 &rarr; no learning signal.
+    </div>
+    <div class="box box-green">
+      <strong>Anchor-based (v7-v12):</strong> Up to 92.4% SR. Semantic anchor enables meaningful SSScore.
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 2: SGF Review ==================== -->
+<section class="divider">
+  <h2>Part 2</h2>
+  <p style="font-size:1.2em;">SGF &mdash; Safety-Guided Flow</p>
+  <p>ICLR 2026 Oral &middot; A unified framework for negative guidance</p>
+</section>
+
+<!-- SGF Overview -->
+<section>
+  <h2>SGF Overview</h2>
+  <p class="sub">Kim et al. &mdash; Unified framework showing SPELL and Safe Denoiser are special cases</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3 style="color:var(--teal);">Core Mechanism</h3>
+      <div class="formula" style="font-size:0.82em;">
+        x&#771;<sub>t</sub> = f<sub>&theta;</sub>(x<sub>t</sub>, t) + &lambda;(t) &middot; &nabla;<sub>x</sub> E(x<sub>t</sub>)
+      </div>
+      <div class="formula" style="font-size:0.82em;">
+        E(x<sub>t</sub>) = MMD&sup2;(k<sub>&sigma;</sub>)({x<sub>t</sub>}, D<sup>&minus;</sup>)
+      </div>
+      <div class="box box-teal">
+        <strong>MMD gradient as repulsive force:</strong> Push generated samples away from an unsafe reference dataset D<sup>&minus;</sup> using Maximum Mean Discrepancy.
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--teal);">Key Contributions</h3>
+      <ul style="font-size:0.82em;">
+        <li><strong>Unification:</strong> SPELL, Safe Denoiser are special cases of MMD guidance</li>
+        <li><strong>CBF Theory:</strong> Control Barrier Function analysis proves earlier timestep guidance is strictly better</li>
+        <li><strong>Plug-and-play:</strong> Compatible with SLD, SAFREE, etc.</li>
+        <li><strong>Lightweight:</strong> +0.10s/image overhead</li>
+      </ul>
+      <div class="box box-warn" style="margin-top:6px;">
+        <strong>Limitation:</strong> SGF applies guidance <em>globally</em> &mdash; no spatial control. Safe regions are also modified.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SGF Results & Relation -->
+<section>
+  <h2>SGF &mdash; Results &amp; Relation to Our Work</h2>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3 style="color:var(--teal);">SGF Results on Ring-A-Bell</h3>
+      <table>
+        <tr><th>Method</th><th>ASR&darr;</th><th>SR&uarr;</th></tr>
+        <tr><td>SAFREE (NP only)</td><td>0.127</td><td>65.8%</td></tr>
+        <tr class="best"><td>SAFREE + SGF</td><td>0.051</td><td>74.7%</td></tr>
+        <tr><td>Safe Denoiser</td><td>0.127</td><td>&mdash;</td></tr>
+      </table>
+      <p class="small" style="margin-top:4px;">SGF achieves 59.8% ASR reduction over Safe Denoiser baseline.</p>
+      <div class="box" style="margin-top:6px;">
+        <strong>CBF insight:</strong> Guide early timesteps with higher &lambda;(t), then reduce &mdash; concentrates safety intervention where it matters most.
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--accent2);">How SGF Relates to Our Approach</h3>
+      <div class="box box-teal">
+        <strong>SGF provides:</strong><br>
+        CBF-proven time window + MMD repulsion (undirected, global)
+      </div>
+      <div class="box box-purple">
+        <strong>Our approach adds:</strong><br>
+        CAS-based selective trigger (WHEN) + GradCAM spatial mask (WHERE) + directed classifier gradient (HOW)
+      </div>
+      <div class="box box-warn" style="margin-top:4px;">
+        <strong>Key difference:</strong> SGF modifies all images globally. We only intervene when CAS detects harmful content, and only in harmful spatial regions.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 3: CAS ==================== -->
+<section class="divider">
+  <h2>Part 3</h2>
+  <p style="font-size:1.2em;">Concept Alignment Score (CAS)</p>
+  <p>Online adaptation of SDErasure's SSScore idea</p>
+</section>
+
+<!-- CAS Definition -->
+<section>
+  <h2>From SSScore to Concept Alignment Score</h2>
+  <p class="sub">Key insight: replace offline precomputation with online cosine similarity</p>
+  <div class="vs" style="margin-top:10px;">
+    <div class="vs-l" style="font-size:0.82em;">
+      <h3 style="color:#991b1b; margin-top:0;">SDErasure SSScore (Offline)</h3>
+      <div class="formula" style="font-size:0.85em;">
+        S<sub>t</sub> = 1 / (1 + exp(L<sub>c</sub> &minus; L<sub>a</sub>))
+      </div>
+      <ul style="margin:4px 0 0 12px; font-size:0.9em;">
+        <li>Precomputed on <strong>random latents</strong></li>
+        <li>Not prompt-specific</li>
+        <li>On vanilla SD: S<sub>t</sub> &asymp; 0.5 &forall; t</li>
+        <li>Designed for fine-tuning loss weighting</li>
+      </ul>
+    </div>
+    <div class="vs-m">&rarr;</div>
+    <div class="vs-r" style="font-size:0.82em;">
+      <h3 style="color:#166534; margin-top:0;">Concept Alignment Score (Online)</h3>
+      <div class="formula" style="font-size:0.85em;">
+        CAS<sub>t</sub> = cos(d<sub>prompt</sub>, d<sub>target</sub>)
+      </div>
+      <ul style="margin:4px 0 0 12px; font-size:0.9em;">
+        <li>Computed on <strong>actual generation latents</strong></li>
+        <li><strong>Prompt-specific</strong>: high for harmful, low for safe</li>
+        <li>Works on vanilla SD out of the box</li>
+        <li>Designed for inference-time "when" detection</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box box-teal" style="margin-top:6px;">
+    <strong>Shared insight:</strong> Both measure how much the model's behavior at timestep t relates to the target concept. CAS makes this <em>prompt-aware</em> by using the actual generation's noise prediction direction.
+  </div>
+</section>
+
+<!-- CAS Mechanism -->
+<section>
+  <h2>How CAS Works</h2>
+  <div class="pipe" style="margin:10px 0;">
+    <div class="s" style="background:#eff6ff; border:2px solid #93c5fd; color:#1e40af;">z<sub>t</sub></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#fef3c7; border:2px solid #fbbf24; color:#92400e;">UNet(z<sub>t</sub>, prompt)<br>UNet(z<sub>t</sub>, &empty;)<br>UNet(z<sub>t</sub>, "nudity")</div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#f3e8ff; border:2px solid #c084fc; color:#6b21a8;">d<sub>prompt</sub> = &epsilon;<sub>p</sub> &minus; &epsilon;<sub>&empty;</sub><br>d<sub>target</sub> = &epsilon;<sub>t</sub> &minus; &epsilon;<sub>&empty;</sub></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#dcfce7; border:2px solid #86efac; color:#166534;">CAS = cos(d<sub>p</sub>, d<sub>t</sub>)<br>&gt; &tau; &rarr; trigger</div>
+  </div>
+  <div class="two-col" style="margin-top:8px;">
+    <div>
+      <div class="box">
+        <strong>d<sub>prompt</sub></strong> = &epsilon;(prompt) &minus; &epsilon;(&empty;)<br>
+        The direction the current prompt pushes generation. Already computed in CFG &mdash; <strong>free</strong>.
+      </div>
+      <div class="box" style="margin-top:4px;">
+        <strong>d<sub>target</sub></strong> = &epsilon;("nudity") &minus; &epsilon;(&empty;)<br>
+        The direction the target concept would push. Costs <strong>1 extra UNet forward</strong> per step.
+      </div>
+    </div>
+    <div>
+      <div class="box box-red">
+        <strong>Harmful prompt</strong> (Ring-A-Bell):<br>
+        d<sub>prompt</sub> aligns with d<sub>"nudity"</sub><br>
+        &rarr; CAS &asymp; 0.6&ndash;0.9 &rarr; <strong>trigger guidance</strong>
+      </div>
+      <div class="box box-green">
+        <strong>Safe prompt</strong> (COCO):<br>
+        d<sub>prompt</sub> orthogonal to d<sub>"nudity"</sub><br>
+        &rarr; CAS &asymp; 0.1&ndash;0.3 &rarr; <strong>skip guidance</strong>
+      </div>
+    </div>
+  </div>
+  <div class="box box-warn" style="margin-top:6px;">
+    <strong>Sticky mode:</strong> Once CAS exceeds &tau; at any timestep, guidance remains active for all subsequent steps.
+  </div>
+</section>
+
+<!-- Why CAS works -->
+<section>
+  <h2>Why CAS Achieves Selectivity</h2>
+  <p class="sub">The key difference from SSScore and other monitors</p>
+  <div style="margin-top:10px;">
+    <div class="box" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="margin-top:2px;">1</span>
+      <div>
+        <strong>Prompt-specific signal</strong><br>
+        Unlike SSScore (same schedule for all prompts), CAS measures the <em>actual</em> generation direction at each step against the target concept.
+      </div>
+    </div>
+    <div class="box box-purple" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="background:var(--accent2); margin-top:2px;">2</span>
+      <div>
+        <strong>Directional, not magnitude-based</strong><br>
+        Grad Norm and Noise Div measure <em>magnitude</em> &mdash; high for any prompt with strong signal. CAS measures <em>direction</em> &mdash; high only when the prompt's noise direction aligns with the target concept.
+      </div>
+    </div>
+    <div class="box box-green" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="background:var(--safe); margin-top:2px;">3</span>
+      <div>
+        <strong>No fine-tuning required</strong><br>
+        Works on vanilla SD v1.4. The cosine similarity between noise prediction directions is inherently informative about concept alignment, even without model modification.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 4: Results ==================== -->
+<section class="divider">
+  <h2>Part 4</h2>
+  <p style="font-size:1.2em;">Experimental Results</p>
+  <p>TP/FP selectivity, COCO quality impact, and grid search</p>
+</section>
+
+<!-- Spatial CG brief -->
+<section>
+  <h2>Spatial Classifier Guidance (WHERE + HOW)</h2>
+  <p class="sub">CAS answers "when" &mdash; spatial CG handles "where" and "how"</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3 style="color:var(--accent2);">WHERE: GradCAM Spatial Mask</h3>
+      <div class="formula" style="font-size:0.82em;">
+        M(p) = 1[ &Phi;((H<sub>p</sub> &minus; &mu;) / &sigma;) &ge; &tau;(t) ]
+      </div>
+      <div class="box">
+        GradCAM heatmap from a latent-space 4-class classifier (benign / safe_clothed / harm_nude / harm_color) &rarr; z-score &rarr; CDF &rarr; binary mask.<br>
+        Only harmful spatial regions receive guidance.
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--safe);">HOW: Bidirectional Gradient</h3>
+      <div class="formula" style="font-size:0.82em;">
+        g<sub>t</sub> = &nabla;<sub>z</sub> log p(safe | z<sub>t</sub>) &minus; &nabla;<sub>z</sub> log p(harm | z<sub>t</sub>)
+      </div>
+      <div class="box">
+        Simultaneously attract toward safe_clothed (class 1) and repel from harmful classes (2, 3).<br>
+        Injected into noise estimate, weighted by spatial mask.
+      </div>
+    </div>
+  </div>
+  <div class="formula" style="margin-top:8px; font-size:0.82em;">
+    &epsilon;&#770;<sub>t</sub> = &epsilon;<sub>&theta;</sub>(z<sub>t</sub>, t, p) &minus; 1[CAS<sub>t</sub> &gt; &tau;] &middot; &radic;(1 &minus; &alpha;<sub>t</sub>) &middot; [ M<sub>t</sub> &middot; s<sub>g</sub> + (1&minus;M<sub>t</sub>) &middot; s<sub>b</sub> ] &middot; g<sub>t</sub>
+  </div>
+</section>
+
+<!-- TP/FP Results -->
+<section>
+  <h2>CAS Selectivity: TP/FP Analysis</h2>
+  <p class="sub">Ring-A-Bell (79 harmful) vs COCO (100 safe) &middot; SD v1.4 vanilla</p>
+  <div class="two-col" style="margin-top:8px;">
+    <div>
+      <table>
+        <tr><th>Threshold</th><th>TP (harmful)&uarr;</th><th>FP (safe)&darr;</th><th>Selectivity</th></tr>
+        <tr><td>0.30</td><td>100%</td><td>74%</td><td>26%p</td></tr>
+        <tr><td>0.35</td><td>100%</td><td>57%</td><td>43%p</td></tr>
+        <tr><td>0.45</td><td>100%</td><td>30%</td><td>70%p</td></tr>
+        <tr><td>0.50</td><td>100%</td><td>21%</td><td>79%p</td></tr>
+        <tr><td>0.55</td><td>98.7%</td><td>8%</td><td>90.7%p</td></tr>
+        <tr class="best"><td>0.60</td><td>97.5%</td><td>6%</td><td>91.5%p</td></tr>
+        <tr><td>0.65</td><td>93.7%</td><td>5%</td><td>88.7%p</td></tr>
+        <tr><td>0.70</td><td>86.1%</td><td>2%</td><td>84.1%p</td></tr>
+        <tr><td>0.80</td><td>68.4%</td><td>0%</td><td>68.4%p</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>Sweet spot &tau;=0.55&ndash;0.60:</strong><br>
+        TP &asymp; 98%, FP &asymp; 6&ndash;8%.<br>
+        Nearly perfect separation between harmful and safe prompts.
+      </div>
+      <div class="box box-red" style="margin-top:6px;">
+        <strong>Comparison &mdash; Grad Norm:</strong><br>
+        TP=100%, FP=<strong>100%</strong>.<br>
+        Triggers on every single prompt.
+      </div>
+      <div class="box" style="margin-top:6px;">
+        <strong>CAS is the only monitor</strong> that achieves meaningful TP-FP separation across all tested methods.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COCO Quality Impact -->
+<section>
+  <h2>COCO Quality Impact (FID &amp; Guidance Stats)</h2>
+  <p class="sub">500 COCO images &middot; How much does CAS guidance degrade safe image quality?</p>
+  <table style="margin-top:8px;">
+    <tr><th>Config</th><th>FID&darr;</th><th>Guidance Ratio</th><th>No Guidance</th><th>Heavy Guidance</th><th>Avg Guided Steps</th></tr>
+    <tr class="best"><td>Baseline (no guidance)</td><td>&mdash;</td><td>0%</td><td>500/500</td><td>0/500</td><td>0</td></tr>
+    <tr><td>CAS &tau;=0.6</td><td style="color:var(--safe); font-weight:700;">17.17</td><td>14.5%</td><td>415/500 (83%)</td><td>70/500 (14%)</td><td>7.2</td></tr>
+    <tr><td>CAS &tau;=0.45</td><td>43.27</td><td>36.0%</td><td>286/500 (57%)</td><td>171/500 (34%)</td><td>18.0</td></tr>
+    <tr><td>CAS &tau;=0.3</td><td>74.19</td><td>64.0%</td><td>116/500 (23%)</td><td>309/500 (62%)</td><td>32.0</td></tr>
+    <tr class="bad"><td>Grad Norm &tau;=0.45</td><td style="color:var(--danger); font-weight:700;">119.74</td><td>100%</td><td>0/500 (0%)</td><td>500/500 (100%)</td><td>50.0</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:8px;">
+    <div class="box box-green">
+      <strong>CAS &tau;=0.6:</strong> 83% of COCO images receive <em>zero</em> guidance. FID=17.17 &mdash; minimal quality loss. Only 14% of safe images are affected.
+    </div>
+    <div class="box box-red">
+      <strong>Grad Norm:</strong> 100% of COCO images guided at all 50 steps. FID=119.74 &mdash; 7x worse. Indiscriminate guidance destroys safe image quality.
+    </div>
+  </div>
+</section>
+
+<!-- Grid Search Results -->
+<section>
+  <h2>Grid Search &mdash; Best Configurations</h2>
+  <p class="sub">36 configs tested on Ring-A-Bell (79 prompts) &middot; VLM (Qwen3-VL) evaluation</p>
+  <table style="margin-top:8px;">
+    <tr><th>CAS Mode</th><th>&tau;</th><th>GS</th><th>Spatial</th><th>Safe</th><th>Partial</th><th>Full&darr;</th><th>SR&uarr;</th></tr>
+    <tr class="best">
+      <td>sticky</td><td>0.40</td><td>10.0</td><td>0.2&ndash;0.4</td>
+      <td>43.0%</td><td>40.5%</td><td>11.4%</td><td style="font-weight:700;">83.5%</td>
+    </tr>
+    <tr class="hl">
+      <td>non-sticky</td><td>0.40</td><td>10.0</td><td>0.2&ndash;0.4</td>
+      <td>44.3%</td><td>36.7%</td><td>13.9%</td><td>81.0%</td>
+    </tr>
+    <tr>
+      <td>sticky</td><td>0.45</td><td>10.0</td><td>0.3&ndash;0.5</td>
+      <td>41.8%</td><td>38.0%</td><td>15.2%</td><td>79.7%</td>
+    </tr>
+    <tr>
+      <td>sticky</td><td>0.40</td><td>10.0</td><td>0.3&ndash;0.5</td>
+      <td>40.5%</td><td>38.0%</td><td>16.5%</td><td>78.5%</td>
+    </tr>
+    <tr>
+      <td>sticky</td><td>0.45</td><td>10.0</td><td>0.2&ndash;0.4</td>
+      <td>39.2%</td><td>38.0%</td><td>17.7%</td><td>77.2%</td>
+    </tr>
+  </table>
+  <div class="box" style="margin-top:8px;">
+    <strong>Key findings from grid search:</strong>
+    <ul style="margin:4px 0 0 15px;">
+      <li><strong>Guidance scale:</strong> gs=10.0 optimal. gs=20.0 over-guides, SR drops to ~62%</li>
+      <li><strong>Spatial threshold:</strong> 0.2&ndash;0.4 range best (stricter early, broader late)</li>
+      <li><strong>CAS threshold:</strong> &tau;=0.40 gives highest SR (83.5%), but FP ~35% on COCO</li>
+      <li><strong>Sticky vs non-sticky:</strong> Sticky slightly better (+2.5%p SR)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Safety Rate Full Comparison -->
+<section>
+  <h2>Safety Rate &mdash; Full Comparison</h2>
+  <p class="sub">Ring-A-Bell 79 prompts &middot; VLM (Qwen3-VL) &middot; SR = (Safe + Partial) / Total</p>
+  <table style="margin-top:8px;">
+    <tr><th>Method</th><th>Type</th><th>Safe</th><th>Partial</th><th>Full&darr;</th><th>SR&uarr;</th><th>FP (COCO)</th><th>FID</th></tr>
+    <tr><td>SD v1.4</td><td>&mdash;</td><td>13.9%</td><td>16.5%</td><td style="color:var(--danger);">64.6%</td><td>30.4%</td><td>0%</td><td>&mdash;</td></tr>
+    <tr><td>SAFREE</td><td>Neg. Prompt</td><td>48.1%</td><td>17.7%</td><td>29.1%</td><td>65.8%</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>SAFREE + SGF</td><td>NP + NG</td><td>63.3%</td><td>11.4%</td><td>20.3%</td><td>74.7%</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr class="hl"><td>CAS + SCG (&tau;=0.40)</td><td>Inference</td><td>43.0%</td><td>40.5%</td><td>11.4%</td><td style="font-weight:700;">83.5%</td><td>~35%</td><td>&mdash;</td></tr>
+    <tr><td>CAS + SCG (&tau;=0.45)</td><td>Inference</td><td>39.2%</td><td>38.0%</td><td>17.7%</td><td>77.2%</td><td>30%</td><td>43.27</td></tr>
+    <tr><td>CAS + SCG (&tau;=0.55)</td><td>Inference</td><td>38.0%</td><td>35.4%</td><td>16.5%</td><td>73.4%</td><td style="color:var(--safe);">8%</td><td>&mdash;</td></tr>
+    <tr><td>CAS + SCG (&tau;=0.60)</td><td>Inference</td><td>38.0%</td><td>34.2%</td><td>21.5%</td><td>72.2%</td><td style="color:var(--safe); font-weight:700;">6%</td><td style="color:var(--safe);">17.17</td></tr>
+    <tr class="bad"><td>Grad Norm (&tau;=0.45)</td><td>Inference</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>84.8%</td><td style="color:var(--danger); font-weight:700;">100%</td><td style="color:var(--danger);">119.74</td></tr>
+    <tr style="border-top:2px solid #94a3b8;"><td>SDErasure v12</td><td>Fine-tune</td><td>74.7%</td><td>17.7%</td><td style="color:var(--safe);">3.8%</td><td style="color:var(--safe);">92.4%</td><td>&mdash;</td><td>&mdash;</td></tr>
+  </table>
+  <div class="box box-warn" style="margin-top:6px;">
+    <strong>Trade-off:</strong> &tau;=0.40 &rarr; SR=83.5% but FP=35%, FID degrades. &tau;=0.60 &rarr; SR=72.2% but FP=6%, FID=17.17. Grad Norm's 84.8% SR is misleading due to FP=100%.
+  </div>
+</section>
+
+<!-- Key Takeaways -->
+<section>
+  <h2>Key Takeaways</h2>
+  <div style="margin-top:12px;">
+    <div class="box box-green" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="background:var(--safe); margin-top:2px;">1</span>
+      <div>
+        <strong>CAS successfully adapts SDErasure's insight for inference-time use</strong><br>
+        Online cosine similarity provides the selectivity that offline SSScore cannot.
+      </div>
+    </div>
+    <div class="box" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="margin-top:2px;">2</span>
+      <div>
+        <strong>Only CAS achieves meaningful TP-FP separation</strong><br>
+        TP=97.5%, FP=6% at &tau;=0.60. All other monitors have FP &ge; 50%.
+      </div>
+    </div>
+    <div class="box box-red" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="background:var(--danger); margin-top:2px;">3</span>
+      <div>
+        <strong>COCO quality is preserved with selective guidance</strong><br>
+        CAS &tau;=0.60: 83% of COCO images untouched, FID=17.17. Grad Norm: FID=119.74 (7x worse).
+      </div>
+    </div>
+    <div class="box box-purple" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="background:var(--accent2); margin-top:2px;">4</span>
+      <div>
+        <strong>Best config: &tau;=0.40, gs=10.0, spatial 0.2&ndash;0.4 &rarr; SR=83.5%</strong><br>
+        Surpasses SAFREE+SGF (74.7%) as inference-time method. Trade-off with FP controllable via &tau;.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Next Steps -->
+<section>
+  <h2>Next Steps</h2>
+  <div style="margin-top:12px;">
+    <div class="box" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="margin-top:2px;">1</span>
+      <div>
+        <strong>Improve SR at low FP</strong><br>
+        <span style="font-size:0.9em;">Find operating point with SR &gt; 80% and FP &lt; 10% via guidance scale and spatial tuning.</span>
+      </div>
+    </div>
+    <div class="box box-purple" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="background:var(--accent2); margin-top:2px;">2</span>
+      <div>
+        <strong>SDErasure + Spatial CG Stack</strong><br>
+        <span style="font-size:0.9em;">Apply CAS + SCG on top of fine-tuned v12 UNet. CAS catches remaining failures beyond 92.4% SR.</span>
+      </div>
+    </div>
+    <div class="box box-teal" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="background:var(--teal); margin-top:2px;">3</span>
+      <div>
+        <strong>CAS + SGF combination</strong><br>
+        <span style="font-size:0.9em;">Use CAS for selective trigger + SGF's MMD repulsion for additional safety margin.</span>
+      </div>
+    </div>
+    <div class="box box-warn" style="display:flex; align-items:flex-start; gap:10px;">
+      <span class="nc" style="background:var(--warn); margin-top:2px;">4</span>
+      <div>
+        <strong>Multi-attack &amp; generalization</strong><br>
+        <span style="font-size:0.9em;">UnlearnDiff, MMA-Diffusion, I2P. SD v2.1, SDXL. Beyond nudity: violence, copyright.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Thank You -->
+<section class="divider">
+  <h2>Thank You</h2>
+  <p style="font-size:1em; margin-top:20px;">
+    SDErasure + Spatial Classifier Guidance
+  </p>
+  <p style="font-size:0.85em; margin-top:15px; color:#94a3b8;">
+    Concept Alignment Score: adapting SSScore for inference-time<br>
+    TP=97.5%, FP=6% | Best SR=83.5% (inference-time) vs 74.7% (SAFREE+SGF)
+  </p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    margin: 0.08,
+    center: false,
+  });
+</script>
+</body>
+</html>

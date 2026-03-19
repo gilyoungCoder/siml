@@ -1,0 +1,31 @@
+{
+  "mean": 0.042802329432593246,
+  "std": 0.03160887380412141,
+  "min": 0.0,
+  "max": 0.3114621043205261,
+  "percentiles": {
+    "p10": 0.00222694727126509,
+    "p25": 0.01704002171754837,
+    "p50": 0.03981319069862366,
+    "p75": 0.06336049735546112,
+    "p90": 0.08499915078282358,
+    "p95": 0.09884765967726704,
+    "p99": 0.12867968231439592
+  },
+  "num_images_processed": 1000,
+  "num_images_error": 0,
+  "num_values_seen": 4096000,
+  "percentile_sample_size": 2000000,
+  "classifier_ckpt": "./work_dirs/shocking_9class/checkpoint/step_23700/classifier.pth",
+  "harmful_class": 7,
+  "gradcam_layer": "encoder_model.middle_block.2",
+  "pretrained_model_name_or_path": "CompVis/stable-diffusion-v1-4",
+  "timestep_sampling": {
+    "mode": "random",
+    "fixed_t": null,
+    "t_min": 0,
+    "t_max": 999,
+    "num_train_timesteps": 1000,
+    "classifier_timestep_format": "t_norm = t_int / num_train_timesteps"
+  }
+}

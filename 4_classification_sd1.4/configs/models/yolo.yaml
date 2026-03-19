@@ -1,0 +1,20 @@
+model_type: yolo
+model_args:
+  # image_size: 64
+  # classifier_use_fp16: False
+  # classifier_width: 128
+  # classifier_depth: 2
+  # classifier_attention_resolutions: "32,16,8"
+  # classifier_use_scale_shift_norm: True
+  # classifier_resblock_updown: True
+  # classifier_pool: "attention"
+  # out_channels: 1
+  # in_channels: 4
+
+  # data: /home/djfelrl11/yolov7/data/coco.yaml
+  # cfg: /home/djfelrl11/yolov7/cfg/training/yolov7.yaml
+  # hyp: /home/djfelrl11/yolov7/data/hyp.scratch.p5.yaml
+
+  data: /mnt/home/jeongjun/layout_diffusion/yolov7/data/coco.yaml
+  cfg: /mnt/home/jeongjun/layout_diffusion/yolov7/cfg/training/yolov7.yaml
+  hyp: /mnt/home/jeongjun/layout_diffusion/yolov7/data/hyp.scratch.p5.yaml

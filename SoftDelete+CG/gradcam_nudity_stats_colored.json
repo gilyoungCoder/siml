@@ -1,0 +1,21 @@
+{
+  "mean": 0.012029503472149372,
+  "std": 0.015111125074326992,
+  "min": 0.0,
+  "max": 0.18486261367797852,
+  "median": 0.006895209662616253,
+  "percentiles": {
+    "p10": 0.0,
+    "p25": 0.0004838744134758599,
+    "p50": 0.0068952098954468966,
+    "p75": 0.017945894971489906,
+    "p90": 0.03139115534722805,
+    "p95": 0.04150724243372676,
+    "p99": 0.06663488000631329
+  },
+  "num_images": 1000,
+  "num_values": 4096000,
+  "classifier_ckpt": "./work_dirs/nudity_three_class_colored/checkpoint/step_11600/classifier.pth",
+  "harmful_class": 2,
+  "gradcam_layer": "encoder_model.middle_block.2"
+}

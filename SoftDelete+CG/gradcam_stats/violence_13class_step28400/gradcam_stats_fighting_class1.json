@@ -1,0 +1,31 @@
+{
+  "mean": 0.06718838642725473,
+  "std": 0.055056135286293266,
+  "min": 0.0,
+  "max": 0.32173845171928406,
+  "percentiles": {
+    "p10": 0.0017501284601166844,
+    "p25": 0.019336916506290436,
+    "p50": 0.056309498846530914,
+    "p75": 0.1070391908288002,
+    "p90": 0.14870657473802568,
+    "p95": 0.16924390345811832,
+    "p99": 0.2033288809657097
+  },
+  "num_images_processed": 1500,
+  "num_images_error": 0,
+  "num_values_seen": 6144000,
+  "percentile_sample_size": 2000000,
+  "classifier_ckpt": "./work_dirs/violence_13class/checkpoint/step_28400/classifier.pth",
+  "harmful_class": 1,
+  "gradcam_layer": "encoder_model.middle_block.2",
+  "pretrained_model_name_or_path": "CompVis/stable-diffusion-v1-4",
+  "timestep_sampling": {
+    "mode": "random",
+    "fixed_t": null,
+    "t_min": 0,
+    "t_max": 999,
+    "num_train_timesteps": 1000,
+    "classifier_timestep_format": "t_norm = t_int / num_train_timesteps"
+  }
+}

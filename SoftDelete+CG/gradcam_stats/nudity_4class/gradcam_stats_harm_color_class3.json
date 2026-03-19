@@ -1,0 +1,67 @@
+{
+  "mean": 0.05017627956713851,
+  "std": 0.04344116305778545,
+  "min": 0.0,
+  "max": 0.5114402174949646,
+  "percentiles": {
+    "p10": 0.0026831913040950895,
+    "p25": 0.017358557786792517,
+    "p50": 0.042142946273088455,
+    "p75": 0.07174242474138737,
+    "p90": 0.10469625890254977,
+    "p95": 0.12929099798202515,
+    "p99": 0.19447574794292455
+  },
+  "topk": {
+    "mean": 0.09861351360093812,
+    "std": 0.05296114435415745,
+    "min": 0.0,
+    "max": 0.5114402174949646,
+    "percentiles": {
+      "p10": 0.03958832286298275,
+      "p25": 0.06277330964803696,
+      "p50": 0.0933568924665451,
+      "p75": 0.12410739250481129,
+      "p90": 0.16167303174734116,
+      "p95": 0.19269289448857307,
+      "p99": 0.2788020819425583
+    },
+    "num_values": 830226,
+    "top_percentile": 20.0,
+    "description": "Statistics from top 20.0% pixels of each heatmap"
+  },
+  "sample_level": {
+    "mean": 0.050176279506529683,
+    "std": 0.02178716877976632,
+    "min": 0.00042831903556361794,
+    "max": 0.12509867548942566,
+    "percentiles": {
+      "p10": 0.020394684560596944,
+      "p25": 0.034764811396598816,
+      "p50": 0.051749955862760544,
+      "p75": 0.06499988026916981,
+      "p90": 0.07661520391702653,
+      "p95": 0.08550328910350799,
+      "p99": 0.10251047693192959
+    },
+    "num_images": 1000
+  },
+  "num_images_processed": 1000,
+  "num_images_error": 0,
+  "num_values_seen": 4096000,
+  "percentile_sample_size": 2000000,
+  "classifier_ckpt": "./work_dirs/nudity_4class_safe_combined/checkpoint/step_17100/classifier.pth",
+  "target_class": 3,
+  "target_class_name": "harm_color",
+  "gradcam_layer": "encoder_model.middle_block.2",
+  "pretrained_model_name_or_path": "CompVis/stable-diffusion-v1-4",
+  "data_dir": "/mnt/home/yhgil99/dataset/threeclassImg/nudity/color_artifacts_strong",
+  "timestep_sampling": {
+    "mode": "random",
+    "fixed_t": null,
+    "t_min": 0,
+    "t_max": 999,
+    "num_train_timesteps": 1000,
+    "classifier_timestep_format": "t_norm = t_int / num_train_timesteps"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "mean": 0.006414034869521856,
+  "std": 0.010116924531757832,
+  "min": 0.0,
+  "max": 0.09115085750818253,
+  "median": 0.000840237713418901,
+  "percentiles": {
+    "p10": 0.0,
+    "p25": 0.0,
+    "p50": 0.000840237713418901,
+    "p75": 0.00948363565839827,
+    "p90": 0.02131906133145094,
+    "p95": 0.028767076041549378,
+    "p99": 0.04290915697813033
+  },
+  "num_images": 1000,
+  "num_values": 4096000,
+  "classifier_ckpt": "./work_dirs/violence_three_class_diff/checkpoint/step_11400/classifier.pth",
+  "harmful_class": 2,
+  "gradcam_layer": "encoder_model.middle_block.2"
+}

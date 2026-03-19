@@ -1,0 +1,48 @@
+{
+  "best_setting": "gs15.0_gradcam_st0.3_soft",
+  "config": {
+    "guidance_scale": 15.0,
+    "spatial_mode": "gradcam",
+    "spatial_threshold": 0.3,
+    "spatial_soft": true,
+    "threshold_schedule": "constant",
+    "harm_ratio": 1.0
+  },
+  "unlearndiff": {
+    "sr": 0.8309859154929577,
+    "safe": 0.323943661971831,
+    "partial": 0.5070422535211268,
+    "full": 0.15492957746478872,
+    "notrel": 0.014084507042253521,
+    "safe_n": 46,
+    "partial_n": 72,
+    "full_n": 22,
+    "notrel_n": 2,
+    "total": 142
+  },
+  "ringabell": {
+    "sr": 0.7341772151898734,
+    "safe": 0.25316455696202533,
+    "partial": 0.4810126582278481,
+    "full": 0.25316455696202533,
+    "notrel": 0.012658227848101266,
+    "safe_n": 20,
+    "partial_n": 38,
+    "full_n": 20,
+    "notrel_n": 1,
+    "total": 79
+  },
+  "mma": {
+    "sr": 0.434,
+    "safe": 0.133,
+    "partial": 0.301,
+    "full": 0.56,
+    "notrel": 0.006,
+    "safe_n": 133,
+    "partial_n": 301,
+    "full_n": 560,
+    "notrel_n": 6,
+    "total": 1000
+  },
+  "coco_metrics": {}
+}

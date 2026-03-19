@@ -1,0 +1,60 @@
+Among 8 tokens, we remove 1.
+beta : 0.5804581642150879, adjusted_beta: 9
+Among 14 tokens, we remove 2.
+beta : 0.5766052007675171, adjusted_beta: 9
+Among 7 tokens, we remove 4.
+beta : 0.5669614374637604, adjusted_beta: 8
+Among 8 tokens, we remove 3.
+beta : 0.5988370478153229, adjusted_beta: 10
+Among 10 tokens, we remove 2.
+beta : 0.5513109564781189, adjusted_beta: 7
+Among 8 tokens, we remove 3.
+beta : 0.6361810863018036, adjusted_beta: 10
+Among 10 tokens, we remove 1.
+beta : 0.5118625164031982, adjusted_beta: 3
+Among 13 tokens, we remove 3.
+beta : 0.5990586280822754, adjusted_beta: 10
+Among 9 tokens, we remove 1.
+beta : 0.586499035358429, adjusted_beta: 9
+Among 13 tokens, we remove 5.
+beta : 0.6419278979301453, adjusted_beta: 10
+Among 8 tokens, we remove 1.
+beta : 0.5804581642150879, adjusted_beta: 9
+Among 14 tokens, we remove 2.
+beta : 0.5766052007675171, adjusted_beta: 9
+Among 7 tokens, we remove 4.
+beta : 0.5669614374637604, adjusted_beta: 8
+Among 8 tokens, we remove 3.
+beta : 0.5988370478153229, adjusted_beta: 10
+Among 10 tokens, we remove 2.
+beta : 0.5513109564781189, adjusted_beta: 7
+Among 8 tokens, we remove 3.
+beta : 0.6361810863018036, adjusted_beta: 10
+Among 10 tokens, we remove 1.
+beta : 0.5118625164031982, adjusted_beta: 3
+Among 13 tokens, we remove 3.
+beta : 0.5990586280822754, adjusted_beta: 10
+Among 9 tokens, we remove 1.
+beta : 0.586499035358429, adjusted_beta: 9
+Among 13 tokens, we remove 5.
+beta : 0.6419278979301453, adjusted_beta: 10
+Among 8 tokens, we remove 1.
+beta : 0.5804581642150879, adjusted_beta: 9
+Among 14 tokens, we remove 2.
+beta : 0.5766052007675171, adjusted_beta: 9
+Among 7 tokens, we remove 4.
+beta : 0.5669614374637604, adjusted_beta: 8
+Among 8 tokens, we remove 3.
+beta : 0.5988370478153229, adjusted_beta: 10
+Among 10 tokens, we remove 2.
+beta : 0.5513109564781189, adjusted_beta: 7
+Among 8 tokens, we remove 3.
+beta : 0.6361810863018036, adjusted_beta: 10
+Among 10 tokens, we remove 1.
+beta : 0.5118625164031982, adjusted_beta: 3
+Among 13 tokens, we remove 3.
+beta : 0.5990586280822754, adjusted_beta: 10
+Among 9 tokens, we remove 1.
+beta : 0.586499035358429, adjusted_beta: 9
+Among 13 tokens, we remove 5.
+beta : 0.6419278979301453, adjusted_beta: 10

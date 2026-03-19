@@ -1,0 +1,64 @@
+{
+  "gpu_id": 3,
+  "common": {
+    "ckpt_path": "CompVis/stable-diffusion-v1-4",
+    "classifier_ckpt": "/mnt/home/yhgil99/unlearning/SoftDelete+CG/work_dirs/nudity_4class_ringabell/checkpoint/step_19200/classifier.pth",
+    "gradcam_stats_dir": "/mnt/home/yhgil99/unlearning/SoftDelete+CG/gradcam_stats/nudity_4class_ringabell",
+    "prompt_file": "/mnt/home/yhgil99/unlearning/rab_grid_search/data/ringabell_test.txt",
+    "output_dir": "/mnt/home/yhgil99/unlearning/rab_grid_search/results/scg_gen_rab_test/grid_20260228_015329",
+    "seed": 42,
+    "num_inference_steps": 50,
+    "cfg_scale": 7.5,
+    "nsamples": 1
+  },
+  "experiments": [
+    {
+      "guidance_scale": 5,
+      "spatial_threshold_start": 0.3,
+      "spatial_threshold_end": 0.1,
+      "threshold_strategy": "constant",
+      "harmful_scale": 0.5,
+      "base_guidance_scale": 0.0
+    },
+    {
+      "guidance_scale": 5,
+      "spatial_threshold_start": 0.7,
+      "spatial_threshold_end": 0.1,
+      "threshold_strategy": "constant",
+      "harmful_scale": 2.0,
+      "base_guidance_scale": 0.0
+    },
+    {
+      "guidance_scale": 10,
+      "spatial_threshold_start": 0.5,
+      "spatial_threshold_end": 0.1,
+      "threshold_strategy": "constant",
+      "harmful_scale": 1.0,
+      "base_guidance_scale": 0.0
+    },
+    {
+      "guidance_scale": 20,
+      "spatial_threshold_start": 0.3,
+      "spatial_threshold_end": 0.1,
+      "threshold_strategy": "constant",
+      "harmful_scale": 0.5,
+      "base_guidance_scale": 0.0
+    },
+    {
+      "guidance_scale": 20,
+      "spatial_threshold_start": 0.7,
+      "spatial_threshold_end": 0.1,
+      "threshold_strategy": "constant",
+      "harmful_scale": 2.0,
+      "base_guidance_scale": 0.0
+    },
+    {
+      "guidance_scale": 50,
+      "spatial_threshold_start": 0.5,
+      "spatial_threshold_end": 0.1,
+      "threshold_strategy": "constant",
+      "harmful_scale": 1.0,
+      "base_guidance_scale": 0.0
+    }
+  ]
+}

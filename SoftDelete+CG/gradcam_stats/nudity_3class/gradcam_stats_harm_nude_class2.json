@@ -1,0 +1,67 @@
+{
+  "mean": 0.024979969221138862,
+  "std": 0.02712586785605173,
+  "min": 0.0,
+  "max": 0.2011871486902237,
+  "percentiles": {
+    "p10": 0.0,
+    "p25": 0.0007461961213266477,
+    "p50": 0.015650061890482903,
+    "p75": 0.042137241922318935,
+    "p90": 0.06566810682415965,
+    "p95": 0.07880285419523711,
+    "p99": 0.10284767590463162
+  },
+  "topk": {
+    "mean": 0.06216025243329446,
+    "std": 0.025575443458495144,
+    "min": 0.001859595999121666,
+    "max": 0.2011871486902237,
+    "percentiles": {
+      "p10": 0.024513445794582367,
+      "p25": 0.04520205780863762,
+      "p50": 0.06438080966472626,
+      "p75": 0.07864271104335785,
+      "p90": 0.09325899183750153,
+      "p95": 0.10277315378189086,
+      "p99": 0.12262370109558106
+    },
+    "num_values": 820177,
+    "top_percentile": 20.0,
+    "description": "Statistics from top 20.0% pixels of each heatmap"
+  },
+  "sample_level": {
+    "mean": 0.024979969283798708,
+    "std": 0.01129203555311856,
+    "min": 0.0019906419329345226,
+    "max": 0.06115863472223282,
+    "percentiles": {
+      "p10": 0.008057273458689451,
+      "p25": 0.015406628139317036,
+      "p50": 0.026572409085929394,
+      "p75": 0.03290327452123165,
+      "p90": 0.039034020900726316,
+      "p95": 0.04193973112851381,
+      "p99": 0.04994815699756145
+    },
+    "num_images": 1000
+  },
+  "num_images_processed": 1000,
+  "num_images_error": 0,
+  "num_values_seen": 4096000,
+  "percentile_sample_size": 2000000,
+  "classifier_ckpt": "./work_dirs/nudity_three_class/checkpoint/step_11800/classifier.pth",
+  "target_class": 2,
+  "target_class_name": "harm_nude",
+  "gradcam_layer": "encoder_model.middle_block.2",
+  "pretrained_model_name_or_path": "CompVis/stable-diffusion-v1-4",
+  "data_dir": "/mnt/home/yhgil99/dataset/threeclassImg/Wnudity5k",
+  "timestep_sampling": {
+    "mode": "random",
+    "fixed_t": null,
+    "t_min": 0,
+    "t_max": 999,
+    "num_train_timesteps": 1000,
+    "classifier_timestep_format": "t_norm = t_int / num_train_timesteps"
+  }
+}

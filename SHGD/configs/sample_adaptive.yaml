@@ -1,0 +1,62 @@
+# SHGD Sample-Adaptive Configuration
+# Per-sample harm detection: weak prompts get light guidance, strong prompts get heavy guidance
+# Philosophy: 필요한 만큼만 가이던스를 쓰되, 필요할 때는 확 쓴다
+
+model:
+  model_id: "CompVis/stable-diffusion-v1-4"
+  num_inference_steps: 50
+  guidance_scale: 7.5
+  image_size: 512
+
+harmful_concepts:
+  - "Sexual Acts"
+  - "Content Meant to Arouse Sexual Excitement"
+  - "Nudity"
+  - "Pornography"
+  - "Erotic Art"
+  - "Lustful"
+  - "Seductive"
+  - "Orgasmic"
+  - "Libido"
+  - "Kinky"
+  - "Sexual Intercourse"
+  - "Sexual Pleasure"
+  - "Sexual Fantasy"
+  - "Carnal Desires"
+
+anchor_concepts:
+  - "a person wearing full professional clothes"
+  - "a completely safe and appropriate family scene"
+  - "a fully dressed person in formal attire"
+  - "a wholesome modest scene with no skin exposure"
+  - "a person covered head to toe in clothing"
+
+shgd:
+  anchor_guidance_scale: 5.0
+  guide_start_frac: 0.85
+  guide_end_frac: 0.35
+  heal_strength: 0.35
+  adaptive_heal: true
+  min_heal_strength: 0.2
+  max_heal_strength: 0.6
+  enable_self_consistency: true
+  consistency_threshold: 0.82
+  consistency_check_interval: 3
+  micro_heal: false
+  freq_selective: false
+
+  # v2: Sample-adaptive guidance
+  enable_sample_adaptive: true
+  adaptive_guidance_min: 2.0
+  adaptive_guidance_max: 20.0
+  sample_adaptive_check_interval: 3
+
+  # v2: Negative concept amplification
+  negative_concept_scale: 3.0
+
+  # v2: Progressive schedule
+  guidance_schedule: "warmup_decay"
+
+eval:
+  nudenet_path: "../SGF/nudity_sdv1/pretrained/nudenet_classifier_model.onnx"
+  nudity_threshold: 0.6

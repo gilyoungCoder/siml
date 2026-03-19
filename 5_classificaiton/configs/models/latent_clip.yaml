@@ -1,0 +1,5 @@
+model_type: latent_clip
+model_args:
+  latent2clip_ckpt: "/path/to/latent2clip_epoch10.pt"
+  clip_text_encoder: "openai/clip-vit-large-patch14"
+  prompt: "a fully clothed person"

@@ -1,0 +1,153 @@
+{
+  "gpu_id": 2,
+  "experiments": [
+    {
+      "guidance_scale": 5.0,
+      "spatial_mode": "none",
+      "spatial_threshold": 0.2,
+      "spatial_soft": false,
+      "threshold_schedule": "constant",
+      "harm_ratio": 2.0
+    },
+    {
+      "guidance_scale": 5.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.3,
+      "spatial_soft": false,
+      "threshold_schedule": "constant",
+      "harm_ratio": 1.0
+    },
+    {
+      "guidance_scale": 5.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.5,
+      "spatial_soft": true,
+      "threshold_schedule": "constant",
+      "harm_ratio": 0.5
+    },
+    {
+      "guidance_scale": 5.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.7,
+      "spatial_soft": true,
+      "threshold_schedule": "constant",
+      "harm_ratio": 2.0
+    },
+    {
+      "guidance_scale": 10.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.2,
+      "spatial_soft": true,
+      "threshold_schedule": "constant",
+      "harm_ratio": 1.0
+    },
+    {
+      "guidance_scale": 10.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.5,
+      "spatial_soft": false,
+      "threshold_schedule": "constant",
+      "harm_ratio": 0.5
+    },
+    {
+      "guidance_scale": 10.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.7,
+      "spatial_soft": false,
+      "threshold_schedule": "constant",
+      "harm_ratio": 2.0
+    },
+    {
+      "guidance_scale": 20.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.2,
+      "spatial_soft": false,
+      "threshold_schedule": "constant",
+      "harm_ratio": 1.0
+    },
+    {
+      "guidance_scale": 20.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.3,
+      "spatial_soft": true,
+      "threshold_schedule": "constant",
+      "harm_ratio": 0.5
+    },
+    {
+      "guidance_scale": 20.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.5,
+      "spatial_soft": true,
+      "threshold_schedule": "constant",
+      "harm_ratio": 2.0
+    },
+    {
+      "guidance_scale": 50.0,
+      "spatial_mode": "none",
+      "spatial_threshold": 0.2,
+      "spatial_soft": false,
+      "threshold_schedule": "constant",
+      "harm_ratio": 1.0
+    },
+    {
+      "guidance_scale": 50.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.3,
+      "spatial_soft": false,
+      "threshold_schedule": "constant",
+      "harm_ratio": 0.5
+    },
+    {
+      "guidance_scale": 50.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.5,
+      "spatial_soft": false,
+      "threshold_schedule": "constant",
+      "harm_ratio": 2.0
+    },
+    {
+      "guidance_scale": 50.0,
+      "spatial_mode": "gradcam",
+      "spatial_threshold": 0.7,
+      "spatial_soft": true,
+      "threshold_schedule": "constant",
+      "harm_ratio": 1.0
+    }
+  ],
+  "common": {
+    "ckpt_path": "CompVis/stable-diffusion-v1-4",
+    "prompt_file": "/mnt/home/yhgil99/unlearning/rab_grid_search/data/ringabell_test.txt",
+    "classifier_ckpt": "/mnt/home/yhgil99/unlearning/z0_clf_guidance/work_dirs/z0_resnet18_4class_ringabell/checkpoint/step_15900/classifier.pth",
+    "harmful_stats_path": "/mnt/home/yhgil99/unlearning/z0_clf_guidance/harmful_stats_4class_ringabell_layer2.pt",
+    "architecture": "resnet18",
+    "num_classes": 4,
+    "space": "latent",
+    "guidance_mode": "safe_minus_harm",
+    "target_class": 1,
+    "safe_classes": [
+      0,
+      1
+    ],
+    "harm_classes": [
+      2,
+      3
+    ],
+    "cfg_scale": 7.5,
+    "num_inference_steps": 50,
+    "seed": 1234,
+    "nsamples": 1,
+    "grad_wrt_z0": false,
+    "gradcam_layer": "layer2",
+    "csv_prompt_column": "sensitive prompt",
+    "csv_filter_column": null,
+    "csv_filter_value": null,
+    "harmful_keywords": null,
+    "attn_resolutions": null,
+    "prototype_path": null,
+    "eacg_harm_class": 2,
+    "eacg_safe_class": 1,
+    "eacg_tau": 0.0,
+    "eacg_kappa": 0.1
+  },
+  "output_root": "/mnt/home/yhgil99/unlearning/rab_grid_search/results/z0_gen_rab_test/grid_20260228_014418"
+}

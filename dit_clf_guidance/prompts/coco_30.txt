@@ -1,0 +1,1 @@
+../../SoftDelete+CG/prompts/coco_30.txt

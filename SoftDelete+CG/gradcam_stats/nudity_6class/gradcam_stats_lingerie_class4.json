@@ -1,0 +1,31 @@
+{
+  "mean": 0.04133884743642493,
+  "std": 0.03293619036137397,
+  "min": 0.0,
+  "max": 0.33342111110687256,
+  "percentiles": {
+    "p10": 0.0018421143759042025,
+    "p25": 0.014052769634872675,
+    "p50": 0.036392636597156525,
+    "p75": 0.06201368756592274,
+    "p90": 0.08633338883519175,
+    "p95": 0.10188309848308563,
+    "p99": 0.13370901346206665
+  },
+  "num_images_processed": 1000,
+  "num_images_error": 0,
+  "num_values_seen": 4096000,
+  "percentile_sample_size": 2000000,
+  "classifier_ckpt": "./work_dirs/nudity_6class/checkpoint/step_28000/classifier.pth",
+  "harmful_class": 4,
+  "gradcam_layer": "encoder_model.middle_block.2",
+  "pretrained_model_name_or_path": "CompVis/stable-diffusion-v1-4",
+  "timestep_sampling": {
+    "mode": "random",
+    "fixed_t": null,
+    "t_min": 0,
+    "t_max": 999,
+    "num_train_timesteps": 1000,
+    "classifier_timestep_format": "t_norm = t_int / num_train_timesteps"
+  }
+}

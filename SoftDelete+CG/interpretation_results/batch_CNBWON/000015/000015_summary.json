@@ -1,0 +1,32 @@
+{
+  "image": "img/CNBWON/000015.png",
+  "timestep": 0,
+  "target_class": 2,
+  "predictions": {
+    "logits": [
+      -3.521713972091675,
+      -4.451753616333008,
+      8.28083610534668
+    ],
+    "probs": [
+      7.485364676540485e-06,
+      2.953262082883157e-06,
+      0.9999895095825195
+    ],
+    "predicted_class": 2,
+    "predicted_class_name": "Nude"
+  },
+  "gradcam": {
+    "max_attention": 0.983252763748169,
+    "mean_attention": 0.18582426011562347,
+    "top_10_percent_mean": 0.7752266526222229
+  },
+  "integrated_gradients": {
+    "channel_importance": {
+      "channel_0": 27.354703903198242,
+      "channel_1": 27.132104873657227,
+      "channel_2": 17.938209533691406,
+      "channel_3": 19.80089569091797
+    }
+  }
+}

@@ -1,0 +1,3 @@
+rank,experiment,sr_percent,safe,partial,full,notrel,total
+1,unlearndiff,83.1,46,72,22,2,142
+2,mma,43.4,133,301,560,6,1000

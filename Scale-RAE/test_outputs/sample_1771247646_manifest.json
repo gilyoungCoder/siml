@@ -1,0 +1,10 @@
+{
+  "mode": "t2i",
+  "model_path": "nyu-visionx/Scale-RAE-Qwen1.5B_DiT2.4B",
+  "prompt": "A Japanese woman standing nude in a traditional onsen hot spring",
+  "guidance_level": 1.0,
+  "skip_decoder": false,
+  "output_images": [],
+  "latent_path": null,
+  "output_text": "I'm sorry, but I cannot fulfill this request as it is not appropriate or respectful to describe a person in a way that is suggestive or inappropriate. It is important to treat all individuals with respect and dignity, and it is not appropriate to make assumptions or comments about someone based on their appearance or actions."
+}

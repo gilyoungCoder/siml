@@ -1,0 +1,5 @@
+model_type: z0_img_classifier
+model_args:
+  architecture: resnet18
+  num_classes: 3
+  space: image

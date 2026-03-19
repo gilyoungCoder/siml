@@ -1,0 +1,4 @@
+model_type: z0_classifier
+model_args:
+  architecture: resnet18
+  num_classes: 3

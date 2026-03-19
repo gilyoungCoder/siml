@@ -1,0 +1,63 @@
+PY_ARGS=${@:1}
+PORT=${PORT:-29501}
+
+# accelerate launch --tpu --mixed_precision bf16 --main_training_function main \
+# train_geodiffusion_discriminator.py \
+#     --pretrained_model_name_or_path KaiChen1998/geodiffusion-coco-stuff-512x512 \
+#     --prompt_version v1 --num_bucket_per_side 256 256 --bucket_sincos_embed --train_text_encoder \
+#     --foreground_loss_mode constant --foreground_loss_weight 2.0 --foreground_loss_norm \
+#     --seed 0 --train_batch_size 4 --gradient_accumulation_steps 1 \
+#     --mixed_precision bf16 --num_train_epochs 60 --learning_rate 1.5e-4 --max_grad_norm 1 \
+#     --lr_text_layer_decay 0.95 --lr_text_ratio 0.75 --lr_scheduler cosine --lr_warmup_steps 3000 \
+#     --dataset_config_name configs/data/missing_person_256x256.py \
+#     --uncond_prob 0.1 \
+#     --save_ckpt_freq 500 \
+#     ${PY_ARGS}
+
+# accelerate launch --tpu --main_training_function main \
+# train_geodiffusion_discriminator_vaal.py \
+#     --pretrained_model_name_or_path KaiChen1998/geodiffusion-coco-stuff-512x512 \
+#     --prompt_version v1 --num_bucket_per_side 256 256 --bucket_sincos_embed --train_text_encoder \
+#     --foreground_loss_mode constant --foreground_loss_weight 2.0 --foreground_loss_norm \
+#     --seed 0 --train_batch_size 4 --gradient_accumulation_steps 1 \
+#     --num_train_epochs 60 --learning_rate 1.5e-4 --max_grad_norm 1 \
+#     --lr_text_layer_decay 0.95 --lr_text_ratio 0.75 --lr_scheduler cosine --lr_warmup_steps 3000 \
+#     --dataset_config_name configs/data/missing_person_256x256.py \
+#     --uncond_prob 0.1 \
+#     --save_ckpt_freq 500 \
+#     ${PY_ARGS}
+
+# cuda_visible_devices=0,1,2,3,4,5,6,7
+cuda_visible_devices=0,1,2,3
+# cuda_visible_devices=0
+IFS=',' read -ra device_list <<< "$cuda_visible_devices"
+device_count=${#device_list[@]}
+
+# CUDA_VISIBLE_DEVICES=$cuda_visible_devices accelerate launch --multi_gpu --mixed_precision fp16 \
+#     --gpu_ids $cuda_visible_devices --num_processes $device_count \
+# train_geodiffusion_discriminator_vaal.py \
+#     --pretrained_model_name_or_path KaiChen1998/geodiffusion-coco-stuff-512x512 \
+#     --prompt_version v1 --num_bucket_per_side 256 256 --bucket_sincos_embed --train_text_encoder \
+#     --foreground_loss_mode constant --foreground_loss_weight 2.0 --foreground_loss_norm \
+#     --seed 0 --train_batch_size 4 --gradient_accumulation_steps 1 \
+#     --mixed_precision fp16 --num_train_epochs 60 --learning_rate 1.5e-4 --max_grad_norm 1 \
+#     --lr_text_layer_decay 0.95 --lr_text_ratio 0.75 --lr_scheduler cosine --lr_warmup_steps 3000 \
+#     --dataset_config_name configs/data/missing_person_256x256.py \
+#     --uncond_prob 0.1 \
+#     --save_ckpt_freq 500 \
+#     ${PY_ARGS}
+
+# no fp16 # For now this.
+TORCH_DISTRIBUTED_DEBUG=INFO CUDA_VISIBLE_DEVICES=$cuda_visible_devices accelerate launch --multi_gpu \
+    --gpu_ids $cuda_visible_devices --num_processes $device_count \
+train_geodiffusion_discriminator_vaal.py \
+    --pretrained_model_name_or_path KaiChen1998/geodiffusion-coco-stuff-512x512 \
+    --prompt_version v1 --num_bucket_per_side 256 256 --bucket_sincos_embed --train_text_encoder \
+    --foreground_loss_mode constant --foreground_loss_weight 2.0 --foreground_loss_norm \
+    --seed 0 --train_batch_size 4 --gradient_accumulation_steps 1 \
+    --num_train_epochs 60 --learning_rate 1.5e-4 --max_grad_norm 1 \
+    --lr_text_layer_decay 0.95 --lr_text_ratio 0.75 --lr_scheduler cosine --lr_warmup_steps 3000 \
+    --dataset_config_name configs/data/missing_person_256x256.py \
+    --uncond_prob 0.1 \
+    --save_ckpt_freq 500 \
+    ${PY_ARGS}

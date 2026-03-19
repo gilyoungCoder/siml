@@ -1,0 +1,16 @@
+python generate.py "${CKPT_PATH}" \
+  --prompt_file "${PROMPT_FILE}" \
+  --output_dir "${OUTPUT_DIR}" \
+  --nsamples 1 \
+  --cfg_scale 7.5 \
+  --num_inference_steps 50 \
+  --seed 1234 \
+  --classifier_ckpt "${CLASSIFIER_CKPT}" \
+  --architecture resnet18 \
+  --num_classes 3 \
+  --space image \
+  --guidance_scale 5.0 \
+  --guidance_start_step 1 \
+  --guidance_mode safe_minus_harm \
+  --safe_classes 1 \
+  --harm_classes 2

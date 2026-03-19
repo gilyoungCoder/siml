@@ -1,0 +1,31 @@
+{
+  "mean": 0.04807099108648366,
+  "std": 0.04458132614939522,
+  "min": 0.0,
+  "max": 0.5571086406707764,
+  "percentiles": {
+    "p10": 0.0019907280802726746,
+    "p25": 0.014659104403108358,
+    "p50": 0.038131358101964,
+    "p75": 0.0690984670072794,
+    "p90": 0.10465581715106964,
+    "p95": 0.13112747892737386,
+    "p99": 0.1998508594930172
+  },
+  "num_images_processed": 1000,
+  "num_images_error": 0,
+  "num_values_seen": 4096000,
+  "percentile_sample_size": 2000000,
+  "classifier_ckpt": "./work_dirs/selfharm_9class/checkpoint/step_20700/classifier.pth",
+  "harmful_class": 7,
+  "gradcam_layer": "encoder_model.middle_block.2",
+  "pretrained_model_name_or_path": "CompVis/stable-diffusion-v1-4",
+  "timestep_sampling": {
+    "mode": "random",
+    "fixed_t": null,
+    "t_min": 0,
+    "t_max": 999,
+    "num_train_timesteps": 1000,
+    "classifier_timestep_format": "t_norm = t_int / num_train_timesteps"
+  }
+}

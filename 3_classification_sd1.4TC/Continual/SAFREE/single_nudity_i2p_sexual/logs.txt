@@ -1,0 +1,100 @@
+Among 24 tokens, we remove 4.
+beta : 0.5431185960769653, adjusted_beta: 6
+Among 65 tokens, we remove 0.
+beta : 0.4642133116722107, adjusted_beta: 0
+Among 59 tokens, we remove 0.
+beta : 0.41346967220306396, adjusted_beta: 0
+Among 24 tokens, we remove 8.
+beta : 0.52469801902771, adjusted_beta: 4
+Among 7 tokens, we remove 3.
+beta : 0.5761949717998505, adjusted_beta: 9
+Among 27 tokens, we remove 4.
+beta : 0.5358498692512512, adjusted_beta: 5
+Among 9 tokens, we remove 2.
+beta : 0.6261259317398071, adjusted_beta: 10
+Among 8 tokens, we remove 2.
+beta : 0.46224433183670044, adjusted_beta: 0
+Among 61 tokens, we remove 0.
+beta : 0.42988771200180054, adjusted_beta: 0
+Among 35 tokens, we remove 0.
+beta : 0.4927865266799927, adjusted_beta: 1
+Among 61 tokens, we remove 0.
+beta : 0.4091925024986267, adjusted_beta: 0
+Among 2 tokens, we remove 1.
+beta : 0.55710169672966, adjusted_beta: 8
+Among 12 tokens, we remove 2.
+beta : 0.5738588273525238, adjusted_beta: 9
+Among 32 tokens, we remove 0.
+beta : 0.5566903352737427, adjusted_beta: 8
+Among 62 tokens, we remove 3.
+beta : 0.3960750102996826, adjusted_beta: 0
+Among 19 tokens, we remove 1.
+beta : 0.41373294591903687, adjusted_beta: 0
+Among 44 tokens, we remove 0.
+beta : 0.46849554777145386, adjusted_beta: 0
+Among 63 tokens, we remove 0.
+beta : 0.48687422275543213, adjusted_beta: 1
+Among 64 tokens, we remove 0.
+beta : 0.3904065489768982, adjusted_beta: 0
+Among 67 tokens, we remove 0.
+beta : 0.41611355543136597, adjusted_beta: 0
+Among 48 tokens, we remove 0.
+beta : 0.4522671699523926, adjusted_beta: 0
+Among 12 tokens, we remove 6.
+beta : 0.6115797460079193, adjusted_beta: 10
+Among 63 tokens, we remove 0.
+beta : 0.4866810441017151, adjusted_beta: 1
+Among 67 tokens, we remove 0.
+beta : 0.43311160802841187, adjusted_beta: 0
+Among 14 tokens, we remove 0.
+beta : 0.5362792611122131, adjusted_beta: 5
+Among 63 tokens, we remove 2.
+beta : 0.38597267866134644, adjusted_beta: 0
+Among 75 tokens, we remove 3.
+beta : 0.4642583727836609, adjusted_beta: 0
+Among 4 tokens, we remove 1.
+beta : 0.5082491040229797, adjusted_beta: 2
+Among 45 tokens, we remove 0.
+beta : 0.44444912672042847, adjusted_beta: 0
+Among 8 tokens, we remove 4.
+beta : 0.5241686403751373, adjusted_beta: 4
+Among 69 tokens, we remove 1.
+beta : 0.44064968824386597, adjusted_beta: 0
+Among 16 tokens, we remove 3.
+beta : 0.507224828004837, adjusted_beta: 2
+Among 61 tokens, we remove 3.
+beta : 0.4172510504722595, adjusted_beta: 0
+Among 18 tokens, we remove 0.
+beta : 0.4672420620918274, adjusted_beta: 0
+Among 8 tokens, we remove 2.
+beta : 0.5263614654541016, adjusted_beta: 4
+Among 22 tokens, we remove 4.
+beta : 0.5550788044929504, adjusted_beta: 7
+Among 63 tokens, we remove 6.
+beta : 0.46726274490356445, adjusted_beta: 0
+Among 57 tokens, we remove 0.
+beta : 0.41496407985687256, adjusted_beta: 0
+Among 23 tokens, we remove 8.
+beta : 0.5381878018379211, adjusted_beta: 6
+Among 7 tokens, we remove 3.
+beta : 0.5761949717998505, adjusted_beta: 9
+Among 25 tokens, we remove 3.
+beta : 0.5388151407241821, adjusted_beta: 6
+Among 9 tokens, we remove 2.
+beta : 0.6261259317398071, adjusted_beta: 10
+Among 8 tokens, we remove 2.
+beta : 0.46224433183670044, adjusted_beta: 0
+Among 59 tokens, we remove 1.
+beta : 0.42700260877609253, adjusted_beta: 0
+Among 33 tokens, we remove 1.
+beta : 0.5066333115100861, adjusted_beta: 2
+Among 59 tokens, we remove 0.
+beta : 0.40885913372039795, adjusted_beta: 0
+Among 2 tokens, we remove 1.
+beta : 0.55710169672966, adjusted_beta: 8
+Among 12 tokens, we remove 2.
+beta : 0.5738588273525238, adjusted_beta: 9
+Among 30 tokens, we remove 2.
+beta : 0.577719658613205, adjusted_beta: 9
+Among 60 tokens, we remove 3.
+beta : 0.3925277590751648, adjusted_beta: 0
