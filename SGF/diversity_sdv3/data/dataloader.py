@@ -79,11 +79,17 @@ def get_dataset(name: str, root: str, **kwargs):
     if __DATASET__.get(name, None) is None:
         raise NameError(f"Dataset {name} is not defined.")
     
-    # exceptio treatment: transform -> transforms
-    if "transform" not in kwargs and "transforms" in kwargs:
+    # exception treatment: match kwarg name to what the dataset class expects
+    import inspect
+    cls = __DATASET__[name]
+    sig = inspect.signature(cls.__init__)
+    params = set(sig.parameters.keys())
+    if "transforms" in params and "transform" in kwargs and "transforms" not in kwargs:
+        kwargs["transforms"] = kwargs.pop("transform")
+    elif "transform" in params and "transforms" in kwargs and "transform" not in kwargs:
         kwargs["transform"] = kwargs.pop("transforms")
-    
-    new_dataset = __DATASET__[name](root=root, **kwargs)
+
+    new_dataset = cls(root=root, **kwargs)
     return new_dataset
 
 def get_all_imgs(dataloader):
