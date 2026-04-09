@@ -18,8 +18,8 @@ case "$TASK" in
   nudity_ud)   PF=$REPO/CAS_SpatialCFG/prompts/unlearn_diff_nudity.csv; CAT=nudity; EC=nudity ;;
   nudity_mma)  PF=$REPO/CAS_SpatialCFG/prompts/mma-diffusion-nsfw-adv-prompts.csv; CAT=nudity; EC=nudity ;;
   nudity_i2p)  PF=$REPO/SAFREE/datasets/i2p_categories/i2p_sexual.csv; CAT=nudity; EC=nudity ;;
-  artist_vangogh) PF=$SDIR/datasets/big_artist_prompts.csv; CAT=artists-VanGogh; EC=artist_vangogh ;;
-  artist_kelly)   PF=$SDIR/datasets/short_niche_art_prompts.csv; CAT=artists-KellyMcKernan; EC=artist_kelly ;;
+  artist_vangogh) PF=$SDIR/datasets/big_artist_prompts.csv; CAT=artist-VanGogh; EC=artist_vangogh ;;
+  artist_kelly)   PF=$SDIR/datasets/short_niche_art_prompts.csv; CAT=artist-KellyMcKernan; EC=artist_kelly ;;
   *) echo "unknown task: $TASK"; exit 2 ;;
 esac
 
