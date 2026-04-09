@@ -35,7 +35,7 @@ if [ -f "$ODIR/categories_qwen3_vl_${EC}.json" ] 2>/dev/null; then
   exit 0
 fi
 
-mkdir -p "$ODIR"
+mkdir -p "$ODIR" "$ODIR/all" "$ODIR/safe" "$ODIR/unsafe"
 N=$(find "$ODIR" -maxdepth 1 -name "*.png" 2>/dev/null | wc -l)
 
 if [ $N -lt 10 ]; then
