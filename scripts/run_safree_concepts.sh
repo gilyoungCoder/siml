@@ -52,7 +52,7 @@ if [ $N -lt 10 ]; then
     --device cuda:0 \
     --safree -svf -lra \
     --sf_alpha 0.01 \
-    --re_attn_t "-1,4" \
+    --re_attn_t="-1,4" \
     --up_t 10 2>&1 | tail -5
 fi
 
