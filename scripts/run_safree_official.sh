@@ -43,7 +43,7 @@ fi
 
 cd "$SDIR"
 echo "[$(date +%H:%M)] GPU $GPU: SAFREE $TASK"
-CUDA_VISIBLE_DEVICES=$GPU "$P" generate_safree.py \
+PYTHONPATH="$SDIR:${PYTHONPATH:-}" CUDA_VISIBLE_DEVICES=$GPU "$P" generate_safree.py \
   --config ./configs/sd_config.json \
   --data "$PF" \
   --nudenet-path ./pretrained/nudenet_classifier_model.onnx \

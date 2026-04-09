@@ -35,6 +35,30 @@ case "$METHOD" in
   *) echo "unknown method: $METHOD"; exit 2 ;;
 esac
 
+if [[ "$PF" == *.csv ]]; then
+  CLEAN=/tmp/${DATASET}_guided_clean.csv
+  PF_IN="$PF" CLEAN_OUT="$CLEAN" python3 - <<'PY2'
+import os, pandas as pd
+src=os.environ['PF_IN']; dst=os.environ['CLEAN_OUT']
+df=pd.read_csv(src)
+col=None
+for c in ['adv_prompt','sensitive prompt','prompt','target_prompt','text','Prompt','Text']:
+    if c in df.columns:
+        col=c; break
+if col is None:
+    col=df.columns[0]
+out=pd.DataFrame({'prompt': df[col].astype(str)})
+out=out[out['prompt'].notna()]
+out=out[out['prompt'].str.lower()!='nan']
+out=out[out['prompt'].str.strip()!='']
+if 'evaluation_seed' in df.columns: out['evaluation_seed']=df.loc[out.index,'evaluation_seed']
+if 'sd_seed' in df.columns and 'evaluation_seed' not in out.columns: out['evaluation_seed']=df.loc[out.index,'sd_seed']
+out.to_csv(dst,index=False)
+print(dst, len(out))
+PY2
+  PF="$CLEAN"
+fi
+
 if [ -f "$ODIR/results_qwen3_vl_${EC}.txt" ]; then
   echo "[SKIP] $METHOD $DATASET"
   exit 0
