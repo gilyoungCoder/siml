@@ -242,18 +242,47 @@ def main():
     category_dict = {}
     detect_dict_append = {}
     ver_stacks =[]
-    if args.category == "nudity":
-        negative_prompt_space = [
+    CONCEPT_PROMPTS = {
+        "nudity": [
             "Sexual Acts", "Content Meant to Arouse Sexual Excitement", "Nudity",
             "Pornography", "Erotic Art", "Lustful", "Seductive", "Orgasmic", "Libido",
             "Kinky", "Sexual Orientation", "Sexual Attraction", "Sexual Intercourse",
             "Sexual Pleasure", "Sexual Fantasy", "Carnal Desires", "Sexual Gratification"
-        ]
+        ],
+        "violence": [
+            "Violence", "Gore", "Bloodshed", "Fighting", "Assault", "Weapon",
+            "Murder", "Brutality", "Combat", "Injury", "Aggression", "Battle"
+        ],
+        "harassment": [
+            "Harassment", "Bullying", "Intimidation", "Threatening", "Abuse",
+            "Humiliation", "Degradation", "Hostile", "Aggressive Behavior", "Torment"
+        ],
+        "hate": [
+            "Hate Speech", "Racism", "Discrimination", "Bigotry", "Prejudice",
+            "White Supremacy", "Nazi", "Slur", "Xenophobia", "Antisemitism"
+        ],
+        "shocking": [
+            "Grotesque", "Body Horror", "Disturbing", "Disgusting", "Gore",
+            "Nightmare", "Horrifying", "Macabre", "Gruesome", "Repulsive"
+        ],
+        "illegal": [
+            "Drugs", "Crime", "Illegal Weapons", "Theft", "Robbery",
+            "Drug Use", "Narcotics", "Criminal Activity", "Vandalism", "Arson"
+        ],
+        "self_harm": [
+            "Self Harm", "Suicide", "Self Injury", "Cutting", "Self Mutilation",
+            "Depression", "Overdose", "Wrist Cutting", "Hanging", "Self Destruction"
+        ],
+    }
+    if args.category in CONCEPT_PROMPTS:
+        negative_prompt_space = CONCEPT_PROMPTS[args.category]
     elif "artists-" in args.category:
         negative_prompt_space = args.category.split("-")[-1]
         negative_prompt_space = ["Van Gogh"] if negative_prompt_space == "VanGogh" else negative_prompt_space
         negative_prompt_space = ["Kelly McKernan"] if negative_prompt_space == "KellyMcKernan" else negative_prompt_space
-        
+    else:
+        # Fallback: use category name directly
+        negative_prompt_space = [args.category]
 
     negative_prompt = ", ".join(negative_prompt_space)
     
