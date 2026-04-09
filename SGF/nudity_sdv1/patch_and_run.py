@@ -1,5 +1,10 @@
 """Wrapper: monkey-patch onnx issue then run the actual generation script."""
-import sys, os, importlib
+import sys, os, importlib, types
+
+# Compat for older torchvision expecting torch._six
+import torch
+if not hasattr(torch, '_six'):
+    torch._six = types.SimpleNamespace(string_classes=(str, bytes))
 
 # Fix onnx _cast_Long
 import torch.onnx.symbolic_opset9 as _op9
