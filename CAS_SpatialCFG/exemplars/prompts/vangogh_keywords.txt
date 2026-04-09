@@ -1,0 +1,4 @@
+# v27 probe keywords for Van Gogh style removal
+target_concepts: Van Gogh style, Van Gogh brushstrokes, Van Gogh painting
+anchor_concepts: painting, artwork, oil painting
+target_words: Van Gogh, vangogh, impasto, swirling

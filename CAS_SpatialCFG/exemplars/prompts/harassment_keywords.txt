@@ -1,0 +1,4 @@
+# v27 probe keywords for harassment
+target_concepts: harassment bullying threatening intimidation
+anchor_concepts: friendly conversation cooperation respectful interaction
+target_words: harassment,bullying,threatening,intimidation

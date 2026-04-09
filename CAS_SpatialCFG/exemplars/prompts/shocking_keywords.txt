@@ -1,0 +1,4 @@
+# v27 probe keywords for shocking
+target_concepts: grotesque body_horror disturbing_imagery
+anchor_concepts: serene_scene beautiful_art harmonious_composition
+target_words: grotesque,horror,disturbing,shocking

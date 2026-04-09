@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAG + Paint by Example &rarr; v13 Exemplar Cross-Attention Probe</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<!-- KaTeX for math rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<style>
+  :root {
+    --heading: #1a1a2e;
+    --main: #333;
+    --accent: #2563eb;
+    --accent2: #7c3aed;
+    --safe: #059669;
+    --danger: #dc2626;
+    --warn: #d97706;
+    --teal: #0f766e;
+    --dag: #c026d3;
+    --pbe: #ea580c;
+    --v13: #2563eb;
+  }
+  .reveal { font-size: 26px; }
+  .reveal h1 { font-size: 2.0em; color: var(--heading); font-weight: 800; }
+  .reveal h2 { font-size: 1.35em; color: var(--heading); font-weight: 700; border-bottom: 3px solid var(--accent); padding-bottom: 6px; display: inline-block; }
+  .reveal h3 { font-size: 1.0em; color: var(--accent2); font-weight: 600; margin-bottom: 8px; }
+  .reveal .sub { color: #64748b; font-size: 0.75em; margin-top: -6px; }
+  .reveal section { text-align: left; }
+  .reveal ul { margin-left: 0; }
+  .reveal li { margin-bottom: 5px; line-height: 1.45; }
+  .small { font-size: 0.72em; color: #64748b; }
+
+  .title-slide { text-align: center !important; }
+  .title-slide h1 { font-size: 2.0em; background: linear-gradient(135deg, #1a1a2e, #2563eb, #c026d3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  .divider { text-align: center !important; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important; }
+  .divider h2 { color: #fff !important; border-bottom-color: #60a5fa !important; font-size: 1.8em; }
+  .divider p { color: #cbd5e1 !important; }
+
+  .box { background: #f8fafc; border-radius: 8px; padding: 12px 16px; margin: 7px 0; border-left: 4px solid var(--accent); font-size: 0.82em; }
+  .box-purple { border-left-color: var(--accent2); }
+  .box-green { border-left-color: var(--safe); background: #f0fdf4; }
+  .box-red { border-left-color: var(--danger); background: #fef2f2; }
+  .box-warn { border-left-color: var(--warn); background: #fffbeb; }
+  .box-teal { border-left-color: var(--teal); background: #f0fdfa; }
+  .box-dag { border-left-color: var(--dag); background: #fdf4ff; }
+  .box-pbe { border-left-color: var(--pbe); background: #fff7ed; }
+  .box-v13 { border-left-color: var(--v13); background: #eff6ff; }
+
+  .reveal table { font-size: 0.62em; width: 100%; border-collapse: collapse; margin: 6px 0; }
+  .reveal table th { background: #1e293b; color: #fff; padding: 6px 8px; text-align: center; font-weight: 600; }
+  .reveal table td { padding: 5px 8px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+  .reveal table tr:nth-child(even) { background: #f8fafc; }
+  .best { background: #dcfce7 !important; font-weight: 700; }
+  .hl { background: #dbeafe !important; font-weight: 600; }
+  .bad { background: #fee2e2 !important; }
+
+  .formula { background: #f1f5f9; border-radius: 8px; padding: 14px 18px; margin: 10px 0; font-size: 0.92em; text-align: center; border: 1px solid #e2e8f0; line-height: 1.8; }
+  .formula-dag { border-left: 4px solid var(--dag); }
+  .formula-pbe { border-left: 4px solid var(--pbe); }
+  .formula-v13 { border-left: 4px solid var(--v13); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .col-6-4 { display: grid; grid-template-columns: 6fr 4fr; gap: 16px; }
+  .col-4-6 { display: grid; grid-template-columns: 4fr 6fr; gap: 16px; }
+
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.7em; font-weight: 700; color: #fff; margin-right: 4px; }
+  .tag-dag { background: var(--dag); }
+  .tag-pbe { background: var(--pbe); }
+  .tag-v13 { background: var(--v13); }
+  .tag-shared { background: #475569; }
+
+  .pipe { display: flex; align-items: center; justify-content: center; gap: 5px; margin: 12px 0; flex-wrap: wrap; }
+  .pipe .s { border-radius: 10px; padding: 10px 14px; font-size: 0.7em; font-weight: 600; text-align: center; min-width: 85px; }
+  .pipe .a { font-size: 1.3em; color: #93c5fd; }
+
+  .insight { background: linear-gradient(135deg, #eff6ff, #fdf4ff); border-radius: 10px; padding: 14px 18px; margin: 10px 0; border: 2px solid #c7d2fe; font-size: 0.85em; }
+  .insight strong { color: var(--accent2); }
+
+  .comparison-row { display: flex; align-items: stretch; gap: 10px; margin: 8px 0; }
+  .comparison-card { flex: 1; background: #f8fafc; border-radius: 8px; padding: 12px 14px; border-top: 3px solid #ccc; font-size: 0.78em; }
+  .comparison-card.dag-card { border-top-color: var(--dag); }
+  .comparison-card.pbe-card { border-top-color: var(--pbe); }
+  .comparison-card.v13-card { border-top-color: var(--v13); }
+  .comparison-card h4 { margin: 0 0 6px 0; font-size: 1.05em; }
+  .comparison-card.dag-card h4 { color: var(--dag); }
+  .comparison-card.pbe-card h4 { color: var(--pbe); }
+  .comparison-card.v13-card h4 { color: var(--v13); }
+
+  .arrow-down { text-align: center; font-size: 1.5em; color: var(--accent); margin: 4px 0; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ======================== TITLE ======================== -->
+<section class="title-slide">
+  <h1>From DAG &amp; Paint by Example<br>to v13 Exemplar Probe</h1>
+  <p style="color:#64748b; font-size:0.85em; margin-top:12px;">
+    Cross-Attention 기반 Unsafe Concept Detection의 핵심 아이디어와<br>
+    Training-Free Exemplar Probe (v13)로의 통합
+  </p>
+  <p style="font-size:0.65em; color:#94a3b8; margin-top:20px;">2026.03.27</p>
+</section>
+
+<!-- ======================== OVERVIEW ======================== -->
+<section>
+  <h2>Outline</h2>
+  <div style="font-size:0.9em; line-height:1.8;">
+    <ol>
+      <li><strong>공통 모티베이션</strong> &mdash; 왜 Cross-Attention Map인가?</li>
+      <li><span class="tag tag-dag">DAG</span> 핵심 아이디어: Guideline Token Optimization</li>
+      <li><span class="tag tag-pbe">PbE</span> 핵심 아이디어: Information Bottleneck</li>
+      <li><strong>공통점과 차이점</strong> 비교 분석</li>
+      <li><span class="tag tag-v13">v13</span> 우리 방법: Training-Free Exemplar Probe</li>
+      <li><strong>수식 비교</strong>: DAG vs v13 파이프라인</li>
+      <li><strong>결론</strong>: 왜 v13이 두 논문의 장점을 결합하는가</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======================== PART 1: SHARED MOTIVATION ======================== -->
+<section class="divider">
+  <h2>1. 공통 모티베이션</h2>
+  <p>Cross-Attention은 WHERE 정보를 담고 있다</p>
+</section>
+
+<section>
+  <h2>Cross-Attention의 역할</h2>
+  <div class="box">
+    <strong>핵심 관찰</strong>: Diffusion Model의 Cross-Attention Map (CAM)은 "어떤 텍스트 토큰이 이미지의 어디에 영향을 주는지"를 나타낸다.
+  </div>
+  <div class="formula">
+    $\text{CAM}(h_t^l, c) = \text{softmax}\!\left(\frac{Q(h_t^l) \cdot K(c)^\top}{\sqrt{d}}\right)$
+    <br><br>
+    $Q = W_Q^l \cdot h_t^l \quad\text{(이미지 features)}, \quad K = W_K^l \cdot c \quad\text{(텍스트/개념 조건)}$
+  </div>
+  <div class="two-col" style="margin-top:12px;">
+    <div class="box-dag box">
+      <span class="tag tag-dag">DAG</span> &ldquo;Cross-attention map으로 unsafe region을 <strong>감지(detect)</strong>하고, 그 영역만 guidance&rdquo;
+    </div>
+    <div class="box-pbe box">
+      <span class="tag tag-pbe">PbE</span> &ldquo;Cross-attention은 <strong>이미지 조건</strong>에서도 spatial control을 제공 &mdash; 텍스트 대신 이미지 임베딩 사용 가능&rdquo;
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>공통 문제의식: 텍스트 조건의 한계</h2>
+  <div class="col-6-4">
+    <div>
+      <h3>문제: "nude person"이라는 텍스트가 충분한가?</h3>
+      <ul>
+        <li><strong>Background Leakage</strong>: CAM("nude person")이 배경까지 번진다</li>
+        <li><strong>Specificity 부족</strong>: "nude"가 고양이, 벽에도 반응</li>
+        <li><strong>모호성</strong>: 텍스트만으로 fine-grained visual concept 표현 어려움</li>
+      </ul>
+      <div class="box-red box" style="margin-top:10px;">
+        <strong>DAG Fig. 3</strong>: Non-optimized CAM("nude person")은 배경에 leakage &amp; 고양이를 nude로 감지
+      </div>
+    </div>
+    <div>
+      <div class="insight">
+        <strong>Paint by Example의 통찰</strong><br>
+        &ldquo;A picture is worth a thousand words&rdquo;<br><br>
+        텍스트 설명을 아무리 정밀하게 해도<br>
+        이미지 조건보다 정보가 부족하다.<br>
+        <span style="font-size:0.85em; color:#64748b;">(PbE Fig. 8: progressively precise text vs image)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PART 2: DAG ======================== -->
+<section class="divider">
+  <h2>2. DAG: Guideline Token Optimization</h2>
+  <p>Detect-and-Guide (Li et al., 2025)</p>
+</section>
+
+<section>
+  <h2>DAG 핵심 아이디어 (1): Token Optimization</h2>
+  <div class="box-dag box">
+    <strong>핵심</strong>: &ldquo;nude person&rdquo; 텍스트 대신, 소수의 annotated 이미지로 토큰 임베딩 $c^*$를 최적화하여 정확한 CAM 추출
+  </div>
+
+  <h3>CAM Loss (Pixel-level CE)</h3>
+  <div class="formula formula-dag">
+    $\mathcal{L}_{\text{CAM}} = \mathbb{E}_{(i,y)\sim(\mathcal{X},\mathcal{Y})} \;\mathbb{E}_{t\sim\mathcal{T},\; l\sim\mathcal{L}} \;\frac{1}{K}\sum_{k}\sum_{h,w} \Big[-\text{OneHot}(y^{GT})_{h,w} \cdot \log\big(\hat{A}_{k,h,w}(h_t^l[i],\; c)\big)\Big]$
+  </div>
+
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>Optimization Objective</h3>
+      <div class="formula formula-dag">
+        $c^* = \arg\min_c \;\mathbb{E}_{(i,y)} \;\mathcal{L}_{\text{CAM}}$
+      </div>
+      <ul class="small" style="margin-top:6px;">
+        <li>$\hat{A}$: Cross-attention map (min-max normalized)</li>
+        <li>$y^{GT}$: Ground truth mask (Grounded-SAM)</li>
+        <li>$\mathcal{L} = \{l \mid h_t^l.\text{size} \in [16^2, 32^2]\}$ (고해상도 layer만)</li>
+        <li>5 unsafe + 3 safe images로 충분</li>
+      </ul>
+    </div>
+    <div>
+      <h3>결과</h3>
+      <ul>
+        <li>Background leakage 해소</li>
+        <li>Non-target concept (cat, wall) 무반응</li>
+        <li>$\hat{A}(c^*) \geq 0.5$ &rArr; unsafe region 감지</li>
+        <li>Unseen 샘플에 일반화</li>
+      </ul>
+      <div class="box-green box" style="margin-top:6px;">
+        <strong>장점</strong>: 한 번 최적화하면 inference 시 추가 비용 $\approx$ 0
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>DAG 핵심 아이디어 (2): Adaptive Safety Guidance</h2>
+
+  <h3>Safety Guidance 수식 (DAG)</h3>
+  <div class="formula formula-dag">
+    $\tilde{\epsilon}_\theta = (1-s_g)\,\epsilon^\varnothing + s_g\Big(\epsilon^p - \mathbf{S}_{c_s} \cdot \mathbf{M}_{c_s} \cdot \epsilon^{c_s}\Big)$
+  </div>
+
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>Scale Map $\mathbf{S}_{c_s}$</h3>
+      <div class="formula formula-dag" style="font-size:0.85em;">
+        $\mathbf{S}_{c_s} = s_c \cdot \text{Area}_{0.5}(\hat{A}) \;\odot\; \mathcal{T}_{0.01}(\hat{A})$
+      </div>
+      <ul class="small">
+        <li>$s_c = \frac{5}{H \times W}$: base weight</li>
+        <li>$\text{Area}_{0.5}(\hat{A})$: unsafe 영역 크기 (CAM $\geq$ 0.5인 픽셀 수)</li>
+        <li>$\mathcal{T}_{0.01}(\hat{A})$: magnitude rescaling ($0.01 \leq a \leq 1 \to [1, 5]$)</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Mask $\mathbf{M}_{c_s}$</h3>
+      <div class="formula formula-dag" style="font-size:0.85em;">
+        $\mathbf{M}_{c_s} = \mathbb{I}[\hat{A} \geq 0.01] \;\odot\; M_{cs}^{\text{SEGA/SLD}}$
+      </div>
+      <ul class="small">
+        <li>$\hat{A} \geq 0.01$: potentially unsafe region (gate)</li>
+        <li>기존 SEGA/SLD mask와 결합</li>
+        <li>$t_{cs} = 5$: warm-up 5 step만 (SLD는 7-15)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box-dag box" style="margin-top:10px;">
+    <strong>핵심 차별점</strong>: CAM magnitude가 클수록 더 강한 guidance &rarr; adaptive strength + spatial precision
+  </div>
+</section>
+
+<!-- ======================== PART 3: PbE ======================== -->
+<section class="divider">
+  <h2>3. Paint by Example: Information Bottleneck</h2>
+  <p>Yang et al., CVPR 2023</p>
+</section>
+
+<section>
+  <h2>PbE 핵심 아이디어 (1): Information Bottleneck</h2>
+  <div class="box-pbe box">
+    <strong>문제</strong>: Self-supervised 학습에서 reference image를 그대로 copy-paste하는 trivial solution에 빠진다
+  </div>
+
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>Naive Solution (실패)</h3>
+      <div class="formula formula-pbe">
+        $c = \text{CLIP}_{\text{all}}(x_r)$<br>
+        <span class="small">(class token + 256 patch tokens = 257 tokens)</span>
+      </div>
+      <ul class="small">
+        <li>Spatial 정보가 그대로 유지</li>
+        <li>모델이 단순히 copy-paste 학습</li>
+        <li>Test 시 reference와 다른 이미지 &rArr; 실패</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Information Bottleneck (성공)</h3>
+      <div class="formula formula-pbe">
+        $c = \text{MLP}\Big(\text{CLIP}_{\text{class}}(x_r)\Big)$<br>
+        <span class="small">(class token만 사용 = 1&times;768 vector)</span>
+      </div>
+      <ul class="small">
+        <li>$224 \times 224 \times 3 \to 1024$차원 벡터로 압축</li>
+        <li>High-freq detail 제거 &rarr; semantic 정보만 보존</li>
+        <li>모델이 의미를 이해하고 <strong>재생성</strong>하도록 강제</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="arrow-down">&darr;</div>
+  <div class="insight">
+    <strong>Key Insight</strong>: CLIP class token은 이미지의 <em>semantic essence</em>를 담지만 spatial layout은 버린다.<br>
+    이것이 바로 concept-level probe에 필요한 속성이다.
+  </div>
+</section>
+
+<section>
+  <h2>PbE 핵심 아이디어 (2): Augmentation + CFG</h2>
+
+  <h3>Strong Augmentation</h3>
+  <div class="formula formula-pbe">
+    $c = \text{MLP}\Big(\text{CLIP}\big(\mathcal{A}(x_r)\big)\Big), \quad \bar{m} = 1 - \mathcal{D}(m)$
+  </div>
+  <ul>
+    <li>$\mathcal{A}$: flip, rotation, blur, elastic transform &rarr; train-test gap 축소</li>
+    <li>$\mathcal{D}$: irregular mask distortion (Bezier curve) &rarr; 실제 편집 상황 모방</li>
+  </ul>
+
+  <h3 style="margin-top:14px;">Classifier-Free Guidance로 유사도 제어</h3>
+  <div class="formula formula-pbe">
+    $\tilde{\epsilon}_\theta(y_t, c) = \epsilon_\theta(y_t, v) + s\Big(\epsilon_\theta(y_t, c) - \epsilon_\theta(y_t, v)\Big)$
+  </div>
+  <ul>
+    <li>$v$: learnable unconditional vector (학습 중 20% dropout)</li>
+    <li>$s$: guidance scale &mdash; 클수록 reference image에 가까운 생성</li>
+  </ul>
+</section>
+
+<!-- ======================== PART 4: COMPARISON ======================== -->
+<section class="divider">
+  <h2>4. 공통점과 차이점</h2>
+  <p>DAG vs Paint by Example &mdash; 수렴하는 통찰, 다른 접근</p>
+</section>
+
+<section>
+  <h2>공통점: 수렴하는 핵심 통찰</h2>
+  <div class="comparison-row">
+    <div class="comparison-card" style="border-top-color: #475569;">
+      <h4 style="color:#475569;">1. 텍스트보다 이미지가 낫다</h4>
+      <ul>
+        <li><span class="tag tag-dag">DAG</span> &ldquo;non-optimized 'nude person' 텍스트는 background leakage + specificity 부족&rdquo;</li>
+        <li><span class="tag tag-pbe">PbE</span> &ldquo;A picture is worth a thousand words &mdash; 텍스트 설명은 fine-grained control 부족&rdquo;</li>
+      </ul>
+    </div>
+  </div>
+  <div class="comparison-row">
+    <div class="comparison-card" style="border-top-color: #475569;">
+      <h4 style="color:#475569;">2. Cross-Attention의 Semantic Entanglement 활용</h4>
+      <ul>
+        <li><span class="tag tag-dag">DAG</span> attribute(nude) + object(human) 결합이 CAM에서 자연스럽게 entangle</li>
+        <li><span class="tag tag-pbe">PbE</span> CLIP class token이 cross-attention을 통해 spatial control 제공</li>
+      </ul>
+    </div>
+  </div>
+  <div class="comparison-row">
+    <div class="comparison-card" style="border-top-color: #475569;">
+      <h4 style="color:#475569;">3. 고해상도 Layer가 정밀한 Spatial 정보를 갖는다</h4>
+      <ul>
+        <li><span class="tag tag-dag">DAG</span> $\mathcal{L} = \{l \mid \text{size} \in [16^2, 32^2]\}$ &mdash; 64&times;64는 too noisy</li>
+        <li><span class="tag tag-pbe">PbE</span> 동일한 U-Net cross-attention 구조 활용 (SD 기반)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>차이점: 접근 방식의 분기</h2>
+  <table>
+    <tr>
+      <th style="width:22%;">관점</th>
+      <th style="width:39%;"><span class="tag tag-dag">DAG</span> Detect-and-Guide</th>
+      <th style="width:39%;"><span class="tag tag-pbe">PbE</span> Paint by Example</th>
+    </tr>
+    <tr>
+      <td><strong>목적</strong></td>
+      <td>Safe generation (unsafe concept 제거)</td>
+      <td>Exemplar-based image editing</td>
+    </tr>
+    <tr>
+      <td><strong>조건 소스</strong></td>
+      <td>최적화된 토큰 임베딩 $c^*$</td>
+      <td>CLIP class token of reference image</td>
+    </tr>
+    <tr>
+      <td><strong>학습 필요</strong></td>
+      <td>Token optimization (5+3 images, GT mask)</td>
+      <td>Full model fine-tuning (64 V100, 7일)</td>
+    </tr>
+    <tr>
+      <td><strong>CAM 활용</strong></td>
+      <td>Detection mask &rarr; spatial guidance</td>
+      <td>암묵적 (cross-attention이 자동 align)</td>
+    </tr>
+    <tr>
+      <td><strong>Information Bottleneck</strong></td>
+      <td>최적화로 불필요 정보 제거</td>
+      <td>CLIP class token으로 명시적 압축</td>
+    </tr>
+    <tr>
+      <td><strong>Inference 비용</strong></td>
+      <td>+1 extra K projection (negligible)</td>
+      <td>Single forward (standard diffusion)</td>
+    </tr>
+    <tr>
+      <td><strong>일반화</strong></td>
+      <td>Unseen prompts에 일반화 (검증됨)</td>
+      <td>Arbitrary reference images에 일반화</td>
+    </tr>
+  </table>
+</section>
+
+<!-- ======================== PART 5: OUR V13 ======================== -->
+<section class="divider">
+  <h2>5. v13: Training-Free Exemplar Probe</h2>
+  <p>두 논문의 장점을 결합한 우리의 접근</p>
+</section>
+
+<section>
+  <h2>v13의 핵심 질문</h2>
+  <div class="insight" style="text-align:center; font-size:1.0em;">
+    <strong>DAG의 정밀한 CAM detection</strong>을 <strong>PbE의 training-free information bottleneck</strong>으로 달성할 수 있는가?
+  </div>
+  <div class="arrow-down">&darr;</div>
+  <div class="three-col">
+    <div class="box-dag box">
+      <strong>DAG에서 가져온 것</strong>
+      <ul>
+        <li>Cross-attention probing으로 spatial detection</li>
+        <li>고해상도 layer 선택 ($16^2, 32^2$)</li>
+        <li>Detection map &rarr; adaptive guidance</li>
+      </ul>
+    </div>
+    <div class="box-pbe box">
+      <strong>PbE에서 가져온 것</strong>
+      <ul>
+        <li>CLIP class token as information bottleneck</li>
+        <li>이미지 기반 조건: &ldquo;a picture is worth 1000 words&rdquo;</li>
+        <li>Training-free projection 가능성</li>
+      </ul>
+    </div>
+    <div class="box-v13 box">
+      <strong>v13의 새로운 기여</strong>
+      <ul>
+        <li>CLIP exemplar &rarr; SD text space projection</li>
+        <li>Zero-shot probe (학습 0)</li>
+        <li>CAS gating과의 통합</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>v13 Pipeline: WHEN + WHERE + HOW</h2>
+  <div class="pipe">
+    <div class="s" style="background:#fef3c7; color:#92400e;">Exemplar Images<br><span style="font-size:0.8em;">nude / clothed</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#fce7f3; color:#9d174d;">CLIP ViT-L/14<br><span style="font-size:0.8em;">class token</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#ede9fe; color:#5b21b6;">Text Space<br><span style="font-size:0.8em;">projection</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#dbeafe; color:#1e40af;">Probe Keys<br><span style="font-size:0.8em;">$K^* = W_K \cdot c^*$</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#d1fae5; color:#065f46;">Spatial Mask<br><span style="font-size:0.8em;">WHERE</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#fee2e2; color:#991b1b;">Safety Guidance<br><span style="font-size:0.8em;">HOW</span></div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Step 1: Exemplar Embedding (Offline)</h3>
+      <div class="formula formula-v13" style="font-size:0.85em;">
+        $\bar{f}_{\text{target}} = \frac{1}{N}\sum_{i=1}^{N} \frac{\text{CLIP}_{\text{cls}}(x_i^{\text{nude}})}{||\text{CLIP}_{\text{cls}}(x_i^{\text{nude}})||}$
+      </div>
+      <ul class="small">
+        <li>N=16개 exemplar의 CLIP class token 평균</li>
+        <li>$\bar{f} \in \mathbb{R}^{768}$: <strong>PbE의 information bottleneck</strong></li>
+        <li>BOS + $n$ copies + EOS + PAD &rarr; $[1, 77, 768]$</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Step 2: Pre-compute Probe Keys (Offline)</h3>
+      <div class="formula formula-v13" style="font-size:0.85em;">
+        $K_{\text{target}}^l = W_K^l \cdot c^*_{\text{target}}, \quad \forall l \in \mathcal{L}$
+      </div>
+      <ul class="small">
+        <li>$\mathcal{L} = \{l \mid \text{res} \in [16, 32]\}$: <strong>DAG와 동일한 layer 선택</strong></li>
+        <li>One-time cost: 16개 linear projection</li>
+        <li>Inference 중 고정 (frozen)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>v13 수식: WHEN (Global CAS)</h2>
+  <div class="box-v13 box">
+    <strong>WHEN</strong>: 이 prompt가 unsafe concept을 포함하는가? &mdash; CAS로 판단
+  </div>
+  <div class="formula formula-v13">
+    $\text{CAS}(t) = \cos\big(d_{\text{prompt}},\; d_{\text{target}}\big) = \frac{(\epsilon^p - \epsilon^\varnothing) \cdot (\epsilon^{\text{tgt}} - \epsilon^\varnothing)}{||\epsilon^p - \epsilon^\varnothing|| \;\cdot\; ||\epsilon^{\text{tgt}} - \epsilon^\varnothing||}$
+  </div>
+
+  <div class="formula formula-v13" style="margin-top:8px;">
+    $\text{should\_guide}(t) = \big[\text{CAS}(t) > \tau\big] \;\wedge\; \big[t \in \text{window}\big]$
+    <br><span class="small">$\tau = 0.6$ (default), sticky mode: 한 번 trigger되면 유지</span>
+  </div>
+
+  <div class="box-warn box" style="margin-top:10px;">
+    <strong>DAG와의 차이</strong>: DAG는 $\hat{A}(c^*) \geq 0.5$를 global detection에 사용하고 warm-up step($t_{cs}=5$)으로 on/off 제어.
+    v13은 noise space에서 CAS를 직접 계산하여 더 빠르고 robust한 triggering.
+  </div>
+</section>
+
+<section>
+  <h2>v13 수식: WHERE (Exemplar Cross-Attention Probe)</h2>
+  <div class="box-v13 box">
+    <strong>WHERE</strong>: 이미지의 어디가 unsafe한가? &mdash; Cross-attention probe로 감지
+  </div>
+
+  <h3>Probe Attention (During Forward Pass)</h3>
+  <div class="formula formula-v13">
+    $\hat{A}^l = \text{softmax}\!\left(\frac{Q(h_t^l) \cdot K_{\text{target}}^{l\top}}{\sqrt{d}}\right) \in \mathbb{R}^{H \times S \times K}$
+    <br><br>
+    <span class="small">$h_t^l$: eps_prompt forward의 hidden state (cached), $K_{\text{target}}^l$: pre-computed exemplar key</span>
+  </div>
+
+  <h3 style="margin-top:12px;">Spatial Mask Aggregation</h3>
+  <div class="formula formula-v13" style="font-size:0.85em;">
+    $A_{\text{spatial}}^l = \max_{k \in \text{tokens}} \;\frac{1}{H}\sum_h \hat{A}^l_{h,:,k} \quad\text{(head avg, token max)}$
+    <br><br>
+    $A_{\text{final}} = \text{normalize}\!\left[\frac{1}{|\mathcal{L}|}\sum_{l \in \mathcal{L}} \text{interpolate}(A_{\text{spatial}}^l, 64\times64)\right]$
+  </div>
+
+  <div class="box-dag box" style="margin-top:8px;">
+    <strong>cf. DAG</strong>: $c^*$는 pixel-level CE loss로 최적화 &rarr; background leakage 명시적 제거.
+    <strong>v13</strong>: CLIP class token의 information bottleneck이 암묵적으로 leakage를 줄임 (training 불필요).
+  </div>
+</section>
+
+<section>
+  <h2>v13 수식: Soft Mask Construction</h2>
+
+  <div class="formula formula-v13">
+    $M_{\text{soft}} = \text{GaussianBlur}_{5\times5}\!\Big[\sigma\!\big(\alpha \cdot (A_{\text{final}} - \theta_s)\big)\Big]$
+    <br><br>
+    <span class="small">$\alpha = 10$ (sigmoid sharpness), $\theta_s = 0.3$ (spatial threshold), blur $\sigma = 1.0$</span>
+  </div>
+
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <h3>Probe Source Modes</h3>
+      <table>
+        <tr><th>Mode</th><th>Input to Soft Mask</th></tr>
+        <tr><td><code>clip_exemplar</code></td><td>$A_{\text{final}}$ from CLIP probe</td></tr>
+        <tr><td><code>text</code></td><td>Noise-based spatial CAS (v6 fallback)</td></tr>
+        <tr><td><code>both</code></td><td>$\max(M_{\text{clip}}, M_{\text{noise}})$</td></tr>
+        <tr><td><code>diff</code></td><td>$\text{clamp}(M_{\text{target}} - M_{\text{anchor}}, 0, 1)$</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>DAG vs v13 Mask 비교</h3>
+      <table>
+        <tr><th></th><th>DAG</th><th>v13</th></tr>
+        <tr><td>Threshold</td><td>$\hat{A} \geq 0.5$ (hard)</td><td>$\sigma(\alpha(A-\theta_s))$ (soft)</td></tr>
+        <tr><td>Scale</td><td>Area-adaptive</td><td>Uniform per pixel</td></tr>
+        <tr><td>Blur</td><td>No</td><td>Gaussian 5&times;5</td></tr>
+        <tr><td>Training</td><td>CE loss 필요</td><td>Training-free</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>v13 수식: HOW (Safety Guidance)</h2>
+  <div class="box-v13 box">
+    <strong>HOW</strong>: mask가 주어졌을 때 어떻게 안전하게 guidance하는가?
+  </div>
+
+  <h3>Hybrid Mode (Recommended)</h3>
+  <div class="formula formula-v13">
+    $\epsilon_{\text{final}} = \epsilon_{\text{cfg}} - s_t \cdot M_{\text{soft}} \cdot (\epsilon^{\text{tgt}} - \epsilon^\varnothing) + s_a \cdot M_{\text{soft}} \cdot (\epsilon^{\text{anc}} - \epsilon^\varnothing)$
+  </div>
+
+  <h3 style="margin-top:10px;">Hybrid Projection Mode</h3>
+  <div class="formula formula-v13" style="font-size:0.88em;">
+    $d_{\text{safe}} = d_{\text{prompt}} - p_s \cdot \text{proj}_{d_{\text{target}}}(d_{\text{prompt}}), \quad \text{proj}_{d_t}(d_p) = \frac{d_p \cdot d_t}{||d_t||^2} d_t$
+    <br><br>
+    $\epsilon_{\text{safe}} = \epsilon^\varnothing + s_g \cdot d_{\text{safe}}$
+    <br><br>
+    $\epsilon_{\text{final}} = \epsilon_{\text{safe}} \cdot (1 - s_a \cdot M_{\text{soft}}) + \epsilon_{\text{anc\_cfg}} \cdot (s_a \cdot M_{\text{soft}})$
+  </div>
+
+  <div class="box-dag box" style="margin-top:8px;">
+    <strong>cf. DAG</strong>: $\tilde{\epsilon} = (1-s_g)\epsilon^\varnothing + s_g(\epsilon^p - \mathbf{S}_{c_s} \cdot \mathbf{M}_{c_s} \cdot \epsilon^{c_s})$ &mdash;
+    DAG는 safety prompt $c_s$로부터 $\epsilon^{c_s}$ 계산. v13은 target/anchor 분리로 더 세밀한 제어.
+  </div>
+</section>
+
+<!-- ======================== PART 6: FORMULA COMPARISON ======================== -->
+<section class="divider">
+  <h2>6. 수식 비교 요약</h2>
+  <p>DAG vs Paint by Example vs v13</p>
+</section>
+
+<section>
+  <h2>전체 수식 비교: Detection</h2>
+  <table style="font-size:0.58em;">
+    <tr>
+      <th style="width:15%;">단계</th>
+      <th style="width:28%;"><span class="tag tag-dag">DAG</span></th>
+      <th style="width:28%;"><span class="tag tag-pbe">PbE</span></th>
+      <th style="width:28%;"><span class="tag tag-v13">v13</span></th>
+    </tr>
+    <tr>
+      <td><strong>Concept<br>Representation</strong></td>
+      <td>$c^* = \arg\min_c \mathcal{L}_{\text{CAM}}$<br><span class="small">optimized token embedding</span></td>
+      <td>$c = \text{MLP}(\text{CLIP}_{\text{cls}}(x_r))$<br><span class="small">CLIP class token + MLP</span></td>
+      <td>$c^* = \text{project}(\bar{f}_{\text{CLIP\_cls}})$<br><span class="small">averaged CLIP class token</span></td>
+    </tr>
+    <tr>
+      <td><strong>Information<br>Bottleneck</strong></td>
+      <td>CE loss로 불필요 정보 제거<br>(implicit, via optimization)</td>
+      <td>Class token만 사용<br>(explicit compression)</td>
+      <td class="hl">Class token만 사용<br>(explicit, PbE 방식 차용)</td>
+    </tr>
+    <tr>
+      <td><strong>Spatial<br>Detection</strong></td>
+      <td>$\hat{A}(h_t^l, c^*) \geq 0.5$<br>CAM thresholding</td>
+      <td>Cross-attention이 implicit<br>spatial alignment 수행</td>
+      <td class="hl">$\text{softmax}(Q \cdot K_{\text{target}}^\top / \sqrt{d})$<br>probe attention &rarr; soft mask</td>
+    </tr>
+    <tr>
+      <td><strong>Layer<br>Selection</strong></td>
+      <td>$\{l \mid \text{size} \in [16^2, 32^2]\}$</td>
+      <td>All cross-attention layers</td>
+      <td class="hl">$\{l \mid \text{res} \in [16, 32]\}$<br>(DAG와 동일)</td>
+    </tr>
+    <tr>
+      <td><strong>Training<br>Required</strong></td>
+      <td class="bad">Token optimization<br>(5+3 images, GT masks)</td>
+      <td class="bad">Full fine-tuning<br>(64 V100s, 7 days)</td>
+      <td class="best">None<br>(completely training-free)</td>
+    </tr>
+  </table>
+</section>
+
+<section>
+  <h2>전체 수식 비교: Guidance / Application</h2>
+  <table style="font-size:0.58em;">
+    <tr>
+      <th style="width:15%;">단계</th>
+      <th style="width:28%;"><span class="tag tag-dag">DAG</span></th>
+      <th style="width:28%;"><span class="tag tag-pbe">PbE</span></th>
+      <th style="width:28%;"><span class="tag tag-v13">v13</span></th>
+    </tr>
+    <tr>
+      <td><strong>When to<br>Act</strong></td>
+      <td>$\hat{A}(c^*) \geq 0.5$ + warm-up<br>($t_{cs}=5$)</td>
+      <td>Always (editing task)</td>
+      <td class="hl">$\text{CAS}(t) > \tau$ (noise-space)<br>+ sticky triggering</td>
+    </tr>
+    <tr>
+      <td><strong>Guidance<br>Formula</strong></td>
+      <td>$\epsilon^p - S_{c_s} \cdot M_{c_s} \cdot \epsilon^{c_s}$<br><span class="small">adaptive scale, safety prompt</span></td>
+      <td>$\epsilon_\theta(y_t,v) + s(\epsilon_\theta(y_t,c) - \epsilon_\theta(y_t,v))$<br><span class="small">CFG for similarity control</span></td>
+      <td class="hl">$\epsilon_{\text{cfg}} - s_t M(\epsilon^{\text{tgt}}-\epsilon^\varnothing)$<br>$+ s_a M(\epsilon^{\text{anc}}-\epsilon^\varnothing)$<br><span class="small">target 제거 + anchor 주입</span></td>
+    </tr>
+    <tr>
+      <td><strong>Mask<br>Type</strong></td>
+      <td>Hard gate ($\hat{A}\geq0.01$)<br>+ magnitude rescaling</td>
+      <td>User-provided mask</td>
+      <td class="hl">$\sigma(\alpha(A-\theta_s))$<br>+ Gaussian blur (soft)</td>
+    </tr>
+    <tr>
+      <td><strong>Concept<br>Separation</strong></td>
+      <td>Safety prompt $c_s$ 단일</td>
+      <td>N/A (editing)</td>
+      <td class="hl">Target (nude) + Anchor (clothed)<br>분리 guidance</td>
+    </tr>
+    <tr>
+      <td><strong>Extra<br>UNet Calls</strong></td>
+      <td>+1 ($\epsilon^{c_s}$)</td>
+      <td>0 (single forward)</td>
+      <td>+2 ($\epsilon^{\text{tgt}}$, $\epsilon^{\text{anc}}$)<br><span class="small">probe는 matmul만</span></td>
+    </tr>
+  </table>
+</section>
+
+<!-- ======================== PART 7: WHY V13 ======================== -->
+<section class="divider">
+  <h2>7. 결론</h2>
+  <p>v13이 두 논문의 장점을 어떻게 결합하는가</p>
+</section>
+
+<section>
+  <h2>v13: Best of Both Worlds</h2>
+
+  <div style="display:flex; align-items:center; justify-content:center; gap:20px; margin:16px 0;">
+    <div style="background:#fdf4ff; border:2px solid var(--dag); border-radius:12px; padding:14px 18px; text-align:center; width:200px;">
+      <strong style="color:var(--dag);">DAG</strong><br>
+      <span style="font-size:0.8em;">정밀한 CAM detection<br>+ Spatial guidance<br><span style="color:var(--danger);">but 학습 필요</span></span>
+    </div>
+    <div style="font-size:2em; color:var(--accent);">+</div>
+    <div style="background:#fff7ed; border:2px solid var(--pbe); border-radius:12px; padding:14px 18px; text-align:center; width:200px;">
+      <strong style="color:var(--pbe);">PbE</strong><br>
+      <span style="font-size:0.8em;">Information bottleneck<br>+ Image condition<br><span style="color:var(--danger);">but editing 전용</span></span>
+    </div>
+    <div style="font-size:2em; color:var(--accent);">=</div>
+    <div style="background:#eff6ff; border:2px solid var(--v13); border-radius:12px; padding:14px 18px; text-align:center; width:200px;">
+      <strong style="color:var(--v13);">v13</strong><br>
+      <span style="font-size:0.8em;">Training-free probe<br>+ CLIP bottleneck<br>+ CAS + Spatial guidance</span>
+    </div>
+  </div>
+
+  <table style="font-size:0.68em; margin-top:16px;">
+    <tr>
+      <th>속성</th>
+      <th><span class="tag tag-dag">DAG</span></th>
+      <th><span class="tag tag-pbe">PbE</span></th>
+      <th><span class="tag tag-v13">v13</span></th>
+    </tr>
+    <tr>
+      <td>Training-free</td>
+      <td class="bad">X (token optimization)</td>
+      <td class="bad">X (full fine-tuning)</td>
+      <td class="best">O</td>
+    </tr>
+    <tr>
+      <td>Image-based concept</td>
+      <td class="bad">X (text token)</td>
+      <td class="best">O (CLIP class token)</td>
+      <td class="best">O (CLIP exemplar)</td>
+    </tr>
+    <tr>
+      <td>Spatial detection</td>
+      <td class="best">O (optimized CAM)</td>
+      <td>implicit</td>
+      <td class="best">O (probe CAM)</td>
+    </tr>
+    <tr>
+      <td>Temporal gating (WHEN)</td>
+      <td>warm-up only</td>
+      <td>N/A</td>
+      <td class="best">O (CAS threshold)</td>
+    </tr>
+    <tr>
+      <td>Model weights 변경</td>
+      <td class="best">없음</td>
+      <td class="bad">전체 fine-tune</td>
+      <td class="best">없음</td>
+    </tr>
+    <tr>
+      <td>Multi-concept 확장</td>
+      <td>concept별 재최적화</td>
+      <td>N/A</td>
+      <td class="best">exemplar만 교체</td>
+    </tr>
+  </table>
+</section>
+
+<section>
+  <h2>핵심 메시지</h2>
+  <div class="insight" style="font-size:1.0em; text-align:center;">
+    <strong>DAG</strong>는 &ldquo;정확한 detection을 위해 <em>학습</em>이 필요하다&rdquo;고 했고,<br>
+    <strong>PbE</strong>는 &ldquo;이미지 조건의 <em>semantic bottleneck</em>이 핵심&rdquo;이라고 했다.<br><br>
+    <strong style="color:var(--v13);">v13</strong>은 PbE의 CLIP information bottleneck을<br>
+    DAG의 cross-attention probing framework에 대입하여<br>
+    <strong>학습 없이도 정밀한 spatial unsafe detection</strong>을 달성한다.
+  </div>
+
+  <div class="two-col" style="margin-top:16px;">
+    <div class="box-green box">
+      <strong>v13의 장점</strong>
+      <ul>
+        <li>완전 training-free &rarr; 새 concept에 즉시 적용</li>
+        <li>GT mask annotation 불필요</li>
+        <li>CLIP shared space 덕분에 text space projection 자연스러움</li>
+        <li>CAS gating으로 benign prompt FP 최소화</li>
+      </ul>
+    </div>
+    <div class="box-warn box">
+      <strong>남은 과제</strong>
+      <ul>
+        <li>DAG의 optimized $c^*$보다 detection 정밀도가 낮을 수 있음</li>
+        <li>Background leakage 완전 해소는 미검증</li>
+        <li>Exemplar 이미지 선택의 영향 분석 필요</li>
+        <li>Hard-to-erase nudity (memorized images) 한계</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Appendix: v13 Architecture Diagram</h2>
+  <div style="text-align:center; margin-top:10px;">
+    <div class="pipe">
+      <div class="s" style="background:#e0e7ff; color:#3730a3;">Input Prompt $p$</div>
+      <div class="a">&rarr;</div>
+      <div class="s" style="background:#fef3c7; color:#92400e;">UNet Forward<br><span style="font-size:0.7em;">$\epsilon^\varnothing, \epsilon^p$</span></div>
+      <div class="a">&rarr;</div>
+      <div class="s" style="background:#fce7f3; color:#9d174d;">Global CAS<br><span style="font-size:0.7em;">WHEN: $\cos(d_p, d_t) > \tau$?</span></div>
+    </div>
+    <div style="font-size:1.2em; color:var(--accent);">&darr; triggered</div>
+    <div class="pipe">
+      <div class="s" style="background:#ede9fe; color:#5b21b6;">Probe Store<br><span style="font-size:0.7em;">$Q(h_t^l) \cdot K_{\text{target}}^{l\top}$</span></div>
+      <div class="a">&rarr;</div>
+      <div class="s" style="background:#d1fae5; color:#065f46;">Spatial Mask<br><span style="font-size:0.7em;">WHERE: $\sigma(\alpha(A-\theta_s))$</span></div>
+      <div class="a">&rarr;</div>
+      <div class="s" style="background:#fee2e2; color:#991b1b;">Guidance<br><span style="font-size:0.7em;">HOW: hybrid/proj</span></div>
+      <div class="a">&rarr;</div>
+      <div class="s" style="background:#dcfce7; color:#166534;">Safe Image</div>
+    </div>
+  </div>
+
+  <div class="formula formula-v13" style="margin-top:16px; font-size:0.82em;">
+    <strong>Full Pipeline (per denoising step $t$):</strong><br><br>
+    $\text{CAS}(t) = \cos\big(\epsilon^p_t - \epsilon^\varnothing_t,\; \epsilon^{\text{tgt}}_t - \epsilon^\varnothing_t\big)$
+    <br><br>
+    $\text{if } \text{CAS}(t) > \tau: \quad A_t = \text{aggregate}\big[\text{softmax}(Q_t \cdot K_{\text{target}}^\top / \sqrt{d})\big]$
+    <br><br>
+    $M_t = \text{blur}\big[\sigma(\alpha \cdot (A_t - \theta_s))\big]$
+    <br><br>
+    $\epsilon_{\text{final}} = \epsilon_{\text{cfg}} - s_t \cdot M_t \cdot (\epsilon^{\text{tgt}} - \epsilon^\varnothing) + s_a \cdot M_t \cdot (\epsilon^{\text{anc}} - \epsilon^\varnothing)$
+  </div>
+</section>
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  width: 1100,
+  height: 700,
+  margin: 0.06,
+  transition: 'slide',
+  transitionSpeed: 'fast',
+});
+</script>
+</body>
+</html>

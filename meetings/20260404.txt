@@ -1,0 +1,70 @@
+조규상  [오전 10:21]
+교수님께서 말씀하시던 것 중에, compositional한 concept들에 대한 defense가 잘 안되던부분이 있다고 하셨는데, 흠 defense하면서 전체 맥락 유지가 좀 힘든가요..?
+Younghwan Gil  [오후 1:37]
+저는 compositional한 컨셉에 대해서는 아직 직접적으로 실험해보지는 않았고, multi-concept erasure 위주로만 실험을 진행해봤습니다.
+
+예를 들어 nude와 violence처럼 서로 다른 컨셉을 동시에 제거하는 경우에는  
+각 컨셉을 단일로 제거할 때보다 성능이 떨어지거나,  
+이미지의 전체적인 시맨틱이 깨지는 문제가 있었습니다.
+
+여러 컨셉을 동시에 억제하려다 보니  
+가이던스 방향 간 conflict가 생기면서 이러한 문제가 발생한 것으로 보입니다.
+
+학습 없이 명시적인 guidance를 주는 방식이라면,  
+예를 들어 “young + nude”와 같은 compositional한 경우도  
+이를 하나의 negative concept처럼 보고 처리할 수 있어서  
+단일 컨셉과 크게 다르지 않을 수 있다고 생각합니다.
+
+다만 이렇게 여러 케이스를 계속 추가해서 보다 generic하게 확장하려고 하면, guidance 간 충돌이 누적되면서  
+단일 컨셉 데이터로 generic한 모델을 평가해보면 기존에 비해 성능이 떨어지거나 시맨틱이 깨지는 문제가 생길 가능성이 있다고 생각합니다.
+
+그래서 compositional한 경우가 개별 컨셉 간 의미적으로 연결되어 있다는 점에서 multi-concept setting보다는 덜 어려울 수도 있지만,  여기서도 여러 컨셉을 다 지우는 generic한 모델의 형태로 확장하는 것은 여전히 쉽지 않을 것 같다고 생각하고 있습니다..!
+조규상  [오후 1:45]
+
+multi concept erasure - 둘 다 지워야하는 concept인 경우
+compositional - 하나는 지워야하는 concept, 하나는 추가 속성 
+의 의미로 구분하신거죠??
+[오후 1:49]오호 확실히 defense 관점에서는 compositional하다는 것이 조금 더 특정되거나, distributionally specific 한 개념을 지운다고 생각할 수 있겠네요..
+Younghwan Gil  [오후 1:50]
+네.. 제가 compositional 은 아직 안해봐서 잘은 모르겠지만 느낌은 그럴거 같습니다!
+[오후 1:52]multi concept을 테스트 할 때도 사실 둘다 지워야 하는 상황에서 테스트를 한 것이 아니라, 각각 단일 컨셉 데이터로 멀티 컨셉이 지워지도록 세팅된 모델을 테스트 했다보니 성능 저하가 더 크게 있었던 것 같습니다.
+조규상  [오후 1:52]
+아하 알겠습니다! 경험 공유해주셔서 감사합니다 :slightly_smiling_face:
+Younghwan Gil  [오후 1:53]
+아마 교수님께서는 두개가 조금 비슷하다고 느끼셔서 그렇게 말씀하셨을거 같아요.. 혹시 compositional data 는 어떻게 테스트 하고 계신가요?
+조규상  [오후 1:55]
+저희는 jailbreak 관점인데요, T2I 모델들 safety tuning된 최신 오픈소스 모델들 테스트하고 있어요.
+[오후 1:57]rare한 distribution의 데이터를 jailbreak해서 생성하자가 목적인데,  neutral concept들이 누적되는 경우는 상관없지만 harmful concept들이 누적되면 suppression 효과가 확실히 커지더라고요...
+[오후 1:58]특히 nudity + young 같은거는 extremely harmful한 컨셉이라 공격성공률이 확 줄어드네요
+Younghwan Gil  [오후 2:01]
+아 그렇군요 그러면 약간 프롬프트를 직접 만들어서 테스트 하시는건가요?
+조규상  [오후 2:01]
+넵 맞습니다
+[오후 2:02]기존 데이터셋에 개념 넣어서 uncensored llm 가공하는 방식으로 하고있어요
+Younghwan Gil  [오후 2:03]
+이게 오히려 컨셉을 늘리다보면 지우는게 많아져서 기본적으로 suppression 효과는 쎄지게 되고, 그러다보면 semantic이 깨질 수가 있는데 이걸 안깨지게 강도를 조절하려다보니 erasing 성능이 저하되고 하는거 같습니다. 
+[오후 2:04]inference time 방법론들은 파라미터 세팅 값에 따라 너무 변하다 보니 오히려 파인튜닝 방법론들이 jailbreaking 테스트 용도로는 더 적합할 수도 있을 것 같네요..
+조규상  [오후 2:05]
+흠 그렇군요... 지금 상용모델들에 erasing 된 걸로 추가 실험해보려는데, 혹시 추천해주실 파인튜닝 방법론들도 있을까요??
+Younghwan Gil  [오후 2:05]
+너무 옛날 방식이긴하지만 그래도 제일 많이 하는게 esd인 것 같습니다. 
+조규상  [오후 2:06]
+ㅎㅎ그렇군요... ESD도 해봐야겠네요
+Younghwan Gil  [오후 2:14]
+네, 감사합니다.
+혹시 jail breaking 쪽에서 참고할만한 논문 여쭤볼 수 있을까요? (편집됨) 
+조규상  [오후 2:30]
+흠 사실 jailbreak쪽에서 diffusion guidance를 주는 방향은 거의 없는 것 같고, 아직까지는 대부분 prompt 최적화하는 듯 해요..
+https://arxiv.org/abs/2505.21074 . https://arxiv.org/abs/2404.02928 같이, evaluator를 두고, 그 feedback을 기반으로 attack prompt 열심히 깎는게 거의 대부분의 jailbreak 구조인 것 같아요!
+다만 latent 관점에선 이런 시도도 있는 것 같구요...
+https://arxiv.org/abs/2602.00175v1
+arXiv.orgRed-Teaming Text-to-Image Systems by Rule-based Preference ModelingText-to-image (T2I) models raise ethical and safety concerns due to their potential to generate inappropriate or harmful images. Evaluating these models' security through red-teaming is vital, yet white-box approaches are limited by their need for internal access, complicating their use with closed-source models. Moreover, existing black-box methods often assume knowledge about the model's specific defense mechanisms, limiting their utility in real-world commercial API scenarios. A significant challenge is how to evade unknown and diverse defense mechanisms. To overcome this difficulty, we propose a novel Rule-based Preference modeling Guided Red-Teaming (RPG-RT), which iteratively employs L… arXiv.orgJailbreaking Prompt Attack: A Controllable Adversarial Attack against Diffusion ModelsText-to-image (T2I) models can be maliciously used to generate harmful content such as sexually explicit, unfaithful, and misleading or Not-Safe-for-Work (NSFW) images. Previous attacks largely depend on the availability of the diffusion model or involve a lengthy optimization process. In this work, we investigate a more practical and universal attack that does not require the presence of a target model and demonstrate that the high-dimensional text embedding space inherently contains NSFW concepts that can be exploited to generate harmful images. We present the Jailbreaking Prompt Attack (JPA). JPA first searches for the target malicious concepts in the text embedding space using a group of… arXiv.orgThe Illusion of Forgetting: Attack Unlearned Diffusion via Initial Latent Variable OptimizationAlthough unlearning-based defenses claim to purge Not-Safe-For-Work (NSFW) concepts from diffusion models (DMs), we reveals that this "forgetting" is largely an illusion. Unlearning partially disrupts the mapping between linguistic symbols and the underlying knowledge, which remains intact as dormant memories. We find that the distributional discrepancy in the denoising process serves as a measurable indicator of how much of the mapping is retained, also reflecting the strength of unlearning. Inspired by this, we propose IVO (Initial Latent Variable Optimization), a concise and powerful attack framework that reactivates these dormant memories by reconstructing the broken mappings. Through Im… Younghwan Gil  [오후 2:52]
+넵넵 감사합니다! 한번 잘 읽어보겠습니다.
+조규상  [오후 2:55]
+ㅎㅎ 연구 방향이 어떻게 되세요? 저도 재밌는거 찾으면 말씀 드릴게요!
+Younghwan Gil  [오후 2:57]
+저는 그냥 safety guidance inference time에서 잘 주는 법에 대해서 해보고 있는데, 아직 걸음마 단계네요 ㅎㅎ cfg를 적당히 잘 깎아서 줘보려고 하고 있습니다!
+조규상  [오후 2:59]
+아하 그렇군요 ㅎㅎㅎ 저는 어쨌든 과제 목표가 jailbreak 보다는 Safety-tuning 쪽 가깝기도 해서 자주자주 물어볼게요 !! 재밌는거 있으면 저도 알려주세요~~
+Younghwan Gil  [오후 3:00]
+넵 감사합니다!!

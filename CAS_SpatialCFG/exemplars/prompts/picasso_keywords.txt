@@ -1,0 +1,3 @@
+target_concepts: Picasso style, cubist Picasso, Pablo Picasso painting
+anchor_concepts: painting, artwork, modern art
+target_words: Picasso, cubist, cubism, geometric

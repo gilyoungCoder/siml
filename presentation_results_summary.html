@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CAS + Spatial CFG — Results Summary</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<style>
+:root {
+  --heading: #1a1a2e; --accent: #2563eb; --accent2: #7c3aed;
+  --safe: #059669; --danger: #dc2626; --warn: #d97706; --teal: #0f766e;
+}
+.reveal { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; }
+.reveal h1, .reveal h2, .reveal h3 { color: var(--heading); font-weight: 700; }
+.reveal h2 { font-size: 1.6em; margin-bottom: 0.4em; }
+.reveal h3 { font-size: 1.15em; color: var(--accent); }
+.reveal section { text-align: left; }
+
+/* Title slide */
+.title-slide { text-align: center !important; }
+.title-slide h1 { font-size: 2em; margin-bottom: 0.2em; }
+.title-slide .subtitle { font-size: 1.1em; color: #555; margin-top: 0.3em; }
+.title-slide .date { font-size: 0.85em; color: #888; margin-top: 1.5em; }
+.title-slide .tag { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.7em; margin: 3px; }
+.tag-blue { background: #dbeafe; color: var(--accent); }
+.tag-green { background: #d1fae5; color: var(--safe); }
+.tag-purple { background: #ede9fe; color: var(--accent2); }
+.tag-red { background: #fee2e2; color: var(--danger); }
+
+/* Divider */
+.divider { background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important; text-align: center !important; }
+.divider h2 { color: #fff !important; font-size: 2em; }
+.divider p { color: #94a3b8; font-size: 1em; }
+
+/* Table */
+.reveal table { width: 100%; border-collapse: collapse; font-size: 0.58em; margin-top: 0.4em; }
+.reveal th { background: #1e293b; color: #fff; padding: 8px 10px; text-align: center; font-weight: 600; }
+.reveal td { padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+.reveal tr:nth-child(even) { background: #f8fafc; }
+.reveal tr.best { background: #d1fae5 !important; font-weight: 600; }
+.reveal tr.bad { background: #fee2e2 !important; color: #999; }
+.reveal tr.baseline { background: #fef3c7 !important; }
+.reveal td:first-child, .reveal th:first-child { text-align: left; }
+
+/* Box */
+.box { background: #f1f5f9; border-radius: 10px; padding: 14px 18px; margin: 8px 0; border-left: 4px solid var(--accent); }
+.box-green { background: #ecfdf5; border-left-color: var(--safe); }
+.box-red { background: #fef2f2; border-left-color: var(--danger); }
+.box-purple { background: #faf5ff; border-left-color: var(--accent2); }
+.box-orange { background: #fffbeb; border-left-color: var(--warn); }
+
+/* Layout */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* Formula */
+.formula { background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 18px; font-family: 'Georgia', serif; font-size: 0.82em; text-align: center; margin: 10px 0; line-height: 1.7; }
+.formula-sm { font-size: 0.75em; padding: 8px 14px; margin: 6px 0; }
+
+/* Highlight */
+.hl { color: var(--accent); font-weight: 700; }
+.hl-green { color: var(--safe); font-weight: 700; }
+.hl-red { color: var(--danger); font-weight: 700; }
+
+/* Arrow indicator */
+.arr-down { color: var(--safe); }
+.arr-up { color: var(--safe); }
+
+/* Small text */
+.small { font-size: 0.75em; color: #64748b; }
+
+/* Metric card */
+.metric-card { text-align: center; background: #f8fafc; border-radius: 10px; padding: 16px; border: 1px solid #e2e8f0; }
+.metric-card .value { font-size: 2em; font-weight: 800; }
+.metric-card .label { font-size: 0.75em; color: #64748b; margin-top: 4px; }
+
+/* Pipeline */
+.pipe { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; margin: 12px 0; }
+.pipe .s { background: #e0e7ff; padding: 8px 14px; border-radius: 8px; font-size: 0.7em; font-weight: 600; color: #3730a3; }
+.pipe .a { font-size: 1.2em; color: #94a3b8; margin: 0 6px; }
+
+/* UNet flow */
+.unet-flow { display: flex; align-items: center; gap: 4px; font-size: 0.65em; margin: 8px 0; flex-wrap: wrap; }
+.unet-flow .pass { background: #e0e7ff; padding: 4px 10px; border-radius: 6px; color: #3730a3; font-weight: 600; white-space: nowrap; }
+.unet-flow .pass-new { background: #dcfce7; padding: 4px 10px; border-radius: 6px; color: #166534; font-weight: 600; white-space: nowrap; }
+.unet-flow .pass-skip { background: #f1f5f9; padding: 4px 10px; border-radius: 6px; color: #94a3b8; font-weight: 600; white-space: nowrap; text-decoration: line-through; }
+.unet-flow .arr { color: #94a3b8; }
+
+/* version badge */
+.ver-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.7em; font-weight: 700; }
+.ver-v3 { background: #dbeafe; color: #1d4ed8; }
+.ver-v4 { background: #fef3c7; color: #92400e; }
+.ver-v6 { background: #d1fae5; color: #065f46; }
+.ver-v7 { background: #ede9fe; color: #5b21b6; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ====== TITLE ====== -->
+<section class="title-slide">
+  <h1>Training-Free Nudity Removal<br>in Diffusion Models</h1>
+  <div class="subtitle">CAS + Spatial CFG: Method Evolution & Results</div>
+  <div style="margin-top: 20px;">
+    <span class="tag tag-blue">Training-Free</span>
+    <span class="tag tag-green">Inference Guidance</span>
+    <span class="tag tag-purple">Example-Based</span>
+  </div>
+  <div class="date">2026.03.26 &mdash; Internal Sharing</div>
+</section>
+
+<!-- ====== OVERVIEW ====== -->
+<section>
+  <h2>Core Framework: WHEN + WHERE + HOW</h2>
+  <div class="pipe">
+    <div class="s">WHEN<br><span style="font-weight:400;font-size:0.85em">CAS trigger</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s">WHERE<br><span style="font-weight:400;font-size:0.85em">Spatial mask</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s">HOW<br><span style="font-weight:400;font-size:0.85em">Guidance type</span></div>
+  </div>
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <div class="box">
+        <strong>WHEN &mdash; CAS (Concept Alignment Score)</strong><br>
+        <span class="small">At each denoising step, measure how close the current generation is to the unsafe concept. Guidance is only applied when CAS exceeds a threshold.</span>
+        <div class="formula formula-sm">
+          d<sub>prompt</sub> = &epsilon;<sub>prompt</sub> &minus; &epsilon;<sub>&empty;</sub> &nbsp;&nbsp;,&nbsp;&nbsp;
+          d<sub>target</sub> = &epsilon;<sub>target</sub> &minus; &epsilon;<sub>&empty;</sub><br>
+          CAS = cos(d<sub>prompt</sub>, d<sub>target</sub>) &nbsp;&gt;&nbsp; &tau;
+        </div>
+      </div>
+      <div class="box">
+        <strong>WHERE &mdash; Spatial Masking</strong><br>
+        <span class="small">Determine <em>which pixels</em> in the latent are generating unsafe content. Different versions use different signals: cross-attention maps, noise direction similarity, or exemplar directions.</span>
+      </div>
+    </div>
+    <div>
+      <div class="box">
+        <strong>HOW &mdash; Guidance Strategy</strong><br>
+        <span class="small">Modify the UNet's noise prediction <em>only in masked regions</em>. Core idea: subtract the "nudity direction" and/or steer toward a "safe anchor direction" in the noise prediction space.</span>
+        <div class="formula formula-sm">
+          &epsilon;<sub>final</sub> = &epsilon;<sub>cfg</sub> &minus; s<sub>t</sub> &middot; M &middot; d<sub>target</sub> + s<sub>a</sub> &middot; M &middot; d<sub>anchor</sub>
+        </div>
+      </div>
+      <div class="box-green box">
+        <strong>Evaluation</strong><br>
+        NudeNet Unsafe% <span class="arr-down">&darr;</span> &nbsp;|&nbsp; Qwen3-VL SR% <span class="arr-up">&uarr;</span><br>
+        <span class="small">SR = (Safe+Partial) / Total &times; 100</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== STANDARD CFG RECAP ====== -->
+<section>
+  <h2>Background: Standard CFG in Stable Diffusion</h2>
+  <div class="box" style="margin-bottom:12px;">
+    <strong>UNet Denoising Loop (50 DDIM steps)</strong><br>
+    <span class="small">At each timestep t, the UNet predicts noise &epsilon; from the current noisy latent z<sub>t</sub>. The predicted noise is used to compute z<sub>t-1</sub>.</span>
+  </div>
+  <div class="formula">
+    <strong>Standard CFG (2 UNet passes per step):</strong><br><br>
+    &epsilon;<sub>&empty;</sub> = UNet(z<sub>t</sub>, t, &empty;) &nbsp;&nbsp;&larr; unconditional pass<br>
+    &epsilon;<sub>prompt</sub> = UNet(z<sub>t</sub>, t, c<sub>prompt</sub>) &nbsp;&nbsp;&larr; text-conditioned pass<br><br>
+    &epsilon;<sub>cfg</sub> = &epsilon;<sub>&empty;</sub> + s<sub>cfg</sub> &middot; (&epsilon;<sub>prompt</sub> &minus; &epsilon;<sub>&empty;</sub>)
+    &nbsp;&nbsp;&nbsp; <span style="font-size:0.8em;color:#64748b">(s<sub>cfg</sub> = 7.5)</span>
+  </div>
+  <div class="box" style="border-left-color:var(--accent2);">
+    <strong>Our method adds extra UNet passes</strong> to compute concept directions:<br>
+    <span class="small">&epsilon;<sub>target</sub> = UNet(z<sub>t</sub>, t, c<sub>"nude person"</sub>) &rarr; nudity direction d<sub>target</sub> = &epsilon;<sub>target</sub> &minus; &epsilon;<sub>&empty;</sub><br>
+    &epsilon;<sub>anchor</sub> = UNet(z<sub>t</sub>, t, c<sub>"clothed person"</sub>) &rarr; safe direction d<sub>anchor</sub> = &epsilon;<sub>anchor</sub> &minus; &epsilon;<sub>&empty;</sub><br>
+    These directions tell us "which way is nudity" and "which way is clothed" in the noise prediction space at each denoising step.</span>
+  </div>
+</section>
+
+<!-- ====== METHOD EVOLUTION ====== -->
+<section class="divider">
+  <h2>Method Evolution</h2>
+  <p>v3 &rarr; v7: How each version changed WHEN / WHERE / HOW</p>
+</section>
+
+<!-- ====== v3 SLIDE 1: Architecture ====== -->
+<section>
+  <h2><span class="ver-badge ver-v3">v3</span> Cross-Attention Map + SLD/DAG Guidance</h2>
+  <div class="two-col">
+    <div>
+      <h3>WHEN: Global CAS (&tau; = 0.3)</h3>
+      <div class="formula formula-sm">
+        CAS<sub>t</sub> = cos(d<sub>prompt</sub>, d<sub>target</sub>)<br>
+        trigger if CAS<sub>t</sub> &gt; 0.3 (sticky: once on, stays on)
+      </div>
+
+      <h3>WHERE: Cross-Attention Maps</h3>
+      <div class="box" style="font-size:0.78em;">
+        Hook into UNet's <strong>cross-attention layers</strong> (attn2) at 16&times;16 and 32&times;32 resolutions.<br><br>
+        During the &epsilon;<sub>prompt</sub> forward pass, extract attention weights:<br>
+        <strong>Attn = softmax(Q &middot; K<sup>T</sup> / &radic;d)</strong><br>
+        where Q = spatial features, K = text token embeddings.<br><br>
+        Average attention for target tokens ("nude", "person") across heads and layers &rarr; upsample to 64&times;64 &rarr; normalize to [0,1].<br><br>
+        <strong>Binary mask:</strong> M[h,w] = 1 if CAM<sub>target</sub>[h,w] &minus; CAM<sub>anchor</sub>[h,w] &gt; 0.3
+      </div>
+    </div>
+    <div>
+      <h3>HOW: SLD / DAG Guidance</h3>
+      <div class="formula" style="font-size:0.78em; text-align:left;">
+        <strong>SLD mode:</strong><br>
+        &epsilon;<sub>safe</sub> = &epsilon;<sub>cfg</sub> &minus; s &middot; W &middot; d<sub>target</sub><br><br>
+        <strong>DAG adaptive mode:</strong><br>
+        area = &Sigma;M / |M|<br>
+        T(A) = 1 + 4 &middot; W &nbsp;<span style="color:#64748b">(magnitude scaling)</span><br>
+        &epsilon;<sub>safe</sub> = &epsilon;<sub>cfg</sub> &minus; s &middot; (5&middot;area) &middot; T(A) &middot; M &middot; d<sub>target</sub><br><br>
+        <strong>Dual mode:</strong><br>
+        &epsilon;<sub>safe</sub> = &epsilon;<sub>cfg</sub> &minus; s &middot; W &middot; (d<sub>target</sub> &minus; d<sub>anchor</sub>)
+      </div>
+
+      <div class="unet-flow" style="margin-top:10px;">
+        <span style="font-weight:600;color:#64748b;">UNet calls:</span>
+        <span class="pass">&epsilon;<sub>&empty;</sub></span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>prompt</sub></span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>target</sub></span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>anchor</sub></span>
+        <span style="color:#64748b;font-size:0.9em">&nbsp;= <strong>4 passes/step</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== v3 SLIDE 2: Results ====== -->
+<section>
+  <h2><span class="ver-badge ver-v3">v3</span> Results (Ring-A-Bell)</h2>
+  <div class="two-col">
+    <div>
+      <div class="box-green box">
+        <strong>Key Finding</strong><br>
+        DAG (Direction-Aware Guidance) vastly outperforms SLD.
+        Area-adaptive scaling prevents over-suppression on small nudity regions while being aggressive on large ones.
+      </div>
+      <div class="box">
+        <strong>What it modifies in UNet output</strong><br>
+        <span class="small">
+          The noise prediction &epsilon;<sub>cfg</sub> is the UNet's final output that determines the next latent z<sub>t-1</sub>.
+          v3 <em>subtracts</em> the target concept's direction vector from this output, weighted by the cross-attention spatial mask.
+          This steers the denoising away from nudity <em>only in pixels</em> where the UNet is attending to nudity-related tokens.
+        </span>
+      </div>
+      <div class="box-orange box">
+        <strong>Limitation</strong><br>
+        <span class="small">Cross-attention maps require a dedicated UNet forward pass for target and anchor concepts. 4 UNet calls per step. Binary thresholding of attention maps can be noisy.</span>
+      </div>
+    </div>
+    <div>
+      <table>
+        <tr><th>Config</th><th>NN Unsafe%</th><th>SR%</th></tr>
+        <tr class="baseline"><td>baseline (no guidance)</td><td>75.6</td><td>35.4</td></tr>
+        <tr><td>sld_s5</td><td>69.6</td><td>43.3</td></tr>
+        <tr><td>xattn_ashift_s5</td><td>58.5</td><td>60.4</td></tr>
+        <tr><td>dag_s3</td><td>2.2</td><td>92.1</td></tr>
+        <tr class="best"><td>dag_s5</td><td style="color:var(--safe);font-weight:700">0.95</td><td style="color:var(--safe);font-weight:700">90.5</td></tr>
+      </table>
+      <p class="small" style="margin-top:8px;">Dataset: Ring-A-Bell (79 prompts, 4 samples each)</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== v4 SLIDE 1: Architecture ====== -->
+<section>
+  <h2><span class="ver-badge ver-v4">v4</span> Spatial CAS + Anchor Inpainting</h2>
+  <div class="two-col">
+    <div>
+      <h3>WHERE changed: Noise-Based Spatial CAS</h3>
+      <div class="box" style="font-size:0.78em;">
+        Instead of hooking into cross-attention layers, v4 computes <strong>per-pixel cosine similarity</strong> directly in the noise prediction space.<br><br>
+        Problem: raw 4-channel latent vectors are too noisy for pixel-level cosine similarity.<br>
+        Solution: <strong>3&times;3 neighborhood pooling</strong> via unfold &rarr; 36-dim vectors.
+      </div>
+      <div class="formula" style="font-size:0.78em;">
+        d<sub>prompt</sub> = Unfold<sub>3&times;3</sub>(&epsilon;<sub>prompt</sub> &minus; &epsilon;<sub>&empty;</sub>) &isin; &#8477;<sup>36 &times; H&middot;W</sup><br>
+        d<sub>target</sub> = Unfold<sub>3&times;3</sub>(&epsilon;<sub>target</sub> &minus; &epsilon;<sub>&empty;</sub>) &isin; &#8477;<sup>36 &times; H&middot;W</sup><br><br>
+        SpatialCAS[h,w] = cos(d<sub>prompt</sub>[:,hw], d<sub>target</sub>[:,hw])<br><br>
+        <strong>Soft mask</strong>: M = GaussBlur(&sigma;(10 &middot; (SpatialCAS &minus; 0.3)))
+      </div>
+      <p class="small">Sigmoid + Gaussian blur produces smooth [0,1] mask instead of binary threshold.</p>
+    </div>
+    <div>
+      <h3>HOW changed: Anchor Inpainting</h3>
+      <div class="formula" style="font-size:0.78em; text-align:left;">
+        <strong>Anchor Inpaint (new default):</strong><br>
+        &epsilon;<sub>anchor_cfg</sub> = &epsilon;<sub>&empty;</sub> + s<sub>cfg</sub> &middot; d<sub>anchor</sub><br>
+        &epsilon;<sub>final</sub> = &epsilon;<sub>cfg</sub> &middot; (1 &minus; s&middot;M) + &epsilon;<sub>anchor_cfg</sub> &middot; (s&middot;M)<br>
+        <span style="color:#64748b">Blends toward "clothed" generation in masked pixels</span><br><br>
+
+        <strong>Hybrid (subtract + add):</strong><br>
+        &epsilon;<sub>final</sub> = &epsilon;<sub>cfg</sub> &minus; s<sub>t</sub>&middot;M&middot;d<sub>target</sub> + s<sub>a</sub>&middot;M&middot;d<sub>anchor</sub><br>
+        <span style="color:#64748b">Simultaneously push away from nudity AND toward clothed</span><br><br>
+
+        <strong>Projection (new):</strong><br>
+        proj = (d<sub>prompt</sub>&middot;d<sub>target</sub> / ||d<sub>target</sub>||&sup2;) &middot; d<sub>target</sub><br>
+        d<sub>safe</sub> = d<sub>prompt</sub> &minus; s &middot; proj<br>
+        <span style="color:#64748b">Surgically remove nudity component from prompt direction</span>
+      </div>
+
+      <div class="unet-flow" style="margin-top:10px;">
+        <span style="font-weight:600;color:#64748b;">UNet calls:</span>
+        <span class="pass">&epsilon;<sub>&empty;</sub></span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>prompt</sub></span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>target</sub></span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>anchor</sub></span>
+        <span style="color:#64748b;font-size:0.9em">&nbsp;= <strong>4 passes/step</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== v4 SLIDE 2: Results ====== -->
+<section>
+  <h2><span class="ver-badge ver-v4">v4</span> Results (Ring-A-Bell)</h2>
+  <div class="two-col">
+    <div>
+      <div class="box">
+        <strong>What changed vs v3</strong><br>
+        <span class="small">
+          <strong>WHERE:</strong> Cross-attention maps &rarr; Noise-based spatial CAS<br>
+          <strong>Mask type:</strong> Binary threshold &rarr; Soft sigmoid + Gaussian blur<br>
+          <strong>HOW:</strong> Added anchor inpainting (blend toward safe) and projection (remove nudity component)<br>
+          <strong>CAS &tau;:</strong> 0.3 (same as v3)
+        </span>
+      </div>
+      <div class="box-orange box">
+        <strong>Issue: Spatial CAS is noisy</strong><br>
+        <span class="small">Per-pixel cosine similarity in 64&times;64 latent space, even with neighborhood pooling, produces less semantically meaningful masks than cross-attention. The baseline unsafe% (23.4% with anchor inpainting) is lower than v3 baseline (75.6%) because the spatial CAS itself partially works, but fine-grained masking accuracy is poor.</span>
+      </div>
+      <div class="box-green box">
+        <strong>Projection mode introduced</strong><br>
+        <span class="small">First version to implement "nudity direction projection" &mdash; removing just the nudity-aligned component from d<sub>prompt</sub> while preserving the rest. This idea carries through to v6, v7, and beyond.</span>
+      </div>
+    </div>
+    <div>
+      <table>
+        <tr><th>Config</th><th>NN Unsafe%</th><th>SR%</th></tr>
+        <tr class="baseline"><td>ainp_s1.0 (anchor inpaint)</td><td>23.4</td><td>94.3</td></tr>
+        <tr><td>ainp_s0.9</td><td>30.4</td><td>95.6</td></tr>
+        <tr><td>ainp_s1.0_t0.1</td><td>19.9</td><td>96.5</td></tr>
+        <tr class="best"><td>sld_s10</td><td>9.2</td><td>78.5</td></tr>
+      </table>
+      <p class="small" style="margin-top:8px;">v4's anchor inpainting has high SR (94%+) but insufficient nudity removal (23% unsafe). SLD mode is stronger but loses SR.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== v6 SLIDE 1: Architecture ====== -->
+<section>
+  <h2><span class="ver-badge ver-v6">v6</span> Cross-Attention Probing</h2>
+  <div class="two-col">
+    <div>
+      <h3>WHERE changed: Attention Probing (Zero Overhead)</h3>
+      <div class="box" style="font-size:0.78em;">
+        v3's cross-attention required a dedicated UNet forward pass for the target concept. v6 solves this with <strong>probing</strong>:<br><br>
+        <strong>Step 1 (offline):</strong> Pre-compute target concept's K (key) projections<br>
+        &nbsp;&nbsp; K<sub>target</sub> = W<sub>K</sub> &middot; TextEnc("nude person")<br><br>
+        <strong>Step 2 (runtime):</strong> During the normal &epsilon;<sub>prompt</sub> forward pass, hook into cross-attention layers and extract Q (query) features from the hidden states.<br><br>
+        <strong>Step 3:</strong> Compute attention without extra UNet call:<br>
+        &nbsp;&nbsp; Attn = softmax(Q<sub>spatial</sub> &middot; K<sub>target</sub><sup>T</sup> / &radic;d)<br>
+        &nbsp;&nbsp; &rarr; spatial mask of nudity-related pixels
+      </div>
+      <p class="small">This piggybacks on the existing CFG pass &mdash; zero extra UNet calls for WHERE detection.</p>
+    </div>
+    <div>
+      <h3>Probing vs v3 Cross-Attention</h3>
+      <div class="formula" style="font-size:0.75em; text-align:left;">
+        <strong>v3:</strong> Run UNet(z<sub>t</sub>, c<sub>target</sub>) &rarr; extract full attention<br>
+        &nbsp;&nbsp;Cost: 1 extra UNet pass<br><br>
+        <strong>v6:</strong> During UNet(z<sub>t</sub>, c<sub>prompt</sub>), hook Q from attn2 layers<br>
+        &nbsp;&nbsp;Compute: softmax(Q &middot; K<sub>target</sub><sup>T</sup> / &radic;d)<br>
+        &nbsp;&nbsp;Cost: matrix multiply only (negligible vs UNet pass)
+      </div>
+
+      <h3>HOW: Same as v4</h3>
+      <div class="box" style="font-size:0.78em;">
+        All guidance modes from v4: hybrid (recommended), SLD, anchor inpainting, projection. CAS threshold raised to <strong>&tau; = 0.6</strong> for fewer false positives.
+      </div>
+
+      <div class="unet-flow" style="margin-top:10px;">
+        <span style="font-weight:600;color:#64748b;">UNet calls:</span>
+        <span class="pass">&epsilon;<sub>&empty;</sub></span>
+        <span class="arr">+</span>
+        <span class="pass-new">&epsilon;<sub>prompt</sub> + probe</span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>target</sub></span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>anchor</sub></span>
+        <span style="color:#64748b;font-size:0.9em">&nbsp;= <strong>4 passes</strong> (WHERE is free)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== v6 SLIDE 2: Results ====== -->
+<section>
+  <h2><span class="ver-badge ver-v6">v6</span> Results (Ring-A-Bell)</h2>
+  <div class="two-col">
+    <div>
+      <div class="box">
+        <strong>What changed vs v4</strong><br>
+        <span class="small">
+          <strong>WHERE:</strong> Noise-based spatial CAS &rarr; Cross-attention probing<br>
+          <strong>Mask type:</strong> Semantically meaningful token-to-pixel alignment<br>
+          <strong>CAS &tau;:</strong> 0.3 &rarr; 0.6 (reduces false positives on benign prompts)<br>
+          <strong>HOW:</strong> Same as v4 (hybrid mode recommended)
+        </span>
+      </div>
+      <div class="box-green box">
+        <strong>Highest SR achieved</strong><br>
+        <span class="small">
+          Cross-attention probing provides semantically precise masks. The mask highlights exactly the pixels where the UNet is generating nudity-related content (via token-to-pixel alignment), rather than relying on noisy cosine similarity in latent space. This leads to <span class="hl-green">93.4% SR</span> &mdash; the best semantic preservation of any version.
+        </span>
+      </div>
+      <div class="box-orange box">
+        <strong>Limitation</strong><br>
+        <span class="small">Nudity removal weaker than v3 DAG (16% vs 0.95% unsafe). Semantic precision means smaller mask area &rarr; less aggressive removal. Still needs online target UNet pass for CAS.</span>
+      </div>
+    </div>
+    <div>
+      <table>
+        <tr><th>Config</th><th>NN Unsafe%</th><th>SR%</th></tr>
+        <tr><td>ts10_as10</td><td>29.1</td><td>86.1</td></tr>
+        <tr><td>ts15_as15</td><td>18.0</td><td>90.2</td></tr>
+        <tr><td>ts20_as15</td><td>15.5</td><td>91.5</td></tr>
+        <tr class="best"><td>ts20_as20</td><td>16.1</td><td style="color:var(--safe);font-weight:700">93.4</td></tr>
+        <tr><td>sld_s15</td><td>14.2</td><td>79.4</td></tr>
+      </table>
+      <p class="small" style="margin-top:8px;">ts = target_scale, as = anchor_scale in hybrid mode.<br>Higher scales = stronger removal but lower SR.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== v7 SLIDE 1: Architecture ====== -->
+<section>
+  <h2><span class="ver-badge ver-v7">v7</span> GLASS Exemplar-Based Guidance</h2>
+  <div class="two-col">
+    <div>
+      <h3>Core Innovation: Pre-Computed Anchor</h3>
+      <div class="box" style="font-size:0.78em;">
+        v3&ndash;v6 compute d<sub>anchor</sub> <strong>online</strong> via a UNet pass with c<sub>"clothed person"</sub> at every step.<br><br>
+        v7 replaces this with <strong>offline pre-computed directions</strong> from 16 diverse exemplar image pairs (nude &harr; clothed):<br><br>
+        <strong>Offline (once):</strong><br>
+        For each exemplar pair (nude prompt, clothed prompt):<br>
+        &nbsp;&nbsp; Run full 50-step denoising with same seed<br>
+        &nbsp;&nbsp; At each timestep t, store:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; d<sub>target</sub>[t] = &epsilon;<sub>nude</sub> &minus; &epsilon;<sub>&empty;</sub> &nbsp; <span style="color:#64748b;">[1,4,64,64]</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp; d<sub>anchor</sub>[t] = &epsilon;<sub>clothed</sub> &minus; &epsilon;<sub>&empty;</sub> &nbsp; <span style="color:#64748b;">[1,4,64,64]</span><br>
+        &nbsp;&nbsp; Average across 16 exemplar pairs
+      </div>
+    </div>
+    <div>
+      <h3>Runtime: Hybrid Exemplar Blend</h3>
+      <div class="formula" style="font-size:0.75em; text-align:left;">
+        <strong>Exemplar mode (3 UNet passes):</strong><br>
+        d<sub>anchor</sub> = precomputed[t] &nbsp;<span style="color:#64748b">(no UNet call!)</span><br>
+        &epsilon;<sub>anchor</sub> = &epsilon;<sub>&empty;</sub> + d<sub>anchor</sub><br><br>
+
+        <strong>Hybrid blend mode:</strong><br>
+        d<sub>target</sub> = w &middot; d<sub>target_exemplar</sub>[t] + (1&minus;w) &middot; d<sub>target_online</sub><br>
+        <span style="color:#64748b">Blend pre-computed generic direction with image-specific online direction</span><br><br>
+
+        <strong>Guidance (same hybrid formula):</strong><br>
+        &epsilon;<sub>final</sub> = &epsilon;<sub>cfg</sub> &minus; s<sub>t</sub>&middot;M&middot;d<sub>target</sub> + s<sub>a</sub>&middot;M&middot;d<sub>anchor</sub>
+      </div>
+      <div class="unet-flow" style="margin-top:10px;">
+        <span style="font-weight:600;color:#64748b;">UNet calls:</span>
+        <span class="pass">&epsilon;<sub>&empty;</sub></span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>prompt</sub></span>
+        <span class="arr">+</span>
+        <span class="pass">&epsilon;<sub>target</sub></span>
+        <span class="arr">+</span>
+        <span class="pass-skip">&epsilon;<sub>anchor</sub></span>
+        <span style="color:var(--safe);font-size:0.9em">&nbsp;= <strong>3 passes</strong> (~25% faster)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== v7 SLIDE 2: WHERE detail ====== -->
+<section>
+  <h2><span class="ver-badge ver-v7">v7</span> Spatial Mask & Exemplar Details</h2>
+  <div class="two-col">
+    <div>
+      <h3>WHERE: Spatial CAS with Exemplar Directions</h3>
+      <div class="formula" style="font-size:0.75em; text-align:left;">
+        <strong>Exemplar mode:</strong><br>
+        Uses online d<sub>target</sub> for spatial CAS (image-specific)<br>
+        SpatialCAS[h,w] = cos(Unfold(d<sub>prompt</sub>), Unfold(d<sub>target_online</sub>))<br><br>
+
+        <strong>Hybrid blend mode:</strong><br>
+        d<sub>target_blended</sub> = w &middot; d<sub>target_exemplar</sub>[t] + (1&minus;w) &middot; d<sub>target_online</sub><br>
+        SpatialCAS[h,w] = cos(Unfold(d<sub>prompt</sub>), Unfold(d<sub>target_blended</sub>))<br><br>
+
+        M = GaussBlur(&sigma;(10 &middot; (SpatialCAS &minus; 0.3)))
+      </div>
+      <h3>Why Exemplar Works</h3>
+      <div class="box" style="font-size:0.78em;">
+        The anchor direction from real exemplar pairs captures a <em>data-driven</em> "clothed" concept, more robust than a single text prompt "clothed person". Averaging over 16 diverse pairs smooths out image-specific noise.
+      </div>
+    </div>
+    <div>
+      <h3>Results (Ring-A-Bell)</h3>
+      <table>
+        <tr><th>Config</th><th>NN Unsafe%</th><th>SR%</th></tr>
+        <tr><td>hyb_ts10_as15</td><td>10.4</td><td>75.9</td></tr>
+        <tr class="best"><td>hyb_ts15_as15</td><td style="color:var(--safe);font-weight:700">5.06</td><td>54.1</td></tr>
+        <tr><td>hyb_ts20_as20</td><td>4.75</td><td>40.2</td></tr>
+        <tr><td>hyb_ts25_as25</td><td>4.43</td><td>29.4</td></tr>
+        <tr><td>sld_s15</td><td>5.70</td><td>52.5</td></tr>
+        <tr><td style="color:var(--accent2)">hyb_ts15_cas04</td><td style="color:var(--accent2)">0.95</td><td>59.2</td></tr>
+      </table>
+      <div class="box-orange box" style="margin-top:8px;">
+        <strong>Core Tradeoff</strong><br>
+        <span class="small">Stronger guidance &rarr; lower unsafe% but also lower SR.<br>
+        ts15_as15: 5.06% unsafe / 54.1% SR<br>
+        ts25_as25: 4.43% unsafe / 29.4% SR<br>
+        Lowering CAS &tau; to 0.4 achieves 0.95% unsafe but triggers more aggressively.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== VERSION COMPARISON DIAGRAM ====== -->
+<section>
+  <h2>Version Comparison: What Changed at Each Step</h2>
+  <table style="font-size:0.6em;">
+    <tr>
+      <th>Aspect</th>
+      <th><span class="ver-badge ver-v3">v3</span></th>
+      <th><span class="ver-badge ver-v4">v4</span></th>
+      <th><span class="ver-badge ver-v6">v6</span></th>
+      <th><span class="ver-badge ver-v7">v7</span></th>
+    </tr>
+    <tr>
+      <td style="font-weight:600">WHERE source</td>
+      <td>Cross-attention maps<br>(from target UNet pass)</td>
+      <td>Noise-based spatial CAS<br>(per-pixel cosine sim)</td>
+      <td>Cross-attention probing<br>(free, during CFG pass)</td>
+      <td>Noise-based spatial CAS<br>(with exemplar directions)</td>
+    </tr>
+    <tr>
+      <td style="font-weight:600">Mask type</td>
+      <td>Binary threshold</td>
+      <td>Soft sigmoid + blur</td>
+      <td>Soft sigmoid + blur</td>
+      <td>Soft sigmoid + blur</td>
+    </tr>
+    <tr>
+      <td style="font-weight:600">Best HOW mode</td>
+      <td>DAG adaptive</td>
+      <td>Anchor inpaint / Hybrid</td>
+      <td>Hybrid</td>
+      <td>Hybrid</td>
+    </tr>
+    <tr>
+      <td style="font-weight:600">CAS &tau;</td>
+      <td>0.3</td>
+      <td>0.3</td>
+      <td>0.6</td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <td style="font-weight:600">UNet passes (guided)</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4 (WHERE free)</td>
+      <td style="color:var(--safe);font-weight:600">3 (anchor pre-computed)</td>
+    </tr>
+    <tr>
+      <td style="font-weight:600">Anchor source</td>
+      <td>Online text ("clothed")</td>
+      <td>Online text ("clothed")</td>
+      <td>Online text ("clothed")</td>
+      <td style="color:var(--accent2);font-weight:600">Pre-computed exemplars</td>
+    </tr>
+    <tr>
+      <td style="font-weight:600">Best Unsafe%</td>
+      <td style="color:var(--safe);font-weight:600">0.95%</td>
+      <td>9.2%</td>
+      <td>14.2%</td>
+      <td style="color:var(--safe);font-weight:600">5.06% (0.95% w/ &tau;=0.4)</td>
+    </tr>
+    <tr>
+      <td style="font-weight:600">Best SR%</td>
+      <td>90.5%</td>
+      <td>96.5%</td>
+      <td style="color:var(--safe);font-weight:600">93.4%</td>
+      <td>75.9%</td>
+    </tr>
+  </table>
+</section>
+
+<!-- ====== v8-v12 DIVIDER ====== -->
+<section class="divider">
+  <h2>v8 &ndash; v12: Further Iterations</h2>
+  <p>Experimental variants building on v7's exemplar framework</p>
+</section>
+
+<!-- v8-v12 grouped -->
+<section>
+  <h2>v8 &ndash; v12: Ideas & Results</h2>
+  <div style="font-size:0.72em;">
+  <table>
+    <tr><th>Ver</th><th>Idea</th><th>HOW formula (key difference)</th><th>Result</th></tr>
+    <tr class="bad">
+      <td><strong>v8</strong></td>
+      <td>Project online d<sub>target</sub> onto exemplar concept subspace before guidance</td>
+      <td style="text-align:left;font-size:0.9em;">d<sub>concept</sub> = proj(d<sub>target_online</sub>, d<sub>exemplar</sub>)<br>&epsilon;<sub>final</sub> = &epsilon;<sub>cfg</sub> &minus; s&middot;M&middot;d<sub>concept</sub></td>
+      <td style="color:var(--danger);">42&ndash;70% unsafe<br>Projection distorts target</td>
+    </tr>
+    <tr class="bad">
+      <td><strong>v9</strong></td>
+      <td>Use pre-computed exemplar direction directly as guidance (no online target for HOW)</td>
+      <td style="text-align:left;font-size:0.9em;">&epsilon;<sub>final</sub> = &epsilon;<sub>cfg</sub> &minus; s&middot;M&middot;d<sub>target_exemplar</sub>[t]<br><span style="color:#64748b">Generic direction, not image-specific</span></td>
+      <td style="color:var(--danger);">72&ndash;76% unsafe<br>Too generic, no effect</td>
+    </tr>
+    <tr>
+      <td><strong>v10</strong></td>
+      <td>Project nudity out of d<sub>prompt</sub> (not d<sub>target</sub>). Adaptive CAS scaling + deviation clamp.</td>
+      <td style="text-align:left;font-size:0.9em;">proj = clamp(d<sub>prompt</sub>&middot;d<sub>target</sub>/||d<sub>target</sub>||&sup2;, 0) &middot; d<sub>target</sub><br>&epsilon;<sub>safe_cfg</sub> = &epsilon;<sub>&empty;</sub> + s<sub>cfg</sub>&middot;(d<sub>prompt</sub> &minus; proj)</td>
+      <td>6.65% unsafe<br>41.8% SR</td>
+    </tr>
+    <tr>
+      <td><strong>v11</strong></td>
+      <td>Stochastic ensemble: generate K noisy anchor variants at runtime, select best-matching via CAS</td>
+      <td style="text-align:left;font-size:0.9em;">d<sub>anchor_k</sub> = d<sub>anchor</sub> + &eta;&middot;&sigma;<sub>t</sub>&middot;N(0,1)<br>Select argmax<sub>k</sub> cos(d<sub>prompt</sub>, d<sub>anchor_k</sub>)</td>
+      <td>6.65% unsafe<br>41.1% SR (=v10)</td>
+    </tr>
+    <tr>
+      <td><strong>v12</strong></td>
+      <td>v6 cross-attention WHERE + v10 projection HOW</td>
+      <td style="text-align:left;font-size:0.9em;">M = CrossAttnProbe (semantic mask)<br>+ v10 projection guidance</td>
+      <td>9.49% unsafe<br>57.9% SR</td>
+    </tr>
+  </table>
+  </div>
+  <div class="two-col" style="margin-top:12px;">
+    <div class="box-red box">
+      <strong>v8/v9: Failed</strong><br>
+      <span class="small">v8: Projecting online direction onto exemplar subspace loses image-specific info.<br>v9: Generic exemplar direction has no adaptivity &mdash; performs like no guidance at all.</span>
+    </div>
+    <div class="box">
+      <strong>v10&ndash;v12: Marginal</strong><br>
+      <span class="small">No clear improvement over v7's simpler approach. Projection + ensemble adds complexity without measurable benefit. v7 hybrid remains the best cost/performance point.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== COMPARISON ====== -->
+<section class="divider">
+  <h2>Overall Comparison</h2>
+  <p>Ring-A-Bell benchmark &mdash; best configs</p>
+</section>
+
+<!-- Main comparison table -->
+<section>
+  <h2>Ring-A-Bell &mdash; Best Configs Comparison</h2>
+  <table>
+    <tr><th>Version</th><th>Method</th><th>NN Unsafe% &darr;</th><th>SR% &uarr;</th><th>COCO FP%</th></tr>
+    <tr class="baseline"><td>v3</td><td>baseline (no guidance)</td><td>75.6</td><td>35.4</td><td>&mdash;</td></tr>
+    <tr class="best"><td>v3</td><td>DAG s=5</td><td style="color:var(--safe);font-weight:700">0.95</td><td style="color:var(--safe);font-weight:700">90.5</td><td>&mdash;</td></tr>
+    <tr><td>v4</td><td>Spatial CAS + SLD s=10</td><td>9.2</td><td>78.5</td><td>~5%</td></tr>
+    <tr><td>v6</td><td>CrossAttn ts20_as20</td><td>16.1</td><td style="color:var(--safe);font-weight:700">93.4</td><td>~6.7%</td></tr>
+    <tr><td>v6</td><td>CrossAttn sld_s15</td><td>14.2</td><td>79.4</td><td>&mdash;</td></tr>
+    <tr class="best"><td>v7</td><td>Exemplar hyb ts15_as15</td><td style="color:var(--safe);font-weight:700">5.06</td><td>54.1</td><td>~5%</td></tr>
+    <tr><td>v7</td><td>+CAS threshold 0.4</td><td style="color:var(--safe);font-weight:700">0.95</td><td>59.2</td><td>&mdash;</td></tr>
+    <tr><td>v10</td><td>Projection ts2_as1</td><td>6.65</td><td>41.8</td><td>&mdash;</td></tr>
+    <tr><td>v12</td><td>CrossAttn+Proj</td><td>9.49</td><td>57.9</td><td>&mdash;</td></tr>
+  </table>
+</section>
+
+<!-- Other datasets -->
+<section>
+  <h2>Other Nudity Datasets (v7 hyb_ts10_as15)</h2>
+  <table>
+    <tr><th>Dataset</th><th>NN Unsafe% &darr;</th><th>SR% &uarr;</th></tr>
+    <tr><td>Ring-A-Bell (79)</td><td>10.4</td><td>75.9</td></tr>
+    <tr><td>MMA (200)</td><td>57.5</td><td>72.0</td></tr>
+    <tr><td>P4DN (16)</td><td>18.9</td><td>93.7</td></tr>
+    <tr><td>UnlearnDiff</td><td>12.0</td><td>96.8</td></tr>
+    <tr><td>COCO (benign)</td><td>5.0</td><td>20.8</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:12px;">
+    <div class="box-green box">
+      <strong>P4DN / UnlearnDiff</strong><br>
+      High SR + low unsafe &rarr; works well on standard nudity prompts
+    </div>
+    <div class="box-red box">
+      <strong>MMA</strong><br>
+      Adversarial prompts &rarr; 57.5% still unsafe. CAS detection struggles with obfuscated prompts.
+    </div>
+  </div>
+</section>
+
+<!-- Country nude body -->
+<section>
+  <h2>Country Nude Body (Explicit Nudity Test)</h2>
+  <table>
+    <tr><th>Version</th><th>Config</th><th>NN Unsafe% &darr;</th><th>SR% &uarr;</th></tr>
+    <tr class="baseline"><td>baseline</td><td>&mdash;</td><td>100.0</td><td>3.8</td></tr>
+    <tr class="best"><td>v7</td><td>hyb_ts15_as15</td><td style="color:var(--safe);font-weight:700">1.25</td><td>22.5</td></tr>
+    <tr class="best"><td>v7</td><td>hyb_ts25_as25</td><td style="color:var(--safe);font-weight:700">1.25</td><td>12.5</td></tr>
+    <tr><td>v10</td><td>proj_ts2_as1</td><td>2.5</td><td>37.5</td></tr>
+    <tr><td>v11</td><td>proj_K4_eta03</td><td>2.5</td><td>36.2</td></tr>
+    <tr><td>v12</td><td>xattn_proj_ts2_as1</td><td>10.0</td><td>70.0</td></tr>
+    <tr><td>v6</td><td>ts20_as15</td><td>25.0</td><td style="color:var(--safe);font-weight:700">98.8</td></tr>
+    <tr><td>v4</td><td>sld_s10</td><td>18.8</td><td>47.5</td></tr>
+  </table>
+  <p class="small">100% unsafe baseline &rarr; v7 reduces to 1.25%. Very strong removal on explicit prompts.</p>
+</section>
+
+<!-- ====== KEY TAKEAWAYS ====== -->
+<section class="divider">
+  <h2>Key Takeaways</h2>
+</section>
+
+<section>
+  <h2>Summary & Tradeoffs</h2>
+  <div class="two-col">
+    <div>
+      <div class="box-green box">
+        <h3 style="margin:0 0 6px">Best Nudity Removal</h3>
+        <strong>v7 Exemplar Hybrid</strong> &mdash; 5.06% unsafe<br>
+        <span class="small">Pre-computed anchor from 16 exemplar pairs + hybrid guidance.<br>CAS threshold tuning &rarr; 0.95% achievable.</span>
+      </div>
+      <div class="box box-purple">
+        <h3 style="margin:0 0 6px">Best Fidelity (SR + Unsafe)</h3>
+        <strong>v3 DAG s=5</strong> &mdash; 0.95% unsafe, 90.5% SR<br>
+        <span class="small">Best balance of removal and preservation.<br>But: requires 4 UNet passes with online target.</span>
+      </div>
+      <div class="box">
+        <h3 style="margin:0 0 6px">Best Semantic Preservation</h3>
+        <strong>v6 CrossAttn ts20_as20</strong> &mdash; 93.4% SR<br>
+        <span class="small">Precise token-to-pixel masking preserves non-nudity content.<br>But: 16.1% unsafe (weaker removal).</span>
+      </div>
+    </div>
+    <div>
+      <div class="box-red box">
+        <h3 style="margin:0 0 6px">Core Tradeoff</h3>
+        <strong>Unsafe% &darr; &harr; SR% &darr;</strong><br>
+        Aggressive guidance removes nudity but also degrades prompt fidelity.<br>
+        <span class="small">v7 ts15: 5% unsafe / 54% SR<br>v7 ts25: 4.4% unsafe / 29% SR</span>
+      </div>
+      <div class="box-red box">
+        <h3 style="margin:0 0 6px">Failed Approaches</h3>
+        <strong>v8 (projection) & v9 (substitution)</strong><br>
+        <span class="small">Projecting onto or substituting with exemplar subspace<br>&rarr; loses image-specific information &rarr; baseline-level performance</span>
+      </div>
+      <div class="box">
+        <h3 style="margin:0 0 6px">Remaining Challenge</h3>
+        <strong>MMA adversarial prompts</strong><br>
+        <span class="small">57.5% unsafe even with v7. CAS-based detection fails on obfuscated prompts that bypass cosine similarity.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== NEXT STEPS ====== -->
+<section>
+  <h2>Next Steps</h2>
+  <div class="two-col">
+    <div>
+      <div class="box" style="border-left-color:var(--accent2)">
+        <strong>1. Improve SR-Unsafe Tradeoff</strong><br>
+        Combine v7's strong removal with v6's high SR &mdash; e.g., cross-attention WHERE + exemplar HOW
+      </div>
+      <div class="box" style="border-left-color:var(--accent2)">
+        <strong>2. Adversarial Robustness</strong><br>
+        MMA dataset &mdash; need CAS detection robust to obfuscated/adversarial prompts
+      </div>
+    </div>
+    <div>
+      <div class="box" style="border-left-color:var(--accent2)">
+        <strong>3. Evaluation Expansion</strong><br>
+        VQAScore alignment / FID / other unsafe categories
+      </div>
+      <div class="box" style="border-left-color:var(--accent2)">
+        <strong>4. NeurIPS Submission</strong><br>
+        Example-based When+Where framework as a paper
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  transition: 'slide',
+  width: 1200,
+  height: 700,
+  margin: 0.08,
+  center: false,
+});
+</script>
+</body>
+</html>

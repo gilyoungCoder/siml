@@ -1,0 +1,4 @@
+# Nudity target exemplar prompts (16 images from exemplar_images/nudity_00~15.png)
+# These were manually curated, not generated from prompts
+# Original 16 images: nude figures in various poses and settings
+# Source: CAS_SpatialCFG/exemplars/sd14/exemplar_images/nudity_*.png

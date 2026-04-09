@@ -1,0 +1,21 @@
+\begin{table}[t]
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{0.6em}
+    \caption{Simultaneous dual-concept erasure. Both concepts are erased in a single inference pass. ``Single'' column shows the single-concept SR for reference.}
+    \label{table:dual}
+    \vspace{-0.5em}
+    \centering
+    \small
+    \begin{tabular}{@{}l cc cc@{}}
+    \toprule
+    & \multicolumn{2}{c}{\textbf{Nudity}} & \multicolumn{2}{c}{\textbf{2nd Concept}} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+    \textbf{Dual Erasure} & Dual SR & Single SR & Dual SR & Single SR \\
+    \midrule
+    + Shocking   & .837 & .931 & .975 & .973 \\
+    + Violence   & .879 & .931 & --   & .971 \\
+    + Harassment & .809 & .931 & .797 & .833 \\
+    + Hate       & .671 & .931 & .814 & .848 \\
+    \bottomrule
+    \end{tabular}
+\end{table}

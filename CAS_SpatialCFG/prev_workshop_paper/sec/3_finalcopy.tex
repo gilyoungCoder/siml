@@ -1,0 +1,12 @@
+\section{Conclusion}
+
+We introduced ASCG, a necessity-driven inference-time guidance framework that ensures safe T2I generation by intervening only \textit{whether} (\S\ref{subsec:selective}) and \textit{where} (\S\ref{subsec:targeted}) toxic content emerges.
+By employing selective intervention and targeted localization strategies, ASCG effectively prevents semantic collapse and erase harmful content effectively.
+Our VLM-based evaluation confirms that ASCG achieves exceptionally low \emph{NotRelevant} rates while preserving localized fidelity better than conventional methods.
+Notably, ASCG exhibits remarkable synergy with SAFREE, establishing a new state-of-the-art balance between safety and fidelity across all evaluated benchmarks.
+This collaborative approach shows that ASCG is a promising component for trustworthy generative modeling, achieving robust safety without sacrificing semantic integrity.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Potential negative societal impacts.}
+While our framework is designed to mitigate safety concerns in T2I generative models, our steering framework could be susceptible to dual-use.
+Specifically, the same localization techniques intended for mitigation might be subverted to amplify harmful concepts if applied maliciously.

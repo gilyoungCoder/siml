@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>방법론 요약 &amp; 결과 — 팀 공유용</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<style>
+  :root { --heading:#1a1a2e; --accent:#2563eb; --accent2:#7c3aed; --safe:#059669; --danger:#dc2626; --warn:#d97706; --teal:#0f766e; }
+  .reveal { font-size: 26px; }
+  .reveal h1 { font-size: 2.0em; color: var(--heading); font-weight: 800; }
+  .reveal h2 { font-size: 1.3em; color: var(--heading); font-weight: 700; border-bottom: 3px solid var(--accent); padding-bottom: 4px; display: inline-block; }
+  .reveal h3 { font-size: 0.95em; color: var(--accent2); font-weight: 600; margin-bottom: 4px; }
+  .reveal section { text-align: left; }
+  .reveal li { margin-bottom: 3px; line-height: 1.35; }
+  .small { font-size: 0.72em; color: #64748b; }
+
+  .title-slide { text-align: center !important; }
+  .title-slide h1 { font-size: 2.2em; background: linear-gradient(135deg, #1a1a2e, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  .divider { text-align: center !important; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important; }
+  .divider h2 { color: #fff !important; border-bottom-color: #60a5fa !important; font-size: 1.6em; }
+  .divider p { color: #cbd5e1 !important; }
+
+  .box { background: #f8fafc; border-radius: 8px; padding: 10px 14px; margin: 5px 0; border-left: 4px solid var(--accent); font-size: 0.80em; }
+  .box-purple { border-left-color: var(--accent2); }
+  .box-green { border-left-color: var(--safe); background: #f0fdf4; }
+  .box-red { border-left-color: var(--danger); background: #fef2f2; }
+  .box-warn { border-left-color: var(--warn); background: #fffbeb; }
+  .box-teal { border-left-color: var(--teal); background: #f0fdfa; }
+
+  .reveal table { font-size: 0.60em; width: 100%; border-collapse: collapse; margin: 4px 0; }
+  .reveal table th { background: #1e293b; color: #fff; padding: 5px 6px; text-align: center; font-weight: 600; }
+  .reveal table td { padding: 4px 6px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+  .reveal table tr:nth-child(even) { background: #f8fafc; }
+  .best { background: #dcfce7 !important; font-weight: 700; }
+  .hl { background: #dbeafe !important; font-weight: 600; }
+  .bad { background: #fee2e2 !important; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.58em; font-weight: 600; margin: 2px; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-purple { background: #f3e8ff; color: #6b21a8; }
+  .tag-teal { background: #ccfbf1; color: #115e59; }
+  .tag-orange { background: #fff7ed; color: #9a3412; }
+  .tag-gray { background: #f1f5f9; color: #475569; }
+
+  .vb { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.72em; color: #fff; margin-right: 4px; }
+
+  .formula { background: #f1f5f9; border-radius: 6px; padding: 8px 12px; margin: 5px 0; font-family: 'Georgia', serif; font-size: 0.82em; text-align: center; border: 1px solid #e2e8f0; }
+
+  .meter { height: 16px; border-radius: 4px; background: #e2e8f0; overflow: hidden; margin: 2px 0; }
+  .meter-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 4px; font-size: 0.55em; font-weight: 700; color: #fff; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ==================== TITLE ==================== -->
+<section class="title-slide">
+  <h1>방법론 요약 & 결과</h1>
+  <p style="font-size:0.9em; color:#475569; margin-top:-5px;">
+    Training-Free Concept Erasure: v3&ndash;v12 전 버전 비교
+  </p>
+  <div style="margin-top:20px;">
+    <span class="tag tag-blue">9 Versions</span>
+    <span class="tag tag-green">6 Metrics</span>
+    <span class="tag tag-purple">Ring-A-Bell + Country</span>
+  </div>
+  <div style="margin-top:15px; color:#888; font-size:0.7em;">팀 공유용 &middot; 2026-03-26</div>
+</section>
+
+<!-- ==================== 공통 프레임워크 ==================== -->
+<section>
+  <h2>공통 프레임워크: WHEN &middot; WHERE &middot; HOW</h2>
+  <p class="small">모든 버전이 이 3단계를 공유. 버전마다 각 단계의 구현이 다름.</p>
+  <div class="three-col" style="margin-top:8px;">
+    <div class="box box-warn">
+      <h3 style="color:var(--warn);">WHEN &mdash; 언제 가이드?</h3>
+      <div class="formula" style="font-size:0.75em;">CAS = cos(d<sub>prompt</sub>, d<sub>target</sub>) > 0.6</div>
+      <ul style="font-size:0.78em; margin:4px 0 0 10px;">
+        <li>프롬프트가 nudity와 얼마나 align되는지</li>
+        <li>Sticky: 한번 trigger되면 유지</li>
+        <li>COCO FP = 5% (안전 프롬프트 거의 안 걸림)</li>
+      </ul>
+    </div>
+    <div class="box box-purple">
+      <h3 style="color:var(--accent2);">WHERE &mdash; 어디를 가이드?</h3>
+      <ul style="font-size:0.78em; margin:4px 0 0 10px;">
+        <li><strong>Noise-based</strong>: 3×3 per-pixel CAS (v3~v5, v7, v10, v11)</li>
+        <li><strong>CrossAttn</strong>: attention probe로 nudity token 위치 (v6, v12)</li>
+        <li>Sigmoid + Blur → soft mask</li>
+      </ul>
+    </div>
+    <div class="box box-green">
+      <h3 style="color:var(--safe);">HOW &mdash; 어떻게 가이드?</h3>
+      <ul style="font-size:0.78em; margin:4px 0 0 10px;">
+        <li><strong>SLD</strong>: &epsilon; &minus; s·M·d<sub>target</sub></li>
+        <li><strong>DAG</strong>: area-adaptive scaling</li>
+        <li><strong>Hybrid</strong>: subtract target + add anchor</li>
+        <li><strong>Projection</strong>: nudity 성분만 제거</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box box-teal" style="margin-top:6px;">
+    <strong>평가 지표:</strong>
+    <span class="tag tag-green">SR (Qwen) — 메인</span>
+    <span class="tag tag-red">NudeNet — safety</span>
+    <span class="tag tag-purple">Falcon NSFW</span>
+    <span class="tag tag-blue">SigLIP 5-class</span>
+    <span class="tag tag-orange">VQAScore — fidelity</span>
+    <span class="tag tag-teal">Anchor VQA — redirection</span>
+  </div>
+</section>
+
+<!-- ==================== 버전별 한줄 요약 ==================== -->
+<section>
+  <h2>버전별 한줄 요약</h2>
+  <table style="margin-top:6px;">
+    <tr><th>Ver</th><th>이름</th><th>HOW 핵심</th><th>UNet/step</th><th>결과 한줄</th></tr>
+    <tr class="best">
+      <td><span class="vb" style="background:#374151;">v3</span></td>
+      <td>DAG Adaptive</td>
+      <td>Area·magnitude 비례 guidance</td>
+      <td>4</td>
+      <td><strong>SR 92%, NN 0.95%, Full 0%</strong> — 최강</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#6b7280;">v4</span></td>
+      <td>Anchor Inpaint</td>
+      <td>Text anchor로 soft blend</td>
+      <td>4</td>
+      <td>SR 78~96%, NN 9~20% — 기초</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#6b7280;">v5</span></td>
+      <td>Hybrid Projection</td>
+      <td>Global projection + anchor</td>
+      <td>4</td>
+      <td>SR 87%, NN 14.6% — v4 소폭 개선</td>
+    </tr>
+    <tr class="hl">
+      <td><span class="vb" style="background:#2563eb;">v6</span></td>
+      <td>CrossAttn WHERE</td>
+      <td>Attention probe로 정밀 위치</td>
+      <td>4 (probe 무료)</td>
+      <td>SR 93%, NN 16% — WHERE 최고, HOW 부족</td>
+    </tr>
+    <tr class="hl">
+      <td><span class="vb" style="background:#059669;">v7</span></td>
+      <td>GLASS Exemplar</td>
+      <td>Pre-computed anchor, 고정 scale</td>
+      <td>3 (25%↓)</td>
+      <td>NN 4.4% — 가장 낮지만 SR 29~54%</td>
+    </tr>
+    <tr class="bad">
+      <td><span class="vb" style="background:#dc2626;">v8</span></td>
+      <td>Exemplar Proj</td>
+      <td>Exemplar subspace projection</td>
+      <td>3</td>
+      <td>NN 42~70% — 실패</td>
+    </tr>
+    <tr class="bad">
+      <td><span class="vb" style="background:#dc2626;">v9</span></td>
+      <td>Direct Exemplar</td>
+      <td>Static exemplar direction</td>
+      <td>3</td>
+      <td>NN 72~76% — 완전 실패</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#7c3aed;">v10</span></td>
+      <td>Projection</td>
+      <td>Per-pixel nudity 성분만 제거</td>
+      <td>3</td>
+      <td>NN 6.7%, SR 42% — NotRel 52%</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#d97706;">v11</span></td>
+      <td>Stochastic Ensemble</td>
+      <td>K개 virtual anchor 생성+선택</td>
+      <td>3</td>
+      <td>v10과 동일 (NN 6.7%, SR 41%)</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#0f766e;">v12</span></td>
+      <td>CrossAttn + Proj</td>
+      <td>v6 WHERE + v10 HOW 결합</td>
+      <td>3 (probe 무료)</td>
+      <td>NN 9.5%, SR 58% — 중간</td>
+    </tr>
+  </table>
+</section>
+
+<!-- ==================== 전체 결과표 ==================== -->
+<section>
+  <h2>전체 결과 비교 (Ring-A-Bell, Best Config/Version)</h2>
+  <p class="small">SR = (Safe+Partial)/Total — 메인 지표. Full = 완전 누드 비율. NotRel = 콘텐츠 파괴.</p>
+  <table>
+    <tr><th>Ver</th><th>Best Config</th><th>SR&uarr;</th><th>NudeNet&darr;</th><th>Full%&darr;</th><th>NotRel%&darr;</th><th>VQA&uarr;</th></tr>
+    <tr class="best">
+      <td><span class="vb" style="background:#374151;">v3</span></td>
+      <td>dag_s3</td>
+      <td><strong>92.0%</strong></td><td><strong>2.2%</strong></td><td><strong>0%</strong></td><td><strong>7.9%</strong></td><td>0.370</td>
+    </tr>
+    <tr class="best">
+      <td><span class="vb" style="background:#374151;">v3</span></td>
+      <td>dag_s5</td>
+      <td>90.5%</td><td><strong>0.95%</strong></td><td><strong>0%</strong></td><td>9.4%</td><td>0.324</td>
+    </tr>
+    <tr class="hl">
+      <td><span class="vb" style="background:#2563eb;">v6</span></td>
+      <td>xattn ts20_as20</td>
+      <td><strong>93.3%</strong></td><td>16.1%</td><td>3.1%</td><td><strong>3.4%</strong></td><td>0.451</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#6b7280;">v5</span></td>
+      <td>sld_s10</td>
+      <td>87.0%</td><td>14.6%</td><td>2.8%</td><td>10.1%</td><td>0.537</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#6b7280;">v4</span></td>
+      <td>sld_s10</td>
+      <td>78.4%</td><td>9.2%</td><td>2.5%</td><td>18.9%</td><td>0.508</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#0f766e;">v12</span></td>
+      <td>xattn+proj</td>
+      <td>57.9%</td><td>9.5%</td><td>6.9%</td><td>35.1%</td><td>0.440</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#059669;">v7</span></td>
+      <td>hyb ts15_as15</td>
+      <td>54.1%</td><td>5.1%</td><td>3.7%</td><td>42.0%</td><td>0.408</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#7c3aed;">v10</span></td>
+      <td>proj ts2_as1</td>
+      <td>41.7%</td><td>6.7%</td><td>6.3%</td><td>51.8%</td><td>0.372</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#d97706;">v11</span></td>
+      <td>proj K4 &eta;=0.3</td>
+      <td>41.1%</td><td>6.7%</td><td>6.3%</td><td>52.5%</td><td>0.371</td>
+    </tr>
+    <tr>
+      <td><span class="vb" style="background:#059669;">v7</span></td>
+      <td>hyb ts25_as25</td>
+      <td>29.4%</td><td><strong>4.4%</strong></td><td>3.1%</td><td>67.4%</td><td>0.282</td>
+    </tr>
+    <tr class="bad">
+      <td><span class="vb" style="background:#dc2626;">v8</span></td>
+      <td>dual ts15_as15</td>
+      <td>62.0%</td><td>42.1%</td><td>32.5%</td><td>5.3%</td><td>&mdash;</td>
+    </tr>
+    <tr class="bad">
+      <td><span class="vb" style="background:#dc2626;">v9</span></td>
+      <td>exhyb ts15_as15</td>
+      <td>40.1%</td><td>72.5%</td><td>56.9%</td><td>2.8%</td><td>&mdash;</td>
+    </tr>
+    <tr class="bad">
+      <td>&mdash;</td>
+      <td>Baseline (no guide)</td>
+      <td>35.4%</td><td>75.6%</td><td>61.7%</td><td>2.8%</td><td>0.725</td>
+    </tr>
+  </table>
+</section>
+
+<!-- ==================== Country Nude Body ==================== -->
+<section>
+  <h2>Country Nude Body 결과</h2>
+  <p class="small">"[국가] nude body" → "[국가] clothed body" anchor 전환 평가 (20개국 × 4 samples)</p>
+  <table style="margin-top:6px;">
+    <tr><th>Ver</th><th>Config</th><th>NudeNet&darr;</th><th>SR&uarr;</th><th>VQA-Orig</th><th>VQA-Anchor&uarr;</th><th>Falcon&darr;</th></tr>
+    <tr class="bad"><td>&mdash;</td><td>Baseline</td><td>100%</td><td>3.7%</td><td>0.536</td><td>0.047</td><td>85.0%</td></tr>
+    <tr class="best"><td><span class="vb" style="background:#059669;">v7</span></td><td>ts15_as15</td><td><strong>1.25%</strong></td><td>22.5%</td><td>0.221</td><td>0.408</td><td>0.0%</td></tr>
+    <tr class="best"><td><span class="vb" style="background:#059669;">v7</span></td><td>ts25_as25</td><td><strong>1.25%</strong></td><td>12.5%</td><td>0.182</td><td>0.323</td><td>0.0%</td></tr>
+    <tr class="hl"><td><span class="vb" style="background:#7c3aed;">v10</span></td><td>proj</td><td>2.5%</td><td>37.5%</td><td>0.263</td><td>0.348</td><td>0.0%</td></tr>
+    <tr class="hl"><td><span class="vb" style="background:#d97706;">v11</span></td><td>K4 &eta;=0.3</td><td>2.5%</td><td>36.2%</td><td>0.260</td><td>0.348</td><td>0.0%</td></tr>
+    <tr><td><span class="vb" style="background:#0f766e;">v12</span></td><td>xattn+proj</td><td>10.0%</td><td>70.0%</td><td>0.316</td><td>0.377</td><td>6.2%</td></tr>
+    <tr><td><span class="vb" style="background:#6b7280;">v4</span></td><td>sld_s10</td><td>18.8%</td><td>47.5%</td><td>0.326</td><td>0.509</td><td>3.8%</td></tr>
+    <tr><td><span class="vb" style="background:#2563eb;">v6</span></td><td>ts20_as15</td><td>25.0%</td><td><strong>98.7%</strong></td><td>0.174</td><td><strong>0.593</strong></td><td>0.0%</td></tr>
+    <tr><td><span class="vb" style="background:#6b7280;">v5</span></td><td>sld_s10</td><td>41.3%</td><td>78.7%</td><td>0.373</td><td>0.545</td><td>11.2%</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:4px;">
+    <div class="box box-green">
+      <strong>v7 = nudity 완전 제거</strong> (NN 1.25%) but 콘텐츠도 같이 파괴 (SR 22%, VQA-Anchor 0.408)
+    </div>
+    <div class="box box-teal">
+      <strong>v6 = anchor 전환 최고</strong> (VQA-Anchor 0.593) — nude를 clothed로 자연스럽게 대체. but 일부 nudity 잔존 (NN 25%)
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 핵심 인사이트 ==================== -->
+<section>
+  <h2>핵심 인사이트</h2>
+  <div class="two-col" style="margin-top:8px;">
+    <div>
+      <h3 style="color:var(--safe);">왜 v3/dag가 최강인가?</h3>
+      <div class="box box-green">
+        <strong>Area-adaptive scaling:</strong> guidance 강도가 detected area에 비례.
+        <ul style="margin:4px 0 0 10px; font-size:0.85em;">
+          <li>작은 nudity 영역 → 약한 guidance → 비-nudity 보존</li>
+          <li>큰 nudity 영역 → 강한 guidance → 확실히 제거</li>
+        </ul>
+      </div>
+      <div class="box box-red">
+        <strong>v7의 문제:</strong> 고정 scale 15×로 무조건 강하게 → nudity가 아닌 배경/사람/맥락까지 전부 파괴 → NotRel 42%+
+      </div>
+      <div class="box box-warn">
+        <strong>v10/v11의 문제:</strong> Projection은 nudity 성분만 제거하지만, spatial mask가 너무 넓어서 결국 NotRel 52%
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--accent2);">다음 방향</h3>
+      <div class="box box-purple">
+        <strong>1. DAG + Exemplar:</strong> v3의 area-adaptive + v7의 exemplar anchor → UNet 3 call + 최고 안전성
+      </div>
+      <div class="box box-purple">
+        <strong>2. DAG + CrossAttn WHERE:</strong> v3의 adaptive HOW + v6의 정밀 WHERE → 정밀 위치 + 적응적 강도
+      </div>
+      <div class="box">
+        <strong>3. 데이터셋 확장:</strong> MMA, P4DN, UnlearnDiff에서도 v3/dag가 최강인지 검증
+      </div>
+      <div class="box box-teal">
+        <strong>4. SAFREE 비교:</strong> State-of-the-art baseline과 head-to-head
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 요약 ==================== -->
+<section class="title-slide">
+  <h2>한눈에 보기</h2>
+  <div style="margin-top:15px; text-align:left; max-width:850px; margin-left:auto; margin-right:auto;">
+    <div class="box box-green" style="font-size:0.82em;">
+      <strong>1위 — v3/dag_s5:</strong> SR 90.5% · NudeNet 0.95% · Full 0% · NotRel 9.4%<br>
+      <span class="small">Area-adaptive scaling이 safety-quality tradeoff를 해결. 유일하게 "ideal quadrant" 달성</span>
+    </div>
+    <div class="box" style="font-size:0.82em;">
+      <strong>2위 — v6/xattn_ts20:</strong> SR 93.3% · NudeNet 16.1% · Full 3.1% · NotRel 3.4%<br>
+      <span class="small">CrossAttn WHERE가 최고 정밀도. SR 최고, anchor 전환 최고. but NudeNet 높음</span>
+    </div>
+    <div class="box box-purple" style="font-size:0.82em;">
+      <strong>3위 — v7/hyb_ts15:</strong> SR 54.1% · NudeNet 5.1% · Full 3.7% · NotRel 42.0%<br>
+      <span class="small">Exemplar anchor + 3 UNet call. NudeNet 최저급이지만 콘텐츠 파괴 심함</span>
+    </div>
+    <div class="box box-warn" style="font-size:0.82em;">
+      <strong>실패 — v8/v9:</strong> NN 42~76%<br>
+      <span class="small">Static exemplar direction은 per-image nudity에 불일치 → 감지 실패</span>
+    </div>
+  </div>
+  <div style="margin-top:18px;">
+    <span class="tag tag-green">0.95% Best NudeNet (v3)</span>
+    <span class="tag tag-purple">93.3% Best SR (v6)</span>
+    <span class="tag tag-teal">0% Full Nudity (v3)</span>
+    <span class="tag tag-blue">0.593 Best Anchor VQA (v6)</span>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    margin: 0.06,
+    center: false,
+  });
+</script>
+</body>
+</html>

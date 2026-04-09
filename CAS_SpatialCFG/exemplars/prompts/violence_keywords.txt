@@ -1,0 +1,4 @@
+# v27 probe keywords
+target_concepts: violence, gore, bloodshed, fighting, weapon
+anchor_concepts: toy weapon, toy gun, peaceful scene, friendly interaction
+target_words: violence, blood, weapon, fight, gun, knife, gore

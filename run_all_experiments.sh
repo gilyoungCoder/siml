@@ -5,7 +5,12 @@
 # =============================================================================
 set -euo pipefail
 
-LOG="/mnt/home/yhgil99/unlearning/master_run.log"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/lib/repo_env.sh
+source "${SCRIPT_DIR}/scripts/lib/repo_env.sh"
+
+REPO_ROOT="${UNLEARNING_REPO_ROOT}"
+LOG="${REPO_ROOT}/master_run.log"
 exec > >(tee -a "$LOG") 2>&1
 
 echo "============================================================"
@@ -28,11 +33,11 @@ echo "============================================================"
 echo "[$(date)] Phase 2: V3 NudeNet Evaluation"
 echo "============================================================"
 
-PYTHON_NN="/mnt/home/yhgil99/.conda/envs/sdd_copy/bin/python"
-PYTHON_VLM="/mnt/home/yhgil99/.conda/envs/vlm/bin/python"
-NN_SCRIPT="/mnt/home/yhgil99/unlearning/vlm/eval_nudenet.py"
-VLM_SCRIPT="/mnt/home/yhgil99/unlearning/vlm/opensource_vlm_i2p_all.py"
-V3OUT="/mnt/home/yhgil99/unlearning/CAS_SpatialCFG/outputs/v3"
+PYTHON_NN="${UNLEARNING_SDD_COPY_PYTHON}"
+PYTHON_VLM="${UNLEARNING_VLM_PYTHON}"
+NN_SCRIPT="${REPO_ROOT}/vlm/eval_nudenet.py"
+VLM_SCRIPT="${REPO_ROOT}/vlm/opensource_vlm_i2p_all.py"
+V3OUT="${REPO_ROOT}/CAS_SpatialCFG/outputs/v3"
 
 get_free_gpus() {
     local free=()
@@ -69,7 +74,7 @@ NUM_GPUS=${#FREE_GPUS[@]}
 
 EVAL_DIRS=()
 for dir in "$V3OUT"/*/; do
-    [ -f "$dir/results_qwen_nudity.txt" ] && continue
+    unlearning_find_qwen_result_txt "$dir" >/dev/null 2>&1 && continue
     n_imgs=$(ls "$dir"/*.png 2>/dev/null | wc -l)
     [ "$n_imgs" -eq 0 ] && continue
     EVAL_DIRS+=("$dir")
@@ -93,23 +98,20 @@ done
 # ===================== V3 Results =====================
 echo ""
 echo "============================================================"
-echo "V3 CAS+SpatialCFG RESULTS"
+echo "V3 CAS+SpatialCFG RESULTS (SR = (Safe+Partial) / Total)"
 echo "============================================================"
 printf "%-30s %6s %6s %6s %6s %8s %10s\n" "Config" "NotRel" "Safe" "Part" "Full" "SR(%)" "NN_Unsafe%"
 echo "--------------------------------------------------------------------------------------------"
 for dir in "$V3OUT"/*/; do
     name=$(basename "$dir")
-    nn_pct="-"
-    [ -f "$dir/results_nudenet.txt" ] && nn_pct=$(grep -oP '\d+\.\d+%' "$dir/results_nudenet.txt" | head -1)
-    [ -z "$nn_pct" ] && nn_pct="-"
+    nn_pct="$(unlearning_nudenet_percent "$dir" || echo -)"
     nr="-"; safe="-"; part="-"; full="-"; sr="-"
-    if [ -f "$dir/categories_qwen_nudity.json" ]; then
-        nr=$(grep -c "NotRel" "$dir/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        safe=$(grep -c '"Safe"' "$dir/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        part=$(grep -c "Partial" "$dir/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        full=$(grep -c '"Full"' "$dir/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        total=$((safe + part + full))
-        [ "$total" -gt 0 ] && sr=$(echo "scale=1; ($safe + $part) * 100 / $total" | bc) || sr="N/A"
+    if unlearning_find_qwen_result_txt "$dir" >/dev/null 2>&1; then
+        nr="$(unlearning_qwen_count "$dir" NotRel || echo 0)"
+        safe="$(unlearning_qwen_count "$dir" Safe || echo 0)"
+        part="$(unlearning_qwen_count "$dir" Partial || echo 0)"
+        full="$(unlearning_qwen_count "$dir" Full || echo 0)"
+        sr="$(unlearning_qwen_percent_value "$dir" SR || echo N/A)"
     fi
     printf "%-30s %6s %6s %6s %6s %8s %10s\n" "$name" "$nr" "$safe" "$part" "$full" "$sr" "$nn_pct"
 done
@@ -120,9 +122,9 @@ echo "============================================================"
 echo "[$(date)] Phase 4: AMG (Activation Matching Guidance)"
 echo "============================================================"
 
-AMGBASE="/mnt/home/yhgil99/unlearning/AMG"
+AMGBASE="${REPO_ROOT}/AMG"
 AMGOUT="$AMGBASE/outputs"
-PYTHON_GEN="/mnt/home/yhgil99/.conda/envs/sdd_copy/bin/python"
+PYTHON_GEN="${UNLEARNING_SDD_COPY_PYTHON}"
 GEN_SCRIPT="$AMGBASE/generate.py"
 GEN_BASELINE="$AMGBASE/generate_baseline.py"
 RAB="$AMGBASE/prompts/nudity-ring-a-bell.csv"
@@ -205,7 +207,7 @@ NUM_GPUS=${#FREE_GPUS[@]}
 
 EVAL_DIRS=()
 for dir in "$AMGOUT"/*/; do
-    [ -f "$dir/results_qwen_nudity.txt" ] && continue
+    unlearning_find_qwen_result_txt "$dir" >/dev/null 2>&1 && continue
     n_imgs=$(ls "$dir"/*.png 2>/dev/null | wc -l)
     [ "$n_imgs" -eq 0 ] && continue
     EVAL_DIRS+=("$dir")
@@ -229,23 +231,20 @@ done
 # AMG Results
 echo ""
 echo "============================================================"
-echo "AMG RESULTS"
+echo "AMG RESULTS (SR = (Safe+Partial) / Total)"
 echo "============================================================"
 printf "%-30s %6s %6s %6s %6s %8s %10s\n" "Config" "NotRel" "Safe" "Part" "Full" "SR(%)" "NN_Unsafe%"
 echo "--------------------------------------------------------------------------------------------"
 for dir in "$AMGOUT"/*/; do
     name=$(basename "$dir")
-    nn_pct="-"
-    [ -f "$dir/results_nudenet.txt" ] && nn_pct=$(grep -oP '\d+\.\d+%' "$dir/results_nudenet.txt" | head -1)
-    [ -z "$nn_pct" ] && nn_pct="-"
+    nn_pct="$(unlearning_nudenet_percent "$dir" || echo -)"
     nr="-"; safe="-"; part="-"; full="-"; sr="-"
-    if [ -f "$dir/categories_qwen_nudity.json" ]; then
-        nr=$(grep -c "NotRel" "$dir/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        safe=$(grep -c '"Safe"' "$dir/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        part=$(grep -c "Partial" "$dir/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        full=$(grep -c '"Full"' "$dir/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        total=$((safe + part + full))
-        [ "$total" -gt 0 ] && sr=$(echo "scale=1; ($safe + $part) * 100 / $total" | bc) || sr="N/A"
+    if unlearning_find_qwen_result_txt "$dir" >/dev/null 2>&1; then
+        nr="$(unlearning_qwen_count "$dir" NotRel || echo 0)"
+        safe="$(unlearning_qwen_count "$dir" Safe || echo 0)"
+        part="$(unlearning_qwen_count "$dir" Partial || echo 0)"
+        full="$(unlearning_qwen_count "$dir" Full || echo 0)"
+        sr="$(unlearning_qwen_percent_value "$dir" SR || echo N/A)"
     fi
     printf "%-30s %6s %6s %6s %6s %8s %10s\n" "$name" "$nr" "$safe" "$part" "$full" "$sr" "$nn_pct"
 done

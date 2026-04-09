@@ -1,0 +1,34 @@
+Notion update guide for this repository
+=====================================
+
+Purpose
+- Keep human-readable project status notes synchronized into the Notion workspace.
+- Prefer adding dated child pages or database entries rather than overwriting prior reports.
+
+Writing rules
+- Use clear dated titles: YYYY-MM-DD + short topic.
+- Put the executive summary first.
+- Separate sections for: completed work, verification, current metrics, risks, next steps.
+- Prefer bullet lists and short tables over dense prose.
+- Never store API secrets in this file.
+- Prefer reading report source from docs/omc_reports/ before publishing.
+
+Recommended local source artifacts
+- docs/omc_reports/current_gridsearch_best_config_summary.md
+- docs/omc_reports/current_concept_pack_completeness.md
+- docs/omc_handoff_multiconcept_and_results.md
+- docs/omc_reports/YYYY-MM-DD_progress_report_for_notion.md
+
+Notion publishing pattern
+- Default action: create a dated child page under the main Unlearning page.
+- If a dedicated database exists and is clearly intended for progress logs, add a new dated row/page there.
+- Preserve prior records; append new dated pages instead of replacing history.
+
+Suggested page structure
+1. Executive summary
+2. What changed
+3. Verification
+4. Current experiment readout
+5. Multi-concept readiness
+6. Risks / blockers
+7. Next steps

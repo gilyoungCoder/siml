@@ -1,0 +1,89 @@
+\section{Experiments}
+\label{sec:exp}
+
+\subsection{Experimental Setup}
+
+\paragraph{Base Model.} We use Stable Diffusion v1.4~\citep{rombach2022high} (\texttt{CompVis/stable-diffusion-v1-4}) as the base T2I model, with the safety checker disabled to ensure a fair evaluation of concept erasure methods. All images are generated at 512$\times$512 resolution with 50 DDIM steps, $s=7.5$ guidance scale, and a fixed seed of 42.
+
+\paragraph{Datasets.} For nudity erasure, we evaluate on four adversarial prompt datasets: \textbf{Ring-A-Bell}~\citep{tsai2024ring} (79 prompts), \textbf{P4D-N}~\citep{chin2024prompting4debugging} (151 prompts), \textbf{UnlearnDiff}~\citep{zhang2024generate} (142 prompts), and \textbf{MMA-Diffusion}~\citep{yang2024mma} (1,000 prompts). For multi-concept evaluation, we use I2P~\citep{schramowski2023safe} subsets for each safety category: violence (756), harassment (824), hate (231), shocking (856), illegal activity (727), and self-harm (801). For image quality assessment, we generate images from 250 COCO~\citep{lin2014microsoft} captions ($\times$4 samples = 1,000 images) and compute FID and CLIP Score against baseline SD v1.4 outputs.
+
+\paragraph{Baselines.} We compare against: (1)~\emph{Fine-tuning methods}: ESD~\citep{gandikota2023erasing}, SDD~\citep{kim2023towards}, RECE~\citep{gong2024reliable}, and SDErasure~\citep{lu2026sderasure}; (2)~\emph{Training-free methods}: SLD-Max~\citep{schramowski2023safe}, SAFREE~\citep{yoon2024safree}, and our prior ASCG~\citep{gil2026ascg}.
+
+\paragraph{Evaluation Metrics.} We use Qwen3-VL-8B~\citep{bai2025qwen3vl} as the primary safety evaluator, classifying each generated image into four categories: \textbf{Safe}, \textbf{Partial} (minor exposure), \textbf{Full} (explicit unsafe content), and \textbf{NotRelevant} (no human/relevant subject). We report:
+\begin{itemize}[leftmargin=1.5em,itemsep=1pt]
+    \item \textbf{SR} (Safe Rate): $(\text{Safe} + \text{Partial}) / \text{Total}$ --- higher is better
+    \item \textbf{Full}: fraction of fully unsafe images --- lower is better
+    \item \textbf{FID}~\citep{heusel2017gans}: Fr\'{e}chet Inception Distance on COCO --- lower is better
+    \item \textbf{CLIP Score}~\citep{hessel2021clipscore}: text-image alignment on COCO --- higher is better
+\end{itemize}
+We validate our VLM evaluator through MJ-Bench~\citep{chen2025mjbench} benchmarking (\S\ref{subsec:evaluator}).
+
+% ===========================================================================
+\subsection{Main Results: Nudity Erasure}
+\label{subsec:main_results}
+
+Table~\ref{table:main} presents the comprehensive comparison on nudity erasure across four adversarial prompt datasets and COCO image quality metrics.
+
+\input{table/main}
+
+\paragraph{Comparison with Fine-tuning Methods.}
+\ours{} (Hybrid) achieves the highest SR on Ring-A-Bell (94.9\%) and UnlearnDiff (97.2\%), surpassing all fine-tuning methods including SDD (88.6\%, 90.8\%) and RECE (54.4\%, 90.1\%). Notably, fine-tuning methods suffer from high FID scores (RECE: 10.33, UCE: 11.45), indicating significant quality degradation on benign prompts, while \ours{} maintains FID $\sim$3.7--5.1.
+
+\paragraph{Comparison with Training-free Methods.}
+Among training-free approaches, \ours{} substantially outperforms SLD-Max (57.0\% on Ring-A-Bell) and SAFREE (77.2\%). The improvement is particularly pronounced on MMA-Diffusion, the most challenging dataset with 1,000 adversarial prompts, where \ours{} achieves 79.6\% SR compared to SAFREE's 75.5\% and SLD-Max's 49.0\%.
+
+\paragraph{Anchor Inpainting vs.\ Hybrid.}
+Both guidance modes outperform all baselines. Hybrid guidance achieves the best SR on Ring-A-Bell (+5.0\%p over Anchor) due to its active replacement of unsafe content with safe anchors, while Anchor Inpainting provides slightly better quality preservation (lower FID).
+
+% ===========================================================================
+\subsection{Multi-Concept Erasure}
+\label{subsec:multi_results}
+
+A distinguishing feature of \ours{} is its ability to erase multiple unsafe concepts without any concept-specific training. Table~\ref{table:multi} presents single-concept erasure results across all seven I2P safety categories.
+
+\input{table/multi_concept}
+
+\paragraph{Single-Concept Results.}
+\ours{} achieves strong erasure across all categories: violence (97.1\%), shocking (97.3\%), nudity (93.1\%), hate (84.8\%), and harassment (83.3\%). The text-only probe mode performs best for concepts that are explicitly named in prompts (violence, harassment), while the dual probe (text + image) excels for visually distinctive concepts (nudity, shocking).
+
+\paragraph{Simultaneous Multi-Concept Erasure.}
+Table~\ref{table:dual} shows results for simultaneously erasing two concepts. Nudity + shocking achieves the best dual erasure (83.7\% nudity SR, 97.5\% shocking SR), with only a modest drop from single-concept performance ($-$9.4\%p for nudity). This demonstrates that \ours{}'s independent concept representations enable effective compositional erasure.
+
+\input{table/dual_concept}
+
+% ===========================================================================
+\subsection{Ablation Study}
+\label{subsec:ablation}
+
+We ablate the three core components of \ours{} on Ring-A-Bell and MMA-Diffusion.
+
+\input{table/ablation}
+
+\paragraph{Effect of CAS (When).}
+Removing the CAS gate (Table~\ref{table:ablation}, row b vs.\ d) decreases SR by 2--5\%p while increasing false positive rate on COCO. CAS is critical for precision: it prevents unnecessary intervention on benign prompts.
+
+\paragraph{Effect of Spatial Probe (Where).}
+Without spatial localization (row a vs.\ d), guidance is applied globally, which degrades image quality and can paradoxically reduce SR by disrupting the overall composition. The dual probe provides the strongest localization.
+
+\paragraph{Probe Mode Comparison.}
+Table~\ref{table:probe} compares the three probe modes. Image+Text (dual) achieves the highest SR for hybrid guidance (94.9\%), while text-only is competitive for anchor inpainting (91.1\%). The image probe alone is weaker (49.4\%--60.8\%) but provides complementary signal that boosts dual-probe performance.
+
+\input{table/probe_ablation}
+
+% ===========================================================================
+\subsection{Image Quality Preservation}
+\label{subsec:quality}
+
+Table~\ref{table:main} (right columns) reports FID and CLIP Score on COCO-30K. \ours{} achieves the lowest FID among training-free methods (3.66--5.06) with CLIP Score nearly identical to the baseline ($\Delta < 0.1$). This confirms that CAS gating effectively prevents quality degradation on benign prompts: guidance is simply not activated when CAS remains below threshold.
+
+% ===========================================================================
+\subsection{Evaluator Validation}
+\label{subsec:evaluator}
+
+To validate Qwen3-VL as a reliable safety judge, we benchmark it on MJ-Bench~\citep{chen2025mjbench}, a curated dataset of 672 safety image pairs with human preference annotations.
+
+\paragraph{MJ-Bench Results.}
+Using the official MJ-Bench protocol (5-criteria multi-image evaluation), Qwen3-VL achieves competitive performance among open-source VLMs on safety preference accuracy. On the safety-specific evaluation (scale [1-10]), Qwen3-VL achieves 49.7\% w/tie and 88.1\% w/o tie accuracy, demonstrating strong discriminative ability when it can distinguish between image pairs.
+
+\paragraph{Cross-Validator Agreement.}
+We independently evaluate all generated images with both Qwen3-VL and LLaVA~\citep{liu2023visual}, computing binary safe/unsafe agreement. The two models achieve \textbf{92.3\%} agreement, confirming that our VLM-based evaluation provides consistent and reliable safety assessments.

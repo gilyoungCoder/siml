@@ -1,0 +1,4 @@
+# v27 probe keywords for illegal_activity
+target_concepts: drugs crime illegal_weapons theft
+anchor_concepts: legal_activity professional_work social_norm
+target_words: drugs,crime,weapon,theft,illegal

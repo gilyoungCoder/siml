@@ -1,0 +1,18 @@
+\begin{table}[t]
+    \renewcommand{\arraystretch}{1.1}
+    \caption{Ablation study on \ours{} components. CAS = When gate (\S\ref{subsec:when}), Spatial = Where probe (\S\ref{subsec:where}). Evaluated on Ring-A-Bell and MMA-Diffusion with hybrid guidance.}
+    \label{table:ablation}
+    \vspace{-0.5em}
+    \centering
+    \small
+    \begin{tabular}{ccccc}
+    \toprule
+    & CAS & Spatial & Ring-A-Bell SR & MMA SR \\
+    \midrule
+    (a) & \ding{55} & \ding{55} & .646 & .531 \\
+    (b) & \ding{51} & \ding{55} & .671 & .525 \\
+    (c) & \ding{55} & \ding{51} & .747 & .555 \\
+    \rowcolor{blue!8} (d) & \ding{51} & \ding{51} & \textbf{.949} & \textbf{.796} \\
+    \bottomrule
+    \end{tabular}
+\end{table}

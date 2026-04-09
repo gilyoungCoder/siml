@@ -2,10 +2,17 @@
 # Full eval pipeline for V3 + AMG: NudeNet + Qwen3-VL on 8 GPUs
 set -e
 
-NUDENET_PY="/mnt/home/yhgil99/.conda/envs/sdd_copy/bin/python"
-VLM_PY="/mnt/home/yhgil99/.conda/envs/vlm/bin/python"
-NUDENET_SCRIPT="/mnt/home/yhgil99/unlearning/vlm/eval_nudenet.py"
-VLM_SCRIPT="/mnt/home/yhgil99/unlearning/vlm/opensource_vlm_i2p_all.py"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/lib/repo_env.sh
+source "${SCRIPT_DIR}/scripts/lib/repo_env.sh"
+
+REPO_ROOT="${UNLEARNING_REPO_ROOT}"
+NUDENET_PY="${UNLEARNING_SDD_COPY_PYTHON}"
+VLM_PY="${UNLEARNING_VLM_PYTHON}"
+NUDENET_SCRIPT="${REPO_ROOT}/vlm/eval_nudenet.py"
+VLM_SCRIPT="${REPO_ROOT}/vlm/opensource_vlm_i2p_all.py"
+V3_OUTPUT_ROOT="${REPO_ROOT}/CAS_SpatialCFG/outputs/v3"
+AMG_OUTPUT_ROOT="${REPO_ROOT}/AMG/outputs"
 
 run_parallel_8gpu() {
     local script="$1"
@@ -44,7 +51,7 @@ echo "============================================================"
 
 # Collect dirs needing NudeNet
 NN_DIRS=()
-for d in /mnt/home/yhgil99/unlearning/CAS_SpatialCFG/outputs/v3/*/ /mnt/home/yhgil99/unlearning/AMG/outputs/*/; do
+for d in "${V3_OUTPUT_ROOT}"/*/ "${AMG_OUTPUT_ROOT}"/*/; do
     if [ ! -f "$d/results_nudenet.txt" ] && ls "$d"/*.png &>/dev/null; then
         NN_DIRS+=("$d")
     fi
@@ -57,8 +64,8 @@ echo "NudeNet DONE! $(date)"
 
 # Collect dirs needing Qwen3-VL
 VLM_DIRS=()
-for d in /mnt/home/yhgil99/unlearning/CAS_SpatialCFG/outputs/v3/*/ /mnt/home/yhgil99/unlearning/AMG/outputs/*/; do
-    if [ ! -f "$d/results_qwen_nudity.txt" ] && ls "$d"/*.png &>/dev/null; then
+for d in "${V3_OUTPUT_ROOT}"/*/ "${AMG_OUTPUT_ROOT}"/*/; do
+    if ! unlearning_find_qwen_result_txt "$d" >/dev/null 2>&1 && ls "$d"/*.png &>/dev/null; then
         VLM_DIRS+=("$d")
     fi
 done
@@ -71,26 +78,22 @@ echo "Qwen3-VL DONE! $(date)"
 # Final results
 echo ""
 echo "============================================================"
-echo "FINAL RESULTS (SR = Safe+Partial, NotRel excluded)"
+echo "FINAL RESULTS (SR = (Safe+Partial) / Total)"
 echo "============================================================"
 echo ""
 echo "--- V3 (CAS + Spatial CFG) ---"
 printf "%-30s %6s %6s %6s %6s %8s %10s\n" "Config" "NotRel" "Safe" "Part" "Full" "SR(%)" "NN_Unsafe%"
 echo "------------------------------------------------------------------------------------"
-for d in /mnt/home/yhgil99/unlearning/CAS_SpatialCFG/outputs/v3/*/; do
+for d in "${V3_OUTPUT_ROOT}"/*/; do
     name=$(basename "$d")
-    if [ -f "$d/results_qwen_nudity.txt" ] && [ -f "$d/results_nudenet.txt" ]; then
-        nr=$(grep -c '"NotRel"' "$d/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        safe=$(grep -c '"Safe"' "$d/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        part=$(grep -c '"Partial"' "$d/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        full=$(grep -c '"Full"' "$d/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        denom=$((safe + part + full))
-        if [ $denom -gt 0 ]; then
-            sr=$(echo "scale=1; ($safe + $part) * 100 / $denom" | bc)
-        else
-            sr="N/A"
-        fi
-        nn=$(grep "Unsafe:" "$d/results_nudenet.txt" | grep -o '[0-9.]*%' | head -1)
+    qwen_txt="$(unlearning_find_qwen_result_txt "$d" || true)"
+    if [ -n "$qwen_txt" ] && [ -f "$d/results_nudenet.txt" ]; then
+        nr="$(unlearning_qwen_count "$d" NotRel || echo 0)"
+        safe="$(unlearning_qwen_count "$d" Safe || echo 0)"
+        part="$(unlearning_qwen_count "$d" Partial || echo 0)"
+        full="$(unlearning_qwen_count "$d" Full || echo 0)"
+        sr="$(unlearning_qwen_percent_value "$d" SR || echo N/A)"
+        nn="$(unlearning_nudenet_percent "$d" || echo -)"
         printf "%-30s %6s %6s %6s %6s %8s %10s\n" "$name" "$nr" "$safe" "$part" "$full" "$sr" "$nn"
     fi
 done
@@ -99,20 +102,16 @@ echo ""
 echo "--- AMG (Activation Matching Guidance) ---"
 printf "%-30s %6s %6s %6s %6s %8s %10s\n" "Config" "NotRel" "Safe" "Part" "Full" "SR(%)" "NN_Unsafe%"
 echo "------------------------------------------------------------------------------------"
-for d in /mnt/home/yhgil99/unlearning/AMG/outputs/*/; do
+for d in "${AMG_OUTPUT_ROOT}"/*/; do
     name=$(basename "$d")
-    if [ -f "$d/results_qwen_nudity.txt" ] && [ -f "$d/results_nudenet.txt" ]; then
-        nr=$(grep -c '"NotRel"' "$d/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        safe=$(grep -c '"Safe"' "$d/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        part=$(grep -c '"Partial"' "$d/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        full=$(grep -c '"Full"' "$d/categories_qwen_nudity.json" 2>/dev/null || echo 0)
-        denom=$((safe + part + full))
-        if [ $denom -gt 0 ]; then
-            sr=$(echo "scale=1; ($safe + $part) * 100 / $denom" | bc)
-        else
-            sr="N/A"
-        fi
-        nn=$(grep "Unsafe:" "$d/results_nudenet.txt" | grep -o '[0-9.]*%' | head -1)
+    qwen_txt="$(unlearning_find_qwen_result_txt "$d" || true)"
+    if [ -n "$qwen_txt" ] && [ -f "$d/results_nudenet.txt" ]; then
+        nr="$(unlearning_qwen_count "$d" NotRel || echo 0)"
+        safe="$(unlearning_qwen_count "$d" Safe || echo 0)"
+        part="$(unlearning_qwen_count "$d" Partial || echo 0)"
+        full="$(unlearning_qwen_count "$d" Full || echo 0)"
+        sr="$(unlearning_qwen_percent_value "$d" SR || echo N/A)"
+        nn="$(unlearning_nudenet_percent "$d" || echo -)"
         printf "%-30s %6s %6s %6s %6s %8s %10s\n" "$name" "$nr" "$safe" "$part" "$full" "$sr" "$nn"
     fi
 done

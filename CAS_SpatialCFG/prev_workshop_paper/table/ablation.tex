@@ -1,0 +1,57 @@
+\begin{table*}[!t]
+    \renewcommand{\arraystretch}{1.1}
+    \setlength{\tabcolsep}{0.43em}
+    \setlength{\aboverulesep}{0pt}
+    \setlength{\belowrulesep}{0pt}
+    \setlength{\extrarowheight}{0.2em}
+    \caption{Ablation study on guidance components of our method evaluated by Qwen3-VL.}
+    \label{table/ablation}
+    \vspace{-0.5em}
+
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{cccccccccccccccccc}
+    \toprule
+    & \multicolumn{2}{c}{Ablation}
+    & \multicolumn{5}{c}{UnlearnDiff}
+    & \multicolumn{5}{c}{Ring-A-Bell}
+    & \multicolumn{5}{c}{MMA-Diffusion} \\
+    \cmidrule(lr){2-3}
+    \cmidrule(lr){4-8}
+    \cmidrule(lr){9-13}
+    \cmidrule(lr){14-18}
+
+    & \S\ref{subsec:selective} & \S\ref{subsec:targeted}
+    & SR & \color{gray}Safe & \color{gray}Partial & \color{gray}Full & \color{gray}NotRel
+    & SR & \color{gray}Safe & \color{gray}Partial & \color{gray}Full & \color{gray}NotRel
+    & SR & \color{gray}Safe & \color{gray}Partial & \color{gray}Full & \color{gray}NotRel \\
+    \midrule
+
+    % $\bar{\tau} = 0.0$ & $ g_{t}$
+    (a) & -- & --
+    & .866 & \color{gray}.415 & \color{gray}.451 & \color{gray}.113 & \color{gray}.021
+    & .646 & \color{gray}.316 & \color{gray}.329 & \color{gray}.304 & \color{gray}.051
+    & .531 & \color{gray}.175 & \color{gray}.356 & \color{gray}.465 & \color{gray}.004 \\
+    
+    % $\bar{\tau} = 0.1$ & $ g_{t}$
+    (b) & \checkmark & --
+    & .845 & \color{gray}.387 & \color{gray}.458 & \color{gray}.134 & \color{gray}.021
+    & .671 & \color{gray}.278 & \color{gray}.392 & \color{gray}.291 & \color{gray}.038
+    & .525 & \color{gray}.186 & \color{gray}.339 & \color{gray}.471 & \color{gray}.004 \\
+    
+    % $\bar{\tau} = 0.0$ & $g_{t}^{\mathrm{spatial}}$
+    (c) & -- & \checkmark
+    & .852 & \color{gray}.366 & \color{gray}.486 & \color{gray}.120 & \color{gray}.028
+    & .747 & \color{gray}.316 & \color{gray}.431 & \color{gray}.215 & \color{gray}.038
+    & .555 & \color{gray}.185 & \color{gray}.370 & \color{gray}.444 & \color{gray}.001 \\
+    
+    \midrule
+    
+    % \rowcolor{blue!10} $\bar{\tau} = 0.1$ & $g_{t}^{\mathrm{spatial}}$
+    \rowcolor{blue!10} (d) & \checkmark & \checkmark
+    & \BL{.887} & \color{gray}.408 & \color{gray}.479 & \color{gray}.099 & \color{gray}.014
+    & \BL{.835} & \color{gray}.392 & \color{gray}.443 & \color{gray}.089 & \color{gray}.076
+    & \BL{.590} & \color{gray}.162 & \color{gray}.428 & \color{gray}.407 & \color{gray}.003 \\
+    
+    \bottomrule
+    \end{tabular}}
+\end{table*}

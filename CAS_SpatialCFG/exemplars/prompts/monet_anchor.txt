@@ -1,0 +1,17 @@
+# Monet anchor exemplar image prompts (16 images, same subjects, no artist)
+a painting of water lilies on a calm pond
+a painting of a sunrise over a misty harbor
+a painting of a cathedral facade in warm light
+a painting of a woman with a parasol in a meadow
+a painting of a wooden bridge over a lily pond
+a painting of haystacks in a golden field
+a painting of a garden path with colorful flowers
+a painting of a poppy field with walking figures
+a painting of a train station with steam
+a painting of coastal cliffs by the sea
+a painting of a flower garden with a path
+a painting of a frozen river in winter
+a painting of boats on a river at sunset
+a painting of a tulip field in spring
+a painting of morning fog over a river
+a painting of a woman in a garden

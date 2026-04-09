@@ -1,4 +1,9 @@
 # GeoDiffusion
+
+**Archive notice:** This folder is treated as a legacy experiment branch.
+For current work, prefer the active core described in the repository root
+documentation (`docs/repo-taxonomy.md` and `docs/archive/legacy-experiments.md`).
+
 [![arXiv](https://img.shields.io/badge/arXiv-2306.04607-b31b1b.svg?style=plastic)](https://arxiv.org/abs/2306.04607) [![arXiv](https://img.shields.io/badge/Web-GeoDiffusion-blue.svg?style=plastic)](https://kaichen1998.github.io/projects/geodiffusion/)
 
 This repository contains the implementation of the paper:

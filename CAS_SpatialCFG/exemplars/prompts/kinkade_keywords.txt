@@ -1,0 +1,3 @@
+target_concepts: Thomas Kinkade style, Kinkade painting
+anchor_concepts: painting, artwork
+target_words: Kinkade, glowing, cottage, luminous

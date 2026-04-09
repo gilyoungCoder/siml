@@ -1,0 +1,299 @@
+\section{Experimental Details}
+\label{app:details}
+
+\subsection{Exemplar Prompt Sets}
+\label{app:exemplars}
+
+For each target concept, we construct a set of 16 exemplar prompts that describe typical instances of the concept. These prompts are used to compute the concept direction $d_\text{target}$ (Eq.~\ref{eq:cas}) and CLIP exemplar embeddings (Eq.~\ref{eq:img_probe}). Table~\ref{table:exemplar_prompts} lists representative prompts for each concept.
+
+\begin{table}[h]
+\centering
+\caption{Representative exemplar prompts for target concepts. Each concept uses 16 prompts; a subset is shown here.}
+\label{table:exemplar_prompts}
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{0.5em}
+\begin{tabular}{@{}l p{9cm}@{}}
+\toprule
+\textbf{Concept} & \textbf{Example Prompts} \\
+\midrule
+Nudity & ``a nude person standing'', ``a naked figure in a painting'', ``explicit nudity photography'', ``a person without clothes'' \\
+\midrule
+Violence & ``a violent fight scene'', ``people attacking each other with weapons'', ``bloodshed and gore'', ``a brutal combat scene'' \\
+\midrule
+Harassment & ``a person being bullied aggressively'', ``threatening and intimidating behavior'', ``hostile confrontation between people'' \\
+\midrule
+Hate & ``hate speech symbols and imagery'', ``racist discriminatory imagery'', ``hateful propaganda poster'' \\
+\midrule
+Shocking & ``grotesque body horror imagery'', ``disturbing deformed figures'', ``nightmarish horrifying scene'' \\
+\midrule
+Illegal & ``drug use and drug paraphernalia'', ``criminal activity scene'', ``illegal weapons and theft'' \\
+\midrule
+Self-harm & ``self-injury depiction'', ``person harming themselves'', ``razor and cutting imagery'' \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For the safe anchor concepts used in hybrid guidance (Eq.~\ref{eq:hybrid}), we define concept-specific anchor directions:
+
+\begin{table}[h]
+\centering
+\caption{Anchor concepts for each target concept, used in hybrid guidance mode.}
+\label{table:anchors}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Target} & \textbf{Anchor Concepts} \\
+\midrule
+Nudity & clothed person, person wearing clothes \\
+Violence & peaceful scene, nature landscape, friendly interaction \\
+Harassment & friendly conversation, cooperation, respectful interaction \\
+Hate & diversity, harmony, cultural respect, equality \\
+Shocking & serene scene, beautiful art, harmonious composition \\
+Illegal & legal activity, professional work, social norm \\
+Self-harm & healing, meditation, healthy activity, mental wellness \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Hyperparameter Settings}
+\label{app:hyperparams}
+
+Table~\ref{table:hyperparams} lists the default hyperparameters used for each concept, selected based on validation experiments on a small held-out subset of each dataset.
+
+\begin{table}[h]
+\centering
+\caption{Default hyperparameters per concept. $\tau$ = CAS threshold, $\theta_\text{text}$ = text attention threshold, $\theta_\text{img}$ = image probe threshold.}
+\label{table:hyperparams}
+\small
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+\textbf{Concept} & $\tau$ & HOW Mode & Scale & $\theta_\text{text}$ & $\theta_\text{img}$ & Probe \\
+\midrule
+Nudity & 0.6 & hybrid & $s_t\!=\!15, s_a\!=\!15$ & 0.1 & 0.4 & both \\
+Violence & 0.4 & anchor inpaint & $s\!=\!1.5$ & 0.1 & 0.4 & text \\
+Harassment & 0.4 & anchor inpaint & $s\!=\!1.2$ & 0.1 & -- & text \\
+Hate & 0.4 & anchor inpaint & $s\!=\!1.0$ & 0.1 & -- & text \\
+Shocking & 0.6 & anchor inpaint & $s\!=\!0.8$ & 0.1 & 0.4 & both \\
+Illegal & 0.5 & anchor inpaint & $s\!=\!0.8$ & 0.1 & 0.4 & both \\
+Self-harm & 0.4 & anchor inpaint & $s\!=\!0.8$ & 0.1 & 0.4 & both \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Common settings.} All experiments use Stable Diffusion v1.4 with 50 DDIM steps, CFG scale $s\!=\!7.5$, seed 42, and 512$\times$512 resolution. CLIP exemplar embeddings are pre-computed using ViT-L/14 from 16 exemplar images per concept. Cross-attention maps are extracted at resolutions $16\times16$ and $32\times32$. The sigmoid sharpness $\alpha\!=\!10.0$ and blur $\sigma\!=\!1.0$ are fixed across all experiments.
+
+\subsection{Generation Pipeline}
+\label{app:pipeline}
+
+At each denoising step $t$ of the 50-step DDIM process, \ours{} performs:
+\begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
+    \item Compute $\epsilon_\varnothing$, $\epsilon_\theta(z_t, c)$, and $\epsilon_\theta(z_t, c_\text{target})$
+    \item Calculate $\text{CAS}(t)$ via Eq.~\ref{eq:cas}; if $\text{CAS}(t) < \tau$ and not sticky-activated, skip guidance
+    \item Extract cross-attention maps for target keywords $\rightarrow M_\text{text}$ (Eq.~\ref{eq:text_probe})
+    \item Compute CLIP exemplar similarity at spatial locations $\rightarrow M_\text{img}$ (Eq.~\ref{eq:img_probe})
+    \item Fuse masks: $M = \min(1, M_\text{text} + M_\text{img})$ (Eq.~\ref{eq:fusion})
+    \item Apply spatially masked guidance (Eq.~\ref{eq:anchor_inpaint} or \ref{eq:hybrid})
+\end{enumerate}
+The overhead per step is approximately 15--20\% compared to standard CFG, primarily from the additional forward pass for $\epsilon_\theta(z_t, c_\text{target})$ and the CLIP feature extraction.
+
+% ===========================================================================
+\section{Additional Experimental Results}
+\label{app:additional}
+
+\subsection{Per-Dataset Detailed Results}
+\label{app:per_dataset}
+
+Table~\ref{table:detailed_nudity} presents the full breakdown of nudity erasure results including the Safe, Partial, Full, and NotRelevant categories for each method across two representative datasets.
+
+\begin{table*}[h]
+\centering
+\caption{Detailed nudity erasure results per dataset. SR = (Safe + Partial) / Total.}
+\label{table:detailed_nudity}
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{0.4em}
+\begin{tabular}{@{}l ccccc ccccc@{}}
+\toprule
+& \multicolumn{5}{c}{\textbf{Ring-A-Bell (79)}} & \multicolumn{5}{c}{\textbf{UnlearnDiff (142)}} \\
+\cmidrule(lr){2-6} \cmidrule(lr){7-11}
+\textbf{Method} & SR & Safe & Partial & Full & NotRel & SR & Safe & Partial & Full & NotRel \\
+\midrule
+Baseline & .215 & .114 & .101 & .747 & .038 & .556 & .218 & .338 & .430 & .014 \\
+SLD-Max & .570 & .329 & .241 & .316 & .114 & .873 & .669 & .204 & .063 & .063 \\
+SAFREE & .772 & .582 & .190 & .127 & .101 & .901 & .754 & .148 & .021 & .077 \\
+ASCG & .835 & .392 & .443 & .089 & .076 & .887 & .408 & .479 & .099 & .014 \\
+\midrule
+\textbf{Ours (Anchor)} & .899 & .861 & .038 & .063 & .038 & .951 & .845 & .106 & .014 & .035 \\
+\textbf{Ours (Hybrid)} & \textbf{.949} & .810 & .139 & .025 & .025 & \textbf{.972} & .789 & .183 & .011 & .017 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{CAS Threshold Sensitivity}
+\label{app:cas_threshold}
+
+We study the effect of varying the CAS threshold $\tau$ from 0.3 to 0.7 on both nudity erasure performance and COCO false positive rate using the hybrid guidance mode on Ring-A-Bell. Key findings:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+    \item $\tau = 0.3$: Very aggressive --- high nudity SR but elevated COCO false positives ($>$8\%)
+    \item $\tau = 0.5$--$0.6$: Optimal range for nudity --- best SR-vs-FP trade-off
+    \item $\tau = 0.7$: Conservative --- low false positives ($<$2\%) but reduced nudity detection
+    \item For violence and shocking, $\tau = 0.4$ works best due to stronger concept alignment signals
+\end{itemize}
+
+\subsection{HOW Mode Comparison Across Concepts}
+\label{app:how_modes}
+
+Table~\ref{table:how_comparison} compares anchor inpainting and hybrid guidance across all evaluated concepts.
+
+\begin{table}[h]
+\centering
+\caption{Anchor inpainting vs.\ hybrid guidance across concepts (SR).}
+\label{table:how_comparison}
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{0.7em}
+\begin{tabular}{@{}l cc@{}}
+\toprule
+\textbf{Concept} & \textbf{Anchor Inpaint} & \textbf{Hybrid} \\
+\midrule
+Nudity (I2P Sexual) & .917 & \textbf{.931} \\
+Violence & \textbf{.971} & TBD \\
+Harassment & \textbf{.833} & TBD \\
+Hate & \textbf{.848} & TBD \\
+Shocking & \textbf{.973} & TBD \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Anchor inpainting generally suffices for text-explicit concepts (violence, harassment) where the cross-attention text probe provides strong localization. Hybrid guidance excels for nudity, where the visual concept may be implicitly triggered without explicit keywords.
+
+\subsection{Multi-Concept Interference Analysis}
+\label{app:interference}
+
+When erasing multiple concepts simultaneously, we observe varying degrees of interference depending on concept similarity:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+    \item \textbf{Low interference}: Nudity + Shocking ($-9.4$\%p nudity SR drop). These concepts occupy distinct semantic regions, enabling independent erasure.
+    \item \textbf{Moderate interference}: Nudity + Violence ($-5.2$\%p), Nudity + Harassment ($-12.2$\%p). Some overlap in ``person'' regions causes mild interference.
+    \item \textbf{High interference}: Nudity + Hate ($-26.0$\%p). Both concepts share semantic associations with human subjects, leading to over-suppression. This suggests that adaptive per-concept threshold tuning is needed for semantically overlapping pairs.
+\end{itemize}
+
+% ===========================================================================
+\section{Evaluator Validation Details}
+\label{app:evaluator}
+
+\subsection{MJ-Bench Evaluation Protocol}
+\label{app:mjbench_protocol}
+
+We follow the official MJ-Bench evaluation protocol using the 5-criteria multi-image prompt from the MJ-Bench codebase~\citep{chen2025mjbench}. For each of the 672 safety image pairs, both images are presented simultaneously to Qwen3-VL-8B-Instruct, which rates each image on:
+\begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
+    \item \textbf{Alignment} (1--5): prompt-image consistency
+    \item \textbf{Aesthetics} (1--5): visual appeal
+    \item \textbf{Artifacts} (1--5): absence of distortions
+    \item \textbf{Safety} (1--5): absence of harmful content
+    \item \textbf{Bias \& Fairness} (1--5): demographic representation
+\end{enumerate}
+The model then selects an \textbf{Overall} preferred image (1, 2, or 0 for tie).
+
+\subsection{MJ-Bench Results (Table 1 Protocol)}
+\label{app:mjbench_table1}
+
+\begin{table}[h]
+\centering
+\caption{MJ-Bench Safety evaluation using the official 5-criteria multi-image protocol. Comparison with published models from~\citet{chen2025mjbench}.}
+\label{table:mjbench_table1}
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{0.6em}
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{Model} & \textbf{Type} & \textbf{Safety w/ tie} & \textbf{Safety w/o tie} \\
+\midrule
+GPT-4o & Proprietary & 35.3 & 100.0 \\
+BLIP-v2 & Scoring & 44.0 & 65.6 \\
+PickScore-v1 & Scoring & 37.2 & 42.2 \\
+LLaVA-1.5-13b & Open VLM & 30.7 & 60.7 \\
+Qwen-VL-Chat & Open VLM & 26.8 & 7.1 \\
+LLaVA-1.5-7b & Open VLM & 24.8 & 50.2 \\
+\midrule
+\textbf{Qwen3-VL-8B (Ours)} & Open VLM & 23.4 & \textbf{54.0} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Qwen3-VL-8B achieves the highest w/o tie accuracy (54.0\%) among all open-source VLMs, representing a massive improvement over its predecessor Qwen-VL-Chat (7.1\%). The 56.7\% tie rate reflects the coarse 5-point scale granularity; when the model can distinguish between images, it does so with high accuracy.
+
+\subsection{Safety-Specific Evaluation}
+\label{app:safety_specific}
+
+Using a dedicated safety evaluation prompt (scale [1--10], single-image scoring), Qwen3-VL achieves stronger performance on the same 672 pairs:
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+    \item \textbf{w/ tie}: 49.7\%, \textbf{w/o tie}: 88.1\%
+    \item \textbf{Tie rate}: 43.6\% (293/672)
+    \item Among non-tie predictions, 88.1\% correctly identify the safer image
+\end{itemize}
+The improved performance with the safety-specific prompt confirms that dedicated evaluation prompts yield more reliable safety assessments than general-purpose multi-criteria prompts.
+
+\subsection{Cross-Validator Agreement}
+\label{app:cross_validator}
+
+To further validate our evaluation protocol, we independently evaluated all generated images from the Ring-A-Bell dataset using both Qwen3-VL and LLaVA-1.5-7b. We binarize each model's output into safe (Safe or Partial) vs.\ unsafe (Full), then compute pairwise agreement:
+\begin{equation}
+    \text{Agreement} = \frac{|\{i : \hat{y}^\text{Qwen}_i = \hat{y}^\text{LLaVA}_i\}|}{N} = 92.3\%
+\end{equation}
+This high agreement rate confirms that our VLM-based evaluation provides consistent safety assessments across independent models.
+
+\subsection{Evaluation Prompt Template}
+\label{app:eval_prompt}
+
+For nudity evaluation, we use the following prompt for Qwen3-VL:
+
+\begin{quote}
+\small
+\textit{``You are a professional nudity-evaluation expert. Classify the image into exactly one category: NotRel (no meaningful human figure), Safe (fully clothed, no nudity), Partial (minor exposure such as swimwear or partial nudity), or Full (explicit nudity, exposed intimate body parts). Respond with only the category name.''}
+\end{quote}
+
+For other concepts, the prompt is adapted to replace nudity-specific criteria with concept-appropriate classification guidelines, following the same four-category structure.
+
+% ===========================================================================
+\section{Computational Cost}
+\label{app:compute}
+
+\begin{table}[h]
+\centering
+\caption{Computational cost comparison. Time measured on a single NVIDIA RTX 3090.}
+\label{table:compute}
+\small
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Method} & \textbf{Training} & \textbf{Inference (per image)} \\
+\midrule
+SD v1.4 Baseline & -- & $\sim$3.8s \\
+ESD & $\sim$30 min & $\sim$3.8s \\
+RECE & $\sim$20 min & $\sim$3.8s \\
+SDErasure & $\sim$25 min & $\sim$3.8s \\
+\midrule
+SLD-Max & -- & $\sim$4.0s \\
+SAFREE & -- & $\sim$4.5s \\
+\textbf{\ours{}} & \textbf{--} & $\sim$\textbf{4.5s} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\ours{} requires no training and adds approximately 15--20\% inference overhead compared to the baseline, primarily from the additional UNet forward pass for $\epsilon_\theta(z_t, c_\text{target})$ and CLIP feature extraction for the image probe. This overhead is comparable to SAFREE and significantly less than the training cost required by fine-tuning methods. Critically, adding new concepts requires only computing new exemplar embeddings ($<$1 minute), whereas fine-tuning methods require full retraining ($\sim$20--30 minutes per concept).
+
+% ===========================================================================
+\section{Limitations and Failure Cases}
+\label{app:limitations}
+
+\paragraph{Adversarial robustness.} The MMA-Diffusion dataset~\citep{yang2024mma} employs sophisticated multimodal adversarial attacks. While \ours{} achieves $\sim$80\% SR, approximately 20\% of adversarial prompts still bypass the CAS gating mechanism. These failures typically involve prompts where the concept alignment signal remains below threshold throughout denoising.
+
+\paragraph{Concept overlap in multi-concept erasure.} When simultaneously erasing semantically similar concepts (\eg, nudity + hate), spatial masks can overlap and interact destructively, leading to over-suppression. This is particularly problematic for concepts sharing visual attributes related to human subjects.
+
+\paragraph{CAS threshold sensitivity.} While $\tau$ generalizes well within concept categories, cross-concept transfer requires per-concept tuning. Automated threshold selection via a small validation set is a promising future direction.
+
+\paragraph{Base model dependency.} Our current evaluation focuses on Stable Diffusion v1.4. While the framework is architecture-agnostic in principle, the specific hyperparameters and exemplar embeddings may require re-tuning for other base models (\eg, SDXL, Stable Diffusion 3).

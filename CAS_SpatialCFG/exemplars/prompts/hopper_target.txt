@@ -1,0 +1,2 @@
+# hopper target exemplar image prompts
+# Used to generate target_*.png images in exemplars/artists/hopper/images/

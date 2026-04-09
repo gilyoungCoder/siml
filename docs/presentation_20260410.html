@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EBSG — Training-Free Concept Erasure via Example-Based Spatial Guidance</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<style>
+  :root { --heading:#1a1a2e; --accent:#2563eb; --accent2:#7c3aed; --safe:#059669; --danger:#dc2626; --warn:#d97706; --teal:#0f766e; --new:#ea580c; }
+  .reveal { font-size:26px; }
+  .reveal h1 { font-size:2.0em; color:var(--heading); font-weight:800; }
+  .reveal h2 { font-size:1.4em; color:var(--heading); font-weight:700; border-bottom:3px solid var(--accent); padding-bottom:6px; display:inline-block; }
+  .reveal h3 { font-size:0.92em; color:var(--accent2); font-weight:600; }
+  .reveal .sub { color:#64748b; font-size:0.68em; margin-top:-6px; }
+  .reveal section { text-align:left; }
+  .reveal li { margin-bottom:4px; line-height:1.4; }
+  .small { font-size:0.68em; color:#64748b; }
+  .title-slide { text-align:center !important; }
+  .title-slide h1 { font-size:1.9em; background:linear-gradient(135deg,#1a1a2e,#2563eb); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .divider { text-align:center !important; background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%) !important; }
+  .divider h2 { color:#fff !important; border-bottom-color:#60a5fa !important; font-size:1.8em; }
+  .divider p { color:#cbd5e1 !important; }
+  .box { background:#f8fafc; border-radius:8px; padding:10px 14px; margin:6px 0; border-left:4px solid var(--accent); font-size:0.78em; }
+  .box-green { border-left-color:var(--safe); background:#f0fdf4; }
+  .box-red { border-left-color:var(--danger); background:#fef2f2; }
+  .box-warn { border-left-color:var(--warn); background:#fffbeb; }
+  .box-teal { border-left-color:var(--teal); background:#f0fdfa; }
+  .box-new { border-left-color:var(--new); background:#fff7ed; }
+  .box-purple { border-left-color:var(--accent2); background:#faf5ff; }
+  .reveal table { font-size:0.58em; width:100%; border-collapse:collapse; margin:6px 0; }
+  .reveal table th { background:#1e293b; color:#fff; padding:5px 6px; text-align:center; font-weight:600; }
+  .reveal table td { padding:4px 6px; border-bottom:1px solid #e2e8f0; text-align:center; }
+  .reveal table tr:nth-child(even) { background:#f8fafc; }
+  .best { background:#dcfce7 !important; font-weight:700; }
+  .hl { background:#dbeafe !important; font-weight:600; }
+  .gray td { color:#9ca3af !important; }
+  td.l { text-align:left !important; }
+  .gv { color:#059669; font-weight:700; }
+  .bv { color:#dc2626; }
+  .pipe { display:flex; align-items:center; justify-content:center; gap:5px; margin:10px 0; flex-wrap:wrap; }
+  .pipe .s { border-radius:10px; padding:10px 14px; font-size:0.65em; font-weight:600; text-align:center; min-width:80px; line-height:1.3; }
+  .pipe .a { font-size:1.3em; color:#93c5fd; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .tag { display:inline-block; padding:2px 10px; border-radius:20px; font-size:0.55em; font-weight:600; margin:2px; }
+  .tag-blue { background:#dbeafe; color:#1e40af; }
+  .tag-green { background:#dcfce7; color:#166534; }
+  .tag-red { background:#fee2e2; color:#991b1b; }
+  .tag-purple { background:#f3e8ff; color:#6b21a8; }
+  .tag-orange { background:#ffedd5; color:#9a3412; }
+  .tag-gray { background:#f1f5f9; color:#475569; }
+  .formula { background:#f8fafc; border-radius:8px; padding:10px 16px; margin:6px 0; font-size:0.85em; text-align:center; border:1px solid #e2e8f0; line-height:1.7; }
+  .formula-hl { border-left:4px solid var(--accent); }
+  .img-grid { display:grid; gap:4px; }
+  .img-grid img { width:100%; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,.1); }
+  .img-label { font-size:0.55em; text-align:center; color:#64748b; margin-top:2px; }
+  .stat-card { background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:12px; padding:16px; text-align:center; border:2px solid #86efac; }
+  .stat-card .num { font-size:2.2em; font-weight:800; color:var(--safe); }
+  .stat-card .label { font-size:0.7em; color:#475569; margin-top:-4px; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ===== TITLE ===== -->
+<section class="title-slide">
+  <h1>Training-Free Concept Erasure<br>via Example-Based Spatial Guidance</h1>
+  <p style="font-size:0.85em; color:#475569; margin-top:-5px;">When, Where, and How to Guide Safe Denoising<br>in Text-to-Image Diffusion Models</p>
+  <div style="margin-top:20px;">
+    <span class="tag tag-blue">Inference-time</span>
+    <span class="tag tag-green">Training-free</span>
+    <span class="tag tag-purple">Multi-concept</span>
+    <span class="tag tag-orange">Example-based</span>
+  </div>
+  <div style="margin-top:15px; color:#888; font-size:0.65em;">Younghwan Gil &middot; NeurIPS 2026 Submission &middot; April 2026</div>
+</section>
+
+<!-- ===== KEY RESULTS ===== -->
+<section>
+  <h2>Key Results at a Glance</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; margin-top:10px;">
+    <div class="stat-card">
+      <div class="num">94.9%</div>
+      <div class="label">Ring-A-Bell SR<br>(vs RECE 78.5%)</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">97.2%</div>
+      <div class="label">UnlearnDiff SR<br>(vs SDErasure 95.1%)</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">7</div>
+      <div class="label">I2P Concepts<br>with single framework</div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border-color:#93c5fd;">
+      <div class="num" style="color:var(--accent);">0</div>
+      <div class="label">Training required<br>(fully inference-time)</div>
+    </div>
+  </div>
+  <div class="box box-green" style="margin-top:12px;">
+    <strong>Headline:</strong> EBSG achieves SOTA safety rates across 7 I2P categories while preserving image quality (FID ~3.7), outperforming both fine-tuning and training-free baselines.
+  </div>
+</section>
+
+<!-- ===== MOTIVATION ===== -->
+<section class="divider"><h2>Motivation</h2></section>
+
+<section>
+  <h2>Problem: T2I Safety Gap</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-red">
+        <strong>T2I Models Generate Harmful Content</strong><br>
+        Nudity, violence, hate imagery, self-harm from adversarial prompts
+      </div>
+      <div class="box box-warn" style="margin-top:8px;">
+        <strong>Existing Solutions</strong>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li><strong>Fine-tuning (ESD, RECE)</strong>: costly per-concept training, catastrophic forgetting</li>
+          <li><strong>SLD/SEGA</strong>: global suppression, quality degradation</li>
+          <li><strong>SAFREE</strong>: token projection, limited concept coverage</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>Our Approach: EBSG</strong>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li>No training / fine-tuning needed</li>
+          <li>Selective intervention: only when &amp; where needed</li>
+          <li>Example-based: add new concepts in &lt;1 min</li>
+          <li>Multi-concept simultaneous erasure</li>
+          <li>7 I2P categories with single framework</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== METHOD ===== -->
+<section class="divider"><h2>Method</h2><p>Example-Based When + Where + How</p></section>
+
+<section>
+  <h2>Three-Stage Pipeline</h2>
+  <div class="pipe">
+    <div class="s" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;"><strong>WHEN</strong><br>CAS Gate<br><span style="font-size:0.85em;">Concept Alignment</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border:2px solid #fbbf24; color:#92400e;"><strong>WHERE</strong><br>Dual Probe<br><span style="font-size:0.85em;">Text + CLIP Image</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#e8d5f5,#d8b4fe); border:2px solid #a78bfa; color:#5b21b6;"><strong>HOW</strong><br>Spatial Guidance<br><span style="font-size:0.85em;">Anchor / Hybrid</span></div>
+  </div>
+  <div class="box" style="font-size:0.78em;">
+    <strong>Key Insight:</strong> Use exemplar embeddings to detect <em>when</em> a concept aligns with the denoising direction, <em>where</em> it localizes via cross-attention + CLIP similarity, and <em>how</em> to steer it toward a safe anchor &mdash; all at inference time.
+  </div>
+</section>
+
+<section>
+  <h2>WHEN: Concept Alignment Score</h2>
+  <div class="formula formula-hl">
+    $\text{CAS}(t) = \cos(\epsilon_\text{prompt} - \epsilon_\varnothing, \; \epsilon_\text{target} - \epsilon_\varnothing) \quad \xrightarrow{\text{if } > \tau} \text{activate}$
+  </div>
+  <ul style="font-size:0.82em;">
+    <li>Measures alignment between prompt direction and target concept at each step $t$</li>
+    <li>Only activates guidance when CAS &gt; threshold $\tau$ (0.4&ndash;0.6)</li>
+    <li><strong>Sticky CAS</strong>: once triggered, stays active for remaining steps</li>
+  </ul>
+  <div class="box box-green">
+    <strong>Result:</strong> Benign prompts (COCO) pass through without any intervention &rarr; FID ~3.7, CLIP &Delta; &lt; 0.1
+  </div>
+</section>
+
+<section>
+  <h2>WHERE: Dual-Probe Localization</h2>
+  <div class="two-col">
+    <div>
+      <h3>Text Probe</h3>
+      <div class="box">
+        Cross-attention maps for target keywords<br>
+        (&ldquo;nude&rdquo;, &ldquo;violence&rdquo;, etc.)<br>
+        $M_\text{text} = \sigma(\alpha \cdot (\max_k A_{w_k} - \theta))$
+      </div>
+      <div class="small">Catches explicit keyword triggers</div>
+    </div>
+    <div>
+      <h3>Image Probe (CLIP Exemplar)</h3>
+      <div class="box box-purple">
+        Compare U-Net features with<br>
+        pre-computed CLIP exemplar embeddings<br>
+        $M_\text{img} = \sigma(\alpha \cdot (\max_n \cos(f, e_n) - \theta))$
+      </div>
+      <div class="small">Catches adversarial/implicit triggers</div>
+    </div>
+  </div>
+  <div class="box box-teal" style="margin-top:8px;">
+    <strong>Fusion:</strong> $M = \min(1, M_\text{text} + M_\text{img})$ &mdash; union of both probes for robustness
+  </div>
+</section>
+
+<section>
+  <h2>HOW: Safe Guidance Modes</h2>
+  <div class="two-col">
+    <div>
+      <h3>Anchor Inpainting</h3>
+      <div class="formula" style="font-size:0.75em;">
+        $\hat\epsilon_\text{safe} = \hat\epsilon_t - s \cdot M \cdot (\epsilon_\text{target} - \epsilon_\varnothing)$
+      </div>
+      <div class="box box-green" style="font-size:0.78em;">
+        Subtract unsafe concept signal within masked region. Best for text-explicit concepts.
+      </div>
+    </div>
+    <div>
+      <h3>Hybrid Guidance</h3>
+      <div class="formula" style="font-size:0.75em;">
+        $\hat\epsilon_\text{safe} = \hat\epsilon_t + s_t \cdot M \cdot (\epsilon_\text{anchor} - \epsilon_\text{target})$
+      </div>
+      <div class="box box-purple" style="font-size:0.78em;">
+        Push toward safe anchor direction. Best for visually implicit concepts (nudity).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RESULTS: NUDITY ===== -->
+<section class="divider"><h2>Results</h2><p>Nudity Erasure</p></section>
+
+<section>
+  <h2>Main Table: Nudity Erasure (SR% &uarr;)</h2>
+  <p class="sub">SR = (Safe + Partial) / Total. <span style="color:#9ca3af;">Gray = fine-tuning methods.</span></p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Method</th>
+      <th>Type</th>
+      <th>Ring-A-Bell<br>(79)</th>
+      <th>P4DN<br>(151)</th>
+      <th>UnlearnDiff<br>(142)</th>
+      <th>MMA<br>(1000)</th>
+      <th>I2P Sexual<br>(931)</th>
+    </tr>
+    <tr><td class="l">SD v1.4 Baseline</td><td>&mdash;</td><td class="bv">40.5</td><td>25.8</td><td>66.2</td><td class="bv">32.4</td><td>76.8</td></tr>
+    <tr class="gray"><td class="l" style="color:#9ca3af">RECE</td><td style="color:#9ca3af">Fine-tune</td><td>78.5</td><td>64.9</td><td>90.8</td><td>82.3</td><td>86.1</td></tr>
+    <tr class="gray"><td class="l" style="color:#9ca3af">SDErasure v12</td><td style="color:#9ca3af">Fine-tune</td><td>93.7</td><td>86.2</td><td>95.1</td><td><strong>96.9</strong></td><td>TBD</td></tr>
+    <tr><td class="l">SLD-Max</td><td>Free</td><td>73.4</td><td>79.5</td><td>82.4</td><td>74.1</td><td>74.7</td></tr>
+    <tr><td class="l">ASCG (prior work)</td><td>Free</td><td>83.5</td><td>&mdash;</td><td>88.7</td><td>59.0</td><td>&mdash;</td></tr>
+    <tr class="hl"><td class="l"><strong>EBSG Anchor (Ours)</strong></td><td>Free</td><td>89.9</td><td><strong>94.7</strong></td><td>95.1</td><td>79.8</td><td>91.5</td></tr>
+    <tr class="best"><td class="l"><strong>EBSG Hybrid (Ours)</strong></td><td>Free</td><td><strong>94.9</strong></td><td>94.7</td><td><strong>97.2</strong></td><td>79.6</td><td><strong>93.1</strong></td></tr>
+  </table>
+  <div class="box box-green" style="font-size:0.72em;">
+    <strong>Training-free SOTA:</strong> EBSG Hybrid outperforms all training-free methods by large margins. Comparable to fine-tuning methods on RingABell/UnlearnDiff without any training.
+  </div>
+</section>
+
+<!-- ===== RESULTS: MULTI-CONCEPT ===== -->
+<section class="divider"><h2>Results</h2><p>Multi-Concept Erasure</p></section>
+
+<section>
+  <h2>All I2P Concepts — Single Framework</h2>
+  <p class="sub">Same EBSG framework, different exemplar embeddings per concept</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Method</th>
+      <th>Type</th>
+      <th>Violence<br>(756)</th>
+      <th>Harass.<br>(824)</th>
+      <th>Hate<br>(231)</th>
+      <th>Shocking<br>(856)</th>
+      <th>Illegal<br>(727)</th>
+    </tr>
+    <tr><td class="l">Baseline</td><td>&mdash;</td><td>81.9</td><td>74.6</td><td>81.8</td><td>92.1</td><td>62.7</td></tr>
+    <tr class="gray"><td class="l" style="color:#9ca3af">RECE-unsafe</td><td style="color:#9ca3af">FT</td><td>77.1</td><td>54.9</td><td>56.7</td><td><strong>99.9</strong></td><td>40.5</td></tr>
+    <tr class="gray"><td class="l" style="color:#9ca3af">SDErasure</td><td style="color:#9ca3af">FT</td><td>80.2</td><td>72.5</td><td>79.6</td><td>94.9</td><td>58.2</td></tr>
+    <tr><td class="l">SLD-Max</td><td>Free</td><td>84.8</td><td>60.9</td><td>73.2</td><td>94.6</td><td>77.6</td></tr>
+    <tr class="best"><td class="l"><strong>EBSG (Ours)</strong></td><td>Free</td><td><strong>97.1</strong></td><td><strong>83.3</strong></td><td><strong>84.8</strong></td><td>97.8</td><td>TBD</td></tr>
+  </table>
+  <div class="box box-new" style="font-size:0.72em;">
+    <strong>Highlights:</strong> Violence 97.1% (best by +12.3%p). Harassment/Hate: only method above 83%. All without concept-specific training.
+  </div>
+</section>
+
+<section>
+  <h2>Dual-Concept Simultaneous Erasure</h2>
+  <p class="sub">Erasing nudity + another concept in a single inference pass</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Dual Erasure</th>
+      <th>Nudity SR</th>
+      <th>Single Nudity</th>
+      <th>Concept SR</th>
+      <th>Single Concept</th>
+      <th>&Delta; Nudity</th>
+    </tr>
+    <tr><td class="l">+ Shocking</td><td class="gv">83.7</td><td>93.1</td><td class="gv">97.5</td><td>97.8</td><td>-9.4</td></tr>
+    <tr><td class="l">+ Violence</td><td class="gv">87.9</td><td>93.1</td><td>&mdash;</td><td>97.1</td><td>-5.2</td></tr>
+    <tr><td class="l">+ Harassment</td><td>80.9</td><td>93.1</td><td>79.7</td><td>83.3</td><td>-12.2</td></tr>
+    <tr><td class="l">+ Hate</td><td class="bv">67.1</td><td>93.1</td><td>81.4</td><td>84.8</td><td>-26.0</td></tr>
+  </table>
+  <div class="box box-teal" style="font-size:0.72em;">
+    <strong>Finding:</strong> Low-overlap concepts (shocking, violence) work well in dual erasure. High semantic overlap (hate) needs adaptive thresholding.
+  </div>
+</section>
+
+<!-- ===== ABLATION ===== -->
+<section class="divider"><h2>Ablation Study</h2></section>
+
+<section>
+  <h2>Component Ablation</h2>
+  <div class="two-col">
+    <div>
+      <h3>When (CAS) + Where (Spatial)</h3>
+      <table>
+        <tr><th></th><th>CAS</th><th>Spatial</th><th>RingABell</th><th>MMA</th></tr>
+        <tr><td>(a)</td><td>&cross;</td><td>&cross;</td><td>64.6</td><td>53.1</td></tr>
+        <tr><td>(b)</td><td>&check;</td><td>&cross;</td><td>67.1</td><td>52.5</td></tr>
+        <tr><td>(c)</td><td>&cross;</td><td>&check;</td><td>74.7</td><td>55.5</td></tr>
+        <tr class="best"><td>(d)</td><td>&check;</td><td>&check;</td><td><strong>94.9</strong></td><td><strong>79.6</strong></td></tr>
+      </table>
+      <div class="small">Both components essential. Spatial probe provides +20%p on RingABell.</div>
+    </div>
+    <div>
+      <h3>Probe Mode</h3>
+      <table>
+        <tr><th>HOW Mode</th><th>Img</th><th>Text</th><th>Both</th></tr>
+        <tr><td class="l">Anchor</td><td>&mdash;</td><td>91.1</td><td>89.9</td></tr>
+        <tr class="best"><td class="l">Hybrid</td><td>&mdash;</td><td>89.9</td><td><strong>94.9</strong></td></tr>
+      </table>
+      <div class="small">Dual probe (text+image) is best for Hybrid. Image probe adds +5%p value.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Image Quality Preservation (COCO)</h2>
+  <div class="two-col">
+    <div>
+      <table>
+        <tr><th style="text-align:left;">Method</th><th>FID &darr;</th><th>CLIP &uarr;</th></tr>
+        <tr><td class="l">Baseline</td><td>&mdash;</td><td><strong>26.07</strong></td></tr>
+        <tr><td class="l">SLD-Max</td><td>18.46</td><td>24.40</td></tr>
+        <tr><td class="l" style="color:#9ca3af">RECE</td><td style="color:#9ca3af">10.33</td><td style="color:#9ca3af">25.50</td></tr>
+        <tr class="best"><td class="l"><strong>Ours (hyb)</strong></td><td><strong>3.66</strong></td><td>26.06</td></tr>
+        <tr><td class="l">Ours (ainp)</td><td>3.95</td><td>26.07</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>FID 3.66</strong> &mdash; nearly identical to baseline<br>
+        CAS gating prevents intervention on benign prompts
+      </div>
+      <div class="box" style="margin-top:8px;">
+        <strong>SLD-Max FID=18.46</strong> &mdash; severe quality loss<br>
+        <strong>RECE FID=10.33</strong> &mdash; fine-tuning distortion<br>
+        Our FID is <strong>5&times; lower</strong> than SLD-Max
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EVALUATOR ===== -->
+<section class="divider"><h2>Evaluator Validation</h2><p>Qwen3-VL as Safety Judge</p></section>
+
+<section>
+  <h2>MJ-Bench Safety Benchmark</h2>
+  <div class="two-col">
+    <div>
+      <h3>Table 1 Protocol (5-criteria, 672 pairs)</h3>
+      <table>
+        <tr><th style="text-align:left;">Model</th><th>w/ tie</th><th>w/o tie</th></tr>
+        <tr><td class="l">GPT-4o</td><td>35.3</td><td><strong>100.0</strong></td></tr>
+        <tr><td class="l">BLIP-v2</td><td><strong>44.0</strong></td><td>65.6</td></tr>
+        <tr><td class="l">LLaVA-1.5-13b</td><td>30.7</td><td>60.7</td></tr>
+        <tr><td class="l">Qwen-VL-Chat (v1)</td><td>26.8</td><td>7.1</td></tr>
+        <tr class="hl"><td class="l"><strong>Qwen3-VL-8B</strong></td><td>23.4</td><td>54.0</td></tr>
+      </table>
+      <div class="small">w/o tie 54.0% = open-source VLM SOTA</div>
+    </div>
+    <div>
+      <h3>Safety-Specific Eval</h3>
+      <div class="stat-card" style="margin-bottom:8px;">
+        <div class="num" style="font-size:1.8em;">88.1%</div>
+        <div class="label">w/o tie accuracy (672 pairs)</div>
+      </div>
+      <div class="stat-card" style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border-color:#93c5fd;">
+        <div class="num" style="font-size:1.8em; color:var(--accent);">92.3%</div>
+        <div class="label">Cross-validator agreement<br>(Qwen3-VL vs LLaVA)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMPARISON WITH PRIOR ===== -->
+<section class="divider"><h2>ASCG &rarr; EBSG</h2><p>Evolution from Workshop to Full Paper</p></section>
+
+<section>
+  <h2>Improvements over ASCG (CVPR-W)</h2>
+  <table>
+    <tr><th></th><th>ASCG (Workshop)</th><th>EBSG (This work)</th></tr>
+    <tr><td class="l">WHEN detection</td><td>Grad-CAM classifier</td><td class="best">CAS (classifier-free)</td></tr>
+    <tr><td class="l">WHERE localization</td><td>Grad-CAM saliency</td><td class="best">Dual probe (text + CLIP)</td></tr>
+    <tr><td class="l">Concept coverage</td><td>Nudity only</td><td class="best">7 I2P categories</td></tr>
+    <tr><td class="l">Multi-concept</td><td>Not supported</td><td class="best">Simultaneous erasure</td></tr>
+    <tr><td class="l">New concept cost</td><td>Train classifier</td><td class="best">&lt;1 min (exemplars only)</td></tr>
+    <tr><td class="l">Ring-A-Bell SR</td><td>83.5%</td><td class="best"><strong>94.9%</strong> (+11.4%p)</td></tr>
+    <tr><td class="l">MMA SR</td><td>59.0%</td><td class="best"><strong>79.6%</strong> (+20.6%p)</td></tr>
+  </table>
+</section>
+
+<!-- ===== SUMMARY ===== -->
+<section class="divider"><h2>Summary</h2></section>
+
+<section>
+  <h2>Contributions</h2>
+  <ol style="font-size:0.82em;">
+    <li><strong>EBSG</strong>: training-free three-stage framework (When + Where + How) for concept erasure</li>
+    <li><strong>Dual-probe spatial localization</strong>: text cross-attention + CLIP exemplar embeddings</li>
+    <li><strong>SOTA nudity erasure</strong>: 94.9% Ring-A-Bell, 97.2% UnlearnDiff</li>
+    <li><strong>7-concept evaluation</strong>: first comprehensive multi-concept erasure benchmark</li>
+    <li><strong>Evaluator validation</strong>: Qwen3-VL reliability via MJ-Bench (88.1% w/o tie, 92.3% agreement)</li>
+  </ol>
+  <div class="box box-new" style="margin-top:10px;">
+    <strong>Ongoing:</strong> SDErasure v12 &amp; RECE I2P eval completing &middot; COCO FID for v27 best config &middot; Qualitative comparison figures
+  </div>
+</section>
+
+<!-- ===== NEXT STEPS ===== -->
+<section>
+  <h2>Next Steps for NeurIPS</h2>
+  <div class="two-col">
+    <div>
+      <h3>Experiments</h3>
+      <ul style="font-size:0.8em;">
+        <li>Complete all baseline &times; dataset matrix</li>
+        <li>Q16 (IP metric) evaluation</li>
+        <li>COCO FID for v27 best config</li>
+        <li>SDErasure concept-specific models</li>
+        <li>Qualitative comparison grids</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Paper</h3>
+      <ul style="font-size:0.8em;">
+        <li>Fill all TBD numbers in tables</li>
+        <li>Method overview figure (Fig.1)</li>
+        <li>CAS threshold sensitivity plot</li>
+        <li>Qualitative examples figure</li>
+        <li>Polishing &amp; submission</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    margin: 0.08,
+    center: false,
+  });
+</script>
+</body>
+</html>

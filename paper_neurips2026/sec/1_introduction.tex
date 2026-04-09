@@ -1,0 +1,28 @@
+\section{Introduction}
+
+The rapid proliferation of text-to-image (T2I) diffusion models~\citep{rombach2022high,ramesh2022hierarchical} has enabled users to generate photorealistic images from natural language descriptions. While this capability has transformative potential for creative industries, it simultaneously raises critical safety concerns: these models can be exploited to generate harmful content including sexual nudity, violence, hate imagery, and other inappropriate material~\citep{rando2022red,schramowski2023safe,qu2023unsafe}. The challenge of \emph{concept erasure}---suppressing specific unsafe concepts while preserving general generative capability---has thus emerged as a pressing research problem.
+
+Existing safety mechanisms can be broadly categorized into two paradigms. \textbf{Training-based approaches}~\citep{gandikota2023erasing,kim2023towards,gandikota2024unified,gong2024reliable} permanently alter model parameters to remove harmful concepts. While effective at targeted suppression, these methods suffer from several limitations: (1) each concept requires separate fine-tuning, incurring substantial computational cost; (2) parameter modification risks catastrophic forgetting of benign concepts; and (3) once modified, the model remains constrained even when generating entirely safe content.
+\textbf{Training-free inference-time guidance}~\citep{schramowski2023safe,brack2023sega,yoon2024safree} preserves model parameters and intervenes dynamically during generation. However, existing methods apply suppression globally across all spatial locations and timesteps, leading to over-correction of benign regions, semantic drift, and degraded image quality---even when unsafe content is spatially localized or entirely absent.
+
+These limitations stem from a shared fundamental issue: \emph{existing methods lack the ability to determine when, where, and how to intervene in a context-dependent manner}. Unsafe content is often sparse, implicit, or localized within specific image regions, yet current approaches apply uniform intervention regardless of the actual generation context.
+
+To address this, we propose \textbf{Example-Based Spatial Guidance (\ours{})}, a training-free concept erasure framework built on three principled stages:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+    \item \textbf{When} (\S\ref{subsec:when}): A \emph{Concept Alignment Score (CAS)} measures the cosine similarity between the current denoising direction and a target concept direction at each timestep, activating safety guidance only when the generation trajectory aligns with an unsafe concept.
+    \item \textbf{Where} (\S\ref{subsec:where}): A \emph{dual-probe spatial localization} mechanism combines cross-attention maps (text probe) with CLIP exemplar embeddings (image probe) to precisely identify concept-relevant spatial regions, enabling surgical intervention that preserves benign content.
+    \item \textbf{How} (\S\ref{subsec:how}): \emph{Spatially masked safe guidance} steers the denoising trajectory within the localized region, either by subtracting the target concept direction (anchor inpainting) or by pushing the trajectory toward a safe anchor direction (hybrid guidance).
+\end{itemize}
+
+A key innovation of \ours{} is its \emph{example-based} concept representation. Rather than relying on fixed text keywords or model-specific classifiers, we represent target concepts through CLIP exemplar embeddings derived from a small set of reference images. This enables \ours{} to (1) detect implicit unsafe content that evades keyword-based filters, (2) generalize to new concepts without any retraining, and (3) perform \emph{simultaneous multi-concept erasure} by maintaining independent concept representations.
+
+We evaluate \ours{} extensively across seven safety categories from the I2P benchmark~\citep{schramowski2023safe} (nudity, violence, harassment, hate, shocking, illegal activity, and self-harm) and four adversarial prompt datasets (Ring-A-Bell~\citep{tsai2024ring}, MMA-Diffusion~\citep{yang2024mma}, P4D-N~\citep{chin2024prompting4debugging}, and UnlearnDiff~\citep{zhang2024generate}). Our contributions are:
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=2pt]
+    \item We propose \ours{}, a training-free three-stage framework (When + Where + How) for concept erasure that achieves spatially selective, context-dependent safety intervention without modifying model parameters.
+    \item We introduce a dual-probe spatial localization mechanism that combines text-based cross-attention and CLIP exemplar embeddings for robust concept detection, surpassing both keyword-based and classifier-based approaches.
+    \item We demonstrate state-of-the-art performance on nudity erasure (94.9\% SR on Ring-A-Bell, 97.2\% on UnlearnDiff) while maintaining image quality (FID $\sim$3.7 on COCO-30K), outperforming both fine-tuning and training-free baselines.
+    \item We present the first comprehensive multi-concept erasure evaluation across all seven I2P categories, showing that \ours{} effectively suppresses diverse unsafe concepts with a single, unified framework.
+    \item We validate our evaluation protocol through MJ-Bench~\citep{chen2025mjbench} benchmarking, establishing Qwen3-VL~\citep{bai2025qwen3vl} as a reliable automated safety judge with 92.3\% cross-validator agreement.
+\end{enumerate}

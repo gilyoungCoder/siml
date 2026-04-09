@@ -1,0 +1,82 @@
+\section{Method}
+\label{sec:method}
+
+Given a pre-trained text-to-image diffusion model and a set of target concepts to erase (\eg, nudity, violence), \ours{} intervenes at inference time through three stages: \textbf{When} to activate safety guidance, \textbf{Where} to localize the intervention spatially, and \textbf{How} to steer the denoising trajectory toward safe content. Figure~\ref{fig:overview} illustrates the full pipeline.
+
+\subsection{Preliminaries: Classifier-Free Guidance}
+
+In classifier-free guidance (CFG)~\citep{ho2021classifier}, the noise prediction at each denoising step $t$ is:
+\begin{equation}
+    \hat{\epsilon}_t = \epsilon_\varnothing + s \cdot (\epsilon_\theta(z_t, c) - \epsilon_\varnothing),
+\end{equation}
+where $\epsilon_\varnothing = \epsilon_\theta(z_t, \varnothing)$ is the unconditional prediction, $\epsilon_\theta(z_t, c)$ is the conditional prediction given prompt $c$, and $s$ is the guidance scale. The \emph{concept direction} $d_c = \epsilon_\theta(z_t, c) - \epsilon_\varnothing$ represents how the prompt steers generation away from the unconditional distribution.
+
+\subsection{When: Concept Alignment Score (CAS)}
+\label{subsec:when}
+
+Not every denoising step requires safety intervention. Early steps establish global composition while later steps refine details; unsafe content may emerge only at specific timesteps. Applying guidance indiscriminately wastes computation and risks degrading benign content.
+
+We define the \textbf{Concept Alignment Score (CAS)} to measure whether the current denoising direction aligns with a target concept:
+\begin{equation}
+    \text{CAS}(t) = \cos\left(d_\text{prompt}(t), \; d_\text{target}\right) = \frac{d_\text{prompt}(t) \cdot d_\text{target}}{\|d_\text{prompt}(t)\| \cdot \|d_\text{target}\|},
+    \label{eq:cas}
+\end{equation}
+where $d_\text{prompt}(t) = \epsilon_\theta(z_t, c) - \epsilon_\varnothing$ is the prompt-driven concept direction at step $t$, and $d_\text{target} = \epsilon_\theta(z_t, c_\text{target}) - \epsilon_\varnothing$ is the target concept direction computed from exemplar prompts (\eg, ``a nude person'').
+
+Safety guidance is activated only when $\text{CAS}(t) > \tau$, where $\tau$ is a concept-specific threshold (typically $0.4$--$0.6$). This gating mechanism ensures that benign prompts---whose denoising directions do not align with the target concept---proceed without intervention, significantly reducing false positives.
+
+\paragraph{Sticky CAS.} Once CAS exceeds $\tau$ at any step $t_0$, we maintain activation for all subsequent steps $t > t_0$. This prevents the guidance from flickering on and off, which could produce inconsistent results.
+
+\subsection{Where: Dual-Probe Spatial Localization}
+\label{subsec:where}
+
+When CAS triggers intervention, the next question is \emph{where} in the spatial domain the unsafe concept is being generated. We introduce a dual-probe mechanism that combines complementary signals:
+
+\paragraph{Text Probe.} Cross-attention maps in the U-Net associate each spatial location with specific text tokens. Given a set of target keywords $\mathcal{W} = \{w_1, \ldots, w_K\}$ (\eg, ``nude'', ``naked'', ``bare''), we extract the cross-attention map $A_{w_k} \in \mathbb{R}^{H \times W}$ for each keyword $w_k$ and compute the text-based spatial mask:
+\begin{equation}
+    M_\text{text}(i,j) = \sigma\left(\alpha \cdot \left(\max_k A_{w_k}(i,j) - \theta_\text{text}\right)\right),
+    \label{eq:text_probe}
+\end{equation}
+where $\sigma$ is the sigmoid function, $\alpha$ controls sharpness, and $\theta_\text{text}$ is an attention threshold.
+
+\paragraph{Image Probe.} The text probe fails when adversarial prompts avoid explicit unsafe keywords. To address this, we introduce a CLIP-based image probe. We pre-compute CLIP exemplar embeddings $\{e_1, \ldots, e_N\}$ from a small set of concept-representative images ($N \approx 16$). At each denoising step, we extract intermediate U-Net features $f(i,j)$ at each spatial location and compute:
+\begin{equation}
+    M_\text{img}(i,j) = \sigma\left(\alpha \cdot \left(\max_n \cos(f(i,j), e_n) - \theta_\text{img}\right)\right).
+    \label{eq:img_probe}
+\end{equation}
+This probe detects concept-relevant regions based on visual similarity to exemplar images, regardless of the input prompt's phrasing.
+
+\paragraph{Probe Fusion.} The final spatial mask combines both probes via union:
+\begin{equation}
+    M(i,j) = \min\left(1, \; M_\text{text}(i,j) + M_\text{img}(i,j)\right).
+    \label{eq:fusion}
+\end{equation}
+Union fusion ensures that unsafe regions detected by \emph{either} probe are suppressed, providing robustness against both explicit and adversarial prompts. We also support text-only and image-only modes for ablation.
+
+\subsection{How: Spatially Masked Safe Guidance}
+\label{subsec:how}
+
+Given the spatial mask $M$, we modify the noise prediction to suppress the target concept within the localized region. We propose two guidance modes:
+
+\paragraph{Anchor Inpainting.} This mode subtracts the target concept direction from the CFG prediction, scaled by the spatial mask:
+\begin{equation}
+    \hat{\epsilon}_\text{safe} = \hat{\epsilon}_t - s_\text{safe} \cdot M \cdot (\epsilon_\theta(z_t, c_\text{target}) - \epsilon_\varnothing),
+    \label{eq:anchor_inpaint}
+\end{equation}
+where $s_\text{safe}$ controls the suppression strength. This effectively ``inpaints'' the unsafe region by removing the concept-specific signal while preserving the rest of the image.
+
+\paragraph{Hybrid Guidance.} This mode actively pushes the denoising trajectory toward a safe anchor concept (\eg, ``clothed person'' for nudity erasure):
+\begin{equation}
+    \hat{\epsilon}_\text{safe} = \hat{\epsilon}_t + s_t \cdot M \cdot (\epsilon_\theta(z_t, c_\text{anchor}) - \epsilon_\theta(z_t, c_\text{target})),
+    \label{eq:hybrid}
+\end{equation}
+where $s_t$ is the target-to-anchor guidance scale. Hybrid guidance provides stronger suppression and can produce more semantically coherent replacements for the erased content.
+
+\subsection{Multi-Concept Erasure}
+\label{subsec:multi}
+
+A key advantage of \ours{} is its natural support for simultaneous multi-concept erasure. Given $C$ target concepts, each with its own CAS threshold $\tau_c$, spatial mask $M_c$, and guidance direction, we simply apply each concept's guidance independently within its detected region:
+\begin{equation}
+    \hat{\epsilon}_\text{safe} = \hat{\epsilon}_t + \sum_{c=1}^{C} \mathbb{1}[\text{CAS}_c(t) > \tau_c] \cdot s_c \cdot M_c \cdot g_c(z_t),
+\end{equation}
+where $g_c$ is the concept-specific guidance term (Eq.~\ref{eq:anchor_inpaint} or \ref{eq:hybrid}). Since each concept has an independent representation, adding new concepts requires only providing exemplar embeddings---no retraining.

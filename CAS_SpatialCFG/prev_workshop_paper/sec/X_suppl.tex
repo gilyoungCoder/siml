@@ -1,0 +1,192 @@
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=0.94\textwidth]{figures/position_map_revised.png}
+    \caption{
+        \textbf{Qualitative comparison of NudeNet versus VLM-based evaluation.}
+        As illustrated, NudeNet's binary predictions can conflate benign exposure (e.g., swimwear or athletic attire) with harmful content, labeling such cases as \emph{Unsafe}. By contrast, our VLM-based protocol assigns them to \emph{Safe} or \emph{Partial}, better matching human judgment and reducing incentives for over-suppression.
+    }
+    \label{fig:nudenet_vs_vlm_positionmap}
+    \vspace{-0.45em}
+\end{figure*}
+
+\section{\texorpdfstring{Detailed Formulation of $\mathcal{G}$}{Detailed Formulation of G}}
+\label{sec:app:gradcam}
+
+This section details the Grad-CAM operator $\mathcal{G}$ used in ASCG to obtain a spatial saliency map on the latent grid. We instantiate the latent classifier $f_\phi$ as a time-conditioned U-Net that takes $(z_t,t)$ as input and outputs logits $y_t=f_\phi(z_t,t)\in\mathbb{R}^{|\mathcal{C}|}$. For a target class $c\in\mathcal{C}$, we denote its logit by $y_{c,t}$.
+
+Let $A_t^l\in\mathbb{R}^{K\times H_l\times W_l}$ be the activation feature map at an intermediate layer $l$ of the U-Net classifier $f_{\phi}$ during the forward pass. Grad-CAM computes channel-wise importance weights by globally pooling the gradient of the target logit with respect to the feature map:
+\begin{equation}
+\begin{aligned}
+\alpha_{k,t}^{(c)}
+&= \frac{1}{H_lW_l}\sum_{i,j}
+\frac{\partial y_{c,t}}{\partial A_{t,k,i,j}^l}, \\
+k &\in\{1,\dots,K\}.
+\end{aligned}
+\end{equation}
+Intuitively, $\alpha_{k,t}^{(c)}$ measures how sensitive the target class logit $y_{c,t}$ is to changes in the $k$-th feature channel at layer $l$. Then, a coarse Grad-CAM map on the layer grid is obtained by a weighted combination of feature channels followed by a rectifier:
+\begin{equation}
+\begin{aligned}
+\tilde{s}_{t,c}(i,j)
+&= \mathrm{ReLU}\!\left(\sum_{k=1}^{K}\alpha_{k,t}^{(c)} A_{t,k,i,j}^l\right), \\
+\tilde{s}_{t,c}
+&\in \mathbb{R}^{H_l\times W_l}.
+\end{aligned}
+\end{equation}
+We use $\mathrm{ReLU}(\cdot)$ to retain only positive evidence that contributes to increasing the class-$c$ logit. Since $(H_l,W_l)$ is smaller than the latent resolution $(H,W)$ in our setting, we align the saliency map with the latent grid by bilinear interpolation:
+\begin{equation}
+s_{t,c}=\mathrm{Interp}\!\left(\tilde{s}_{t,c};\,H,W\right)\in\mathbb{R}^{H\times W}.
+\end{equation}
+In the main text, we summarize the above computation as
+\begin{equation}
+\begin{aligned}
+s_{t,c}
+&= \mathcal{G}(z_t,c;f_\phi)\in\mathbb{R}^{H\times W}, \\
+\bar{s}_{t,c}
+&= \frac{1}{HW}\sum_{i,j}s_{t,c}(i,j)\in\mathbb{R}.
+\end{aligned}
+\end{equation}
+where $\bar{s}_{t,c}$ is used for intervention (\Cref{eq:gradcam_ps}) and $s_{t,c}$ for localization (\Cref{eq:gradcam_pm,eq:compute_mask}).
+\section{Why VLM-Based Evaluation is Necessary}
+\label{app:vlm_eval}
+
+This section provides additional motivation for adopting a VLM-based evaluation protocol in safety-oriented diffusion research,  with an emphasis on jointly assessing \emph{safety} and \emph{semantic fidelity}.
+
+\begin{figure}[t]
+    \centering 
+    \includegraphics[width=\linewidth]{figures/grid_nudenet_vs_VLM_nude.png}
+    \caption{\textbf{A case study of NudeNet evaluation for over-sensitivity.} Even with a standard threshold, NudeNet’s binary classification incorrectly flags socially acceptable exposure as full nudity.}
+    \label{fig:qual_top}
+\end{figure}
+    
+\begin{figure}[t]
+    \centering 
+    \includegraphics[width=\linewidth]{figures/grid_nudenet_vs_VLM_notrel.png}
+    \vspace{-20pt}
+    \caption{\textbf{A case study of NudeNet evaluation for semantic collapse.} NudeNet fails to detect semantic collapse. When high guidance scales destroy image structure, NudeNet incorrectly labels the resulting not-relevant noise as safe simply due to the absence of recognizable human features. }
+    \label{fig:qual_bottom}
+\end{figure}
+
+\subsection{Limitations of existing evaluation metrics}
+
+Safety-oriented diffusion studies targeting nudity or sexually explicit content are commonly evaluated using automated nudity detectors and classifier-based safety metrics due to their scalability. In particular, NudeNet~\citep{notai_nudenet_2019} is widely adopted as a default evaluation tool, typically producing a coarse nudity decision. Several works report CLIP-based safety classifiers~\citep{schramowski2022machineshelpansweringquestion} as a complementary signal, which estimate inappropriate content through image-text representation scoring against curated descriptors rather than direct semantic verification.
+
+While convenient, these metrics exhibit systematic limitations for safety with semantic preservation. First, coarse nudity detectors may conflate benign exposure (e.g., swimwear or athletic attire) with genuinely harmful content, yielding false positives that incentivize over-suppression. Second, embedding-based safety classifiers are not designed to assess whether an image remains semantically coherent; they may provide a low-risk score even when the generation has degraded into artifacts, blur, or noise. Consequently, detector-only evaluation risks misidentifying semantic collapse as safety, rendering these metrics fundamentally misaligned with human perception. 
+
+% Commonly used nudity classifiers such as NudeNet rely on binary or highly
+% coarse-grained labels.
+% As a result, images depicting short pants, bikinis, or other socially acceptable
+% levels of skin exposure are frequently classified as \emph{full nudity}.
+% From a practical perspective, such images are often well within acceptable usage
+% boundaries.
+% However, under binary nudity metrics, these cases are treated as complete
+% failures, making it difficult to distinguish genuinely harmful content from
+% benign visual exposure.
+
+% General-purpose safety classifiers such as Q16 suffer from a different but
+% related limitation.
+% Rather than directly evaluating visual semantics, these models estimate
+% inappropriateness by comparing image embeddings against positive and negative
+% textual prompts.
+% While effective as a coarse filter, this approach cannot reliably determine
+% whether the semantic structure of an image has been preserved or destroyed.
+
+\subsection{Semantic collapse confounds evaluation}
+
+A distinct confound arises from the evaluation protocol rather than the detector alone. Quality and prompt adherence are typically reported on benign benchmarks, while safety detectors are applied on sensitive prompts. This mismatch leaves semantic fidelity on sensitive prompts largely unmeasured: a method may preserve quality on benign data yet collapse generations under nudity prompts, and still be scored as safe because detectors may fail to activate on unrecognizable outputs. Thus, safety can be overstated unless semantic validity is assessed on the same sensitive prompt distribution.
+
+
+
+% A key failure mode of existing safety evaluation is its susceptibility to semantic collapse. When a safety method applies overly strong suppression on nudity-related prompts, generations may lose recognizable structure and degenerate into blur, artifacts, or noise. However, detector-based metrics can then assign low-risk scores not because harmful content was removed in a controlled manner, but because there is insufficient semantic evidence for the detector to respond to. As a result, semantic degradation can be miscounted as successful concept removal, inflating apparent safety.
+
+% This confound is amplified by the common practice of measuring quality and prompt adherence on benign benchmarks while applying safety metrics on sensitive prompts. Without evaluating semantic fidelity on the same sensitive prompt distribution, it is difficult to distinguish genuine safety from safety-by-destruction. Our evaluation therefore explicitly accounts for semantic validity under sensitive prompts, aligning safety assessment with the practical goal of suppressing harmful concepts \emph{without} collapsing intended semantics.
+
+% More fundamentally, common evaluation pipelines often decouple safety assessment from semantic fidelity. Image quality and prompt adherence are typically measured on benign benchmarks such as COCO~\citep{lin2014microsoft}, whereas safety metrics are applied separately on sensitive (e.g., nudity-related) prompts; fidelity metrics are rarely reported on this sensitive prompt distribution. This separation can confound interpretation: a method that collapses semantics under nudity prompts may appear highly effective, since degraded outputs can evade detector-based metrics simply due to the absence of recognizable human attributes and are therefore counted as successful concept removal.
+
+% This raises a central concern for deployment: safety achieved by destroying semantics undermines model utility and user trust. Our objective is explicitly different. We aim to suppress targeted harmful concepts while preserving the semantic intent of benign regions and overall prompt alignment. Rather than indiscriminately repelling generations away from harmful concepts, we steer them toward \emph{safe semantic alternatives}, promoting global structure, object coherence, and faithful conditioning.
+
+% More critically, existing evaluation pipelines often decouple safety from
+% semantic fidelity.
+% Image quality and semantic preservation are typically evaluated only on benign
+% datasets such as COCO.
+% Consequently, a method that severely degrades images on nudity-related prompts
+% may appear highly effective: visually broken or semantically meaningless outputs
+% often avoid triggering NudeNet or Q16, and are therefore counted as successful
+% concept erasure.
+
+% This raises a fundamental question: is safety achieved by destroying semantics
+% truly desirable?
+% From a user and deployment perspective, suppressing harmful content by collapsing
+% semantic structure undermines the utility and trustworthiness of generative
+% models.
+
+% Our goal is explicitly different.
+% We aim to remove targeted concepts while preserving as much of the original
+% semantic intent as possible.
+% Rather than indiscriminately pushing generations away from harmful concepts, we
+% guide them toward \emph{safe semantic alternatives}.
+% This design choice preserves global structure, object coherence, and prompt
+% alignment.
+
+\vspace{10pt}
+\begin{table}[!t]
+\centering
+\setlength{\tabcolsep}{3.5pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Method & MMA-Diffusion & Ring-A-Bell & UnlearnDiff \\
+\midrule
+SD Baseline  & 0.945 & 0.684 & 0.641 \\
+\midrule
+ESD          & 0.646 & 0.354 & 0.451 \\
+SDD          & 0.561 & 0.253 & 0.296 \\
+UCE          & 0.899 & 0.532 & 0.430 \\
+RECE         & 0.553 & 0.114 & 0.134 \\
+\midrule
+SLD-Weak     & 0.940 & 0.709 & 0.599 \\
+SLD-Medium   & 0.921 & 0.608 & 0.514 \\
+SLD-Strong   & 0.898 & 0.646 & 0.465 \\
+SLD-Max      & 0.822 & 0.494 & 0.423 \\
+\midrule
+ASCG         & 0.879 & 0.696 & 0.697 \\
+SAFREE       & 0.348 & 0.089 & 0.141 \\
+SAFREE+ASCG  & 0.249 & 0.101 & 0.155 \\
+\bottomrule
+\end{tabular}
+}
+\caption{\textbf{NudeNet evaluation across benchmarks.} We report the fraction of samples flagged by NudeNet for each method on MMA, Ring-A-Bell, and UnlearnDiff.}
+\label{tab:nudenet}
+\end{table}
+
+\subsection{VLM-based evaluation with Qwen3-VL}
+
+To better align automatic evaluation with human visual judgment, we adopt a VLM-based protocol using \textbf{Qwen3-VL}. Each generated image is assigned to one of four categories: \emph{Safe}, \emph{Partial}, \emph{Full}, and \emph{NotRelevant}. This taxonomy jointly characterizes safety severity and semantic validity, enabling a fine-grained analysis beyond coarse detector outputs.
+
+Crucially, the VLM-based protocol distinguishes controlled concept suppression from safety-by-destruction: semantically collapsed generations are explicitly captured as \emph{NotRelevant} rather than being implicitly treated as \emph{Safe}. In our experiments, this evaluation reveals improvements in semantic preservation under sensitive prompts that are not consistently reflected by traditional nudity detectors or embedding-based safety classifiers, motivating the use of VLM-based criteria for safety-oriented diffusion research. As illustrated in \Cref{fig:nudenet_vs_vlm_positionmap}, NudeNet can conflate socially acceptable exposure (e.g., swimwear or athletic attire) with harmful content, yielding high-confidence unsafe predictions. In contrast, Qwen3-VL provides a finer-grained judgment by assigning these cases to \emph{Safe} or \emph{Partial}, which better matches human evaluation and reduces incentives for over-suppression.
+
+\section{Training Details of the Latent Classifier}
+\label{appendix:classifier_training}
+
+To ensure robust monitoring of latent states across all timesteps, we train a time-conditioned 4-class classifier designed to operate directly on the latent space. The classifier is trained on a balanced dataset of 6,000 images, with 1,500 samples per class.
+
+\subsection{Dataset composition and class definitions}
+The training data is synthesized using a pipeline that combines Large Language Model (LLM) prompting with Stable Diffusion v1.4 generation. The four classes are defined as follows:
+\begin{itemize}
+    \item \textbf{Benign (Class 0)}: To mitigate out-of-distribution issues and prevent the model from over-suppressing non-human concepts, we utilize ImageNet class labels as prompts.
+    \item \textbf{Safe/Person (Class 1)}: This class consists of human subjects in socially acceptable attire.
+    \item \textbf{Harmful/Nude (Class 2)}: This class includes explicit nudity and targeted harmful concepts that the model aims to suppress.
+    \item \textbf{Color Artifacts Safe/Person (Class 3)}: This class represents semantic collapse. To improve structural stability, we include images of clothed people affected by color artifacts.
+\end{itemize}
+
+\subsection{Modeling guidance-induced color artifacts}
+High guidance scales in safety frameworks often result in visual artifacts before total semantic collapse occurs. To proactively detect these failure modes, we simulate typical guidance-induced artifacts for Class 3 using the following corruption methods:
+
+\begin{enumerate}
+    \item \textbf{Local Color Corruption}: We inject high-intensity color noise into random patches within the latent-derived images to mimic localized pixel corruption caused by guidance conflicts.
+    \item \textbf{Saturation and Hue Distortion}: We apply extreme saturation boosts (up to 4 times) and significant hue shifts in localized circular regions, simulating the color bleeding effect often seen in over-guided samples.
+    \item \textbf{Neon Blotches}: We simulate neon-colored anomalies using Gaussian-masked blending with vibrant hues such as hot pink and neon green. These blotches replicate the characteristic artifacts generated by diffusion models when navigating aggressive safety boundaries.
+\end{enumerate}
+
+% \subsection{Training Protocol}
+
+% The U-Net classifier (40.8M parameters) is trained on noisy latents $z_t$ following the DDPM noise schedule. During training, a random timestep $t \in [0, 1000)$ is sampled for each latent, and the model is conditioned on the normalized value $t/1000$ to ensure consistency across the entire diffusion trajectory. Optimization is performed using the AdamW optimizer with a learning rate of $10^{-4}$ and Cross-Entropy loss.

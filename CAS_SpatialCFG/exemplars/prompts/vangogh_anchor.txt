@@ -1,0 +1,17 @@
+# Van Gogh anchor exemplar image prompts (16 images, same subjects, no artist)
+a painting of a night sky with stars over a village
+a painting of sunflowers in a vase
+a painting of purple irises in a garden
+a painting of a cafe terrace at night
+a painting of a bedroom with simple furniture
+a painting of a wheat field under dramatic clouds
+a painting of a man with a bandaged ear, portrait
+a painting of peasants eating at a table by candlelight
+a painting of a doctor holding a flower, portrait
+a painting of a cypress tree against a blue sky
+a painting of an orchard with pink blossoms in spring
+a painting of a portrait with colorful background
+a painting of a stone bridge over a pond
+a painting of a harvest scene in golden fields
+a painting of almond blossoms on blue background
+a painting of a church building at night

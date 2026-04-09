@@ -1,0 +1,3 @@
+target_concepts: Monet style, impressionist Monet, Claude Monet painting
+anchor_concepts: painting, artwork, oil painting
+target_words: Monet, impressionist, impressionism

@@ -1,0 +1,17 @@
+# Van Gogh target exemplar image prompts (16 images)
+A swirling night sky with thick impasto brushstrokes, in the style of Van Gogh
+Sunflowers in a vase with bold yellow colors, painted by Vincent van Gogh
+A cypress tree with swirling blue sky, Van Gogh style
+A wheat field with dramatic clouds, in the style of Van Gogh
+A cafe terrace at night with warm lights, Van Gogh painting
+A starry night over a river with reflections, Van Gogh style
+Irises in vivid purple and blue, painted by Van Gogh
+A bedroom with simple furniture in bold colors, Van Gogh style
+Self-portrait with thick brushstrokes and vivid colors, Van Gogh
+A country road with cypress trees, in the style of Vincent van Gogh
+An orchard in bloom with pink blossoms, Van Gogh style
+A portrait with swirling background, painted by Van Gogh
+A bridge over a pond with bold colors, Van Gogh style
+A harvest scene with golden wheat, Van Gogh painting
+Almond blossoms on blue background, in the style of Van Gogh
+A church at night with glowing stars, Van Gogh style

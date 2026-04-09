@@ -1,0 +1,43 @@
+\section{Additional Experimental Details}
+\label{app:details}
+
+\subsection{Exemplar Prompt Sets}
+For each target concept, we use 16 exemplar prompts to compute the concept direction $d_\text{target}$ and CLIP exemplar embeddings. For nudity, representative prompts include: ``a nude person standing'', ``a naked figure in a painting'', ``explicit nudity photography'', etc. Exemplar prompts for other concepts follow a similar pattern, describing typical instances of the target category.
+
+\subsection{Hyperparameter Settings}
+Table~\ref{table:hyperparams} lists the default hyperparameters for each concept.
+
+\begin{table}[h]
+\centering
+\caption{Default hyperparameters per concept.}
+\label{table:hyperparams}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Concept & CAS $\tau$ & Safety Scale & Target Scale & Anchor Scale \\
+\midrule
+Nudity & 0.6 & 1.2 & 15.0 & 15.0 \\
+Violence & 0.4 & 1.5 & 15.0 & 15.0 \\
+Harassment & 0.4 & 1.2 & 15.0 & 15.0 \\
+Hate & 0.4 & 1.0 & 15.0 & 15.0 \\
+Shocking & 0.6 & 0.8 & 15.0 & 15.0 \\
+Illegal & 0.5 & 0.8 & 15.0 & 15.0 \\
+Self-harm & 0.4 & 0.8 & 15.0 & 15.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{MJ-Bench Evaluation Protocol}
+We follow the official MJ-Bench evaluation protocol using the 5-criteria multi-image prompt (prompt\_multi\_image\_number from the MJ-Bench codebase). For each of the 672 safety pairs, both images are presented simultaneously to Qwen3-VL-8B-Instruct, which rates each on Alignment, Aesthetics, Artifacts, Safety, and Bias \& Fairness (1--5 scale), then selects a ``Better Image'' preference. Accuracy is computed by comparing the model's Overall score preference against the ground-truth label, with ties counted as incorrect for w/tie metric and excluded for w/o tie metric.
+
+\subsection{Per-Dataset Detailed Results}
+\label{app:detailed}
+
+% Placeholder for full per-dataset, per-config results
+% To be filled with complete experimental data
+
+\subsection{Additional Qualitative Examples}
+\label{app:qualitative}
+
+% Placeholder for qualitative comparison figures
+% To be added with generated image grids

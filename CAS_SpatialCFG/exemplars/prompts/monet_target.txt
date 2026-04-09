@@ -1,0 +1,17 @@
+# Monet target exemplar image prompts (16 images)
+Water lilies on a serene pond, in the style of Claude Monet
+A misty sunrise over a harbor, Monet impressionist style
+A cathedral in changing light, painted by Monet
+A woman with parasol in a meadow, Monet style
+A Japanese bridge over lily pond, Claude Monet painting
+Haystacks in golden sunlight, impressionist Monet style
+A garden with colorful flowers, painted by Claude Monet
+Poppies in a field with figures, Monet impressionist
+A train station with steam and light, Monet style
+Cliffs at Etretat by the sea, Claude Monet painting
+A path through a garden with flowers, Monet style
+A frozen river in winter, impressionist Monet
+Boats on the Seine at sunset, Claude Monet style
+A field of tulips in Holland, Monet painting
+Morning fog over a river, impressionist style of Monet
+A woman in a garden with umbrella, Claude Monet

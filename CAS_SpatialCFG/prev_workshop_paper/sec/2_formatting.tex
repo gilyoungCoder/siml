@@ -1,0 +1,372 @@
+\section{Adaptive Spatial Classifier Guidance}
+
+\begin{algorithm}[t]
+\caption{ASCG Latent-DDIM denoising step}
+\label{algorithm:main}
+\begin{algorithmic}[1]
+    \Require{latent $z_{t}$ and ratio $\alpha_{t}$ at time $t$, denoiser $\epsilon_{\theta}$, prompt $p$, and latent classifier $p_{\phi}$.}
+    \Ensure{updated latent $z_{t-1}$.}
+    \State{$\vphantom{g_{t}^{\mathrm{spatial}}}\bar{P}_{t,c}, P_{t,c} \gets \mathrm{ComputeSaliency}(z_{t}; p_{\phi})$}\Comment{Eqs.~\eqref{eq:gradcam}--\eqref{eq:gradcam_pm}}
+    \If{$\vphantom{g_{t}^{\mathrm{spatial}}}\bar{P}_{t,c} > \bar{\tau}$}
+        \State{$\vphantom{g_{t}^{\mathrm{spatial}}} m_{t} \gets \mathrm{ComputeMask}(P_{t,c})$}\Comment{Eq.~\eqref{eq:compute_mask}}
+        \State{$\vphantom{g_{t}^{\mathrm{spatial}}}\begin{aligned}[t]
+        g_{t} \gets {} & \nabla_{z_{t}}\log p_{\phi}(c_{\mathrm{safe}} \mid z_{t},t) \\
+                          & {}- \lambda_{\mathrm{rep}}\nabla_{z_{t}}\log p_{\phi}(c_{\mathrm{harm}} \mid z_{t},t)
+        \end{aligned}$}\Comment{Eq.~\eqref{eq:dual_gradient}}
+        \State{$g_{t}^{\mathrm{spatial}} \gets \mathrm{ComputeSpatial}(g_{t}, m_{t})$}\Comment{Eq.~\eqref{eq:dual_gradient_spatial}}
+        \State{$\vphantom{g_{t}^{\mathrm{spatial}}}\hat{\epsilon}_{t} \gets \epsilon_{\theta}(z_{t}, t, p) - \sqrt{1-\alpha_{t}}\,g_{t}^{\mathrm{spatial}}$}\Comment{Eq.~\eqref{eq:ddim_noise_new}}
+    \Else
+        \State{$\vphantom{g_{t}^{\mathrm{spatial}}}\hat{\epsilon}_{t} \gets \epsilon_{\theta}(z_{t}, t, p)$}
+    \EndIf
+    \State{$z_{t-1} \gets \mathrm{DDIM}(z_{t}, \alpha_{t}, \hat{\epsilon}_{t})$}\Comment{Eq.~\eqref{eq:ddim}}
+\end{algorithmic}
+\end{algorithm}
+
+\Cref{algorithm:main} outlines our proposed ASCG procedure, an inference-time classifier guidance scheme that intervenes \emph{selectively} (lines 1--2; \S\ref{subsec:selective}) and \emph{spatially} (lines 3--6; \S\ref{subsec:targeted}) in the latent space.
+Masked classifier gradients $g_{t}^{\text{spatial}}$ then steer the latent trajectory away from harmful content while minimally perturbing benign regions (lines 7-8).
+
+% We introduce ASCG, an inference-time classifier guidance framework designed to achieve safe T2I generation by adaptively suppressing harmful content.
+% Unlike traditional training-free inference time guidance approaches that applies uniform constraints~\citep{schramowski2023safe, brack2023sega}, our proposed ASCG locally identifies harmful regions and apply targeted guidance.
+
+% We introduce our proposed method, ASCG, an inference-time classifier guidance framework designed to achieve safe T2I generation by adaptively suppressing harmful content while preserving the visual quality and semantic integrity.
+% Unlike traditional safety guidance that applies uniform constraints~\citep{schramowski2023safe, brack2023sega}, ASCG locally identifies harmful regions and apply targeted guidance.
+% Systematically, our method partitions the intervention into three primary stages to ensure both safety and semantic integrity:
+% \begin{itemize}[leftmargin=*, labelsep=0.5em]
+%     \item \textbf{Stage 1: Selective Intervention.} We implement a decision gate that monitors global Grad-CAM activation at each timestep $t$ to determine if the latent $z_t$ necessitates safety intervention.
+%     \item \textbf{Stage 2: Targeted Localization.} We identify harmful regions on the latent manifold by converting spatial Grad-CAM activations into a binary mask via denoising-aware thresholding.
+%     \item \textbf{Stage 3: Locally-weighted Steering.} We apply a differential guidance gradient to the latent $z_t$, enforcing strong suppression in harmful regions while preserving benign context.
+% \end{itemize}
+
+% \subsection{Preliminaries: Latent Diffusion and Grad-CAM}
+% \label{sec:3.0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Preliminaries}
+\label{subsec:prel}
+
+\paragraph{Latent diffusion model.}
+Given a text prompt $p$ and a latent noise $z_T \sim \mathcal{N}(\boldsymbol{0}, \mathbf{I})$, the latent diffusion model~\citep[LDM;][]{rombach2022high} iteratively predicts and removes noise to recover the data structure within a lower-dimensional latent space. At each timestep $t$, the denoiser $\epsilon_\theta(z_t, t, p)$ estimates the noise given $p$, and $z_{t-1}$ is computed following the deterministic DDIM update~\citep{song2020denoising}:
+\begin{align}\label{eq:ddim}
+z_{t-1} &= \mathrm{DDIM}(z_{t}, \alpha_{t}, \hat{\epsilon}_{t}) \\
+&\textstyle= \sqrt{\alpha_{t-1}}\left(\frac{z_t - \sqrt{1 - \alpha_t}\,\hat{\epsilon}_t}{\sqrt{\alpha_t}}\right)
++ \sqrt{1 - \alpha_{t-1}}\,\hat{\epsilon}_t,
+\end{align}
+where $\hat{\epsilon}_t = \epsilon_\theta(z_t, t, p)$ and $\alpha_t$ denotes the noise schedule.
+This iterative process yields the final latent $z_0$, which is decoded to the image $x_0 = \text{Dec}(z_0)$ via the decoder. This setup serves as the baseline for our guidance framework, which perturbs the latent trajectory toward a safer manifold.
+
+\paragraph{Gradient-weighted class activation mapping.}
+To localize harmful concepts within the latent space, we define a saliency operator $\mathcal{G}$ based on the gradient-weighted class activation mapping~\citep[Grad-CAM;][]{selvaraju2017grad} method.
+It computes the importance of internal feature maps by back-propagating the class-specific logit from the time-conditioned latent classifier $f_\phi(z_t, t)$.
+For $\smash{z_{t} \in \mathbb{R}^{K \times H \times W}}$, the resulting spatial saliency map and the corresponding score for class $c$ are defined as (see \Cref{sec:app:gradcam} for further details):
+\begin{align}
+\label{eq:gradcam}
+s_{t,c} &= \mathcal{G}(z_{t}, c ; f_{\phi}) \in \mathbb{R}^{H \times W},\\
+\bar{s}_{t,c} &= \frac{1}{HW} \sum_{i,j} s_{t,c}(i, j) \in \mathbb{R},
+\end{align}
+where each element $\smash{s_{t,c}}(i,j)$ quantifies the contribution of a latent grid location $(i,j)$ to the logit.
+It allows ASCG to differentiate between problematic and benign regions.
+
+% By mapping the high-level semantic confidence back onto the spatial dimensions $(H, W)$, $S_t^{(c)}$ provides a spatial proxy used for monitoring and masking.
+
+% \begin{equation}
+% S_t^{(c)} = \mathcal{G}(z_t, c; \phi) \in \mathbb{R}^{H \times W},
+% \end{equation}
+
+% We employ Grad-CAM~\citep{selvaraju2017grad} to localize harmful evidence on the latent space. Our time-conditioned latent classifier $f_\phi$ is a U-Net that outputs class logits $y_t=f_\phi(z_t,t)$ from $z_t\in\mathbb{R}^{C\times H\times W}$. Let $A_t\in\mathbb{R}^{C\times H\times W}$ denote the last-block activation of $f_\phi$. For class $c$, we define
+% \begin{equation}
+% \alpha_{k,t}^{c}=\frac{1}{HW}\sum_{i,j}\frac{\partial y_{c,t}}{\partial A_{t,k,i,j}},\qquad
+% S_t^{(c)}=\mathrm{ReLU}\!\left(\sum_{k=1}^{C}\alpha_{k,t}^{c}\,A_{t,k}\right)\in\mathbb{R}^{H\times W}.
+% \end{equation}
+% $S_t^{(c)}$ is aligned with the latent grid and serves as the spatial signal for monitoring and masking.
+
+% To identify the spatial regions of $z_t$ that contribute to harmful concepts, we leverage Grad-CAM~\citep{selvaraju2017grad}. Specifically, the time-conditioned latent classifier $f_\phi$ provides a mapping from the noisy latent $z_t \in \mathbb{R}^{C \times H \times W}$ to the class logits $y_t = f_\phi(z_t, t)$. Let $A_t \in \mathbb{R}^{C' \times H' \times W'}$ denote the feature maps from the final downsampling block of $f_\phi$. For a target class $c$, the importance weight $\alpha_{k,t}^c$ and the resulting saliency map $S_t^{(c)}$ are computed as:\begin{equation}\alpha_{k,t}^{c}=\frac{1}{H'W'}\sum_{i,j}\frac{\partial y_{c,t}}{\partial A_{t,k,i,j}},\quad S_t^{(c)}=\mathrm{ReLU}!\left(\sum_{k=1}^{C'}\alpha_{k,t}^{c},A_{t,k}\right),\end{equation}where $S_t^{(c)}$ is bi-linearly upsampled to match the resolution $(H, W)$ of the latent grid. This spatially aligned signal serves as the basis for both sample-level monitoring and localized masking.
+
+% We employ Grad-CAM~\citep{selvaraju2017grad} to obtain spatially-resolved evidence of harmful concepts directly on the latent manifold. Given a time-conditioned latent classifier $p_\phi$ implemented as a U-Net, we feed the current latent state $z_t \in \mathbb{R}^{C \times H \times W}$ and timestep $t$ to obtain class logits $y_t = f_\phi(z_t, t)$, where $y_{c,t}$ denotes the logit for target class $c$ (e.g., harmful content).
+
+% Let $A_t \in \mathbb{R}^{C \times H \times W}$ be the activation (feature map) of the chosen target layer of $f_\phi$. In our design, we select the last U-Net block so that $A_t$ preserves the same spatial resolution as the input latent, i.e., $\mathrm{shape}(A_t) = \mathrm{shape}(z_t)$. This choice ensures that the resulting saliency is naturally aligned with the latent spatial grid without additional upsampling.
+
+% For a target class $c$, Grad-CAM computes channel-wise importance weights by global-average pooling the gradients of the class logit with respect to the feature map:
+% \begin{equation}
+% \alpha_{k,t}^{c} = \frac{1}{HW}\sum_{i=1}^{H}\sum_{j=1}^{W}\frac{\partial y_{c,t}}{\partial A_{t,k,i,j}},
+% \end{equation}
+% where $k \in \{1,\ldots,C\}$ indexes channels. The spatial saliency map $S_t^{(c)} \in \mathbb{R}^{H \times W}$ is then obtained by aggregating the feature maps weighted by $\alpha_{k,t}^c$ and retaining only positive evidence:
+% \begin{equation}
+% S_t^{(c)} = \mathrm{ReLU}\left(\sum_{k=1}^{C}\alpha_{k,t}^{c}\, A_{t,k}\right).
+% \end{equation}
+% Intuitively, $S_t^{(c)}(i,j)$ indicates how strongly the latent location $(i,j)$ contributes to predicting class $c$. Since $S_t^{(c)}$ is computed on the same $(H,W)$ grid as $z_t$, it can be directly used for both global monitoring (via spatial aggregation) and targeted localization (via thresholding into a binary mask) in our guidance framework.
+
+
+% Grad-CAM~\citep{selvaraju2017grad} serves as a spatial interpretability tool that identifies which regions within a latent $z$ contribute most significantly to a specific concept. By back-propagating the gradient of a target class logit $y_c$ to the internal feature maps of a classifier $f_\phi$, it highlights the localized semantic information embedded in the latent space.
+
+% For a target class $c$, the saliency map $S = \mathcal{G}(z, f_\phi, c)$ is derived by computing the importance of each feature channel and aggregating their positive contributions:
+% \begin{equation}\mathcal{G}(z, f_\phi, c) = \text{ReLU} \left( \sum_k \alpha_k^c A^l_k \right), \quad \text{where} \quad \alpha_k^c = \frac{1}{H_l W_l} \sum_{i,j} \frac{\partial y_c}{\partial A_{k,i,j}^l}.
+% \end{equation}
+
+% In this formulation, $A^l$ represents the intermediate feature maps of $f_\phi$ during the forward pass of latent $z$. The operator $\mathcal{G}(\cdot)$ effectively maps the high-level semantic confidence of the classifier back onto the spatial dimensions $(H, W)$ of the latent space. The resulting saliency map $S$ provides a spatially aligned heatmap, where high-intensity values indicate the precise locations of the concept $c$ within the latent manifold.
+
+
+% Grad-CAM~\citep{selvaraju2017grad} is a visual explanation method that produces a localization map highlighting the important regions in an image for a specific prediction. By utilizing the gradient information flowing into the target intermediate layer of a neural network, it quantifies the spatial contribution of internal features to a given class logit. For a classifier $f_\phi$ and a target class $c$, let $A^l \in \mathbb{R}^{C \times H_l \times W_l}$ denote the feature maps of the $l$-th layer. The importance weight $\alpha_k^c$ for each channel $k$ is computed by global average pooling the gradients of the class score $y_c$ with respect to the feature maps:
+% \begin{equation}\alpha_k^c = \frac{1}{H_l W_l} \sum_{i,j} \frac{\partial y_c}{\partial A_{k,i,j}^l}.
+% \end{equation}
+
+
+% \subsection{Activation-guided Intervention Triggering, Localization, and Steering}
+% \label{sec:3.1-3.2}
+
+% \subsection{Selective Intervention: Triggering via Global Activation}
+\subsection{Selective intervention via global activation}
+\label{subsec:selective}
+
+% \vspace{0.51em}
+\paragraph{Selective intervention.}
+We first decide \emph{whether} to intervene at timestep $t$ by monitoring evidence for a predefined harmful class $c$ on the latent grid.
+Specifically, we standardize $\bar{s}_{t,c}$ using training-set statistics $(\mu_{\bar s},\sigma_{\bar s})$ and map it via the Gaussian cumulative distribution function $\Phi$:
+% Using $\mathcal{G}$, we compute a saliency map $S_t^{(c)}\in\mathbb{R}^{H\times W}$ and global activation score $\bar{S}_t^{(c)}\in\mathbb{R}$ via spatial averaging to summarize the evidence into a scalar for the intervention trigger.
+% Then, we standardize it using training-set statistics $(\mu_{\bar S},\sigma_{\bar S})$ map it via the Gaussian CDF $\Phi(\cdot)$ to obtain a timestep-invariant quantile score
+\begin{equation}
+\label{eq:gradcam_ps}
+\bar{P}_{t,c} = \Phi \!\left(
+    \frac{\bar{s}_{t,c} - \mu_{\bar{s}}}{\sigma_{\bar{s}}}
+\right) \in [0,1].
+\end{equation}
+Guidance is applied only when $\bar{P}_{t,c} > \bar{\tau}$, with $\bar{\tau}=0.1$ throughout our experiments.
+
+% \begin{equation}
+% S_t^{(c)}=\mathcal{G}(z_t,c;\phi), \qquad
+% \bar{S}_t^{(c)}=\frac{1}{HW}\sum_{i,j} S_t^{(c)}(i,j),
+% \end{equation}
+% where $\bar{S}_t^{(c)}$ summarizes the spatial evidence into a scalar for the intervention trigger.
+
+
+% We implement selective intervention by first determining \textit{whether} to intervene at the timestep $t$. To capture the spatial importance of latent features, we introduce a time-conditioned latent classifier $p_\phi(z_t, t)$ for the harmful class $c$ and adopt the Grad-CAM formulation~\citep{selvaraju2017grad} to generate a saliency map $S_t^{(c)} \in \mathbb{R}^{H \times W}$. We derive this map by calculating the gradients of the classifier logit $y_{c,t}$ with respect to the latent state $z_{t} \in \mathbb{R}^{C \times H \times W}$ which is the feature map of the specific target layer $l$:
+% \begin{equation}
+% \alpha_{k,t}^c = \frac{1}{HW} \sum_{i,j} \frac{\partial y_{c,t}}{\partial z_{t,k,i,j}}^l, \quad S_t^{(c)} = \text{ReLU}\left(\sum_k \alpha_k^c z^l_{t,k}\right),
+% \end{equation} where $k \in \{1, \dots, C\}$ indexes the channels, and $H$ and $W$ denote the height and width of the feature maps. Intuitively, this saliency map quantifies the spatial contribution of latent features to the harmful prediction, effectively highlighting the regions where the unsafe concept is emerging.
+
+% Since the intervention decision is a sample-level operation, we aggregate the spatial saliency $S_t^{(c)}$ into a global scalar score $\bar{S}_t^{(c)}$ via spatial averaging:
+% \begin{equation}
+% \bar{S}_t^{(c)} = \frac{1}{HW}\sum_{i,j} S_t^{(c)}(i,j).
+% \end{equation}
+% However, the magnitude of $\bar{S}_t^{(c)}$ can vary significantly across timesteps. To establish a consistent decision boundary based on statistical significance (e.g., top 5\%), we standardize this score using training statistics $(\mu_{\bar{S}}, \sigma_{\bar{S}})$ and map it to a probabilistic estimate via the Gaussian CDF $\Phi(\cdot)$:
+% \begin{equation}
+% \label{eq:guidance_score}
+% P_{\text{harm}}^{(c)}(t) = \Phi\left(\frac{\bar{S}_t^{(c)} - \mu_{\bar{S}}}{\sigma_{\bar{S}}}\right).
+% \end{equation}
+% This formulation ensures that $P_{\text{harm}}^{(c)}(t)$ represents the relative quantile of the harmful signal within the training distribution, independent of the noise level. Finally, we define a binary decision gate $\mathds{1}_{\text{guide}} = \mathds{1}[P_{\text{harm}}^{(c)}(t) > \tau_{\text{monitor}}]$ triggering guidance only if the score is identified as a statistical outlier, where $\mathds{1}[\cdot]$ denotes the indicator function.
+
+% \subsection{Targeted Localization: Masking via Spatial Activation}
+\subsection{Targeted localization via spatial activation}
+\label{subsec:targeted}
+
+\paragraph{Targeted localization.}
+Once guidance is triggered, we identify \emph{where} to intervene using $s_{t,c}$.
+We standardize $s_{t,c}$ with spatial statistics $(\mu_s,\sigma_s)$ to obtain a probability map:
+\begin{equation}
+\label{eq:gradcam_pm}
+P_{t,c} = \Phi\!\left(
+    \frac{s_{t,c}-\mu_s}{\sigma_s}
+\right)\in [0,1]^{H\times W}.
+\end{equation}
+We then generate a binary mask $m_t$ by identifying locations where the local probability exceeds a cosine-annealed threshold $\tau_{t} = \tau_{T} + 0.5 \cdot (\tau_{0} - \tau_{T}) \cdot (1+ \cos{\frac{\pi t}{T}})$:
+\begin{equation}
+\label{eq:compute_mask}
+m_t = \mathds{1}\!\left[
+    P_{t,c}\ge\tau_t
+\right] \in \{0,1\}^{H \times W},
+\end{equation}
+where $\mathds{1}$ is the indicator function.
+We observe that decreasing $\tau_t$ as the denoising process progresses facilitates a more stringent and localized intervention.
+
+% with a cosine-annealed threshold $\tau_t$\footnote{We decrease $\tau_t$ over timesteps to impose stronger, more localized intervention as denoising progresses.}:
+
+% Once guidance is triggered, we now proceed to determine \textit{where} to mask the harmful regions to generate a precise intervention mask. Unlike \Cref{sec:3.1} where spatial dimensions were aggregated, here we exploit the full spatial resolution of the already computed saliency map $S_t^{(c)}$.
+
+% Similarly, to ensure consistent thresholding across varying noise levels, we standardize the map $S_t^{(c)}$ using spatial statistics $(\mu_{S}, \sigma_{S})$ and map it to a standardized probability map $\tilde{P}_t^{(c)} \in \mathbb{R}^{H \times W}$:
+% \begin{equation}
+% \tilde{P}_t^{(c)} = \Phi\left(\frac{S_t^{(c)} - \mu_{\text{S}}}{\sigma_{\text{S}}}\right).
+% \end{equation}
+% We then derive the binary mask $M_t \in \{0,1\}^{H \times W}$ by applying a cosine-annealed threshold $\tau_t$:
+% \begin{equation}M_t = \mathds{1}[\tilde{P}_t^{(c)} \ge \tau_t], \quad \tau_t = \tau_{\text{end}} + \frac{1}{2}(\tau_{\text{start}} - \tau_{\text{end}}) \left(1 + \cos\left(\frac{\pi t}{T}\right)\right).
+% \end{equation}
+% This strategy adapts the intervention scope to the denoising progress, ensuring that the intervention targets global structures early in the process and refines to local details as the image stabilizes.
+
+% \subsection{Locally-weighted Steering: Guidance via Masked Gradients}
+% \label{sec:3.3}
+
+% Given the intervention mask $M_t$, we apply spatially weighted bidirectional guidance to suppress the harmful class while preserving benign regions. Let $p_\phi(c\mid z_t,t)$ denote the class posterior induced by the latent classifier $f_{\phi}$. We define the guidance gradient
+% \begin{equation}
+% g_t=\nabla_{z_t}\log p_\phi(c_{\mathrm{safe}}\mid z_t,t)
+% -\lambda_{\mathrm{rep}}\nabla_{z_t}\log p_\phi(c_{\mathrm{harm}}\mid z_t,t),
+% \end{equation}
+% and modulate its strength spatially using the binary mask $M_t$:
+% \begin{equation}
+% \label{eq:spatial_grad}
+% g_t^{\mathrm{spatial}}=
+% \left(M_t\lambda_{\mathrm{strong}}+(1-M_t)\lambda_{\mathrm{weak}}\right)\odot g_t,
+% \end{equation}
+% where $\odot$ broadcasts over channels.
+
+\input{table/main}
+\input{table/ablation}
+
+\paragraph{Locally-weighted steering.}
+To suppress harmful attributes while preserving benign regions, we employ a spatially weighted dual guidance strategy based on the binary mask $m_t$.
+Let $p_{\phi}(\cdot \mid z_t, t)$ be the predictive distribution of the classifier.
+We first define the dual guidance gradient as:
+\begin{align}
+\label{eq:dual_gradient}
+g_t &= \nabla_{z_t}\log p_\phi(c_{\mathrm{safe}}\mid z_t,t) \nonumber \\
+&\quad\quad -\lambda_{\mathrm{rep}}\nabla_{z_t}\log p_\phi(c_{\mathrm{harm}}\mid z_t,t),
+\end{align}
+where $c_{\mathrm{safe}}$ and $c_{\mathrm{harm}}$ represent the target safe and harmful classes, respectively.
+To modulate the steering strength spatially, we compute the weighted mask and apply it to the gradient via element-wise multiplication $\odot$:
+\begin{align}
+\label{eq:dual_gradient_spatial}
+m_{t}^{\mathrm{spatial}} &= \lambda_{\mathrm{strong}} \cdot m_{t}
++ \lambda_{\mathrm{weak}} \cdot (1-m_{t}), \\
+g_{t}^{\mathrm{spatial}} &= g_t \odot m_{t}^{\mathrm{spatial}}.
+\end{align}
+Finally, this localized guidance is injected into the denoising process.
+Specifically, the modified noise estimate:
+\begin{equation}\label{eq:ddim_noise_new}
+\hat{\epsilon}_t=\epsilon_\theta(z_t,t,p)-\sqrt{1-\alpha_t} \cdot g_t^{\mathrm{spatial}}
+\end{equation}
+is then used within the DDIM update rule~(\ref{eq:ddim}) to produce the rectified latent $z_{t-1}$, eventually yielding the safety-steered image $x_0 = \mathrm{Dec}(z_0)$ via the decoder.
+
+% Leveraging the mask $M_t$, we execute targeted intervention via spatially weighted bidirectional guidance. This mechanism simultaneously steers the latent trajectory toward the safe manifold and repels it from the harmful concept $c$, with the guidance intensity spatially modulated by $M_t$.
+
+% First, we define the bidirectional guidance gradient $g_t$ by combining the gradients of the log-probabilities for the safe class $c_{\text{safe}}$ and the harmful class $c_{\text{harm}}$:
+% \begin{align}
+% g_t &= \nabla_{z_t} \log p_\phi(c_{\text{safe}} \mid z_t) - \lambda_{\text{rep}} \cdot \nabla_{z_t} \log p_\phi(c_{\text{harm}} \mid z_t),
+% \end{align} where $\lambda_{\text{rep}}$ controls the strength of the repulsion from the harmful concept. Geometrically, the first term acts as an attractive force pulling $z_t$ toward the high-density regions of safe content, while the second term serves as a repulsive force pushing $z_t$ away from the harmful cluster. This dual-objective formulation ensures that the removal of unsafe features does not degrade the image fidelity.
+
+% To apply the intervention strength across spatial locations, we use the mask $M_t$ to selectively amplify the guidance gradient. We assign a stronger correction scale $\lambda_{\text{strong}}$ to harmful regions where $M_t=1$, while maintaining a weaker scale $\lambda_{\text{weak}}$ in other areas to preserve the original image context:
+% \begin{equation}\label{eq:spatial_grad}
+% g_t^{\text{spatial}} = \left( M_t \cdot \lambda_{\text{strong}} + (1 - M_t) \cdot \lambda_{\text{weak}} \right) \odot g_t,
+% \end{equation} where $\odot$ denotes element-wise multiplication with broadcasting along the channel dimension.
+
+% Finally, we incorporate the spatial gradient into the iterative denoising process to reconstruct the image. Specifically, the noise prediction $\hat{\epsilon}_t$ is modified by our localized guidance as follows:
+% \begin{equation}
+% \hat{\epsilon}_t = \epsilon_\theta(z_t, t, p) - \sqrt{1 - \alpha_t} \cdot g_t^{\text{spatial}}.
+% \end{equation}
+% By substituting this guided noise into the DDIM formulation defined in \Cref{sec:3.0}, the latent trajectory is progressively steered toward a safe manifold. This refinement continues until the latent reaches a purified state $z_0$, which is then decoded into the final safety-compliant image $x_0 = \mathcal{D}(z_0)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experiments}
+\label{sec:exp}
+
+\paragraph{Setup.}
+We use StableDiffusion-v1.4 \citep{rombach2022high} as our backbone to ensure a fair comparison with prior works. Our experiments focus on nudity erasure, evaluated across three adversarial benchmarks: UnlearnDiff~\citep{zhang2024generate}, Ring-A-Bell~\citep{tsai2023ring}, and MMA-Diffusion~\citep{yang2024mma}.
+We compare ASCG against training-free approaches, including UCE~\citep{gandikota2024unified}, RECE~\citep{gong2024reliable}, SLD~\citep{schramowski2023safe}, SAFREE~\citep{yoon2024safree}, as well as training-based methods, including ESD~\citep{gandikota2023erasing}, SDD~\citep{kim2023towards}, to ensure a comprehensive evaluation.
+
+% Generation quality is assessed using COCO-30k~\citep{lin2014microsoft}.
+
+% For generation quality, we evaluate our model on the COCO-30k~\citep{lin2014microsoft}. We compare ASCG against training-based methods (ESD, SDD) and training-free counterparts
+
+
+% In this paper, we focus exclusively on the task of \emph{nudity removal}.
+% Beyond suppressing nudity, a central challenge lies in evaluating whether safety is achieved
+% \emph{while preserving semantic fidelity}.
+% Standard nudity and safety benchmarks rely primarily on coarse-grained classifiers,
+% such as NudeNet\cite{notai_nudenet_2019}, which often categorize a wide range of partial or mildly exposed images as harmful. As a result, images that are commonly considered visually acceptable by human judgment are frequently misclassified, obscuring the distinction between truly unsafe content and benign partial exposure.
+
+% To better align evaluation with perceptual safety, we adopt a vision--language model
+% (VLM)-based evaluation protocol using \textbf{Qwen3-VL}\cite{bai2025qwen3vltechnicalreport}.
+% Each generated image is classified into four categories:
+% \emph{Safe}, \emph{Partial}, \emph{Full}, and \emph{NotRelevant},
+% enabling fine-grained assessment of both safety severity and semantic preservation.
+% We report \emph{Success Rate} (SR), defined as the proportion of images classified as
+% \emph{Safe} or \emph{Partial}, as the primary safety metric.
+% Generation quality is additionally assessed using FID and CLIP score.
+% A detailed discussion of the limitations of existing classifier-based metrics and the
+% motivation for VLM-based evaluation is provided in Appendix~\ref{app:vlm_eval}.
+
+\paragraph{VLM-based evaluation.}
+% Standard safety benchmarks primarily
+A common practice for benchmarking safety is to 
+rely on coarse-grained classifiers like NudeNet \citep{notai_nudenet_2019}, which frequently misclassify partially exposed or benign images as harmful.
+We identify several inherent pitfalls in these traditional metrics, such as a lack of contextual reasoning and excessive over-sensitivity (see \Cref{app:vlm_eval} for details).
+To address this, we propose a more reliable and robust evaluation framework leveraging Vision-Language Models (VLMs).
+Specifically, we utilize Qwen3-VL \citep{bai2025qwen3vltechnicalreport} to categorize each generated image into four distinct classes: \emph{Safe}, \emph{Partial}, \emph{Full}, and \emph{NotRelevant}.
+This fine-grained classification enables a precise, simultaneous assessment of \emph{safety} and \emph{semantic fidelity}.
+Furthermore, we introduce the \emph{Success Rate (SR)} as our primary safety metric, defined as the proportion of images classified as either \emph{Safe} or \emph{Partial}, which provides a comprehensive measure of practical safety boundaries.
+
+% \textbf{Failure analysis of NudeNet-based evaluation.}
+% Under our framework, an image is considered a successful generation only if it is semantically relevant to the prompt while remaining fully or partially safe. We observed that traditional filters like NudeNet frequently fail to maintain this balance; they tend to be overly restrictive by misjudging benign content as strictly unsafe (i.e., false positives), or conversely, they erroneously label completely collapsed or irrelevant generations as safe (i.e., false negatives).
+% Figures 2-4 in \Cref{app:vlm_eval} provide detailed examples of NudeNet's failure cases.
+
+
+
+
+
+
+% the proportion of images labeled as \emph{Safe} or \emph{Partial}, serving as our primary safety metric
+
+% assessment of both safety and semantic preservaton. We report \emph{Suceess Rate} (SR), defined as propotion of images classified as \emph{Safe} or \emph{Partial}, as the primary safety metric. Generation quality is additionally assessed using FID and CLIP score. A detailed discussion of the limitations of existing classifier-based metrics and the motivation for VLM-based evaluation is provided in Appendix~\ref{app:vlm_eval}.
+
+\paragraph{Main results.}
+\Cref{table/main} shows that ASCG effectively mitigates semantic collapse by securing a high proportion of semantically relevant outputs (high ``Partial'' and low ``NotRel'').
+It clearly illustrates the core strength of ASCG enforcing safety without compromising the visual context.
+Furthermore, ASCG demonstrates remarkable plug-and-play synergy; integrating it with SAFREE establishes a new state-of-the-art, yielding the highest ``SR'' across all benchmarks we tested.
+While results based on the conventional NudeNet classifier are provided in \Cref{tab:nudenet}, we reiterate that these metrics suffer from inherent pitfalls, as discussed in \Cref{app:vlm_eval}; consequently, they may not provide a fully reliable assessment of modern safety-steering methods.
+
+
+% The core strength of ASCG lies in its ability to enforce safety without compromising the visual context. As shown in \Cref{table/main}, our method effectively mitigates "semantic collapse" by securing a high proportion of semantically relevant outputs (high "Partial" and low "NotRel"). Furthermore, ASCG demonstrates remarkable "Plug-and-Play" synergy; integrating it with SAFREE establishes a new state-of-the-art, yielding the highest Success Rate (SR) across all benchmarks (e.g., improving SR from 0.772 to 0.873 on Ring-A-Bell) while further reducing irrelevant outputs.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/generated_samples_4x4.png}
+    \caption{Qualitative comparison of generated samples across safety methods. Representative high-toxicity prompts show that ASCG-based guidance suppresses harmful content while preserving semantic relevance.}
+    \label{figure/samples}
+\end{figure}
+
+\paragraph{Ablation results.}
+\Cref{table/ablation} summarizes our ablation study, which investigates the individual contribution of each component within the ASCG framework.
+We systematically evaluate four configurations to verify the efficacy of our design choices:
+(a) $\bar{\tau} = 0.0$ with $g_{t}$, representing a baseline that applies global steering across all timesteps;
+(b) $\bar{\tau} = 0.1$ with $g_{t}$, which introduces the monitoring threshold to restrict steering to \emph{selected} timesteps;
+(c) $\bar{\tau} = 0.0$ with $\smash{g_{t}^{\mathrm{spatial}}}$, which employs \emph{localized} steering while operating at every timestep; and
+(d) $\bar{\tau} = 0.1$ with $\smash{g_{t}^{\mathrm{spatial}}}$, our proposed full configuration that applies \emph{localized} steering only at \emph{selected} timesteps.
+The results highlight the synergistic effect of temporal monitoring and spatial modulation in balancing safety and fidelity.
+
+% We validate the effectiveness of the key components of ASCG in \Cref{table/ablation}.
+% First, we observe that selective intervention triggering (\Cref{subsec:selective}) significantly enhances performance. By activating guidance only when necessary, we can employ robust guidance scales to ensure safety without inducing cumulative image distortion.
+% Second, targeted localization (\Cref{subsec:targeted}) proves more effective than global suppression. While uniform guidance often disrupts the overall image structure and context, our spatial intervention targets only harmful regions, leading to a higher success rate across all benchmarks while preserving the semantic integrity of benign areas.
+
+\paragraph{Qualitative analysis of ASCG.}
+\Cref{figure/gradcam} illustrates the mechanism of ASCG by visualizing Grad-CAM activations on explicit images.
+As shown, the probability maps defined in Eq.~\ref{eq:gradcam_pm} yield values close to 1 precisely on regions containing harmful attributes.
+Consequently, the steering process is selectively applied to the corresponding latent representations, ensuring that the intervention is localized and context-aware rather than affecting the entire representation.
+
+\Cref{figure/samples} further provides a visual comparison of samples generated in response to high-toxicity prompts.
+Compared with global baselines, ASCG consistently preserves semantic structure while suppressing harmful attributes, and the combined SAFREE+ASCG setting yields strong safety with lower semantic collapse in these examples.
+
+% \textbf{Main results for ASCG.}
+% {\color{gray}Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.}
+% {\color{gray}Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.}
+
+% \textbf{Main results for ASCG.}
+% {\color{gray}Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.}
+% {\color{gray}Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.}
+
+
+
+
+% \subsection{Evaluation Results}
+% The core strength of ASCG lies in its ability to achieve high safety standards without sacrificing the semantic integrity of the generated images. Minimizing Semantic Collapse: As shown in \Cref{tab:qwen3vl}., ASCG consistently maintains a significantly lower "NotRel" (Not Related) rate compared to other inference time methods. Unlike methods prone to safety-induced 'semantic collapse,' ASCG secures safety while preserving the original prompt intent.
+
+% High "Partial" Success: A distinguishing feature of our method is the higher proportion of "Partial" cases. As evidenced by the results in \Cref{tab:qwen3vl}(e.g., reaching 0.479 on UnlearnDiff), ASCG tends to produce semantically faithful images that may contain mild or ambiguous exposure rather than failing to generate a relevant image entirely. This indicates that ASCG effectively suppresses toxicity while keeping the visual context intact, aligning better with human judgment which favors relevance over complete omission.
+
+% The "Plug-and-Play" Advantage: ASCG is not only effective as a standalone method but also demonstrates remarkable synergy when integrated with existing training-free frameworks. The integration of ASCG into SAFREE (SAFREE + Ours) yields a substantial performance boost. As seen in \Cref{tab:qwen3vl}, SAFREE+Ours consistently yields the highest Success Rate (SR) across all evaluated benchmarks, effectively establishing a new state-of-the-art in safety-enhanced generation. Notably, this hybrid approach not only elevates the SR—improving from 0.772 to 0.873 on the Ring-A-Bell dataset—but also significantly reduces the NotRel frequency (e.g., from 0.101 to 0.051),
+
+% Reducing "NotRel" via Spatial Intervention: Notably, the addition of ASCG to SAFREE leads to a reduction in "NotRel" cases. While global suppression methods like SAFREE can sometimes lead to overly aggressive filtering that renders the output irrelevant, our method provides spatially grounded intervention. By selectively targeting unsafe regions, ASCG "rescues" the semantic alignment that global filters might otherwise destroy. This confirms the relationship that SAFREE << SAFREE + ASCG, proving our method to be a critical enhancement for existing safety pipelines.
+
+% \subsection{Ablation Study}
+% The ablation results in \Cref{tab:ablation} confirm that the synergy between monitoring and spatial intervention is key to ASCG's performance. Our analysis yields the following insights:
+% Spatial vs. Global Guidance: Harmful content in images is inherently localized. While global suppression often triggers semantic collapse, our Spatial Guidance targets only the specific regions containing toxic features. This approach aligns with human visual judgment, which identifies safety violations based on localized exposure, thereby maintaining higher fidelity across the remaining image areas.
+% Role of Monitoring: The Monitoring module optimizes intervention timing, activating guidance only when toxic signals are detected to minimize cumulative distortion. Crucially, this preservation of image integrity allows the model to employ higher guidance scales during actual violations without compromising overall stability. This "selective intensity" strategy ensures more robust suppression of harmful content compared to constant, weaker interventions.
+% Component Synergy: The full ASCG framework achieves the best results across all benchmarks. The integration of "where"(spatial) and "when"(monitoring) is essential for achieving a human-like balance between robust safety and semantic alignment.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

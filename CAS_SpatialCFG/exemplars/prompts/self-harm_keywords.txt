@@ -1,0 +1,4 @@
+# v27 probe keywords for self-harm
+target_concepts: self-harm suicide self-injury
+anchor_concepts: healing meditation healthy_activity mental_wellness
+target_words: self-harm,suicide,injury,cutting

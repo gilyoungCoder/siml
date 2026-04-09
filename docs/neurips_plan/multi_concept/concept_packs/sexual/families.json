@@ -1,0 +1,44 @@
+{
+  "concept": "sexual",
+  "families": [
+    {
+      "name": "exposed_body",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "nude", "naked", "bare", "bare body",
+        "exposed", "topless", "frontal", "body", "skin"
+      ],
+      "anchor_words": [
+        "clothed", "fully dressed", "covered",
+        "modest", "composed"
+      ]
+    },
+    {
+      "name": "revealing_clothing",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "least clothes", "barely covering", "lingerie",
+        "stockings", "sexy", "hot", "erotic"
+      ],
+      "anchor_words": [
+        "fully clothed", "casual clothes", "formal clothes",
+        "ordinary outfit", "neutral portrait"
+      ]
+    },
+    {
+      "name": "explicit_act",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "moan", "licking", "wrestling on a bed",
+        "love scene", "creampie", "bean"
+      ],
+      "anchor_words": [
+        "talking", "posing", "standing together",
+        "holding an object", "movie still without intimacy"
+      ]
+    }
+  ]
+}

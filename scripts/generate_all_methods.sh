@@ -33,6 +33,10 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/repo_env.sh
+source "${SCRIPT_DIR}/lib/repo_env.sh"
+
 # ============================================================================
 # Parse Arguments
 # ============================================================================
@@ -63,7 +67,7 @@ fi
 # If --nohup, re-launch in background
 if [ "$USE_NOHUP" = true ]; then
     TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-    LOG_FILE="/mnt/home/yhgil99/unlearning/scripts/logs/generate_all_${DATASET}_${TIMESTAMP}.log"
+    LOG_FILE="${UNLEARNING_REPO_ROOT}/scripts/logs/generate_all_${DATASET}_${TIMESTAMP}.log"
     mkdir -p "$(dirname "$LOG_FILE")"
     echo "Running in background..."
     echo "Log: $LOG_FILE"
@@ -81,15 +85,17 @@ export CUDA_VISIBLE_DEVICES=$GPU
 # ============================================================================
 # Paths
 # ============================================================================
-BASE_DIR="/mnt/home/yhgil99/unlearning"
+BASE_DIR="${UNLEARNING_REPO_ROOT}"
 SCG_DIR="${BASE_DIR}/SoftDelete+CG"
 SAFREE_DIR="${BASE_DIR}/SAFREE"
+GUIDED2_ROOT="${UNLEARNING_GUIDED2_ROOT}"
+PYTHON_BIN="${UNLEARNING_SDD_COPY_PYTHON}"
 
 SD_MODEL="CompVis/stable-diffusion-v1-4"
 
 # SDD / ESD checkpoints
-SDD_CKPT="/mnt/home/yhgil99/guided2-safe-diffusion/Continual2/sdd_2026-01-29_17-05-34"
-ESD_CKPT="/mnt/home/yhgil99/guided2-safe-diffusion/Continual2/esd_2026-01-29_17-05-34"
+SDD_CKPT="${GUIDED2_ROOT}/Continual2/sdd_2026-01-29_17-05-34"
+ESD_CKPT="${GUIDED2_ROOT}/Continual2/esd_2026-01-29_17-05-34"
 
 # Classifiers
 CLASSIFIER_3CLASS="${SCG_DIR}/work_dirs/nudity_three_class/checkpoint/step_11800/classifier.pth"
@@ -118,7 +124,7 @@ case "$DATASET" in
         SAFREE_CONCEPT="sexual"
         ;;
     i2p)
-        PROMPT_FILE="/mnt/home/yhgil99/guided2-safe-diffusion/prompts/i2p/sexual.csv"
+        PROMPT_FILE="${GUIDED2_ROOT}/prompts/i2p/sexual.csv"
         OUTPUT_BASE="${SCG_DIR}/scg_outputs/final_${DATASET}"
         SAFREE_CONCEPT="sexual"
         ;;
@@ -225,7 +231,7 @@ generate_sd_baseline() {
 
     cd "${SCG_DIR}"
 
-    python -c "
+    "${PYTHON_BIN}" -c "
 import torch
 from diffusers import StableDiffusionPipeline
 from pathlib import Path
@@ -287,7 +293,7 @@ generate_safree() {
 
     cd "${SAFREE_DIR}"
 
-    python gen_safree_i2p_concepts.py \
+    "${PYTHON_BIN}" gen_safree_i2p_concepts.py \
         --prompt_file "${PROMPT_FILE}" \
         --concepts "${SAFREE_CONCEPT}" \
         --model_id "${SD_MODEL}" \
@@ -317,7 +323,7 @@ generate_ours_dual() {
 
     cd "${SCG_DIR}"
 
-    python generate_nudity_dual_classifier.py \
+    "${PYTHON_BIN}" generate_nudity_dual_classifier.py \
         --ckpt_path "${SD_MODEL}" \
         --prompt_file "${PROMPT_FILE}" \
         --output_dir "${output_dir}" \
@@ -350,7 +356,7 @@ generate_ours_mon4class() {
 
     cd "${SCG_DIR}"
 
-    python generate_nudity_4class_sample_level_monitoring.py \
+    "${PYTHON_BIN}" generate_nudity_4class_sample_level_monitoring.py \
         --ckpt_path "${SD_MODEL}" \
         --prompt_file "${PROMPT_FILE}" \
         --output_dir "${output_dir}" \
@@ -382,7 +388,7 @@ generate_ours_mon3class() {
 
     cd "${SCG_DIR}"
 
-    python generate_nudity_3class_sample_level_monitoring.py \
+    "${PYTHON_BIN}" generate_nudity_3class_sample_level_monitoring.py \
         --ckpt_path "${SD_MODEL}" \
         --prompt_file "${PROMPT_FILE}" \
         --output_dir "${output_dir}" \
@@ -414,7 +420,7 @@ generate_safree_dual() {
 
     cd "${SAFREE_DIR}"
 
-    python generate_safree_dual_classifier.py \
+    "${PYTHON_BIN}" generate_safree_dual_classifier.py \
         --ckpt_path "${SD_MODEL}" \
         --prompt_file "${PROMPT_FILE}" \
         --output_dir "${output_dir}" \
@@ -452,7 +458,7 @@ generate_safree_mon() {
 
     cd "${SAFREE_DIR}"
 
-    python generate_safree_monitoring.py \
+    "${PYTHON_BIN}" generate_safree_monitoring.py \
         --ckpt_path "${SD_MODEL}" \
         --prompt_file "${PROMPT_FILE}" \
         --output_dir "${output_dir}" \
@@ -487,9 +493,9 @@ generate_sdd() {
     [ "$DRY_RUN" = true ] && return 0
     mkdir -p "$output_dir"
 
-    cd /mnt/home/yhgil99/guided2-safe-diffusion
+    cd "${GUIDED2_ROOT}"
 
-    python generate.py \
+    "${PYTHON_BIN}" generate.py \
         --pretrained_model_name_or_path "${SD_MODEL}" \
         --unet_path "${SDD_CKPT}/step=001000" \
         --image_dir "${output_dir}" \
@@ -511,9 +517,9 @@ generate_esd() {
     [ "$DRY_RUN" = true ] && return 0
     mkdir -p "$output_dir"
 
-    cd /mnt/home/yhgil99/guided2-safe-diffusion
+    cd "${GUIDED2_ROOT}"
 
-    python generate.py \
+    "${PYTHON_BIN}" generate.py \
         --pretrained_model_name_or_path "${SD_MODEL}" \
         --unet_path "${ESD_CKPT}/step=001000" \
         --image_dir "${output_dir}" \

@@ -1,0 +1,169 @@
+{
+  "generated_at": "2026-04-04T03:40:53",
+  "pack_base": "/mnt/home3/yhgil99/unlearning/docs/neurips_plan/multi_concept/concept_packs",
+  "expected_packs": [
+    "sexual",
+    "violence",
+    "shocking",
+    "self-harm",
+    "illegal_activity",
+    "harassment",
+    "hate"
+  ],
+  "audits": [
+    {
+      "name": "sexual",
+      "status": "ready_for_text_only_or_partial_image_modes",
+      "exists": true,
+      "required_present": [
+        "metadata.json",
+        "families.json",
+        "target_prompts.txt",
+        "anchor_prompts.txt",
+        "target_keywords_primary.txt",
+        "target_keywords_secondary.txt",
+        "anchor_keywords.txt"
+      ],
+      "required_missing": [],
+      "optional_present": [],
+      "optional_missing": [
+        "concept_directions.pt",
+        "clip_patch_tokens.pt",
+        "contrastive_embeddings.pt"
+      ],
+      "exemplar_images_exists": false
+    },
+    {
+      "name": "violence",
+      "status": "ready_for_text_only_or_partial_image_modes",
+      "exists": true,
+      "required_present": [
+        "metadata.json",
+        "families.json",
+        "target_prompts.txt",
+        "anchor_prompts.txt",
+        "target_keywords_primary.txt",
+        "target_keywords_secondary.txt",
+        "anchor_keywords.txt"
+      ],
+      "required_missing": [],
+      "optional_present": [],
+      "optional_missing": [
+        "concept_directions.pt",
+        "clip_patch_tokens.pt",
+        "contrastive_embeddings.pt"
+      ],
+      "exemplar_images_exists": false
+    },
+    {
+      "name": "shocking",
+      "status": "ready_for_text_only_or_partial_image_modes",
+      "exists": true,
+      "required_present": [
+        "metadata.json",
+        "families.json",
+        "target_prompts.txt",
+        "anchor_prompts.txt",
+        "target_keywords_primary.txt",
+        "target_keywords_secondary.txt",
+        "anchor_keywords.txt"
+      ],
+      "required_missing": [],
+      "optional_present": [],
+      "optional_missing": [
+        "concept_directions.pt",
+        "clip_patch_tokens.pt",
+        "contrastive_embeddings.pt"
+      ],
+      "exemplar_images_exists": false
+    },
+    {
+      "name": "self-harm",
+      "status": "ready_for_text_only_or_partial_image_modes",
+      "exists": true,
+      "required_present": [
+        "metadata.json",
+        "families.json",
+        "target_prompts.txt",
+        "anchor_prompts.txt",
+        "target_keywords_primary.txt",
+        "target_keywords_secondary.txt",
+        "anchor_keywords.txt"
+      ],
+      "required_missing": [],
+      "optional_present": [],
+      "optional_missing": [
+        "concept_directions.pt",
+        "clip_patch_tokens.pt",
+        "contrastive_embeddings.pt"
+      ],
+      "exemplar_images_exists": false
+    },
+    {
+      "name": "illegal_activity",
+      "status": "ready_for_text_only_or_partial_image_modes",
+      "exists": true,
+      "required_present": [
+        "metadata.json",
+        "families.json",
+        "target_prompts.txt",
+        "anchor_prompts.txt",
+        "target_keywords_primary.txt",
+        "target_keywords_secondary.txt",
+        "anchor_keywords.txt"
+      ],
+      "required_missing": [],
+      "optional_present": [],
+      "optional_missing": [
+        "concept_directions.pt",
+        "clip_patch_tokens.pt",
+        "contrastive_embeddings.pt"
+      ],
+      "exemplar_images_exists": false
+    },
+    {
+      "name": "harassment",
+      "status": "ready_for_text_only_or_partial_image_modes",
+      "exists": true,
+      "required_present": [
+        "metadata.json",
+        "families.json",
+        "target_prompts.txt",
+        "anchor_prompts.txt",
+        "target_keywords_primary.txt",
+        "target_keywords_secondary.txt",
+        "anchor_keywords.txt"
+      ],
+      "required_missing": [],
+      "optional_present": [],
+      "optional_missing": [
+        "concept_directions.pt",
+        "clip_patch_tokens.pt",
+        "contrastive_embeddings.pt"
+      ],
+      "exemplar_images_exists": false
+    },
+    {
+      "name": "hate",
+      "status": "ready_for_text_only_or_partial_image_modes",
+      "exists": true,
+      "required_present": [
+        "metadata.json",
+        "families.json",
+        "target_prompts.txt",
+        "anchor_prompts.txt",
+        "target_keywords_primary.txt",
+        "target_keywords_secondary.txt",
+        "anchor_keywords.txt"
+      ],
+      "required_missing": [],
+      "optional_present": [],
+      "optional_missing": [
+        "concept_directions.pt",
+        "clip_patch_tokens.pt",
+        "contrastive_embeddings.pt"
+      ],
+      "exemplar_images_exists": false
+    }
+  ]
+}

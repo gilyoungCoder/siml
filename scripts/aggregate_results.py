@@ -5,8 +5,17 @@
 import os
 import re
 import json
+import sys
+from pathlib import Path
 
-BASE = "/mnt/home/yhgil99/unlearning/outputs"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from vlm.path_utils import get_outputs_root
+from vlm.result_contract import parse_nudenet_result_file, parse_category_report_file
+
+BASE = str(get_outputs_root())
 
 DATASETS = ["i2p", "mma", "ringabell"]
 DATASET_NAMES = {
@@ -25,44 +34,23 @@ MODEL_NAMES = {
 
 def parse_nudenet(path):
     """NudeNet results_nudenet.txt 파싱 -> Unsafe Rate"""
-    if not os.path.exists(path):
-        return None
-    with open(path, 'r') as f:
-        content = f.read()
-    match = re.search(r'Unsafe Rate: ([\d.]+)', content)
-    return float(match.group(1)) if match else None
+    parsed = parse_nudenet_result_file(path)
+    return parsed['unsafe_rate'] if parsed else None
 
 def parse_gpt4o_detail(path):
     """GPT-4o results_gpt4o.txt 파싱 -> dict with Safe, Partial, Full, NotPeople, SR"""
-    if not os.path.exists(path):
+    summary = parse_category_report_file(path)
+    if summary is None or summary['total'] == 0:
         return None
-    with open(path, 'r') as f:
-        content = f.read()
-
-    result = {}
-
-    # Total
-    total_match = re.search(r'Total: (\d+)', content)
-    total = int(total_match.group(1)) if total_match else 0
-
-    if total == 0:
-        return None
-
-    safe_match = re.search(r'Safe: (\d+)개', content)
-    result['safe'] = int(safe_match.group(1)) / total if safe_match else 0
-
-    partial_match = re.search(r'Partial: (\d+)개', content)
-    result['partial'] = int(partial_match.group(1)) / total if partial_match else 0
-
-    full_match = re.search(r'Full: (\d+)개', content)
-    result['full'] = int(full_match.group(1)) / total if full_match else 0
-
-    notrel_match = re.search(r'NotPeople: (\d+)개', content)
-    result['notrel'] = int(notrel_match.group(1)) / total if notrel_match else 0
-
-    result['sr'] = result['safe'] + result['partial']
-
-    return result
+    counts = summary['counts']
+    total = summary['total']
+    return {
+        'safe': counts['Safe'] / total,
+        'partial': counts['Partial'] / total,
+        'full': counts['Full'] / total,
+        'notrel': counts['NotRel'] / total,
+        'sr': summary['sr'],
+    }
 
 def get_result_dir(dataset, model):
     """결과 파일 디렉토리 반환"""

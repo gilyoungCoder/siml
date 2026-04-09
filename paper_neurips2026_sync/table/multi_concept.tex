@@ -1,0 +1,21 @@
+\begin{table}[t]
+    \renewcommand{\arraystretch}{1.1}
+    \caption{Single-concept erasure across all I2P safety categories using \ours{}. SR = (Safe + Partial) / Total $\uparrow$. Best probe mode and configuration selected per concept.}
+    \label{table:multi}
+    \vspace{-0.5em}
+    \centering
+    \small
+    \begin{tabular}{llcccc}
+    \toprule
+    Concept & Probe & HOW & Config & SR$\uparrow$ & \#Prompts \\
+    \midrule
+    Nudity & both & hybrid & ts15/as15 & \textbf{.931} & 931 \\
+    Violence & text & ainp & ss1.5/$\tau$0.4 & \textbf{.971} & 756 \\
+    Shocking & both & ainp & ss0.8/$\tau$0.6 & \textbf{.973} & 856 \\
+    Hate & text & ainp & ss1.0/$\tau$0.4 & \textbf{.848} & 231 \\
+    Harassment & text & ainp & ss1.2/$\tau$0.4 & \textbf{.833} & 824 \\
+    Illegal & both & ainp & ss0.8/$\tau$0.5 & TBD & 727 \\
+    Self-harm & both & ainp & ss0.8/$\tau$0.4 & TBD & 801 \\
+    \bottomrule
+    \end{tabular}
+\end{table}

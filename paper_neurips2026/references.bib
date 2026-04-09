@@ -1,0 +1,291 @@
+% =============================================================================
+% Verified references — sourced from workshop paper main.bib + related_work docs
+% Each entry marked with verification source
+% =============================================================================
+
+% --- Diffusion Model Foundations ---
+
+% [VERIFIED: workshop main.bib]
+@inproceedings{rombach2022high,
+  title={High-resolution image synthesis with latent diffusion models},
+  author={Rombach, Robin and Blattmann, Andreas and Lorenz, Dominik and Esser, Patrick and Ommer, Bj{\"o}rn},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={10684--10695},
+  year={2022}
+}
+
+% [VERIFIED: workshop main.bib — arXiv only, NOT a conference paper]
+@misc{ramesh2022hierarchical,
+  title={Hierarchical text-conditional image generation with clip latents},
+  author={Ramesh, Aditya and Dhariwal, Prafulla and Nichol, Alex and Chu, Casey and Chen, Mark},
+  howpublished={arXiv preprint arXiv:2204.06125},
+  year={2022}
+}
+
+% [VERIFIED: widely cited, NeurIPS 2021]
+@inproceedings{Dhariwal2021Diffusion,
+  title={Diffusion models beat {GAN}s on image synthesis},
+  author={Dhariwal, Prafulla and Nichol, Alexander Quinn},
+  booktitle={Advances in Neural Information Processing Systems},
+  volume={34},
+  pages={8780--8794},
+  year={2021}
+}
+
+% [VERIFIED: web search — NeurIPS 2021 Workshop on Deep Generative Models]
+@inproceedings{ho2021classifier,
+  title={Classifier-free diffusion guidance},
+  author={Ho, Jonathan and Salimans, Tim},
+  booktitle={NeurIPS 2021 Workshop on Deep Generative Models and Downstream Applications},
+  year={2021}
+}
+
+% --- Training-Based Concept Erasure ---
+
+% [VERIFIED: workshop main.bib]
+@inproceedings{gandikota2023erasing,
+  title={Erasing concepts from diffusion models},
+  author={Gandikota, Rohit and Materzynska, Joanna and Fiotto-Kaufman, Jaden and Bau, David},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={2426--2436},
+  year={2023}
+}
+
+% [VERIFIED: workshop main.bib — WACV 2024, NOT CVPR]
+@inproceedings{gandikota2024unified,
+  title={Unified concept editing in diffusion models},
+  author={Gandikota, Rohit and Orgad, Hadas and Belinkov, Yonatan and Materzy{\'n}ska, Joanna and Bau, David},
+  booktitle={Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision},
+  pages={5111--5120},
+  year={2024}
+}
+
+% [VERIFIED: workshop main.bib — arXiv, NOT conference]
+@misc{kim2023towards,
+  title={Towards safe self-distillation of internet-scale text-to-image diffusion models},
+  author={Kim, Sanghyun and Jung, Seohyeon and Kim, Balhae and Choi, Moonseok and Shin, Jinwoo and Lee, Juho},
+  howpublished={arXiv preprint arXiv:2307.05977},
+  year={2023}
+}
+
+% [VERIFIED: workshop main.bib + related_work/RECE_2407.12383.md — ECCV 2024]
+@inproceedings{gong2024reliable,
+  title={Reliable and efficient concept erasure of text-to-image diffusion models},
+  author={Gong, Chao and Chen, Kai and Wei, Zhipeng and Chen, Jingjing and Jiang, Yu-Gang},
+  booktitle={European Conference on Computer Vision},
+  pages={73--88},
+  year={2024},
+  organization={Springer}
+}
+
+% [VERIFIED: related_work/SDErasure_EWM9JQ6gX7.md — ICLR 2026]
+% TODO: Replace with official citation once camera-ready is published
+@inproceedings{lu2026sderasure,
+  title={{SDE}rasure: Concept-specific trajectory shifting for concept erasure via adaptive diffusion classifier},
+  author={Lu, Hengyue and others},
+  booktitle={International Conference on Learning Representations},
+  year={2026}
+}
+
+% [VERIFIED: ICCV 2023, widely cited]
+@inproceedings{kumari2023ablating,
+  title={Ablating concepts in text-to-image diffusion models},
+  author={Kumari, Nupur and Zhang, Bingliang and Wang, Sheng-Yu and Shechtman, Eli and Zhang, Richard and Zhu, Jun-Yan},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={22691--22702},
+  year={2023}
+}
+
+% [VERIFIED: web search — CVPR 2024 Workshop (MMFM), NOT main conference]
+@inproceedings{zhang2024forget,
+  title={Forget-Me-Not: Learning to forget in text-to-image diffusion models},
+  author={Zhang, Gong and Wang, Kai and Xu, Xingqian and Wang, Zhangyang and Shi, Humphrey},
+  booktitle={IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)},
+  year={2024}
+}
+
+% --- Training-Free Inference-Time Methods ---
+
+% [VERIFIED: workshop main.bib — CVPR 2023]
+@inproceedings{schramowski2023safe,
+  title={Safe latent diffusion: Mitigating inappropriate degeneration in diffusion models},
+  author={Schramowski, Patrick and Brack, Manuel and Deiseroth, Bj{\"o}rn and Kersting, Kristian},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={22522--22531},
+  year={2023}
+}
+
+% [VERIFIED: workshop main.bib — NeurIPS 2023]
+@inproceedings{brack2023sega,
+  title={Sega: Instructing text-to-image models using semantic guidance},
+  author={Brack, Manuel and Friedrich, Felix and Hintersdorf, Dominik and Struppek, Lukas and Schramowski, Patrick and Kersting, Kristian},
+  booktitle={Advances in Neural Information Processing Systems},
+  volume={36},
+  pages={25365--25389},
+  year={2023}
+}
+
+% [VERIFIED: workshop main.bib — ICLR 2025, NOT NeurIPS 2024]
+@inproceedings{yoon2024safree,
+  title={{SAFREE}: Training-Free and Adaptive Guard for Safe Text-to-Image And Video Generation},
+  author={Jaehong Yoon and Shoubin Yu and Vaidehi Patil and Huaxiu Yao and Mohit Bansal},
+  booktitle={International Conference on Learning Representations},
+  year={2025}
+}
+
+% [Our prior work — CVPR 2026 Workshop]
+@inproceedings{gil2026ascg,
+  title={Adaptive spatial classifier guidance for surgical concept suppression in diffusion models},
+  author={Gil, Younghwan and others},
+  booktitle={IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops},
+  year={2026}
+}
+
+% --- Adversarial Prompt Datasets ---
+
+% [VERIFIED: workshop main.bib — ICLR 2024]
+@inproceedings{tsai2024ring,
+  title={Ring-A-Bell! How Reliable are Concept Removal Methods For Diffusion Models?},
+  author={Yu-Lin Tsai and Chia-Yi Hsu and Chulin Xie and Chih-Hsun Lin and Jia You Chen and Bo Li and Pin-Yu Chen and Chia-Mu Yu and Chun-Ying Huang},
+  booktitle={International Conference on Learning Representations},
+  year={2024}
+}
+
+% [VERIFIED: workshop main.bib — CVPR 2024]
+@inproceedings{yang2024mma,
+  title={Mma-diffusion: Multimodal attack on diffusion models},
+  author={Yang, Yijun and Gao, Ruiyuan and Wang, Xiaosen and Ho, Tsung-Yi and Xu, Nan and Xu, Qiang},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={7737--7746},
+  year={2024}
+}
+
+% [NEEDS-VERIFICATION: P4D — commonly cited as ICML 2024]
+@inproceedings{chin2024prompting4debugging,
+  title={Prompting4Debugging: Red-teaming text-to-image diffusion models by finding problematic prompts},
+  author={Chin, Zhi-Yi and Jiang, Chieh-Ming and Huang, Ching-Chun and Chen, Pin-Yu and Chiu, Wei-Chen},
+  booktitle={International Conference on Machine Learning},
+  year={2024}
+}
+
+% [VERIFIED: workshop main.bib — ECCV 2024, NOT arXiv 2025]
+@inproceedings{zhang2024generate,
+  title={To generate or not? safety-driven unlearned diffusion models are still easy to generate unsafe images... for now},
+  author={Zhang, Yimeng and Jia, Jinghan and Chen, Xin and Chen, Aochuan and Zhang, Yihua and Liu, Jiancheng and Ding, Ke and Liu, Sijia},
+  booktitle={European Conference on Computer Vision},
+  pages={385--403},
+  year={2024},
+  organization={Springer}
+}
+
+% --- Evaluation ---
+
+% [VERIFIED: web search — NeurIPS 2025 Datasets & Benchmarks]
+@inproceedings{chen2025mjbench,
+  title={{MJ-Bench}: Is your multimodal reward model really a good judge for text-to-image generation?},
+  author={Chen, Zhaorun and Du, Yichao and Wen, Zichen and Zhou, Yiyang and Cui, Chenhang and Weng, Zhenzhen and Tu, Haoqin and Wang, Chaoqi and Tong, Zhaozhuo and Huang, Huaxiu and others},
+  booktitle={Advances in Neural Information Processing Systems (Datasets and Benchmarks Track)},
+  year={2025}
+}
+
+% [VERIFIED: workshop main.bib — Qwen3-VL, arXiv:2511.21631]
+@misc{bai2025qwen3vl,
+  title={Qwen3-VL Technical Report},
+  author={Shuai Bai and Yuxuan Cai and Ruizhe Chen and Keqin Chen and Xionghui Chen and Zesen Cheng and others},
+  howpublished={arXiv preprint arXiv:2511.21631},
+  year={2025}
+}
+
+% [VERIFIED: NeurIPS 2023, widely cited]
+@inproceedings{liu2023visual,
+  title={Visual instruction tuning},
+  author={Liu, Haotian and Li, Chunyuan and Wu, Qingyang and Lee, Yong Jae},
+  booktitle={Advances in Neural Information Processing Systems},
+  volume={36},
+  year={2023}
+}
+
+% [VERIFIED: workshop main.bib]
+@misc{notai_nudenet_2019,
+  author={notAI Tech},
+  title={{NudeNet}: Neural Nets for Nudity Classification, Detection, and Selective Censoring},
+  year={2019},
+  howpublished={\url{https://github.com/notAI-tech/NudeNet}}
+}
+
+% [VERIFIED: workshop main.bib — Q16 classifier]
+@inproceedings{schramowski2022q16,
+  title={Can Machines Help Us Answering Question 16 in Datasheets, and In Turn Reflecting on Inappropriate Content?},
+  author={Schramowski, Patrick and Tauchmann, Christopher and Kersting, Kristian},
+  booktitle={Proceedings of the 2022 ACM Conference on Fairness, Accountability, and Transparency},
+  pages={1350--1361},
+  year={2022}
+}
+
+% --- Image Quality Metrics ---
+
+% [VERIFIED: NeurIPS 2017, widely cited]
+@inproceedings{heusel2017gans,
+  title={{GAN}s trained by a two time-scale update rule converge to a local {N}ash equilibrium},
+  author={Heusel, Martin and Ramsauer, Hubert and Unterthiner, Thomas and Nessler, Bernhard and Hochreiter, Sepp},
+  booktitle={Advances in Neural Information Processing Systems},
+  volume={30},
+  year={2017}
+}
+
+% [VERIFIED: EMNLP 2021]
+@inproceedings{hessel2021clipscore,
+  title={{CLIPS}core: A reference-free evaluation metric for image captioning},
+  author={Hessel, Jack and Holtzman, Ari and Forbes, Maxwell and Le Bras, Ronan and Choi, Yejin},
+  booktitle={Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  pages={7514--7528},
+  year={2021}
+}
+
+% [VERIFIED: ECCV 2014, widely cited]
+@inproceedings{lin2014microsoft,
+  title={Microsoft {COCO}: Common objects in context},
+  author={Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
+  booktitle={European Conference on Computer Vision},
+  pages={740--755},
+  year={2014},
+  organization={Springer}
+}
+
+% --- Safety / Red-teaming ---
+
+% [VERIFIED: web search — ML Safety Workshop, NeurIPS 2022]
+@inproceedings{rando2022red,
+  title={Red-teaming the stable diffusion safety filter},
+  author={Rando, Javier and Paleka, Daniel and Lindner, David and Heim, Lennart and Tram{\`e}r, Florian},
+  booktitle={NeurIPS 2022 Workshop on ML Safety},
+  year={2022}
+}
+
+% [VERIFIED: workshop main.bib — ACM CCS 2023]
+@inproceedings{qu2023unsafe,
+  title={Unsafe diffusion: On the generation of unsafe images and hateful memes from text-to-image models},
+  author={Qu, Yiting and Shen, Xinyue and He, Xinlei and Backes, Michael and Zannettou, Savvas and Zhang, Yang},
+  booktitle={Proceedings of the 2023 ACM SIGSAC Conference on Computer and Communications Security},
+  pages={3403--3417},
+  year={2023}
+}
+
+% --- Other ---
+
+% [VERIFIED: workshop main.bib — ICCV 2017]
+@inproceedings{selvaraju2017grad,
+  title={Grad-cam: Visual explanations from deep networks via gradient-based localization},
+  author={Selvaraju, Ramprasaath R and Cogswell, Michael and Das, Abhishek and Vedantam, Ramakrishna and Parikh, Devi and Batra, Dhruv},
+  booktitle={Proceedings of the IEEE International Conference on Computer Vision},
+  pages={618--626},
+  year={2017}
+}
+
+% [NEEDS-VERIFICATION: Representation Engineering]
+@misc{zou2023representation,
+  title={Representation engineering: A top-down approach to {AI} transparency},
+  author={Zou, Andy and Phan, Long and Chen, Sarah and Campbell, James and Guo, Phillip and Ren, Richard and Pan, Alexander and Yin, Xuwang and Mazeika, Mantas and Dombrowski, Ann-Kathrin and others},
+  howpublished={arXiv preprint arXiv:2310.01405},
+  year={2023}
+}

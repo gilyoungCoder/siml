@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Training-Free Concept Erasure via Example-Based Guidance</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<style>
+  :root { --heading:#1a1a2e; --accent:#2563eb; --accent2:#7c3aed; --safe:#059669; --danger:#dc2626; --warn:#d97706; --teal:#0f766e; --new:#ea580c; }
+  .reveal { font-size:28px; }
+  .reveal h1 { font-size:2.2em; color:var(--heading); font-weight:800; }
+  .reveal h2 { font-size:1.45em; color:var(--heading); font-weight:700; border-bottom:3px solid var(--accent); padding-bottom:6px; display:inline-block; }
+  .reveal h3 { font-size:0.95em; color:var(--accent2); font-weight:600; }
+  .reveal .sub { color:#64748b; font-size:0.72em; margin-top:-6px; }
+  .reveal section { text-align:left; }
+  .reveal li { margin-bottom:5px; line-height:1.45; }
+  .small { font-size:0.7em; color:#64748b; }
+  .title-slide { text-align:center !important; }
+  .title-slide h1 { font-size:2.0em; background:linear-gradient(135deg,#1a1a2e,#2563eb); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .divider { text-align:center !important; background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%) !important; }
+  .divider h2 { color:#fff !important; border-bottom-color:#60a5fa !important; font-size:1.8em; }
+  .divider p { color:#cbd5e1 !important; }
+  .box { background:#f8fafc; border-radius:8px; padding:12px 16px; margin:7px 0; border-left:4px solid var(--accent); font-size:0.82em; }
+  .box-purple { border-left-color:var(--accent2); }
+  .box-green { border-left-color:var(--safe); background:#f0fdf4; }
+  .box-red { border-left-color:var(--danger); background:#fef2f2; }
+  .box-warn { border-left-color:var(--warn); background:#fffbeb; }
+  .box-teal { border-left-color:var(--teal); background:#f0fdfa; }
+  .box-new { border-left-color:var(--new); background:#fff7ed; }
+  .reveal table { font-size:0.60em; width:100%; border-collapse:collapse; margin:6px 0; }
+  .reveal table th { background:#1e293b; color:#fff; padding:6px 8px; text-align:center; font-weight:600; }
+  .reveal table td { padding:5px 8px; border-bottom:1px solid #e2e8f0; text-align:center; }
+  .reveal table tr:nth-child(even) { background:#f8fafc; }
+  .best { background:#dcfce7 !important; font-weight:700; }
+  .hl { background:#dbeafe !important; font-weight:600; }
+  td.l { text-align:left !important; }
+  .gv { color:#059669; font-weight:700; }
+  .bv { color:#dc2626; }
+  .pipe { display:flex; align-items:center; justify-content:center; gap:5px; margin:12px 0; flex-wrap:wrap; }
+  .pipe .s { border-radius:10px; padding:10px 14px; font-size:0.68em; font-weight:600; text-align:center; min-width:85px; line-height:1.4; }
+  .pipe .a { font-size:1.3em; color:#93c5fd; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  .tag { display:inline-block; padding:2px 10px; border-radius:20px; font-size:0.58em; font-weight:600; margin:2px; }
+  .tag-blue { background:#dbeafe; color:#1e40af; }
+  .tag-green { background:#dcfce7; color:#166534; }
+  .tag-red { background:#fee2e2; color:#991b1b; }
+  .tag-purple { background:#f3e8ff; color:#6b21a8; }
+  .tag-orange { background:#ffedd5; color:#9a3412; }
+  .formula { background:#f8fafc; border-radius:8px; padding:12px 18px; margin:8px 0; font-size:0.9em; text-align:center; border:1px solid #e2e8f0; line-height:1.8; }
+  .formula-hl { border-left:4px solid var(--accent); }
+  .nc { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; font-weight:700; font-size:0.75em; margin-right:8px; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ===== TITLE ===== -->
+<section class="title-slide">
+  <h1>Training-Free Concept Erasure<br>via Example-Based Guidance</h1>
+  <p style="font-size:0.9em; color:#475569; margin-top:-5px;">When, Where, and How to Guide Safe Denoising<br>in Text-to-Image Diffusion Models</p>
+  <div style="margin-top:25px;">
+    <span class="tag tag-blue">Inference-time</span>
+    <span class="tag tag-green">Training-free</span>
+    <span class="tag tag-purple">Multi-concept</span>
+    <span class="tag tag-orange">Example-based</span>
+  </div>
+  <div style="margin-top:18px; color:#888; font-size:0.7em;">Younghwan Gil &middot; April 2026</div>
+</section>
+
+<!-- ===== MOTIVATION ===== -->
+<section class="divider"><h2>Motivation</h2><p style="font-size:1.2em;">Why Training-Free Concept Erasure?</p></section>
+
+<section>
+  <h2>Problem</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-red">
+        <strong>T2I Models Generate Unsafe Content</strong><br>
+        Stable Diffusion can generate nudity, violence, hate speech, etc. from adversarial prompts
+      </div>
+      <div class="box box-warn" style="margin-top:10px;">
+        <strong>Existing Solutions Have Limitations</strong><br>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li><strong>Fine-tuning (ESD, UCE, RECE)</strong>: costly retraining per concept, catastrophic forgetting</li>
+          <li><strong>Negative prompt</strong>: easily bypassed by adversarial attacks</li>
+          <li><strong>Safety checker</strong>: post-hoc, doesn't fix generation</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>Our Goal</strong><br>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li>No training or fine-tuning required</li>
+          <li>Erase multiple concepts simultaneously</li>
+          <li>Preserve image quality for benign prompts</li>
+          <li>Robust to adversarial prompt attacks</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== METHOD ===== -->
+<section class="divider"><h2>Method</h2><p style="font-size:1.2em;">Example-Based When + Where + How</p></section>
+
+<section>
+  <h2>Overview: Three-Stage Guidance</h2>
+  <div class="pipe">
+    <div class="s" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;"><strong>WHEN</strong><br>CAS Gate<br><span style="font-size:0.8em;">Concept Alignment Score</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border:2px solid #fbbf24; color:#92400e;"><strong>WHERE</strong><br>Spatial Probe<br><span style="font-size:0.8em;">Cross-Attention + CLIP</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#e8d5f5,#d8b4fe); border:2px solid #a78bfa; color:#5b21b6;"><strong>HOW</strong><br>Safe Guidance<br><span style="font-size:0.8em;">Hybrid / Anchor Inpaint</span></div>
+  </div>
+  <div class="box">
+    <strong>Key Insight:</strong> Use exemplar embeddings (CLIP) to detect <em>when</em> a concept appears, <em>where</em> it localizes, and guide denoising <em>how</em> to replace it &mdash; all at inference time, no training needed.
+  </div>
+</section>
+
+<section>
+  <h2>WHEN: Concept Alignment Score (CAS)</h2>
+  <div class="formula formula-hl">
+    $\text{CAS}(t) = \cos(\epsilon_\text{prompt} - \epsilon_\varnothing, \; \epsilon_\text{target} - \epsilon_\varnothing)$
+  </div>
+  <ul style="font-size:0.85em;">
+    <li>At each denoising step $t$, compute cosine similarity between prompt direction and target concept direction</li>
+    <li>If $\text{CAS}(t) > \tau$ (threshold), activate safety guidance</li>
+    <li>$\tau = 0.5\text{-}0.6$ for nudity; concept-specific tuning for others</li>
+  </ul>
+  <div class="box box-green">
+    <strong>Benefit:</strong> Reduces false positives on benign prompts &mdash; guidance only activates when the concept is actually being generated
+  </div>
+</section>
+
+<section>
+  <h2>WHERE: Dual-Probe Spatial Localization</h2>
+  <div class="two-col">
+    <div>
+      <h3>Text Probe</h3>
+      <div class="box">
+        Cross-attention maps for target words<br>
+        ("nude", "naked", "violence", etc.)<br>
+        &rarr; pixel-level unsafe region mask
+      </div>
+    </div>
+    <div>
+      <h3>Image Probe (CLIP Exemplar)</h3>
+      <div class="box box-purple">
+        Compare intermediate features with<br>
+        CLIP exemplar embeddings<br>
+        &rarr; concept-aligned spatial mask
+      </div>
+    </div>
+  </div>
+  <div class="box box-teal" style="margin-top:10px;">
+    <strong>Fusion:</strong> Union of text + image probe masks &rarr; robust spatial guidance that catches both explicit and implicit unsafe regions
+  </div>
+</section>
+
+<section>
+  <h2>HOW: Safe Denoising Guidance</h2>
+  <div class="two-col">
+    <div>
+      <h3>Anchor Inpaint Mode</h3>
+      <div class="formula" style="font-size:0.78em;">
+        $\epsilon_\text{safe} = \epsilon_\text{cfg} - s \cdot M \cdot (\epsilon_\text{target} - \epsilon_\varnothing)$
+      </div>
+      <div class="box box-green" style="font-size:0.8em;">
+        Subtract target concept noise from guided prediction, scaled by spatial mask $M$
+      </div>
+    </div>
+    <div>
+      <h3>Hybrid Mode</h3>
+      <div class="formula" style="font-size:0.78em;">
+        $\epsilon_\text{safe} = \epsilon_\text{cfg} + s_t \cdot M \cdot (\epsilon_\text{anchor} - \epsilon_\text{target})$
+      </div>
+      <div class="box box-purple" style="font-size:0.8em;">
+        Push denoising from target toward anchor (safe concept) direction within masked region
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RESULTS: NUDITY ===== -->
+<section class="divider"><h2>Results</h2><p style="font-size:1.2em;">Nudity Erasure</p></section>
+
+<section>
+  <h2>Main Table: Nudity Erasure (Qwen3-VL SR%)</h2>
+  <p class="sub">SR = (Safe + Partial) / Total &uarr; &nbsp; Higher is better</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Method</th>
+      <th>Type</th>
+      <th>Ring-A-Bell<br>(79)</th>
+      <th>P4DN<br>(151)</th>
+      <th>UnlearnDiff<br>(142)</th>
+      <th>MMA<br>(1000)</th>
+      <th>I2P Sexual<br>(931)</th>
+    </tr>
+    <tr>
+      <td class="l">SD v1.4 Baseline</td><td>&mdash;</td>
+      <td class="bv">34.8</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td>
+    </tr>
+    <tr>
+      <td class="l">SLD-Max</td><td>Free</td>
+      <td>57.9</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td>
+    </tr>
+    <tr>
+      <td class="l">SAFREE</td><td>Free</td>
+      <td>89.9</td><td>67.5</td><td>87.3</td><td>&mdash;</td><td>&mdash;</td>
+    </tr>
+    <tr>
+      <td class="l" style="color:#888;">RECE</td><td style="color:#888;">Fine-tune</td>
+      <td style="color:#888;">TBD</td><td style="color:#888;">TBD</td><td style="color:#888;">TBD</td><td style="color:#888;">TBD</td><td style="color:#888;">TBD</td>
+    </tr>
+    <tr>
+      <td class="l" style="color:#888;">SDErasure</td><td style="color:#888;">Fine-tune</td>
+      <td style="color:#888;">TBD</td><td style="color:#888;">TBD</td><td style="color:#888;">TBD</td><td style="color:#888;">TBD</td><td style="color:#888;">TBD</td>
+    </tr>
+    <tr class="hl">
+      <td class="l"><strong>Ours (Anchor)</strong></td><td>Free</td>
+      <td>89.9</td><td>94.7</td><td>95.1</td><td>79.8</td><td>91.5</td>
+    </tr>
+    <tr class="best">
+      <td class="l"><strong>Ours (Hybrid)</strong></td><td>Free</td>
+      <td><strong>94.9</strong></td><td><strong>94.0</strong></td><td><strong>97.2</strong></td><td><strong>79.6</strong></td><td><strong>93.1</strong></td>
+    </tr>
+  </table>
+  <div class="small">TBD = results running overnight on siml-01/02. Gray rows = fine-tuning methods.</div>
+</section>
+
+<!-- ===== RESULTS: MULTI-CONCEPT ===== -->
+<section class="divider"><h2>Results</h2><p style="font-size:1.2em;">Multi-Concept Erasure</p></section>
+
+<section>
+  <h2>Single-Concept Erasure (All I2P Categories)</h2>
+  <p class="sub">Qwen3-VL SR% &uarr; &mdash; Best config per concept</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>I2P Prompts</th>
+      <th>Best Probe</th>
+      <th>Best Config</th>
+      <th>SR%</th>
+    </tr>
+    <tr class="best"><td class="l"><strong>Nudity</strong></td><td>931</td><td>both</td><td>hybrid ts15 as15</td><td><strong>93.1</strong></td></tr>
+    <tr class="best"><td class="l"><strong>Violence</strong></td><td>756</td><td>text</td><td>ainp ss1.5 cas0.4</td><td><strong>97.1</strong></td></tr>
+    <tr><td class="l"><strong>Harassment</strong></td><td>824</td><td>text</td><td>ainp ss1.2 cas0.4</td><td><strong>83.3</strong></td></tr>
+    <tr><td class="l"><strong>Hate</strong></td><td>231</td><td>text</td><td>ainp ss1.0 cas0.4</td><td><strong>84.8</strong></td></tr>
+    <tr class="best"><td class="l"><strong>Shocking</strong></td><td>856</td><td>both</td><td>ainp ss0.8 cas0.6</td><td><strong>97.3</strong></td></tr>
+    <tr><td class="l"><strong>Illegal</strong></td><td>727</td><td colspan="2"><em>Evaluating...</em></td><td>TBD</td></tr>
+    <tr><td class="l"><strong>Self-harm</strong></td><td>801</td><td colspan="2"><em>Evaluating...</em></td><td>TBD</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Multi-Concept Simultaneous Erasure</h2>
+  <p class="sub">Erasing nudity + another concept at the same time</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Dual Erasure</th>
+      <th>Nudity SR%</th>
+      <th>Concept SR%</th>
+      <th>vs Single Nudity</th>
+    </tr>
+    <tr><td class="l">Nudity + Shocking (ss1.0)</td><td class="gv">83.7</td><td class="gv">97.5</td><td>&minus;9.4%p</td></tr>
+    <tr><td class="l">Nudity + Violence (ss1.0)</td><td class="gv">87.9</td><td>&mdash;</td><td>&minus;5.2%p</td></tr>
+    <tr><td class="l">Nudity + Harassment (ss1.0)</td><td>80.9</td><td>79.7</td><td>&minus;12.2%p</td></tr>
+    <tr><td class="l">Nudity + Hate (ss1.0)</td><td class="bv">67.1</td><td>81.4</td><td>&minus;26.0%p</td></tr>
+  </table>
+  <div class="box box-warn">
+    <strong>Finding:</strong> Shocking + nudity dual erasure is most effective (both concepts > 83%). Hate + nudity shows more interference &mdash; threshold tuning needed.
+  </div>
+</section>
+
+<!-- ===== EVALUATOR VALIDATION ===== -->
+<section class="divider"><h2>Evaluator Validation</h2><p style="font-size:1.2em;">Qwen3-VL as Safety Judge</p></section>
+
+<section>
+  <h2>MJ-Bench Safety Evaluation</h2>
+  <p class="sub">Qwen3-VL-8B vs published models on 672 safety pairs</p>
+  <div class="two-col">
+    <div>
+      <table>
+        <tr><th style="text-align:left;">Model</th><th>Safety<br>w/ tie</th></tr>
+        <tr class="best"><td class="l"><strong>GPT-4o</strong></td><td>35.3</td></tr>
+        <tr><td class="l">BLIP-v2</td><td>44.0</td></tr>
+        <tr><td class="l">PickScore-v1</td><td>37.2</td></tr>
+        <tr><td class="l">LLaVA-1.5-13b</td><td>30.7</td></tr>
+        <tr><td class="l">Qwen-VL-Chat (v1)</td><td>26.8</td></tr>
+        <tr class="hl"><td class="l"><strong>Qwen3-VL-8B (Ours)</strong></td><td><strong>TBD</strong></td></tr>
+      </table>
+      <div class="small">Table 1 protocol (5-criteria, [1-5] scale). Running on siml-07.</div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>Cross-Validator Agreement</strong><br>
+        Qwen3-VL vs LLaVA binary safe/unsafe:<br>
+        <span style="font-size:1.3em; font-weight:700; color:var(--safe);">92.3%</span>
+      </div>
+      <div class="box" style="margin-top:10px;">
+        <strong>Safety-Specific Eval (672 pairs)</strong><br>
+        w/ tie: <strong>49.7%</strong> &nbsp; w/o tie: <strong>88.1%</strong><br>
+        <span class="small">Open-source VLM 중 최강 성능</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABLATION ===== -->
+<section class="divider"><h2>Ablation Study</h2><p style="font-size:1.2em;">Component Analysis</p></section>
+
+<section>
+  <h2>Ablation: Probe Mode (Ring-A-Bell)</h2>
+  <table>
+    <tr>
+      <th style="text-align:left;">HOW Mode</th>
+      <th>Image Only</th>
+      <th>Text Only</th>
+      <th>Image + Text</th>
+    </tr>
+    <tr>
+      <td class="l">Anchor Inpaint (ss=1.2)</td>
+      <td>TBD</td>
+      <td>91.1</td>
+      <td>89.9</td>
+    </tr>
+    <tr class="best">
+      <td class="l">Hybrid (ts=15, as=15)</td>
+      <td>TBD</td>
+      <td>89.9</td>
+      <td><strong>94.9</strong></td>
+    </tr>
+  </table>
+  <div class="box">
+    <strong>Finding:</strong> Hybrid + Image+Text probe achieves the best SR (94.9%). Text-only is strong but image probe adds significant value for hybrid mode.
+  </div>
+</section>
+
+<section>
+  <h2>Ablation: CAS Threshold</h2>
+  <p class="sub">Ring-A-Bell + 4-dataset combined (316 prompts)</p>
+  <table>
+    <tr>
+      <th>CAS $\tau$</th>
+      <th>0.3</th><th>0.4</th><th>0.5</th><th>0.6</th><th>0.7</th>
+    </tr>
+    <tr>
+      <td class="l">Nudity SR%</td>
+      <td>TBD</td><td>TBD</td><td>TBD</td><td class="best">92.7</td><td>TBD</td>
+    </tr>
+    <tr>
+      <td class="l">COCO FP% &darr;</td>
+      <td>TBD</td><td>TBD</td><td>TBD><td class="best">~3-5%</td><td>TBD</td>
+    </tr>
+  </table>
+  <div class="box box-teal">
+    <strong>Trade-off:</strong> Higher $\tau$ = fewer false positives on COCO but slightly lower nudity detection. $\tau=0.6$ is optimal for nudity.
+  </div>
+</section>
+
+<section>
+  <h2>Image Quality Preservation (COCO)</h2>
+  <table>
+    <tr>
+      <th style="text-align:left;">Method</th>
+      <th>FID &darr;</th>
+      <th>CLIP Score &uarr;</th>
+    </tr>
+    <tr><td class="l">SD v1.4 Baseline</td><td>&mdash;</td><td><strong>26.07</strong></td></tr>
+    <tr><td class="l">SLD-Max</td><td>TBD</td><td>TBD</td></tr>
+    <tr><td class="l">Ours (v4 ainp s0.9)</td><td>3.95</td><td>26.07</td></tr>
+    <tr><td class="l">Ours (hyb ts7.5 as7.5)</td><td><strong>3.66</strong></td><td>26.06</td></tr>
+    <tr><td class="l">Ours (v27 hyb ts15 as15)</td><td>TBD</td><td>TBD</td></tr>
+  </table>
+  <div class="box box-green">
+    <strong>Key Result:</strong> FID ~3.7-5.1, CLIP delta < 0.1 &mdash; minimal quality degradation on benign prompts
+  </div>
+</section>
+
+<!-- ===== CONCLUSION ===== -->
+<section class="divider"><h2>Summary &amp; Next Steps</h2></section>
+
+<section>
+  <h2>Contributions</h2>
+  <ol style="font-size:0.88em;">
+    <li><strong>Training-free concept erasure framework</strong> with three-stage guidance (When + Where + How)</li>
+    <li><strong>Example-based detection</strong> using CLIP exemplar embeddings &mdash; no concept-specific training</li>
+    <li><strong>State-of-the-art nudity erasure</strong>: 94.9% SR on Ring-A-Bell, 97.2% on UnlearnDiff</li>
+    <li><strong>Multi-concept simultaneous erasure</strong> across 7 I2P categories</li>
+    <li><strong>Evaluator validation</strong>: Qwen3-VL as reliable safety judge (92.3% agreement with LLaVA)</li>
+  </ol>
+  <div class="box box-new" style="margin-top:15px;">
+    <strong>Next Steps:</strong>
+    <ul style="margin:4px 0;">
+      <li>Complete baseline comparisons (RECE, SDErasure running overnight)</li>
+      <li>COCO FID/CLIP for v27 best config</li>
+      <li>Q16 evaluation for IP metric</li>
+      <li>Paper writing: NeurIPS 2026 submission</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    margin: 0.08,
+    center: false,
+  });
+</script>
+</body>
+</html>

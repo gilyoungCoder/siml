@@ -14,8 +14,18 @@ Usage:
 import os
 import re
 import csv
+from pathlib import Path
 
-BASE_DIR = "/mnt/home/yhgil99/unlearning"
+import sys
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from vlm.path_utils import get_repo_root
+from vlm.result_contract import parse_category_report_file
+
+BASE_DIR = str(get_repo_root())
 BASELINES_DIR = f"{BASE_DIR}/SoftDelete+CG/scg_outputs/baselines_i2p"
 BEST_CONFIGS_DIR = f"{BASE_DIR}/SoftDelete+CG/scg_outputs/best_configs"
 
@@ -31,21 +41,18 @@ CONFIGS = {
 }
 
 def parse_result_file(filepath):
-    if not os.path.exists(filepath):
+    summary = parse_category_report_file(filepath)
+    if summary is None:
         return None
-
-    with open(filepath, 'r') as f:
-        content = f.read()
-
-    result = {}
-    match = re.search(r'Total images:\s*(\d+)', content)
-    result['total'] = int(match.group(1)) if match else 0
-
-    for cat in ['NotPeople', 'NotRelevant', 'Safe', 'Partial', 'Full']:
-        match = re.search(rf'-\s*{cat}:\s*(\d+)', content)
-        result[cat.lower()] = int(match.group(1)) if match else 0
-
-    return result
+    counts = summary["counts"]
+    return {
+        "total": summary["total"],
+        "notrel": counts["NotRel"],
+        "safe": counts["Safe"],
+        "partial": counts["Partial"],
+        "full": counts["Full"],
+        "sr": summary["sr"],
+    }
 
 def get_result_path(method, concept, tox, class_type, vlm_concept):
     """Get result file path based on method."""
@@ -92,12 +99,10 @@ def main():
                     safe = result.get('safe', 0)
                     partial = result.get('partial', 0)
                     full = result.get('full', 0)
-                    sr = safe + partial
-
                     safe_pct = safe / total * 100
                     partial_pct = partial / total * 100
                     full_pct = full / total * 100
-                    sr_pct = sr / total * 100
+                    sr_pct = result['sr'] * 100
 
                     row = {
                         'concept': concept,
@@ -146,11 +151,10 @@ def main():
                     full += result.get('full', 0)
 
             if total > 0:
-                sr = safe + partial
                 safe_pct = safe / total * 100
                 partial_pct = partial / total * 100
                 full_pct = full / total * 100
-                sr_pct = sr / total * 100
+                sr_pct = (safe + partial) / total * 100
 
                 summary_rows.append({
                     'concept': concept,

@@ -1,0 +1,107 @@
+\begin{table*}[!t]
+    \renewcommand{\arraystretch}{1.1}
+    \setlength{\tabcolsep}{0.35em}
+    \setlength{\aboverulesep}{0pt}
+    \setlength{\belowrulesep}{0pt}
+    \setlength{\extrarowheight}{0.2em}
+    \caption{Qwen3-VL evaluation results on high-toxicity prompts. SR denotes Safe + Partial. For the fair comparision, Diffusion model fine-tuning--based methods are shown in gray. To evaluate the performance of safety-enhanced T2I models, we computed FID scores by comparing their generated distributions against those of Stable Diffusion v1.4 as a baseline.}
+    \label{table/main}
+    \vspace{-0.5em}
+    
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{lcccccccccccccccrc}
+    \toprule
+    & \multicolumn{5}{c}{UnlearnDiff}
+    & \multicolumn{5}{c}{Ring-A-Bell}
+    & \multicolumn{5}{c}{MMA-Diffusion}
+    & \multicolumn{2}{c}{COCO} \\
+    \cmidrule(lr){2-6}
+    \cmidrule(lr){7-11}
+    \cmidrule(lr){12-16}
+    \cmidrule(lr){17-18}
+    & SR & Safe & Partial & Full & NotRel
+    & SR & Safe & Partial & Full & NotRel
+    & SR & Safe & Partial & Full & NotRel
+    & FID$\downarrow$ & CLIP$\uparrow$ \\
+    \midrule
+    
+    Baseline
+    & .556 & \color{gray}.218 & \color{gray}.338 & \color{gray}.430 & .014
+    & .215 & \color{gray}.114 & \color{gray}.101 & \color{gray}.747 & .038
+    & .228 & \color{gray}.082 & \color{gray}.146 & \color{gray}.768 & .004
+    & -- & .267 \\
+
+    \midrule
+
+    \color{gray} ESD
+    & \color{gray}.859 & \color{gray}.563 & \color{gray}.296 & \color{gray}.092 & \color{gray}.049
+    & \color{gray}.785 & \color{gray}.481 & \color{gray}.304 & \color{gray}.139 & \color{gray}.076
+    & \color{gray}.711 & \color{gray}.414 & \color{gray}.297 & \color{gray}.239 & \color{gray}.050
+    & \color{gray}4.91 & \color{gray}.260 \\
+    
+    \color{gray} SDD
+    & \color{gray}.908 & \color{gray}.620 & \color{gray}.288 & \color{gray}.042 & \color{gray}.049
+    & \color{gray}.886 & \color{gray}.544 & \color{gray}.342 & \color{gray}.076 & \color{gray}.038
+    & \color{gray}.813 & \color{gray}.544 & \color{gray}.269 & \color{gray}.164 & \color{gray}.023
+    & \color{gray}4.73 & \color{gray}.261 \\
+    
+    UCE
+    & .824 & \color{gray}.465 & \color{gray}.359 & \color{gray}.162 & .014
+    & .468 & \color{gray}.228 & \color{gray}.241 & \color{gray}.494 & .038
+    & .345 & \color{gray}.159 & \color{gray}.186 & \color{gray}.651 & .004
+    & 11.45 & .269 \\
+    
+    RECE
+    & .901 & \color{gray}.768 & \color{gray}.134 & \color{gray}.014 & .085
+    & .544 & \color{gray}.519 & \color{gray}.025 & \color{gray}.000 & .456
+    & .794 & \color{gray}.545 & \color{gray}.249 & \color{gray}.164 & .042
+    & 10.33 & .255 \\
+    
+    \midrule
+
+    SLD-Weak
+    & .662 & \color{gray}.296 & \color{gray}.366 & \color{gray}.310 & .028
+    & .215 & \color{gray}.089 & \color{gray}.127 & \color{gray}.734 & .051
+    & .270 & \color{gray}.112 & \color{gray}.152 & \color{gray}.730 & .006
+    & 11.09 & .264 \\
+    
+    SLD-Medium
+    & .789 & \color{gray}.415 & \color{gray}.373 & \color{gray}.169 & .042
+    & .354 & \color{gray}.190 & \color{gray}.165 & \color{gray}.608 & .038
+    & .324 & \color{gray}.134 & \color{gray}.190 & \color{gray}.669 & .007
+    & 12.26 & .260 \\
+    
+    SLD-Strong
+    & .873 & \color{gray}.577 & \color{gray}.296 & \color{gray}.085 & .042
+    & .494 & \color{gray}.241 & \color{gray}.253 & \color{gray}.456 & .051
+    & .419 & \color{gray}.189 & \color{gray}.230 & \color{gray}.572 & .009
+    & 14.56 & .252 \\
+    
+    SLD-Max
+    & .873 & \color{gray}.669 & \color{gray}.204 & \color{gray}.063 & .063
+    & .570 & \color{gray}.329 & \color{gray}.241 & \color{gray}.316 & .114
+    & .490 & \color{gray}.278 & \color{gray}.212 & \color{gray}.461 & .049
+    & 18.46 & .244 \\
+    
+    \rowcolor{blue!10} \BF{ASCG}
+    & .887 & \color{gray}.408 & \color{gray}.479 & \color{gray}.099 & .014
+    & .835 & \color{gray}.392 & \color{gray}.443 & \color{gray}.089 & .076
+    & .590 & \color{gray}.162 & \color{gray}.428 & \color{gray}.407 & .003
+    & 9.96 & .262 \\
+
+    SAFREE
+    & .901 & \color{gray}.754 & \color{gray}.148 & \color{gray}.021 & .077
+    & .772 & \color{gray}.582 & \color{gray}.190 & \color{gray}.127 & .101
+    & .755 & \color{gray}.548 & \color{gray}.207 & \color{gray}.202 & .043
+    & 8.96 & .264 \\
+    
+    \rowcolor{blue!10} \BF{SAFREE + ASCG}
+    & \BL{.915} & \color{gray}.704 & \color{gray}.211 & \color{gray}.014 & .070
+    & \BL{.873} & \color{gray}.532 & \color{gray}.341 & \color{gray}.076 & .051
+    & \BL{.799} & \color{gray}.581 & \color{gray}.218 & \color{gray}.168 & .033
+    & 12.28 & .264 \\
+    
+    \bottomrule
+    \end{tabular}}
+    % \vspace{0.5em}
+\end{table*}

@@ -1,0 +1,4 @@
+# v27 probe keywords for hate
+target_concepts: hate_speech discrimination racist_symbol
+anchor_concepts: diversity harmony cultural_respect equality
+target_words: hate,discrimination,racist,symbol

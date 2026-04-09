@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Aggregate NudeNet + GPT-4o evaluation results for nudity datasets.
+Aggregate NudeNet + nudity-judge evaluation results for nudity datasets.
 
 Usage:
     python aggregate_nudity_results.py <dir1> <dir2> ...
@@ -13,148 +13,89 @@ Output:
 """
 
 import os
-import re
 import json
 import argparse
 from pathlib import Path
-from glob import glob
 from typing import Dict, List, Optional
 import csv
+import sys
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from vlm.result_contract import (
+    load_category_json_summary,
+    parse_category_report_file,
+    parse_nudenet_result_file,
+)
+from vlm.result_paths import (
+    categories_json_candidates,
+    find_existing_result_file,
+    results_txt_candidates,
+)
 
 
 def parse_nudenet_result(result_file: str) -> Optional[Dict]:
     """Parse NudeNet results_nudenet.txt file."""
-    if not os.path.exists(result_file):
-        return None
-
-    try:
-        with open(result_file, 'r') as f:
-            content = f.read()
-
-        total_match = re.search(r'Total Images: (\d+)', content)
-        unsafe_match = re.search(r'Unsafe Count: (\d+)', content)
-        rate_match = re.search(r'Unsafe Rate: ([\d.]+)', content)
-
-        total = int(total_match.group(1)) if total_match else 0
-        unsafe = int(unsafe_match.group(1)) if unsafe_match else 0
-        rate = float(rate_match.group(1)) if rate_match else 0.0
-
-        return {
-            'total': total,
-            'unsafe_count': unsafe,
-            'unsafe_rate': rate,
-            'safe_rate': 1.0 - rate
-        }
-    except Exception as e:
-        print(f"Error parsing {result_file}: {e}")
-        return None
+    return parse_nudenet_result_file(result_file)
 
 
-def parse_gpt_result(result_dir: str) -> Optional[Dict]:
-    """Parse GPT-4o results from results.txt or categories_gpt4o_b64url.json."""
-    # Try results.txt first
-    results_txt = os.path.join(result_dir, "results_gpt4o.txt")
-    categories_json = os.path.join(result_dir, "categories_gpt4o_b64url.json")
+def find_nudenet_result_file(result_dir: str) -> Optional[str]:
+    for name in ("results_nudenet.txt", "results_nudenet_08.txt", "results_nudenet_06.txt"):
+        path = os.path.join(result_dir, name)
+        if os.path.exists(path):
+            return path
+    return None
 
-    if os.path.exists(results_txt):
+
+def parse_judge_result(result_dir: str) -> Optional[Dict]:
+    """Parse current/legacy Qwen nudity-judge results from a result directory."""
+    results_txt = find_existing_result_file(
+        result_dir,
+        results_txt_candidates("qwen", "nudity") + ["results_gpt4o.txt"],
+    )
+    categories_json = find_existing_result_file(
+        result_dir,
+        categories_json_candidates("qwen", "nudity") + ["categories_gpt4o_b64url.json"],
+    )
+
+    if results_txt is not None:
         try:
-            with open(results_txt, 'r') as f:
-                content = f.read()
-
-            # Try new format first: "Success (Safe+Partial): 65개 (82.3%)"
-            success_match = re.search(r'Success \(Safe\+Partial\): (\d+)개 \(([\d.]+)%\)', content)
-            harmful_match = re.search(r'Harmful \(Full\): (\d+)개', content)
-            total_match = re.search(r'Total: (\d+)', content)
-
-            if success_match and total_match:
-                # New format
-                success_count = int(success_match.group(1))
-                success_rate = float(success_match.group(2)) / 100
-                total = int(total_match.group(1))
-                full = int(harmful_match.group(1)) if harmful_match else 0
-
-                # Parse individual counts
-                safe_match = re.search(r'Safe: (\d+)개', content)
-                partial_match = re.search(r'Partial: (\d+)개', content)
-                not_people_match = re.search(r'NotPeople: (\d+)개', content)
-
-                safe = int(safe_match.group(1)) if safe_match else 0
-                partial = int(partial_match.group(1)) if partial_match else 0
-                not_people = int(not_people_match.group(1)) if not_people_match else 0
-
+            summary = parse_category_report_file(results_txt)
+            if summary is not None:
+                counts = summary['counts']
                 return {
-                    'total': total,
-                    'safe': safe,
-                    'partial': partial,
-                    'full': full,
-                    'not_people': not_people,
-                    'success_count': success_count,
-                    'success_rate': success_rate
-                }
-            else:
-                # Old format fallback
-                counts = {}
-                for line in content.split('\n'):
-                    match = re.search(r'(\w+): (\d+)개', line)
-                    if match:
-                        counts[match.group(1)] = int(match.group(2))
-
-                safe = counts.get('Safe', 0)
-                partial = counts.get('Partial', 0)
-                full = counts.get('Full', 0)
-                not_people = counts.get('NotPeople', 0)
-                total = safe + partial + full + not_people
-
-                if total > 0:
-                    success_rate = (safe + partial) / total
-                else:
-                    success_rate = 0.0
-
-                return {
-                    'total': total,
-                    'safe': safe,
-                    'partial': partial,
-                    'full': full,
-                    'not_people': not_people,
-                    'success_count': safe + partial,
-                    'success_rate': success_rate
+                    'result_file': str(results_txt),
+                    'json_file': str(categories_json) if categories_json is not None else None,
+                    'total': summary['total'],
+                    'safe': counts['Safe'],
+                    'partial': counts['Partial'],
+                    'full': counts['Full'],
+                    'not_people': counts['NotRel'],
+                    'success_count': summary['safe_count'],
+                    'success_rate': summary['sr'],
+                    'relevant_success_rate': summary['relevant_sr'],
                 }
         except Exception as e:
             print(f"Error parsing {results_txt}: {e}")
 
     # Try JSON file
-    if os.path.exists(categories_json):
+    if categories_json is not None:
         try:
-            with open(categories_json, 'r') as f:
-                data = json.load(f)
-
-            counts = {'Safe': 0, 'Partial': 0, 'Full': 0, 'NotPeople': 0, 'Error': 0}
-            for filename, result in data.items():
-                cat = result.get('category', 'Error')
-                if cat in counts:
-                    counts[cat] += 1
-                else:
-                    counts['Error'] += 1
-
-            safe = counts['Safe']
-            partial = counts['Partial']
-            full = counts['Full']
-            not_people = counts['NotPeople']
-            total = safe + partial + full + not_people
-
-            if total > 0:
-                success_rate = (safe + partial) / total
-            else:
-                success_rate = 0.0
-
+            summary = load_category_json_summary(categories_json)
+            counts = summary['counts']
             return {
-                'total': total,
-                'safe': safe,
-                'partial': partial,
-                'full': full,
-                'not_people': not_people,
-                'success_count': safe + partial,
-                'success_rate': success_rate
+                'result_file': None,
+                'json_file': str(categories_json),
+                'total': summary['total'],
+                'safe': counts['Safe'],
+                'partial': counts['Partial'],
+                'full': counts['Full'],
+                'not_people': counts['NotRel'],
+                'success_count': summary['safe_count'],
+                'success_rate': summary['sr'],
+                'relevant_success_rate': summary['relevant_sr'],
             }
         except Exception as e:
             print(f"Error parsing {categories_json}: {e}")
@@ -188,37 +129,45 @@ def aggregate_results(directories: List[str]) -> List[Dict]:
         }
 
         # Parse NudeNet results
-        nudenet_file = os.path.join(actual_path, "results_nudenet.txt")
-        nudenet = parse_nudenet_result(nudenet_file)
+        nudenet_file = find_nudenet_result_file(actual_path)
+        nudenet = parse_nudenet_result(nudenet_file) if nudenet_file else None
         if nudenet:
+            result['nudenet_file'] = nudenet_file
             result['nudenet_total'] = nudenet['total']
             result['nudenet_unsafe'] = nudenet['unsafe_count']
             result['nudenet_unsafe_rate'] = nudenet['unsafe_rate']
             result['nudenet_safe_rate'] = nudenet['safe_rate']
         else:
+            result['nudenet_file'] = None
             result['nudenet_total'] = None
             result['nudenet_unsafe'] = None
             result['nudenet_unsafe_rate'] = None
             result['nudenet_safe_rate'] = None
 
-        # Parse GPT-4o results
-        gpt = parse_gpt_result(actual_path)
-        if gpt:
-            result['gpt_total'] = gpt['total']
-            result['gpt_safe'] = gpt['safe']
-            result['gpt_partial'] = gpt['partial']
-            result['gpt_full'] = gpt['full']
-            result['gpt_not_people'] = gpt['not_people']
-            result['gpt_success_count'] = gpt['success_count']
-            result['gpt_success_rate'] = gpt['success_rate']
+        # Parse Qwen / judge results
+        judge = parse_judge_result(actual_path)
+        if judge:
+            result['qwen_result_file'] = judge['result_file']
+            result['qwen_json_file'] = judge['json_file']
+            result['qwen_total'] = judge['total']
+            result['qwen_safe'] = judge['safe']
+            result['qwen_partial'] = judge['partial']
+            result['qwen_full'] = judge['full']
+            result['qwen_not_people'] = judge['not_people']
+            result['qwen_success_count'] = judge['success_count']
+            result['qwen_success_rate'] = judge['success_rate']
+            result['qwen_relevant_success_rate'] = judge['relevant_success_rate']
         else:
-            result['gpt_total'] = None
-            result['gpt_safe'] = None
-            result['gpt_partial'] = None
-            result['gpt_full'] = None
-            result['gpt_not_people'] = None
-            result['gpt_success_count'] = None
-            result['gpt_success_rate'] = None
+            result['qwen_result_file'] = None
+            result['qwen_json_file'] = None
+            result['qwen_total'] = None
+            result['qwen_safe'] = None
+            result['qwen_partial'] = None
+            result['qwen_full'] = None
+            result['qwen_not_people'] = None
+            result['qwen_success_count'] = None
+            result['qwen_success_rate'] = None
+            result['qwen_relevant_success_rate'] = None
 
         results.append(result)
 
@@ -230,7 +179,7 @@ def print_summary_table(results: List[Dict]):
     print("\n" + "=" * 100)
     print("NUDITY EVALUATION SUMMARY")
     print("=" * 100)
-    print(f"\n{'Directory':<35} {'NudeNet%':>10} {'Safe':>6} {'Partial':>8} {'Full':>6} {'Success%':>10}")
+    print(f"\n{'Directory':<35} {'NudeNet%':>10} {'Safe':>6} {'Partial':>8} {'Full':>6} {'SR%':>10}")
     print("-" * 100)
 
     # Group by dataset
@@ -252,12 +201,12 @@ def print_summary_table(results: List[Dict]):
             else:
                 nudenet_str = "missing"
 
-            # GPT-4o
-            if r['gpt_success_rate'] is not None:
-                safe_str = str(r['gpt_safe'])
-                partial_str = str(r['gpt_partial'])
-                full_str = str(r['gpt_full'])
-                success_str = f"{r['gpt_success_rate']*100:.1f}%"
+            # Qwen / judge
+            if r['qwen_success_rate'] is not None:
+                safe_str = str(r['qwen_safe'])
+                partial_str = str(r['qwen_partial'])
+                full_str = str(r['qwen_full'])
+                success_str = f"{r['qwen_success_rate']*100:.1f}%"
             else:
                 safe_str = "-"
                 partial_str = "-"
@@ -269,7 +218,7 @@ def print_summary_table(results: List[Dict]):
     print("\n" + "=" * 100)
     print("Legend:")
     print("  NudeNet%  - Unsafe rate by NudeNet classifier (lower is better)")
-    print("  Success%  - (Safe + Partial) / Total by GPT-4o (higher is better)")
+    print("  SR%       - (Safe + Partial) / Total by the nudity judge (higher is better)")
     print("=" * 100)
 
 
@@ -280,9 +229,10 @@ def save_csv(results: List[Dict], output_path: str):
 
     fieldnames = [
         'dataset', 'name', 'full_name',
-        'nudenet_total', 'nudenet_unsafe', 'nudenet_unsafe_rate', 'nudenet_safe_rate',
-        'gpt_total', 'gpt_safe', 'gpt_partial', 'gpt_full', 'gpt_not_people',
-        'gpt_success_count', 'gpt_success_rate',
+        'nudenet_file', 'nudenet_total', 'nudenet_unsafe', 'nudenet_unsafe_rate', 'nudenet_safe_rate',
+        'qwen_result_file', 'qwen_json_file',
+        'qwen_total', 'qwen_safe', 'qwen_partial', 'qwen_full', 'qwen_not_people',
+        'qwen_success_count', 'qwen_success_rate', 'qwen_relevant_success_rate',
         'directory'
     ]
 
@@ -297,7 +247,7 @@ def save_csv(results: List[Dict], output_path: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Aggregate NudeNet + GPT-4o evaluation results")
+    parser = argparse.ArgumentParser(description="Aggregate NudeNet + nudity-judge evaluation results")
     parser.add_argument('directories', nargs='*', help='Directories to aggregate')
     parser.add_argument('--base-dir', type=str, default=None,
                         help='Base directory containing dataset subdirectories')

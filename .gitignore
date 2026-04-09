@@ -34,6 +34,7 @@
 # Python cache
 # ============================================
 __pycache__/
+.pytest_cache/
 *.pyc
 *.pyo
 *.egg-info/
@@ -94,6 +95,8 @@ vlm/aggregated_*.csv
 # Claude Code internal
 # ============================================
 .claude/
+.omx/
+.omc/
 
 # ============================================
 # Evaluation result files (regeneratable)
@@ -121,3 +124,27 @@ nohup.out
 *.whl
 vlm/token
 *.copy.sh
+vlm/mjbench_results/
+CAS_SpatialCFG/meeting_pack/
+
+# Local secret for Notion publishing
+.notion.token
+.secretkeys
+
+# Overleaf Connect
+.overleafconnect
+*.aux
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.out
+*.toc
+*.pdf
+*.nav
+*.snm
+*.vrb
+*.lot
+*.lof
+%OUTDIR%/

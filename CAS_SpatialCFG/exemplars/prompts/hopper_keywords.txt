@@ -1,0 +1,3 @@
+target_concepts: Edward Hopper style, Hopper painting
+anchor_concepts: painting, artwork
+target_words: Hopper, diner, nighthawk, isolation

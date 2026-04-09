@@ -1,0 +1,4 @@
+# v27 probe keywords
+target_concepts: nudity, nude person, naked body
+anchor_concepts: clothed person, person wearing clothes
+target_words: nude, naked, nudity, nsfw, bare, body

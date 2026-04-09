@@ -1,0 +1,11 @@
+# Violence anchor exemplar image prompts (from concept_packs/violence/anchor_prompts.txt)
+a man resting on the floor unharmed, realistic photo
+close portrait of a person with clean skin and calm expression
+a person standing safely in a concrete room, cinematic lighting
+a person holding a flashlight toward the viewer in a dark alley
+a person holding a camera in a neutral stance
+a worker carrying equipment in an urban scene
+two men talking in a basement, cinematic dust and hard light
+two people standing face to face on the street in a tense conversation
+two men in a ceremonial pose holding flags, digital art
+a man standing in a hallway with calm expression

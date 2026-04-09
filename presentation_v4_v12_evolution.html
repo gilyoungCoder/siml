@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exemplar-Based Safe Generation: v4–v12 Evolution</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<style>
+  :root {
+    --heading: #1a1a2e;
+    --main: #333;
+    --accent: #2563eb;
+    --accent2: #7c3aed;
+    --safe: #059669;
+    --danger: #dc2626;
+    --warn: #d97706;
+    --teal: #0f766e;
+  }
+  .reveal { font-size: 28px; }
+  .reveal h1 { font-size: 2.2em; color: var(--heading); font-weight: 800; }
+  .reveal h2 { font-size: 1.4em; color: var(--heading); font-weight: 700; border-bottom: 3px solid var(--accent); padding-bottom: 6px; display: inline-block; }
+  .reveal h3 { font-size: 1.0em; color: var(--accent2); font-weight: 600; }
+  .reveal .sub { color: #64748b; font-size: 0.75em; margin-top: -6px; }
+  .reveal section { text-align: left; }
+  .reveal ul { margin-left: 0; }
+  .reveal li { margin-bottom: 4px; line-height: 1.4; }
+  .small { font-size: 0.72em; color: #64748b; }
+
+  .title-slide { text-align: center !important; }
+  .title-slide h1 { font-size: 2.2em; background: linear-gradient(135deg, #1a1a2e, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  .divider { text-align: center !important; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important; }
+  .divider h2 { color: #fff !important; border-bottom-color: #60a5fa !important; font-size: 1.8em; }
+  .divider p { color: #cbd5e1 !important; }
+
+  .box { background: #f8fafc; border-radius: 8px; padding: 12px 16px; margin: 7px 0; border-left: 4px solid var(--accent); font-size: 0.82em; }
+  .box-purple { border-left-color: var(--accent2); }
+  .box-green { border-left-color: var(--safe); background: #f0fdf4; }
+  .box-red { border-left-color: var(--danger); background: #fef2f2; }
+  .box-warn { border-left-color: var(--warn); background: #fffbeb; }
+  .box-teal { border-left-color: var(--teal); background: #f0fdfa; }
+
+  .reveal table { font-size: 0.62em; width: 100%; border-collapse: collapse; margin: 6px 0; }
+  .reveal table th { background: #1e293b; color: #fff; padding: 6px 8px; text-align: center; font-weight: 600; }
+  .reveal table td { padding: 5px 8px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+  .reveal table tr:nth-child(even) { background: #f8fafc; }
+  .best { background: #dcfce7 !important; font-weight: 700; }
+  .hl { background: #dbeafe !important; font-weight: 600; }
+  .bad { background: #fee2e2 !important; }
+
+  .formula { background: #f1f5f9; border-radius: 8px; padding: 12px 16px; margin: 8px 0; font-family: 'Georgia', serif; font-size: 0.88em; text-align: center; border: 1px solid #e2e8f0; }
+
+  .pipe { display: flex; align-items: center; justify-content: center; gap: 5px; margin: 12px 0; flex-wrap: wrap; }
+  .pipe .s { border-radius: 10px; padding: 10px 14px; font-size: 0.7em; font-weight: 600; text-align: center; min-width: 85px; }
+  .pipe .a { font-size: 1.3em; color: #93c5fd; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .tag { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.6em; font-weight: 600; margin: 2px; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-purple { background: #f3e8ff; color: #6b21a8; }
+  .tag-teal { background: #ccfbf1; color: #115e59; }
+  .tag-orange { background: #fff7ed; color: #9a3412; }
+
+  .vs { display: flex; align-items: stretch; gap: 10px; margin: 8px 0; }
+  .vs > div { flex: 1; padding: 12px; border-radius: 8px; }
+  .vs-l { background: #fef2f2; border: 2px solid #fca5a5; }
+  .vs-r { background: #f0fdf4; border: 2px solid #86efac; }
+  .vs-m { display: flex; align-items: center; font-size: 1.4em; font-weight: 800; color: #94a3b8; flex: 0; min-width: 30px; justify-content: center; }
+
+  .nc { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: 0.78em; margin-right: 8px; flex-shrink: 0; }
+
+  .timeline { position: relative; margin: 10px 0; }
+  .timeline::before { content: ''; position: absolute; left: 14px; top: 0; bottom: 0; width: 3px; background: #e2e8f0; }
+  .tl-item { position: relative; padding-left: 40px; margin-bottom: 10px; }
+  .tl-item::before { content: ''; position: absolute; left: 8px; top: 6px; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--accent); background: #fff; }
+  .tl-item.tl-success::before { background: var(--safe); border-color: var(--safe); }
+  .tl-item.tl-fail::before { background: var(--danger); border-color: var(--danger); }
+  .tl-item.tl-new::before { background: var(--accent2); border-color: var(--accent2); }
+
+  .version-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75em; color: #fff; margin-right: 6px; }
+  .vb-v4 { background: #6b7280; }
+  .vb-v5 { background: #6b7280; }
+  .vb-v6 { background: #2563eb; }
+  .vb-v7 { background: #059669; }
+  .vb-v8 { background: #dc2626; }
+  .vb-v9 { background: #dc2626; }
+  .vb-v10 { background: #7c3aed; }
+  .vb-v11 { background: #d97706; }
+  .vb-v12 { background: #0f766e; }
+
+  .meter { height: 18px; border-radius: 4px; background: #e2e8f0; overflow: hidden; margin: 3px 0; }
+  .meter-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: 0.6em; font-weight: 700; color: #fff; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ==================== TITLE ==================== -->
+<section class="title-slide">
+  <h1>Exemplar-Based Safe Generation</h1>
+  <p style="font-size:0.95em; color:#475569; margin-top:-5px;">
+    Training-Free Concept Erasure:<br>v4&ndash;v12 Method Evolution &amp; Results
+  </p>
+  <div style="margin-top:25px;">
+    <span class="tag tag-blue">When: CAS</span>
+    <span class="tag tag-purple">Where: Spatial</span>
+    <span class="tag tag-green">How: Guidance</span>
+    <span class="tag tag-teal">Exemplar-Based</span>
+  </div>
+  <div style="margin-top:20px; color:#888; font-size:0.7em;">Research Progress &middot; March 2026</div>
+</section>
+
+<!-- ==================== AGENDA ==================== -->
+<section>
+  <h2>Agenda</h2>
+  <div style="margin-top:12px;">
+    <div class="box" style="display:flex; align-items:center;">
+      <span class="nc">1</span>
+      <div><strong>Three-Layer Architecture</strong> &mdash; WHEN / WHERE / HOW framework overview</div>
+    </div>
+    <div class="box box-teal" style="display:flex; align-items:center;">
+      <span class="nc" style="background:var(--teal);">2</span>
+      <div><strong>v4&ndash;v5: Foundation</strong> &mdash; Online CAS + SLD/Anchor guidance</div>
+    </div>
+    <div class="box box-purple" style="display:flex; align-items:center;">
+      <span class="nc" style="background:var(--accent2);">3</span>
+      <div><strong>v6&ndash;v7: Exemplar</strong> &mdash; Cross-attention WHERE + GLASS exemplar anchor</div>
+    </div>
+    <div class="box box-red" style="display:flex; align-items:center;">
+      <span class="nc" style="background:var(--danger);">4</span>
+      <div><strong>v8&ndash;v9: Failed</strong> &mdash; Static exemplar HOW (negative result)</div>
+    </div>
+    <div class="box box-green" style="display:flex; align-items:center;">
+      <span class="nc" style="background:var(--safe);">5</span>
+      <div><strong>v10&ndash;v12: New</strong> &mdash; Projection, Stochastic Ensemble, CrossAttn+Proj</div>
+    </div>
+    <div class="box box-warn" style="display:flex; align-items:center;">
+      <span class="nc" style="background:var(--warn);">6</span>
+      <div><strong>Results &amp; Analysis</strong> &mdash; Comparative table, tradeoffs, next steps</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 1: THREE-LAYER ARCHITECTURE ==================== -->
+<section class="divider">
+  <h2>Part 1</h2>
+  <p style="font-size:1.2em;">Three-Layer Architecture</p>
+  <p>WHEN &middot; WHERE &middot; HOW</p>
+</section>
+
+<!-- Architecture Overview -->
+<section>
+  <h2>Three-Layer Guidance Architecture</h2>
+  <p class="sub">Unified framework across all versions (v4&ndash;v12)</p>
+  <div class="pipe" style="margin:14px 0;">
+    <div class="s" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border:2px solid #fbbf24; color:#92400e;">
+      <strong>WHEN</strong><br><span style="font-size:0.85em;">Global CAS</span><br><span style="font-size:0.75em;">cos(d<sub>p</sub>, d<sub>t</sub>) &gt; &tau;</span>
+    </div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff); border:2px solid #c084fc; color:#6b21a8;">
+      <strong>WHERE</strong><br><span style="font-size:0.85em;">Spatial Mask</span><br><span style="font-size:0.75em;">Per-pixel CAS/Attn</span>
+    </div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;">
+      <strong>HOW</strong><br><span style="font-size:0.85em;">Guided Denoising</span><br><span style="font-size:0.75em;">SLD/Anchor/Proj</span>
+    </div>
+  </div>
+  <div class="three-col" style="font-size:0.78em;">
+    <div class="box box-warn">
+      <strong>WHEN &mdash; Global CAS</strong>
+      <ul style="margin:4px 0 0 12px;">
+        <li>CAS = cos(d<sub>prompt</sub>, d<sub>target</sub>)</li>
+        <li>Threshold &tau; = 0.6</li>
+        <li>Sticky mode: once ON, stays ON</li>
+        <li>Benign prompts never trigger</li>
+      </ul>
+    </div>
+    <div class="box box-purple">
+      <strong>WHERE &mdash; Spatial Mask</strong>
+      <ul style="margin:4px 0 0 12px;">
+        <li>Noise-based: 3&times;3 neighborhood CAS</li>
+        <li>CrossAttn: token attention probing</li>
+        <li>Sigmoid + Gaussian blur &rarr; soft mask</li>
+        <li>Guide only harmful pixels</li>
+      </ul>
+    </div>
+    <div class="box box-green">
+      <strong>HOW &mdash; Guidance</strong>
+      <ul style="margin:4px 0 0 12px;">
+        <li>SLD: subtract target direction</li>
+        <li>Anchor: blend toward clothed</li>
+        <li>Hybrid: subtract + anchor</li>
+        <li>Projection: surgical removal</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CAS Mechanism -->
+<section>
+  <h2>Concept Alignment Score (CAS)</h2>
+  <p class="sub">Core detection mechanism shared across all versions</p>
+  <div class="pipe" style="margin:10px 0;">
+    <div class="s" style="background:#eff6ff; border:2px solid #93c5fd; color:#1e40af;">z<sub>t</sub></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#fef3c7; border:2px solid #fbbf24; color:#92400e;">UNet(z<sub>t</sub>, prompt)<br>UNet(z<sub>t</sub>, &empty;)<br>UNet(z<sub>t</sub>, "nudity")</div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#f3e8ff; border:2px solid #c084fc; color:#6b21a8;">d<sub>p</sub> = &epsilon;<sub>p</sub> &minus; &epsilon;<sub>&empty;</sub><br>d<sub>t</sub> = &epsilon;<sub>t</sub> &minus; &epsilon;<sub>&empty;</sub></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:#dcfce7; border:2px solid #86efac; color:#166534;">CAS = cos(d<sub>p</sub>, d<sub>t</sub>)<br>&gt; 0.6 &rarr; guide</div>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="box">
+        <strong>d<sub>prompt</sub></strong> = &epsilon;(prompt) &minus; &epsilon;(&empty;)<br>
+        What the prompt generates &mdash; <strong>free</strong> from CFG.
+      </div>
+      <div class="box box-purple">
+        <strong>d<sub>target</sub></strong> = &epsilon;("nudity") &minus; &epsilon;(&empty;)<br>
+        What nudity looks like. One extra UNet call.
+      </div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>High CAS:</strong> prompt aligns with nudity &rarr; <strong>guide</strong><br>
+        <strong>Low CAS:</strong> prompt diverges &rarr; <strong>skip</strong> (no quality loss)
+      </div>
+      <div class="box box-warn">
+        <strong>COCO FP = 5%</strong> at &tau;=0.6 &mdash; benign prompts rarely trigger.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Version Timeline -->
+<section>
+  <h2>Version Evolution Timeline</h2>
+  <div class="timeline" style="font-size:0.78em;">
+    <div class="tl-item">
+      <span class="version-badge vb-v4">v4</span>
+      <strong>Anchor Inpainting</strong> &mdash; Online CAS + SLD/Anchor guidance, 4 UNet calls/step
+    </div>
+    <div class="tl-item">
+      <span class="version-badge vb-v5">v5</span>
+      <strong>Hybrid Projection</strong> &mdash; Project out nudity + anchor blend (moderate results)
+    </div>
+    <div class="tl-item">
+      <span class="version-badge vb-v6">v6</span>
+      <strong>CrossAttn WHERE</strong> &mdash; Attention-based spatial mask (high SR but high NudeNet)
+    </div>
+    <div class="tl-item tl-success">
+      <span class="version-badge vb-v7">v7</span>
+      <strong>GLASS Exemplar</strong> &mdash; Pre-computed anchor from 16 clothed exemplars, 3 UNet calls <strong>(BEST NudeNet: 4.43%)</strong>
+    </div>
+    <div class="tl-item tl-fail">
+      <span class="version-badge vb-v8">v8</span>
+      <strong>Exemplar Subspace Proj</strong> &mdash; Project onto exemplar subspace (FAILED: 42&ndash;70%)
+    </div>
+    <div class="tl-item tl-fail">
+      <span class="version-badge vb-v9">v9</span>
+      <strong>Direct Exemplar HOW</strong> &mdash; Static exemplar direction (FAILED: 72&ndash;76%)
+    </div>
+    <div class="tl-item tl-new">
+      <span class="version-badge vb-v10">v10</span>
+      <strong>Projection Guidance</strong> &mdash; Per-pixel projection removes only nudity component
+    </div>
+    <div class="tl-item tl-new">
+      <span class="version-badge vb-v11">v11</span>
+      <strong>Stochastic Ensemble</strong> &mdash; K virtual exemplar anchors via calibrated noise
+    </div>
+    <div class="tl-item tl-new">
+      <span class="version-badge vb-v12">v12</span>
+      <strong>CrossAttn + Projection</strong> &mdash; v6 WHERE precision + v10 surgical HOW
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 2: v4-v5 FOUNDATION ==================== -->
+<section class="divider">
+  <h2>Part 2</h2>
+  <p style="font-size:1.2em;">v4&ndash;v5: Foundation</p>
+  <p>Online CAS + SLD/Anchor Guidance</p>
+</section>
+
+<!-- v4: Anchor Inpainting -->
+<section>
+  <h2><span class="version-badge vb-v4">v4</span> Anchor Inpainting</h2>
+  <p class="sub">Baseline method: all 4 UNet passes online</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>Architecture</h3>
+      <div class="box">
+        <strong>WHEN:</strong> Online CAS (cos(d<sub>p</sub>, d<sub>t</sub>) &gt; &tau;)
+      </div>
+      <div class="box box-purple">
+        <strong>WHERE:</strong> Noise-based spatial CAS (3&times;3 neighborhood)
+      </div>
+      <div class="box box-green">
+        <strong>HOW:</strong> Anchor inpaint / SLD / Hybrid modes
+      </div>
+      <div class="formula" style="font-size:0.8em;">
+        <strong>Anchor Inpaint:</strong><br>
+        &epsilon;<sub>final</sub> = &epsilon;<sub>cfg</sub>(1 &minus; s&middot;M) + &epsilon;<sub>anchor_cfg</sub>(s&middot;M)
+      </div>
+      <div class="formula" style="font-size:0.8em;">
+        <strong>Hybrid:</strong><br>
+        &epsilon;<sub>final</sub> = &epsilon;<sub>cfg</sub> &minus; t<sub>s</sub>&middot;M&middot;d<sub>target</sub> + a<sub>s</sub>&middot;M&middot;d<sub>anchor</sub>
+      </div>
+    </div>
+    <div>
+      <h3>Key Properties</h3>
+      <ul style="font-size:0.82em;">
+        <li><strong>4 UNet calls/step:</strong> &epsilon;<sub>&empty;</sub>, &epsilon;<sub>prompt</sub>, &epsilon;<sub>target</sub>, &epsilon;<sub>anchor</sub></li>
+        <li>All directions computed <strong>online</strong> (image-specific)</li>
+        <li>Text-based anchor: "clothed person"</li>
+        <li>CAS threshold &tau; = 0.6</li>
+      </ul>
+      <div class="box box-warn" style="margin-top:8px;">
+        <strong>Limitation:</strong> 4 UNet passes = expensive. Text anchor is generic, not grounded in real images.
+      </div>
+      <table style="margin-top:8px;">
+        <tr><th>Config</th><th>NudeNet&darr;</th><th>Note</th></tr>
+        <tr><td>v4 hybrid ts10_as15</td><td>~27.5%</td><td>Baseline</td></tr>
+        <tr><td>v4 baseline (no guide)</td><td>75.6%</td><td>No safety</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- v5: Hybrid Projection -->
+<section>
+  <h2><span class="version-badge vb-v5">v5</span> Hybrid Projection (hybrid_proj)</h2>
+  <p class="sub">Project out nudity component + anchor blend</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>Innovation</h3>
+      <div class="formula" style="font-size:0.8em;">
+        <strong>Step 1:</strong> d<sub>safe</sub> = d<sub>prompt</sub> &minus; proj(d<sub>prompt</sub>, d<sub>target</sub>)<br>
+        <strong>Step 2:</strong> &epsilon;<sub>safe</sub> = &epsilon;<sub>&empty;</sub> + cfg &middot; d<sub>safe</sub><br>
+        <strong>Step 3:</strong> &epsilon;<sub>final</sub> = &epsilon;<sub>safe</sub>(1&minus;a&middot;M) + &epsilon;<sub>anchor</sub>(a&middot;M)
+      </div>
+      <div class="box">
+        <strong>Key idea:</strong> Instead of subtracting the full target direction, project it out from the prompt direction. This preserves non-nudity content.
+      </div>
+    </div>
+    <div>
+      <h3>Results</h3>
+      <div class="box box-warn">
+        <strong>Moderate improvement</strong> over v4 anchor inpaint, but global projection (not per-pixel) limits precision.
+      </div>
+      <div class="box box-red">
+        <strong>Insight:</strong> hybrid mode (subtract + anchor) outperforms hybrid_proj. Direct guidance is stronger than projection at this stage.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 3: v6-v7 EXEMPLAR ==================== -->
+<section class="divider">
+  <h2>Part 3</h2>
+  <p style="font-size:1.2em;">v6&ndash;v7: Exemplar-Based</p>
+  <p>Cross-Attention WHERE + GLASS Exemplar Anchor</p>
+</section>
+
+<!-- v6: Cross-Attention WHERE -->
+<section>
+  <h2><span class="version-badge vb-v6">v6</span> Cross-Attention WHERE</h2>
+  <p class="sub">Semantic spatial masking via attention probing</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>Innovation: Attention-based Spatial Mask</h3>
+      <div class="box box-purple">
+        <strong>Probe Mechanism:</strong>
+        <ul style="margin:4px 0 0 12px;">
+          <li>Inject probe into cross-attention layers (res 16, 32)</li>
+          <li>Q = image features, K = pre-computed target keys</li>
+          <li>Probe attention = where "nudity" tokens attend</li>
+          <li><strong>Zero extra UNet calls</strong> (just one matmul/layer)</li>
+        </ul>
+      </div>
+      <div class="box">
+        <strong>Token matching:</strong> Find nudity-related tokens in prompt ("nude", "naked", "bare", ...) &rarr; aggregate attention for those positions
+      </div>
+    </div>
+    <div>
+      <h3>Results (Ring-A-Bell)</h3>
+      <table>
+        <tr><th>Config</th><th>NudeNet&darr;</th><th>Qwen SR&uarr;</th></tr>
+        <tr><td>v6 crossattn ts15_as15</td><td>18.04%</td><td>&mdash;</td></tr>
+        <tr><td>v6 crossattn ts20_as15</td><td>15.51%</td><td>91.4%</td></tr>
+        <tr><td>v6 crossattn ts10_as15</td><td>33.86%</td><td>89.9%</td></tr>
+      </table>
+      <div class="box box-green" style="margin-top:6px;">
+        <strong>Highest SR: 91.4%</strong> &mdash; attention mask is very precise, low NotRel (4.7%).
+      </div>
+      <div class="box box-red">
+        <strong>But NudeNet still high (15&ndash;34%)</strong> &mdash; better WHERE alone can't fix HOW.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- v7: GLASS Exemplar -->
+<section>
+  <h2><span class="version-badge vb-v7">v7</span> GLASS Exemplar Anchor</h2>
+  <p class="sub">Pre-computed anchor from diverse clothed exemplars &mdash; best performer</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>Key Innovation</h3>
+      <div class="box box-green">
+        <strong>Offline preparation (one-time, ~10 min):</strong>
+        <ul style="margin:4px 0 0 12px;">
+          <li>Generate 16 nude + 16 clothed exemplar images</li>
+          <li>Forward-diffuse each to z<sub>t</sub></li>
+          <li>Compute per-timestep concept directions</li>
+          <li>Average across exemplars &rarr; robust anchor direction</li>
+        </ul>
+      </div>
+      <div class="box">
+        <strong>Generation (3 UNet calls/step):</strong>
+        <ul style="margin:4px 0 0 12px;">
+          <li>Pass 1&amp;2: &epsilon;<sub>&empty;</sub>, &epsilon;<sub>prompt</sub> (batched) &mdash; always</li>
+          <li>Pass 3: &epsilon;<sub>target</sub> (online, for accurate CAS)</li>
+          <li>Pass 4: <strong>SKIP</strong> &mdash; use pre-computed d<sub>anchor</sub></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3>Why v7 Works</h3>
+      <div class="vs" style="font-size:0.8em;">
+        <div class="vs-l" style="padding:8px;">
+          <strong>Target: Online</strong><br>
+          Image-specific, accurate CAS detection
+        </div>
+        <div class="vs-m">+</div>
+        <div class="vs-r" style="padding:8px;">
+          <strong>Anchor: Exemplar</strong><br>
+          Stable, real "clothed" from 16 diverse images
+        </div>
+      </div>
+      <div class="box box-teal">
+        <strong>Online target</strong> (precise detection) + <strong>exemplar anchor</strong> (stable redirection) = best of both worlds. Plus 25% speedup.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- v7 Results -->
+<section>
+  <h2><span class="version-badge vb-v7">v7</span> Results &amp; Tradeoffs</h2>
+  <table style="margin-top:8px;">
+    <tr><th>Config</th><th>NudeNet Unsafe&darr;</th><th>Qwen SR&uarr;</th><th>NotRel%</th><th>Full%</th></tr>
+    <tr class="best"><td>v7_hyb_ts25_as25</td><td><strong>4.43%</strong></td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr class="best"><td>v7_hyb_ts15_as15</td><td><strong>5.06%</strong></td><td>54.1%</td><td>42.0%</td><td>3.7%</td></tr>
+    <tr class="hl"><td>v7_hyb_ts10_as15</td><td>10.44%</td><td>75.9%</td><td>17.7%</td><td>6.3%</td></tr>
+    <tr><td>v7_sld_s10</td><td>11.71%</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>v7_ainp_s10</td><td>8.23%</td><td>53.2%</td><td>39.2%</td><td>7.6%</td></tr>
+    <tr><td>COCO FP (ts15_as15)</td><td>5.00%</td><td colspan="3">Benign: 95% NotRel, 5% Safe</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:8px;">
+    <div class="box box-green">
+      <strong>Best safety:</strong> v7_ts25_as25 achieves <strong>4.43% NudeNet unsafe</strong> on Ring-A-Bell (79 prompts, 4 samples each).
+    </div>
+    <div class="box box-red">
+      <strong>Tradeoff:</strong> Aggressive configs (ts15+) have <strong>42&ndash;75% NotRel</strong> in Qwen &mdash; guidance destroys too much content, not just nudity.
+    </div>
+  </div>
+  <div class="box box-warn" style="margin-top:4px;">
+    <strong>Core problem:</strong> Subtracting full d<sub>target</sub> removes nudity but also destroys other semantic content in the masked region. This is the motivation for v10&ndash;v12.
+  </div>
+</section>
+
+<!-- ==================== PART 4: v8-v9 FAILURE ==================== -->
+<section class="divider">
+  <h2>Part 4</h2>
+  <p style="font-size:1.2em;">v8&ndash;v9: Failed Attempts</p>
+  <p>Static Exemplar HOW &mdash; Negative Results</p>
+</section>
+
+<!-- v8-v9 Summary -->
+<section>
+  <h2><span class="version-badge vb-v8">v8</span><span class="version-badge vb-v9">v9</span> Static Exemplar HOW</h2>
+  <p class="sub">What happens when we replace online target with static exemplar directions</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3 style="color:var(--danger);">v8: Exemplar Subspace Projection</h3>
+      <div class="formula" style="font-size:0.78em;">
+        d<sub>concept</sub> = proj(d<sub>target_online</sub>, exemplar_subspace)
+      </div>
+      <div class="box box-red">
+        Project online nudity direction onto exemplar subspace. Goal: use exemplar knowledge to refine the "what to remove."
+      </div>
+      <table>
+        <tr><th>Config</th><th>NudeNet&darr;</th></tr>
+        <tr class="bad"><td>v8 dual ts15_as15</td><td>42.09%</td></tr>
+        <tr class="bad"><td>v8 proj s10</td><td>58.54%</td></tr>
+        <tr class="bad"><td>v8 proj s5</td><td>69.62%</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3 style="color:var(--danger);">v9: Direct Exemplar HOW</h3>
+      <div class="formula" style="font-size:0.78em;">
+        d<sub>guide</sub> = d<sub>exemplar</sub> (static, no online signal)
+      </div>
+      <div class="box box-red">
+        Use static exemplar concept direction directly for guidance. No online adaptation.
+      </div>
+      <table>
+        <tr><th>Config</th><th>NudeNet&darr;</th></tr>
+        <tr class="bad"><td>v9 exhyb ts15_as15</td><td>72.47%</td></tr>
+        <tr class="bad"><td>v9 exhyb ts10_as15</td><td>75.32%</td></tr>
+        <tr class="bad"><td>v9 contrast s5</td><td>76.27%</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box box-warn" style="margin-top:8px;">
+    <strong>Key lesson:</strong> Static exemplar directions are too distant from per-image nudity patterns. <strong>Online target is essential</strong> for accurate concept detection &mdash; exemplar should only be used for the <strong>anchor</strong> (redirection), not the <strong>target</strong> (detection).
+  </div>
+</section>
+
+<!-- ==================== PART 5: v10-v12 NEW ==================== -->
+<section class="divider">
+  <h2>Part 5</h2>
+  <p style="font-size:1.2em;">v10&ndash;v12: New Methods</p>
+  <p>Addressing the Safety&ndash;Quality Tradeoff</p>
+</section>
+
+<!-- The Problem -->
+<section>
+  <h2>The Core Problem</h2>
+  <p class="sub">v7's success comes at a cost: content destruction</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>v7 Hybrid Guidance</h3>
+      <div class="formula" style="font-size:0.82em;">
+        &epsilon;<sub>final</sub> = &epsilon;<sub>cfg</sub> &minus; <span style="color:var(--danger); font-weight:700;">15</span>&middot;M&middot;(d<sub>target</sub>) + <span style="color:var(--safe); font-weight:700;">15</span>&middot;M&middot;(d<sub>anchor</sub>)
+      </div>
+      <div class="box box-red">
+        <strong>Problem:</strong> d<sub>target</sub> contains both nudity AND legitimate content. Subtracting it with scale=15 destroys everything in the masked region.
+      </div>
+      <div class="box box-warn">
+        <strong>Evidence:</strong> 42% of Ring-A-Bell outputs become "Not Relevant" in Qwen evaluation &mdash; the image content is destroyed, not just the nudity.
+      </div>
+    </div>
+    <div>
+      <h3>Ideal Solution</h3>
+      <div class="box box-green">
+        Remove <strong>only</strong> the nudity-aligned component from the prompt direction, preserve all other semantic content.
+      </div>
+      <div class="formula" style="font-size:0.82em;">
+        d<sub>safe</sub> = d<sub>prompt</sub> &minus; <span style="color:var(--danger);">proj(d<sub>prompt</sub> &rarr; d<sub>target</sub>)</span>
+      </div>
+      <div style="text-align:center; margin:8px 0; font-size:0.8em;">
+        <div style="display:inline-block; width:16px; height:16px; background:var(--danger); border-radius:3px; vertical-align:middle;"></div>
+        Nudity component (removed)
+        &nbsp;&nbsp;
+        <div style="display:inline-block; width:16px; height:16px; background:var(--safe); border-radius:3px; vertical-align:middle;"></div>
+        Rest of prompt (preserved)
+      </div>
+      <p class="small" style="margin-top:6px;">This is the key insight behind v10's <strong>proj_anchor</strong> mode.</p>
+    </div>
+  </div>
+</section>
+
+<!-- v10: Projection Guidance -->
+<section>
+  <h2><span class="version-badge vb-v10">v10</span> Prompt-Fidelity Projection Guidance</h2>
+  <p class="sub">Surgical nudity removal via per-pixel projection</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>proj_anchor Mode</h3>
+      <div class="formula" style="font-size:0.75em;">
+        <strong>1.</strong> dot = (d<sub>prompt</sub> &middot; d<sub>target</sub>) per pixel<br>
+        <strong>2.</strong> proj_coeff = max(0, dot / ||d<sub>target</sub>||&sup2;)<br>
+        <strong>3.</strong> d<sub>nudity</sub> = proj_coeff &middot; d<sub>target</sub> <span class="small">(nudity component)</span><br>
+        <strong>4.</strong> d<sub>safe</sub> = d<sub>prompt</sub> &minus; t<sub>s</sub>&middot;M&middot;d<sub>nudity</sub><br>
+        <strong>5.</strong> &epsilon;<sub>safe</sub> = &epsilon;<sub>&empty;</sub> + cfg &middot; d<sub>safe</sub><br>
+        <strong>6.</strong> &epsilon;<sub>final</sub> = (1&minus;a<sub>s</sub>&middot;M)&middot;&epsilon;<sub>safe</sub> + a<sub>s</sub>&middot;M&middot;&epsilon;<sub>anchor</sub>
+      </div>
+      <div class="box box-green">
+        <strong>Key:</strong> Only <em>positive</em> projection coefficients are used &mdash; we remove the nudity-aligned part, never accidentally amplify it.
+      </div>
+    </div>
+    <div>
+      <h3>Additional Modes</h3>
+      <div class="box">
+        <strong>hybrid_fidelity:</strong> v7 hybrid + deviation clamping<br>
+        <span class="small">Limit max change from &epsilon;<sub>cfg</sub> to prevent content destruction</span>
+      </div>
+      <div class="box box-purple">
+        <strong>adaptive_cas:</strong> Scale guidance by CAS value<br>
+        <span class="small">Higher CAS = more nudity = stronger guidance</span>
+      </div>
+      <h3 style="margin-top:10px;">Results</h3>
+      <table>
+        <tr><th>Config</th><th>NudeNet&darr;</th><th>SR&uarr;</th></tr>
+        <tr class="hl"><td>v10 proj ts2_as1</td><td>6.65%</td><td>41.7%</td></tr>
+        <tr><td>v10 hfid ts15_as15 d03</td><td>9.18%</td><td>&mdash;</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- v11: Stochastic Ensemble -->
+<section>
+  <h2><span class="version-badge vb-v11">v11</span> Stochastic Exemplar Ensemble</h2>
+  <p class="sub">Same concept, diverse manifestations via controlled noise</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>Core Idea</h3>
+      <div class="box">
+        <strong>Problem:</strong> Fixed z<sub>0</sub> + "nudity" prompt &rarr; single deterministic trajectory &rarr; one anchor direction. But nudity manifests in many ways.
+      </div>
+      <div class="box box-purple">
+        <strong>Solution:</strong> Generate K virtual exemplar directions by adding calibrated noise:
+      </div>
+      <div class="formula" style="font-size:0.78em;">
+        d<sub>anchor,k</sub> = d<sub>anchor</sub> + &eta; &middot; &sigma;<sub>d</sub> &middot; &radic;(1&minus;&alpha;&#772;<sub>t</sub>) &middot; z<sub>k</sub>
+      </div>
+      <div class="box box-teal">
+        <strong>Noise calibration:</strong>
+        <ul style="margin:4px 0 0 12px;">
+          <li>&eta;: user-controlled diversity (0 = deterministic)</li>
+          <li>&sigma;<sub>d</sub>: scale by direction's own std (in-distribution)</li>
+          <li>&radic;(1&minus;&alpha;&#772;<sub>t</sub>): more noise at early steps, less at clean steps</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3>Selection Strategy</h3>
+      <div class="box box-green">
+        <strong>best:</strong> Pick K-th anchor with highest CAS match to current image
+      </div>
+      <div class="box">
+        <strong>weighted:</strong> CAS-weighted average of K anchors
+      </div>
+      <div class="box box-warn">
+        <strong>average:</strong> Simple mean of all K (most robust)
+      </div>
+      <h3 style="margin-top:10px;">Additional: eta-DDIM Sampling</h3>
+      <div class="box box-teal">
+        <strong>--eta_ddim:</strong> Add controlled noise to the DDIM step itself.<br>
+        <span class="small">x<sub>t&minus;1</sub> = predicted_mean + &sigma;<sub>eta</sub>&middot;z &mdash; stochastic sampling from same model</span>
+      </div>
+      <table style="margin-top:6px;">
+        <tr><th>Config</th><th>NudeNet&darr;</th><th>SR&uarr;</th></tr>
+        <tr><td>v11 proj K4 &eta;=0.3</td><td>6.65%</td><td>41.1%</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- v12: CrossAttn + Projection -->
+<section>
+  <h2><span class="version-badge vb-v12">v12</span> Cross-Attention WHERE + Projection HOW</h2>
+  <p class="sub">Best spatial precision (v6) + best guidance (v10)</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>Spatial Mask Modes</h3>
+      <div class="box box-purple">
+        <strong>crossattn:</strong> Pure attention-based mask<br>
+        <span class="small">Probes UNet cross-attention layers for nudity token attention. Semantically precise.</span>
+      </div>
+      <div class="box">
+        <strong>noise_cas:</strong> v7-style noise-based spatial CAS<br>
+        <span class="small">Per-pixel cosine similarity in noise space. More sensitive but noisier.</span>
+      </div>
+      <div class="box box-teal">
+        <strong>hybrid_mask:</strong> Weighted average of both<br>
+        <span class="small">M = w&middot;M<sub>attn</sub> + (1&minus;w)&middot;M<sub>noise</sub></span>
+      </div>
+    </div>
+    <div>
+      <h3>Why Combine?</h3>
+      <div class="vs" style="font-size:0.78em;">
+        <div class="vs-l" style="padding:8px;">
+          <strong>v6 alone:</strong><br>
+          Great WHERE (91% SR)<br>
+          Poor safety (15%+ NudeNet)
+        </div>
+        <div class="vs-m">+</div>
+        <div class="vs-r" style="padding:8px;">
+          <strong>v10 alone:</strong><br>
+          Great safety (6.65% NudeNet)<br>
+          Poor quality (52% NotRel)
+        </div>
+      </div>
+      <div class="box box-green">
+        <strong>v12 goal:</strong> Combine precise WHERE (low NotRel) with surgical HOW (low NudeNet) to achieve both safety and quality.
+      </div>
+      <div class="box box-warn">
+        <strong>Zero-cost WHERE:</strong> Cross-attention probing adds only one matmul per layer &mdash; no extra UNet calls.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PART 6: RESULTS ==================== -->
+<section class="divider">
+  <h2>Part 6</h2>
+  <p style="font-size:1.2em;">Results &amp; Analysis</p>
+  <p>6 Metrics &middot; 9 Versions &middot; Ring-A-Bell + Country Nude Body</p>
+</section>
+
+<!-- Main Results: SR-sorted -->
+<section>
+  <h2>Comprehensive Results (Ring-A-Bell, SR&uarr; sorted)</h2>
+  <p class="sub">SR = (Safe+Partial) / Total &mdash; primary metric. NudeNet = secondary safety check.</p>
+  <table>
+    <tr><th>Config</th><th>SR&uarr;</th><th>NudeNet&darr;</th><th>Full%&darr;</th><th>NotRel%</th><th>Falcon&darr;</th><th>VQA&uarr;</th></tr>
+    <tr class="best"><td><span class="version-badge" style="background:#374151;">v3</span> dag_s3</td><td><strong>92.0%</strong></td><td><strong>2.2%</strong></td><td><strong>0%</strong></td><td>7.9%</td><td>0.3%</td><td>0.370</td></tr>
+    <tr class="best"><td><span class="version-badge" style="background:#374151;">v3</span> dag_s5</td><td><strong>90.5%</strong></td><td><strong>0.95%</strong></td><td><strong>0%</strong></td><td>9.4%</td><td>0.0%</td><td>0.324</td></tr>
+    <tr class="hl"><td><span class="version-badge vb-v6">v6</span> xattn ts20_as20</td><td>93.3%</td><td>16.1%</td><td>3.1%</td><td>3.4%</td><td>2.2%</td><td>0.451</td></tr>
+    <tr class="hl"><td><span class="version-badge vb-v6">v6</span> xattn ts20_as15</td><td>91.4%</td><td>15.5%</td><td>3.7%</td><td>4.7%</td><td>2.8%</td><td>0.469</td></tr>
+    <tr><td><span class="version-badge vb-v7">v7</span> hyb ts10_as20</td><td>78.4%</td><td>10.8%</td><td>6.0%</td><td>15.5%</td><td>5.4%</td><td>&mdash;</td></tr>
+    <tr><td><span class="version-badge vb-v12">v12</span> xattn+proj</td><td>57.9%</td><td>9.5%</td><td>6.9%</td><td>&mdash;</td><td>6.0%</td><td>0.440</td></tr>
+    <tr><td><span class="version-badge vb-v7">v7</span> hyb ts15_as15</td><td>54.1%</td><td>5.1%</td><td>3.7%</td><td>42.0%</td><td>&mdash;</td><td>0.408</td></tr>
+    <tr><td><span class="version-badge vb-v10">v10</span> proj ts2_as1</td><td>41.7%</td><td>6.7%</td><td>6.3%</td><td>51.8%</td><td>2.8%</td><td>0.372</td></tr>
+    <tr><td><span class="version-badge vb-v11">v11</span> proj K4 &eta;=0.3</td><td>41.1%</td><td>6.7%</td><td>6.3%</td><td>52.5%</td><td>2.8%</td><td>0.371</td></tr>
+    <tr><td><span class="version-badge vb-v7">v7</span> hyb ts25_as25</td><td>29.4%</td><td>4.4%</td><td>3.1%</td><td>67.4%</td><td>&mdash;</td><td>0.282</td></tr>
+    <tr class="bad"><td>&mdash; Baseline</td><td>35.4%</td><td>75.6%</td><td>61.7%</td><td>&mdash;</td><td>39.9%</td><td>0.725</td></tr>
+  </table>
+  <div class="box box-green" style="margin-top:4px;">
+    <strong>v3/dag achieves the ideal:</strong> SR 90%+ AND NudeNet &lt;2.5% AND Full 0% AND NotRel &lt;10%. Area-adaptive DAG scaling is the key.
+  </div>
+</section>
+
+<!-- v3/dag Discovery -->
+<section>
+  <h2>Key Discovery: v3/dag &mdash; Area-Adaptive Guidance</h2>
+  <p class="sub">DAG (area + magnitude adaptive) achieves best balance across all metrics</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3>DAG Adaptive Formula</h3>
+      <div class="formula" style="font-size:0.78em;">
+        area_factor = 5 &middot; (mask_area / total_pixels)<br>
+        mag_scale = 1 + 4 &middot; weight<br>
+        correction = s &middot; area_factor &middot; mag_scale &middot; M &middot; d<sub>target</sub><br>
+        &epsilon;<sub>safe</sub> = &epsilon;<sub>cfg</sub> &minus; correction
+      </div>
+      <div class="box box-green">
+        <strong>Key insight:</strong> Guidance strength is proportional to detected area. Small nudity region &rarr; weak guidance. Large region &rarr; strong. This prevents over-correction on benign content.
+      </div>
+      <div class="box box-warn">
+        <strong>Why v7 fails here:</strong> v7 uses fixed scale (15&times;) regardless of detected area, destroying content even when CAS barely triggers.
+      </div>
+    </div>
+    <div>
+      <h3>Head-to-Head Comparison</h3>
+      <table>
+        <tr><th>Metric</th><th>v3/dag_s5</th><th>v7/ts15_as15</th></tr>
+        <tr class="best"><td>SR (Safe Rate)&uarr;</td><td><strong>90.5%</strong></td><td>54.1%</td></tr>
+        <tr class="best"><td>NudeNet&darr;</td><td><strong>0.95%</strong></td><td>5.06%</td></tr>
+        <tr class="best"><td>Full Nudity&darr;</td><td><strong>0%</strong></td><td>3.7%</td></tr>
+        <tr class="best"><td>NotRel%&darr;</td><td><strong>9.4%</strong></td><td>42.0%</td></tr>
+        <tr><td>VQAScore&uarr;</td><td>0.324</td><td>0.408</td></tr>
+        <tr><td>Falcon NSFW&darr;</td><td><strong>0.0%</strong></td><td>&mdash;</td></tr>
+      </table>
+      <div class="box box-teal" style="margin-top:6px;">
+        <strong>Takeaway:</strong> v3/dag is strictly better on safety metrics. v7 only wins on VQAScore (prompt fidelity) &mdash; because it destroys more content, making residual content more "on-topic."
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Multi-Metric Safety Evaluation -->
+<section>
+  <h2>Multi-Metric Safety Evaluation</h2>
+  <p class="sub">4 independent safety classifiers confirm results</p>
+  <div class="two-col" style="margin-top:8px;">
+    <div>
+      <h3>Safety Metrics Used</h3>
+      <div class="box box-green">
+        <strong>NudeNet</strong> &mdash; Body-part detection (0.5 threshold)<br>
+        <span class="small">Standard in concept erasure literature</span>
+      </div>
+      <div class="box box-purple">
+        <strong>Qwen3-VL</strong> &mdash; VLM judge: NotRel/Safe/Partial/Full<br>
+        <span class="small">SR = (Safe+Partial) / Total &mdash; primary metric</span>
+      </div>
+      <div class="box">
+        <strong>Falconsai NSFW</strong> &mdash; ViT-Base binary (98% acc)<br>
+        <span class="small">Fast, lightweight validation</span>
+      </div>
+      <div class="box box-teal">
+        <strong>SigLIP2 5-class</strong> &mdash; Normal/Hentai/Porn/Enticing/Anime<br>
+        <span class="small">Fine-grained unsafe categorization (91% acc)</span>
+      </div>
+    </div>
+    <div>
+      <h3>Cross-Metric Validation</h3>
+      <table>
+        <tr><th>Config</th><th>NN%</th><th>Falcon%</th><th>5cl-U%</th><th>SR%</th></tr>
+        <tr class="best"><td>v3 dag_s5</td><td>0.95</td><td>0.0</td><td>2.2</td><td>90.5</td></tr>
+        <tr class="best"><td>v3 dag_s3</td><td>2.2</td><td>0.3</td><td>1.6</td><td>92.0</td></tr>
+        <tr class="hl"><td>v6 ts20_as20</td><td>16.1</td><td>2.2</td><td>&mdash;</td><td>93.3</td></tr>
+        <tr><td>v7 ts15_as15</td><td>5.1</td><td>&mdash;</td><td>&mdash;</td><td>54.1</td></tr>
+        <tr><td>v10 proj</td><td>6.7</td><td>2.8</td><td>2.2</td><td>41.7</td></tr>
+        <tr><td>v12 xattn</td><td>9.5</td><td>6.0</td><td>4.1</td><td>57.9</td></tr>
+        <tr class="bad"><td>Baseline</td><td>75.6</td><td>39.9</td><td>14.6</td><td>35.4</td></tr>
+      </table>
+      <div class="box box-green" style="margin-top:4px;">
+        All 4 metrics agree: <strong>v3/dag is safest</strong>. No metric contradicts.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VQAScore Alignment -->
+<section>
+  <h2>VQAScore: Prompt Alignment</h2>
+  <p class="sub">InstructBLIP-FlanT5-XL: P("Yes" | image, "Does this show '{prompt}'?") &mdash; higher = better fidelity</p>
+  <div class="two-col" style="margin-top:8px;">
+    <div>
+      <h3>Ring-A-Bell (original prompt)</h3>
+      <table>
+        <tr><th>Config</th><th>VQA&uarr;</th><th>NN%</th><th>SR%</th></tr>
+        <tr><td>Baseline</td><td><strong>0.725</strong></td><td>75.6</td><td>35.4</td></tr>
+        <tr><td>v4 sld_s7</td><td>0.565</td><td>18.7</td><td>82.9</td></tr>
+        <tr><td>v5 sld_s10</td><td>0.537</td><td>14.6</td><td>87.0</td></tr>
+        <tr class="hl"><td>v6 ts20_as15</td><td>0.469</td><td>15.5</td><td>91.4</td></tr>
+        <tr><td>v12 xattn+proj</td><td>0.440</td><td>9.5</td><td>57.9</td></tr>
+        <tr><td>v7 ts15_as15</td><td>0.408</td><td>5.1</td><td>54.1</td></tr>
+        <tr class="best"><td>v3 dag_s3</td><td>0.370</td><td>2.2</td><td>92.0</td></tr>
+        <tr class="best"><td>v3 dag_s5</td><td>0.324</td><td>0.95</td><td>90.5</td></tr>
+        <tr class="bad"><td>v7 ts25_as25</td><td>0.282</td><td>4.4</td><td>29.4</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Interpretation</h3>
+      <div class="box box-warn">
+        <strong>VQA paradox:</strong> Baseline has highest VQA (0.725) because it generates exact nudity. Safer methods have lower VQA because they remove the unsafe content the prompt asks for.
+      </div>
+      <div class="box box-green">
+        <strong>v3/dag_s3 = 0.370 vs v7/ts25_as25 = 0.282:</strong> dag preserves more semantic content while removing nudity, because it doesn't destroy non-nudity elements.
+      </div>
+      <div class="box box-teal">
+        <strong>Best fidelity among safe methods:</strong> v6 (0.469) and v12 (0.440) &mdash; cross-attention WHERE preserves context better.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Country Nude Body -->
+<section>
+  <h2>Country Nude Body: Anchor Alignment</h2>
+  <p class="sub">"[Country] nude body" &rarr; "[Country] clothed body" &mdash; does the method redirect to clothed?</p>
+  <table style="margin-top:8px;">
+    <tr><th>Config</th><th>NudeNet&darr;</th><th>SR&uarr;</th><th>VQA-Orig&uarr;</th><th>VQA-Anchor&uarr;</th><th>Falcon&darr;</th></tr>
+    <tr class="bad"><td>Baseline (no guide)</td><td>100%</td><td>3.7%</td><td>0.536</td><td>0.047</td><td>85.0%</td></tr>
+    <tr class="best"><td><span class="version-badge vb-v7">v7</span> hyb ts15_as15</td><td><strong>1.25%</strong></td><td>22.5%</td><td>0.221</td><td>0.408</td><td>0.0%</td></tr>
+    <tr class="best"><td><span class="version-badge vb-v7">v7</span> hyb ts25_as25</td><td><strong>1.25%</strong></td><td>12.5%</td><td>0.182</td><td>0.323</td><td>0.0%</td></tr>
+    <tr class="hl"><td><span class="version-badge vb-v10">v10</span> proj ts2_as1</td><td>2.50%</td><td>37.5%</td><td>0.263</td><td>0.348</td><td>0.0%</td></tr>
+    <tr class="hl"><td><span class="version-badge vb-v11">v11</span> proj K4</td><td>2.50%</td><td>36.2%</td><td>0.260</td><td>0.348</td><td>0.0%</td></tr>
+    <tr><td><span class="version-badge vb-v12">v12</span> xattn+proj</td><td>10.0%</td><td>70.0%</td><td>0.316</td><td>0.377</td><td>6.2%</td></tr>
+    <tr><td><span class="version-badge vb-v4">v4</span> sld_s10</td><td>18.8%</td><td>47.5%</td><td>0.326</td><td>0.509</td><td>3.8%</td></tr>
+    <tr><td><span class="version-badge vb-v6">v6</span> ts20_as15</td><td>25.0%</td><td><strong>98.7%</strong></td><td>0.174</td><td><strong>0.593</strong></td><td>0.0%</td></tr>
+    <tr><td><span class="version-badge vb-v5">v5</span> sld_s10</td><td>41.3%</td><td>78.7%</td><td>0.373</td><td>0.545</td><td>11.2%</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:4px;">
+    <div class="box box-green">
+      <strong>v7 = best nudity removal</strong> (NN 1.25%) but low anchor alignment (VQA-Anchor 0.408) &mdash; destroys content rather than redirecting
+    </div>
+    <div class="box box-teal">
+      <strong>v6 = best anchor alignment</strong> (VQA-Anchor 0.593) &mdash; successfully redirects "nude" &rarr; "clothed" but some nudity remains (NN 25%)
+    </div>
+  </div>
+</section>
+
+<!-- Tradeoff Visualization -->
+<section>
+  <h2>Safety vs Quality: The Pareto Front</h2>
+  <p class="sub">NudeNet% (lower = safer) vs NotRel% (lower = better quality) &mdash; ideal = bottom-left</p>
+  <div style="margin-top:12px;">
+    <div style="display:flex; align-items:center; margin:6px 0; font-size:0.78em;">
+      <span style="width:200px;"><span class="version-badge" style="background:#374151;">v3</span> dag_s5 <span class="tag tag-green" style="font-size:0.8em;">BEST</span></span>
+      <span style="width:70px; text-align:right; margin-right:8px; color:var(--safe); font-weight:600;">0.95%</span>
+      <div class="meter" style="flex:1;">
+        <div class="meter-fill" style="width:0.95%; background: linear-gradient(90deg, #059669, #10b981);">0.9</div>
+      </div>
+      <span style="width:80px; margin-left:8px; color:var(--safe); font-weight:600;">NR: 9.4%</span>
+    </div>
+    <div style="display:flex; align-items:center; margin:6px 0; font-size:0.78em;">
+      <span style="width:200px;"><span class="version-badge" style="background:#374151;">v3</span> dag_s3</span>
+      <span style="width:70px; text-align:right; margin-right:8px; color:var(--safe); font-weight:600;">2.2%</span>
+      <div class="meter" style="flex:1;">
+        <div class="meter-fill" style="width:2.2%; background: linear-gradient(90deg, #059669, #10b981);">2.2</div>
+      </div>
+      <span style="width:80px; margin-left:8px; color:var(--safe); font-weight:600;">NR: 7.9%</span>
+    </div>
+    <div style="display:flex; align-items:center; margin:6px 0; font-size:0.78em;">
+      <span style="width:200px;"><span class="version-badge vb-v6">v6</span> ts20_as15</span>
+      <span style="width:70px; text-align:right; margin-right:8px; color:var(--warn); font-weight:600;">15.5%</span>
+      <div class="meter" style="flex:1;">
+        <div class="meter-fill" style="width:15.5%; background: linear-gradient(90deg, #d97706, #f59e0b);">15.5</div>
+      </div>
+      <span style="width:80px; margin-left:8px; color:var(--safe); font-weight:600;">NR: 4.7%</span>
+    </div>
+    <div style="display:flex; align-items:center; margin:6px 0; font-size:0.78em;">
+      <span style="width:200px;"><span class="version-badge vb-v12">v12</span> xattn+proj</span>
+      <span style="width:70px; text-align:right; margin-right:8px; color:var(--warn); font-weight:600;">9.5%</span>
+      <div class="meter" style="flex:1;">
+        <div class="meter-fill" style="width:9.5%; background: linear-gradient(90deg, #d97706, #f59e0b);">9.5</div>
+      </div>
+      <span style="width:80px; margin-left:8px; color:var(--warn); font-weight:600;">NR: &mdash;</span>
+    </div>
+    <div style="display:flex; align-items:center; margin:6px 0; font-size:0.78em;">
+      <span style="width:200px;"><span class="version-badge vb-v7">v7</span> ts15_as15</span>
+      <span style="width:70px; text-align:right; margin-right:8px; color:var(--safe); font-weight:600;">5.1%</span>
+      <div class="meter" style="flex:1;">
+        <div class="meter-fill" style="width:5.1%; background: linear-gradient(90deg, #059669, #10b981);">5.1</div>
+      </div>
+      <span style="width:80px; margin-left:8px; color:var(--danger); font-weight:600;">NR: 42.0%</span>
+    </div>
+    <div style="display:flex; align-items:center; margin:6px 0; font-size:0.78em;">
+      <span style="width:200px;"><span class="version-badge vb-v10">v10</span> proj ts2_as1</span>
+      <span style="width:70px; text-align:right; margin-right:8px; color:var(--safe); font-weight:600;">6.7%</span>
+      <div class="meter" style="flex:1;">
+        <div class="meter-fill" style="width:6.7%; background: linear-gradient(90deg, #059669, #10b981);">6.7</div>
+      </div>
+      <span style="width:80px; margin-left:8px; color:var(--danger); font-weight:600;">NR: 51.8%</span>
+    </div>
+  </div>
+  <div class="box box-green" style="margin-top:6px;">
+    <strong>v3/dag achieves both:</strong> NudeNet &lt;2.5% AND NotRel &lt;10% &mdash; the only method in the ideal quadrant.
+  </div>
+</section>
+
+<!-- Key Insights UPDATED -->
+<section>
+  <h2>Key Insights &amp; Lessons Learned</h2>
+  <div class="three-col" style="margin-top:10px; font-size:0.82em;">
+    <div>
+      <h3 style="color:var(--safe);">What Works</h3>
+      <div class="box box-green">
+        <strong>Area-adaptive scaling</strong> (v3/dag): guidance proportional to detected area prevents over-correction. Best overall balance.
+      </div>
+      <div class="box box-green">
+        <strong>Online target</strong> for detection: image-specific CAS is far superior to static directions (v8/v9 failure).
+      </div>
+      <div class="box box-green">
+        <strong>Cross-attention WHERE</strong> (v6): semantically precise masking yields highest SR (91%+) and best anchor alignment.
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--danger);">What Fails</h3>
+      <div class="box box-red">
+        <strong>Fixed-scale subtraction</strong> (v7 ts15+): removes nudity but destroys content. 42&ndash;75% NotRel.
+      </div>
+      <div class="box box-red">
+        <strong>Static exemplar target</strong> (v8/v9): too distant from per-image nudity. 42&ndash;76% unsafe.
+      </div>
+      <div class="box box-red">
+        <strong>Projection alone</strong> (v10/v11): low NudeNet but high NotRel (52%) &mdash; projection is too aggressive without area adaptation.
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--accent2);">Next Directions</h3>
+      <div class="box box-purple">
+        <strong>Combine DAG + Exemplar:</strong> v3's area-adaptive scaling with v7's exemplar anchor for even better results.
+      </div>
+      <div class="box box-purple">
+        <strong>DAG + CrossAttn WHERE:</strong> v3's adaptive HOW with v6's semantic WHERE for precision.
+      </div>
+      <div class="box box-purple">
+        <strong>Anchor alignment eval:</strong> Use anchor-friendly prompts to measure concept redirection quality.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COCO False Positive -->
+<section>
+  <h2>COCO False Positive Rates</h2>
+  <p class="sub">Benign prompts should NOT trigger guidance</p>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <table>
+        <tr><th>Config</th><th>NudeNet FP%&darr;</th><th>Qwen</th></tr>
+        <tr class="best"><td>v7 ts10_as15</td><td><strong>5.00%</strong></td><td>NR=95, S=25</td></tr>
+        <tr class="best"><td>v7 ts15_as15</td><td><strong>5.00%</strong></td><td>NR=95, S=25</td></tr>
+        <tr class="best"><td>v7 ts20_as20</td><td><strong>5.00%</strong></td><td>NR=95, S=25</td></tr>
+        <tr class="hl"><td>v6 crossattn</td><td>6.67%</td><td>NR=91, S=29</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>CAS threshold &tau;=0.6</strong> keeps FP at 5% on COCO. Benign prompts have CAS &lt;&lt; 0.6, so guidance rarely triggers.
+      </div>
+      <div class="box">
+        <strong>FP is stable across all versions</strong> because WHEN (CAS threshold) is shared. v3/dag should have similar FP to v7.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Next Steps -->
+<section>
+  <h2>Next Steps &amp; NeurIPS Plan</h2>
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <h3 style="color:var(--accent);">Immediate</h3>
+      <div class="box box-green">
+        <span class="nc" style="background:var(--safe);">1</span>
+        <strong>DAG + Exemplar fusion</strong> &mdash; Combine v3's adaptive scaling with v7's exemplar anchor
+      </div>
+      <div class="box box-purple">
+        <span class="nc" style="background:var(--accent2);">2</span>
+        <strong>DAG + CrossAttn WHERE</strong> &mdash; v3's HOW with v6's semantic WHERE
+      </div>
+      <div class="box box-teal">
+        <span class="nc" style="background:var(--teal);">3</span>
+        <strong>MMA/P4DN/UnlearnDiff</strong> &mdash; Full evaluation on adversarial datasets
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--accent2);">NeurIPS Target</h3>
+      <div class="box">
+        <span class="nc">4</span>
+        <strong>Other models</strong> &mdash; Apply to SDXL, SD 2.1, Flux
+      </div>
+      <div class="box box-warn">
+        <span class="nc" style="background:var(--warn);">5</span>
+        <strong>Other concepts</strong> &mdash; Violence, hate symbols, IP characters
+      </div>
+      <div class="box box-red">
+        <span class="nc" style="background:var(--danger);">6</span>
+        <strong>SAFREE comparison</strong> &mdash; Head-to-head with state-of-the-art baseline
+      </div>
+    </div>
+  </div>
+  <div class="box box-green" style="margin-top:8px;">
+    <strong>Key narrative:</strong> Training-free, area-adaptive concept erasure with exemplar-based anchor. v3/dag achieves <strong>0.95% NudeNet + 90.5% SR + 0% Full nudity</strong> &mdash; first method to achieve both safety and quality in the ideal quadrant.
+  </div>
+</section>
+
+<!-- Summary Slide -->
+<section class="title-slide">
+  <h2>Summary</h2>
+  <div style="margin-top:20px; text-align:left; max-width:800px; margin-left:auto; margin-right:auto;">
+    <div class="box box-green" style="font-size:0.85em;">
+      <strong>Best Overall:</strong> v3/dag_s5 &mdash; <strong>0.95% NudeNet, 90.5% SR, 0% Full, 9.4% NotRel</strong>
+    </div>
+    <div class="box" style="font-size:0.85em;">
+      <strong>Best SR:</strong> v6_crossattn_ts20_as20 &mdash; <strong>93.3% SR</strong>, 3.4% NotRel (but 16.1% NudeNet)
+    </div>
+    <div class="box box-purple" style="font-size:0.85em;">
+      <strong>Best Anchor Alignment:</strong> v6 on Country dataset &mdash; <strong>VQA-Anchor 0.593</strong>, best concept redirection
+    </div>
+    <div class="box box-teal" style="font-size:0.85em;">
+      <strong>Key Insight:</strong> Area-adaptive scaling (DAG) &gt; fixed-scale subtraction. Exemplar anchor stable but needs adaptive HOW.
+    </div>
+  </div>
+  <div style="margin-top:20px;">
+    <span class="tag tag-blue">9 Versions</span>
+    <span class="tag tag-green">0.95% Best NudeNet</span>
+    <span class="tag tag-purple">92.0% Best SR</span>
+    <span class="tag tag-teal">0% Full Nudity</span>
+    <span class="tag tag-orange">6 Metrics</span>
+  </div>
+  <div style="margin-top:15px; color:#888; font-size:0.7em;">
+    Training-Free Concept Erasure with Area-Adaptive Guidance &middot; NeurIPS 2026 Target
+  </div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    margin: 0.08,
+    center: false,
+  });
+</script>
+</body>
+</html>

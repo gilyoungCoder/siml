@@ -198,6 +198,7 @@ def apply_guidance(
     guide_mode: str = "anchor_inpaint",
     safety_scale: float = 1.0,
     cfg_scale: float = 7.5,
+    **kwargs,
 ) -> torch.Tensor:
     """
     Apply spatially-masked guidance to remove unsafe content.
@@ -240,8 +241,67 @@ def apply_guidance(
         eps_final = eps_cfg - safety_scale * mask * eps_safe_direction
 
     elif guide_mode == "hybrid":
-        # Hybrid: subtract target AND add anchor (push from target toward anchor)
-        eps_final = eps_cfg - safety_scale * mask * (eps_target - eps_anchor)
+        # Hybrid: subtract target direction AND add anchor direction (both relative to null)
+        # ε_final = ε_cfg - t_s·M·(ε_target - ε_null) + a_s·M·(ε_anchor - ε_null)
+        t_scale = kwargs.get("target_scale", safety_scale)
+        a_scale = kwargs.get("anchor_scale", safety_scale)
+        eps_final = eps_cfg \
+                    - t_scale * mask * (eps_target - eps_null) \
+                    + a_scale * mask * (eps_anchor - eps_null)
+
+    elif guide_mode == "hybrid_proj":
+        # Hybrid + Projection: project out nudity from prompt, then add anchor
+        # Step 1: Remove nudity component from prompt direction
+        # Step 2: Add anchor direction on top
+        # ε_safe_cfg = ε_null + cfg_scale · (d_prompt - proj(d_prompt, d_target))
+        # ε_final = ε_safe_cfg·(1-a·M) + ε_anchor_cfg·(a·M)
+        d_prompt = eps_prompt - eps_null
+        d_target = eps_target - eps_null
+
+        # Project out nudity
+        dot = (d_prompt * d_target).sum(dim=1, keepdim=True)
+        norm_sq = (d_target * d_target).sum(dim=1, keepdim=True).clamp(min=1e-8)
+        proj = (dot / norm_sq) * d_target
+
+        # Safe prompt = prompt minus nudity, scaled by projection strength
+        p_scale = kwargs.get("proj_scale", 1.0)
+        d_safe = d_prompt - p_scale * proj
+
+        # Reconstruct safe CFG (prompt direction with nudity removed)
+        eps_safe_cfg = eps_null + cfg_scale * d_safe
+
+        # Anchor CFG
+        a_scale = kwargs.get("anchor_scale", safety_scale)
+        eps_anchor_cfg = eps_null + cfg_scale * (eps_anchor - eps_null)
+
+        # Blend: safe_cfg in unmasked, anchor in heavily masked
+        eps_final = eps_safe_cfg * (1.0 - a_scale * mask) + eps_anchor_cfg * (a_scale * mask)
+
+    elif guide_mode == "projection":
+        # Projection: remove nudity component from prompt direction, preserve rest
+        # d_prompt = ε_prompt - ε_null (prompt direction)
+        # d_target = ε_target - ε_null (nudity direction)
+        # d_safe = d_prompt - proj(d_prompt, d_target) (nudity removed)
+        # ε_safe_cfg = ε_null + cfg_scale · d_safe
+        # ε_final = ε_cfg·(1-s·M) + ε_safe_cfg·(s·M)
+        d_prompt = eps_prompt - eps_null
+        d_target = eps_target - eps_null
+
+        # Project out the target (nudity) component from prompt direction
+        # proj(a, b) = (a·b / b·b) * b
+        dot = (d_prompt * d_target).sum(dim=1, keepdim=True)
+        norm_sq = (d_target * d_target).sum(dim=1, keepdim=True).clamp(min=1e-8)
+        proj = (dot / norm_sq) * d_target  # nudity component of prompt
+
+        # Safe prompt direction = prompt minus nudity component
+        d_safe = d_prompt - safety_scale * proj  # s controls how much nudity to remove
+
+        # Reconstruct CFG with safe direction
+        cfg_scale = kwargs.get("cfg_scale", 7.5)
+        eps_safe_cfg = eps_null + cfg_scale * d_safe
+
+        # Blend: use safe CFG in masked regions, original CFG elsewhere
+        eps_final = eps_cfg * (1.0 - mask) + eps_safe_cfg * mask
 
     else:
         raise ValueError(f"Unknown guide_mode: {guide_mode}")
@@ -361,10 +421,16 @@ def parse_args():
 
     # Guidance (How)
     p.add_argument("--guide_mode", type=str, default="anchor_inpaint",
-                    choices=["anchor_inpaint", "sld", "hybrid"],
+                    choices=["anchor_inpaint", "sld", "hybrid", "projection", "hybrid_proj"],
                     help="Guidance mode")
     p.add_argument("--safety_scale", type=float, default=1.0,
                     help="Guidance strength (anchor_inpaint: 0-1, sld: 1-10)")
+    p.add_argument("--target_scale", type=float, default=-1.0,
+                    help="Hybrid only: target repulsion scale (default: same as safety_scale)")
+    p.add_argument("--anchor_scale", type=float, default=-1.0,
+                    help="Hybrid only: anchor attraction scale (default: same as safety_scale)")
+    p.add_argument("--proj_scale", type=float, default=1.0,
+                    help="hybrid_proj only: projection strength for nudity removal (default: 1.0)")
     p.add_argument("--guide_start_frac", type=float, default=0.0,
                     help="Fraction of total steps before guidance starts (0=all steps)")
 
@@ -375,6 +441,13 @@ def parse_args():
     p.add_argument("--anchor_concepts", type=str, nargs="+",
                     default=["clothed person", "person wearing clothes"],
                     help="Anchor concepts to guide toward")
+    p.add_argument("--concept_source", type=str, default="text",
+                    choices=["text", "img_16", "img_32"],
+                    help="Concept embedding source: text (default labels), "
+                         "img_16 (CLIP image 16 exemplars), img_32 (CLIP image 32 exemplars)")
+    p.add_argument("--exemplar_dir", type=str,
+                    default="exemplars/sd14",
+                    help="Directory containing .pt exemplar embedding files")
 
     # Misc
     p.add_argument("--save_maps", action="store_true",
@@ -408,6 +481,7 @@ def main():
           f"threshold={args.spatial_threshold}, alpha={args.sigmoid_alpha}, blur={args.blur_sigma}")
     print(f"  HOW:   {args.guide_mode}, safety_scale={args.safety_scale}, "
           f"start_frac={args.guide_start_frac}")
+    print(f"  CONCEPT SOURCE: {args.concept_source}")
     print(f"  Target concepts: {args.target_concepts}")
     print(f"  Anchor concepts: {args.anchor_concepts}")
     print(f"  Model: {args.ckpt}")
@@ -435,13 +509,7 @@ def main():
 
     # ---- Pre-encode concept embeddings ----
     with torch.no_grad():
-        # Target: average embeddings of all target concepts
-        target_embeds = encode_concepts(text_encoder, tokenizer,
-                                        args.target_concepts, device)
-        # Anchor: average embeddings of all anchor concepts
-        anchor_embeds = encode_concepts(text_encoder, tokenizer,
-                                        args.anchor_concepts, device)
-        # Unconditional (empty string)
+        # Unconditional (empty string) — always needed
         uncond_inputs = tokenizer(
             "", padding="max_length",
             max_length=tokenizer.model_max_length,
@@ -449,8 +517,30 @@ def main():
         )
         uncond_embeds = text_encoder(uncond_inputs.input_ids.to(device))[0]
 
-    print(f"Embeddings encoded: target={len(args.target_concepts)} concepts (averaged), "
-          f"anchor={len(args.anchor_concepts)} concepts (averaged)")
+        if args.concept_source == "text":
+            # Default: encode short text labels
+            target_embeds = encode_concepts(text_encoder, tokenizer,
+                                            args.target_concepts, device)
+            anchor_embeds = encode_concepts(text_encoder, tokenizer,
+                                            args.anchor_concepts, device)
+            print(f"Embeddings: text mode, target={len(args.target_concepts)} concepts, "
+                  f"anchor={len(args.anchor_concepts)} concepts")
+        else:
+            # Image exemplar mode: load pre-computed CLIP image embeddings
+            pt_map = {
+                "img_16": "clip_exemplar_embeddings.pt",
+                "img_32": "clip_exemplar_full_nudity.pt",
+            }
+            pt_file = os.path.join(args.exemplar_dir, pt_map[args.concept_source])
+            print(f"Loading image exemplar embeddings from {pt_file}")
+            exemplar_data = torch.load(pt_file, map_location=device, weights_only=False)
+            target_embeds = exemplar_data["target_clip_embeds"].to(device=device, dtype=torch.float16)
+            anchor_embeds = exemplar_data["anchor_clip_embeds"].to(device=device, dtype=torch.float16)
+            n_target = exemplar_data.get("target_clip_features", torch.empty(0)).shape[0]
+            n_anchor = exemplar_data.get("anchor_clip_features", torch.empty(0)).shape[0]
+            proj_type = exemplar_data.get("config", {}).get("projection", "unknown")
+            print(f"Embeddings: {args.concept_source} mode, {n_target} target imgs, "
+                  f"{n_anchor} anchor imgs, projection={proj_type}")
 
     # ---- Init CAS ----
     cas = GlobalCAS(threshold=args.cas_threshold, sticky=args.cas_sticky)
@@ -566,6 +656,9 @@ def main():
                         guide_mode=args.guide_mode,
                         safety_scale=args.safety_scale,
                         cfg_scale=args.cfg_scale,
+                        target_scale=args.target_scale if args.target_scale > 0 else args.safety_scale,
+                        anchor_scale=args.anchor_scale if args.anchor_scale > 0 else args.safety_scale,
+                        proj_scale=args.proj_scale,
                     )
 
                     guided_count += 1
