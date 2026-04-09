@@ -4,6 +4,7 @@ set -euo pipefail
 GPU=${1:-0}
 CONCEPT=${2:-nudity}
 
+export PYTHONNOUSERSITE=1
 P=/mnt/home3/yhgil99/.conda/envs/safree/bin/python3.10
 VLP=/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10
 VLD=/mnt/home3/yhgil99/unlearning/vlm
