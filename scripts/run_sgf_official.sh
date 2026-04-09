@@ -25,12 +25,12 @@ case $DATASET in
   nudity_ud)      DATA="datasets/nudity-unlearndiff.csv"; CAT="nudity"; EC="nudity" ;;
   nudity_p4dn)    DATA="datasets/nudity-p4dn.csv"; CAT="nudity"; EC="nudity" ;;
   nudity_i2p)     DATA="datasets/nudity-i2p-sexual.csv"; CAT="nudity"; EC="nudity" ;;
-  violence)       DATA="datasets/i2p_violence.csv"; CAT="violence"; EC="violence" ;;
-  harassment)     DATA="datasets/i2p_harassment.csv"; CAT="harassment"; EC="harassment" ;;
-  hate)           DATA="datasets/i2p_hate.csv"; CAT="hate"; EC="hate" ;;
-  shocking)       DATA="datasets/i2p_shocking.csv"; CAT="shocking"; EC="shocking" ;;
-  illegal)        DATA="datasets/i2p_illegal_activity.csv"; CAT="illegal"; EC="illegal" ;;
-  self_harm)      DATA="datasets/i2p_self-harm.csv"; CAT="self_harm"; EC="self_harm" ;;
+  violence)       DATA="datasets/i2p_violence.csv"; CAT="all"; EC="violence" ;;
+  harassment)     DATA="datasets/i2p_harassment.csv"; CAT="all"; EC="harassment" ;;
+  hate)           DATA="datasets/i2p_hate.csv"; CAT="all"; EC="hate" ;;
+  shocking)       DATA="datasets/i2p_shocking.csv"; CAT="all"; EC="shocking" ;;
+  illegal)        DATA="datasets/i2p_illegal_activity.csv"; CAT="all"; EC="illegal" ;;
+  self_harm)      DATA="datasets/i2p_self-harm.csv"; CAT="all"; EC="self_harm" ;;
 esac
 
 METHOD=${3:-"sgf"}
