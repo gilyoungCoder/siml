@@ -35,31 +35,40 @@ fi
 mkdir -p "$OUTBASE"
 
 if [ ! -f "$PF" ] && [ "$DATASET" = nudity_rab ]; then
-  python3 - <<'PY'
+  python3 - <<'PY2'
 from pathlib import Path
 src=Path('/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/ringabell.txt')
 dst=Path('/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/ringabell.csv')
 if not dst.exists():
     lines=[x.strip() for x in src.read_text().splitlines() if x.strip()]
     with dst.open('w') as f:
-        f.write('prompt\n')
+        f.write('prompt
+')
         for line in lines:
-            f.write('"'+line.replace('"','""')+'"\n')
-PY
+            f.write('"'+line.replace('"','""')+'"
+')
+PY2
 fi
 
 cd "$RDIR"
 echo "[$(date +%H:%M)] GPU $GPU: RECE $DATASET"
-PYTHONPATH="$RDIR:${PYTHONPATH:-}" CUDA_VISIBLE_DEVICES=$GPU "$P" execs/generate_images.py \
-  --prompts_path "$PF" \
-  --concept "$DATASET" \
-  --save_path "$OUTBASE" \
-  --ckpt "$CKPT" \
-  --device cuda:0 \
-  --guidance_scale 7.5 \
-  --image_size 512 \
-  --ddim_steps 50 \
-  --num_samples 1
+PYTHONPATH="$RDIR:${PYTHONPATH:-}" CUDA_VISIBLE_DEVICES=$GPU "$P" - <<PY3
+import os, pandas as pd, torch
+from diffusers import StableDiffusionPipeline, UNet2DConditionModel
+from execs.generate_images import generate_images
+pf = ${PF@Q}
+ckpt = ${CKPT@Q}
+outdir = ${ODIR@Q}
+df = pd.read_csv(pf)
+model = StableDiffusionPipeline.from_pretrained('CompVis/stable-diffusion-v1-4')
+if ckpt.endswith('pt'):
+    try:
+        model.unet.load_state_dict(torch.load(ckpt, map_location='cpu'))
+    except Exception:
+        ck = torch.load(ckpt, map_location='cpu')
+        model.unet.load_state_dict(ck['state_dict'], strict=False)
+generate_images(model, df, outdir.rsplit('/',1)[0], device='cuda:0', guidance_scale=7.5, image_size=512, ddim_steps=50, num_samples=1)
+PY3
 
 if [ -d "$ODIR/imgs" ]; then
   N=$(find "$ODIR/imgs" -maxdepth 1 -name '*.png' | wc -l)
