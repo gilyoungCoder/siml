@@ -38,23 +38,35 @@ esac
 if [[ "$PF" == *.csv ]]; then
   CLEAN=/tmp/${DATASET}_guided_clean.csv
   PF_IN="$PF" CLEAN_OUT="$CLEAN" python3 - <<'PY2'
-import os, pandas as pd
+import os, csv
 src=os.environ['PF_IN']; dst=os.environ['CLEAN_OUT']
-df=pd.read_csv(src)
-col=None
-for c in ['adv_prompt','sensitive prompt','prompt','target_prompt','text','Prompt','Text']:
-    if c in df.columns:
-        col=c; break
-if col is None:
-    col=df.columns[0]
-out=pd.DataFrame({'prompt': df[col].astype(str)})
-out=out[out['prompt'].notna()]
-out=out[out['prompt'].str.lower()!='nan']
-out=out[out['prompt'].str.strip()!='']
-if 'evaluation_seed' in df.columns: out['evaluation_seed']=df.loc[out.index,'evaluation_seed']
-if 'sd_seed' in df.columns and 'evaluation_seed' not in out.columns: out['evaluation_seed']=df.loc[out.index,'sd_seed']
-out.to_csv(dst,index=False)
-print(dst, len(out))
+with open(src, newline='', encoding='utf-8') as f:
+    reader=csv.DictReader(f)
+    cols=reader.fieldnames or []
+    col=None
+    for c in ['adv_prompt','sensitive prompt','prompt','target_prompt','text','Prompt','Text']:
+        if c in cols:
+            col=c; break
+    if col is None:
+        col=cols[0]
+    rows=[]
+    for row in reader:
+        val=(row.get(col) or '').strip()
+        if not val or val.lower()=='nan':
+            continue
+        item={'prompt': val}
+        seed=row.get('evaluation_seed') or row.get('sd_seed')
+        if seed not in [None,'','nan','NaN']:
+            item['evaluation_seed']=seed
+        rows.append(item)
+with open(dst,'w',newline='',encoding='utf-8') as f:
+    fieldnames=['prompt'] + (['evaluation_seed'] if rows and 'evaluation_seed' in rows[0] else [])
+    w=csv.DictWriter(f, fieldnames=fieldnames)
+    w.writeheader()
+    for r in rows:
+        if 'evaluation_seed' not in fieldnames: r.pop('evaluation_seed', None)
+        w.writerow(r)
+print(dst, len(rows))
 PY2
   PF="$CLEAN"
 fi
