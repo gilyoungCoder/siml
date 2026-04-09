@@ -50,7 +50,7 @@ fi
 
 cd "$RDIR"
 echo "[$(date +%H:%M)] GPU $GPU: RECE $DATASET"
-CUDA_VISIBLE_DEVICES=$GPU "$P" execs/generate_images.py \
+PYTHONPATH="$RDIR:${PYTHONPATH:-}" CUDA_VISIBLE_DEVICES=$GPU "$P" execs/generate_images.py \
   --prompts_path "$PF" \
   --concept "$DATASET" \
   --save_path "$OUTBASE" \
