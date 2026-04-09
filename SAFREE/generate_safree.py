@@ -152,8 +152,9 @@ class Eval:
         elif 'artists-' in self.category:
             pass
         
-        elif self.category == 'all':
-            ValueError("Currently, only nudity or artist category are supported.")
+        else:
+            # Non-nudity concepts: skip NudeNet, just generate without online detection
+            pass
 
     def compute_embeddings(self, images):
         pr_imgs = [self.clipw.preprocess(img) for img in images]
@@ -180,6 +181,11 @@ class Eval:
                 unsafe = bool(is_nude.detach().cpu().data)
             else:
                 unsafe = bool(max(is_nude.detach().cpu().data))
+
+        else:
+            # Non-nudity concepts: no online detection, save all images
+            unsafe = False
+            pred = 0.0
 
         return unsafe, pred
 
