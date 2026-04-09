@@ -4,7 +4,7 @@ set -euo pipefail
 GPU=${1:-0}
 CONCEPT=${2:-nudity}
 
-P=/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10
+P=/mnt/home3/yhgil99/.conda/envs/safree/bin/python3.10
 VLP=/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10
 VLD=/mnt/home3/yhgil99/unlearning/vlm
 REPO=/mnt/home3/yhgil99/unlearning
