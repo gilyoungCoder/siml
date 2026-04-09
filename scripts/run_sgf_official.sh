@@ -21,10 +21,10 @@ cd $SGF_DIR
 DATASET=${2:-"nudity_rab"}
 case $DATASET in
   nudity_rab)     DATA="datasets/nudity-ring-a-bell.csv"; CAT="nudity"; EC="nudity" ;;
-  nudity_mma)     DATA="datasets/mma-diffusion-nsfw-adv-prompts.csv"; CAT="nudity"; EC="nudity" ;;
-  nudity_ud)      DATA="datasets/unlearn_diff_nudity.csv"; CAT="nudity"; EC="nudity" ;;
-  nudity_p4dn)    DATA="datasets/p4dn_16_prompt.csv"; CAT="nudity"; EC="nudity" ;;
-  nudity_i2p)     DATA="datasets/i2p_sexual.csv"; CAT="nudity"; EC="nudity" ;;
+  nudity_mma)     DATA="datasets/nudity-mma.csv"; CAT="nudity"; EC="nudity" ;;
+  nudity_ud)      DATA="datasets/nudity-unlearndiff.csv"; CAT="nudity"; EC="nudity" ;;
+  nudity_p4dn)    DATA="datasets/nudity-p4dn.csv"; CAT="nudity"; EC="nudity" ;;
+  nudity_i2p)     DATA="datasets/nudity-i2p-sexual.csv"; CAT="nudity"; EC="nudity" ;;
   violence)       DATA="datasets/i2p_violence.csv"; CAT="violence"; EC="violence" ;;
   harassment)     DATA="datasets/i2p_harassment.csv"; CAT="harassment"; EC="harassment" ;;
   hate)           DATA="datasets/i2p_hate.csv"; CAT="hate"; EC="hate" ;;
