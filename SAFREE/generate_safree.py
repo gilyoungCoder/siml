@@ -430,7 +430,7 @@ if __name__ == "__main__":
     parser.add_argument("--model_id", type=str, default="CompVis/stable-diffusion-v1-4")
     parser.add_argument("--num-samples", type=int, default=1, help="number of images to generate with SD")
     parser.add_argument("--nudenet-path", type=str, default="./pretrained/nudenet_classifier_model.onnx", help="nudenet classifer checkpoint path")
-    parser.add_argument("--category", type=str, default="nudity", choices=['nudity', 'artist-VanGogh', 'artist-KellyMcKernan'])
+    parser.add_argument("--category", type=str, default="nudity")
     parser.add_argument("--config", default="sample_config.json", type=str, help="config file path")
     parser.add_argument("--device", default="cuda:0", type=str, help="first gpu device")
     parser.add_argument("--nudity_thr", default=0.6, type=float)
