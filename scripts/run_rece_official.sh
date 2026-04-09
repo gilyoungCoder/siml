@@ -42,23 +42,24 @@ dst=Path('/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/ringabell.csv')
 if not dst.exists():
     lines=[x.strip() for x in src.read_text().splitlines() if x.strip()]
     with dst.open('w') as f:
-        f.write('prompt
-')
+        f.write('prompt\n')
         for line in lines:
-            f.write('"'+line.replace('"','""')+'"
-')
+            f.write('"'+line.replace('"','""')+'"\n')
 PY2
 fi
 
 cd "$RDIR"
 echo "[$(date +%H:%M)] GPU $GPU: RECE $DATASET"
-PYTHONPATH="$RDIR:${PYTHONPATH:-}" CUDA_VISIBLE_DEVICES=$GPU "$P" - <<PY3
-import os, pandas as pd, torch
-from diffusers import StableDiffusionPipeline, UNet2DConditionModel
+PYTHONPATH="$RDIR:${PYTHONPATH:-}" CUDA_VISIBLE_DEVICES=$GPU PF="$PF" CKPT="$CKPT" ODIR="$ODIR" "$P" - <<'PY3'
+import os
+import pandas as pd
+import torch
+from diffusers import StableDiffusionPipeline
 from execs.generate_images import generate_images
-pf = ${PF@Q}
-ckpt = ${CKPT@Q}
-outdir = ${ODIR@Q}
+
+pf = os.environ['PF']
+ckpt = os.environ['CKPT']
+outdir = os.environ['ODIR']
 df = pd.read_csv(pf)
 model = StableDiffusionPipeline.from_pretrained('CompVis/stable-diffusion-v1-4')
 if ckpt.endswith('pt'):
