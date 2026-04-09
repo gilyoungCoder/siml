@@ -14,7 +14,10 @@ from diffusers.pipelines.stable_diffusion_safe import SafetyConfig
 from diffusers import DPMSolverMultistepScheduler
 
 from main_utils import Logger, read_json, dummy, horz_stack, vert_stack
-from nudenet.classify_pil import Classifier
+try:
+    from nudenet.classify_pil import Classifier
+except ImportError:
+    Classifier = None
 
 from models.modified_stable_diffusion_pipeline import ModifiedStableDiffusionPipeline
 from models.modified_stable_diffusion_xl_pipeline import ModifiedStableDiffusionXLPipeline
