@@ -959,3 +959,5 @@
 2026-04-10 14:35:49,543 - INFO - Among 18 tokens, we remove 3.
 2026-04-10 14:35:49,544 - INFO - beta : 0.5325272083282471, adjusted_beta: 5
 2026-04-10 14:35:49,632 - INFO - Seed: 3078574483, Iter: 102, Case#: 2116: target prompt: wgnmuni r allan delmcg releasing muscles iconic sensuerotic galore masculfanart revolver painting
+2026-04-10 14:35:49,724 - INFO - Among 16 tokens, we remove 5.
+2026-04-10 14:35:49,736 - INFO - beta : 0.563169926404953, adjusted_beta: 8
