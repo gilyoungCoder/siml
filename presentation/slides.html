@@ -224,23 +224,22 @@
 
 <!-- Slide 9: I2P Multi-Concept -->
 <section>
-  <h2>I2P Multi-Concept &mdash; Safety Rate</h2>
-  <p class="sub">6 unsafe categories from I2P. SR (Qwen3-VL) / Q16 inappropriate score. GPT-4o SR from SAFREE paper.</p>
-  <table style="font-size:0.55em;">
+  <h2>I2P Multi-Concept &mdash; Safety Rate (%)</h2>
+  <p class="sub">6 unsafe categories from I2P. SR = (Safe+Partial)/Total by Qwen3-VL. SAFREE SR from their paper (GPT-4o eval).</p>
+  <table>
     <thead>
-      <tr><th style="min-width:120px;">Method</th><th>Type</th><th>Violence<br><span class="small">(SR / Q16)</span></th><th>Harass.<br><span class="small">(SR / Q16)</span></th><th>Hate<br><span class="small">(SR / Q16)</span></th><th>Self-harm<br><span class="small">(SR / Q16)</span></th><th>Shocking<br><span class="small">(SR / Q16)</span></th><th>Illegal<br><span class="small">(SR / Q16)</span></th></tr>
+      <tr><th style="min-width:120px;">Method</th><th>Type</th><th>Violence<br><span class="small">(756)</span></th><th>Harass.<br><span class="small">(824)</span></th><th>Hate<br><span class="small">(231)</span></th><th>Self-harm<br><span class="small">(801)</span></th><th>Shocking<br><span class="small">(856)</span></th><th>Illegal<br><span class="small">(727)</span></th></tr>
     </thead>
     <tbody>
-      <tr><td class="l">SD v1.4 Baseline</td><td>&mdash;</td><td>82.1 / 41.9</td><td>74.2 / 35.0</td><td>86.1 / 36.4</td><td>56.0 / 37.7</td><td>93.2 / 51.8</td><td>47.5 / 35.3</td></tr>
-      <tr><td class="l">SAFREE</td><td>TF</td><td>86.0 / 0.20</td><td>64.0 / 0.14</td><td>28.0 / 0.26</td><td>4.0 / 0.12</td><td>30.0 / 0.16</td><td>98.0 / 0.26</td></tr>
-      <tr><td class="l">SLD-Max</td><td>TF</td><td>&mdash; / <strong class="gv">8.3</strong></td><td>&mdash; / <strong class="gv">4.7</strong></td><td>&mdash; / <strong class="gv">5.2</strong></td><td>&mdash; / <strong class="gv">3.6</strong></td><td>&mdash; / <strong class="gv">10.9</strong></td><td>&mdash; / <strong class="gv">3.6</strong></td></tr>
-      <tr class="gray"><td class="l">SD-Erasure</td><td>TB</td><td>80.2 / 46.2</td><td>72.5 / 29.1</td><td>79.6 / 31.9</td><td>65.0 / 43.6</td><td>94.9 / 46.5</td><td>58.2 / 37.5</td></tr>
-      <tr class="best" style="border-top:3px solid var(--accent);"><td class="l"><strong>Ours</strong></td><td><strong>TF</strong></td><td class="gv"><strong>97.1</strong> / 42.1</td><td class="gv"><strong>83.3</strong> / 26.1</td><td class="gv"><strong>84.8</strong> / 27.3</td><td class="gv"><strong>83.4</strong> / 33.5</td><td class="gv"><strong>97.8</strong> / 37.7</td><td><em style="color:#b2bec3;">running</em></td></tr>
+      <tr><td class="l">SD v1.4 Baseline</td><td>&mdash;</td><td>82.1</td><td>74.2</td><td>86.1</td><td>56.0</td><td>93.2</td><td>47.5</td></tr>
+      <tr><td class="l">SAFREE</td><td>TF</td><td>86.0</td><td>64.0</td><td>28.0</td><td>4.0</td><td>30.0</td><td>98.0</td></tr>
+      <tr class="gray"><td class="l">SD-Erasure</td><td>TB</td><td>80.2</td><td>72.5</td><td>79.6</td><td>65.0</td><td>94.9</td><td>58.2</td></tr>
+      <tr class="best" style="border-top:3px solid var(--accent);"><td class="l"><strong>Ours</strong></td><td><strong>TF</strong></td><td class="gv"><strong>97.1</strong></td><td class="gv"><strong>83.3</strong></td><td class="gv"><strong>84.8</strong></td><td class="gv"><strong>83.4</strong></td><td class="gv"><strong>97.8</strong></td><td><em style="color:#b2bec3;">running</em></td></tr>
     </tbody>
   </table>
   <div class="two-col" style="margin-top:6px;">
-    <div class="box box-green"><strong>Ours outperforms all baselines</strong> on every completed concept. Violence +15pp, Self-harm +27pp over baseline. Training-free &mdash; just swap anchors per concept.</div>
-    <div class="box box-warn"><strong>SAFREE:</strong> GPT-4o SR from their paper (different eval). Q16 scores show SAFREE reduces inappropriateness but SR varies by concept. Our Q16 results running.</div>
+    <div class="box box-green"><strong>Ours outperforms all baselines</strong> on every completed concept. Violence +15pp, Self-harm +27pp over baseline. Training-free &mdash; just swap anchor prompts + exemplar images per concept.</div>
+    <div class="box box-warn"><strong>Note:</strong> SAFREE SR is from their paper using GPT-4o eval (different scale). SAFREE excels on Illegal (98%) but collapses on Self-harm (4%) and Shocking (30%).</div>
   </div>
 </section>
 
