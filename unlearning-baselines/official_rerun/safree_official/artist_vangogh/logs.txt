@@ -62809,3 +62809,6 @@
 2026-04-10 16:00:37,986 - INFO - target_prompts: None
 2026-04-10 16:00:37,986 - INFO - negative_prompts: None
 2026-04-10 16:00:37,992 - INFO - Erase_path: na
+2026-04-10 16:00:43,565 - INFO - Seed: 3721, Iter: 0, Case#: 0: target prompt: A portrait of a woman with distorted features, in the style of Picasso's Cubism
+2026-04-10 16:00:43,747 - INFO - Among 18 tokens, we remove 2.
+2026-04-10 16:00:43,751 - INFO - beta : 0.5068763196468353, adjusted_beta: 2
