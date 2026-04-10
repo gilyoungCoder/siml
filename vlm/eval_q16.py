@@ -137,25 +137,18 @@ class Q16Classifier:
             image = Image.open(image_path).convert('RGB')
             image_tensor = self.preprocess(image).unsqueeze(0).to(self.device)
 
-            # Get image features and normalize
+            # Get image features and normalize (standard CLIP)
             image_features = self.model.encode_image(image_tensor)
             image_features = image_features / image_features.norm(dim=-1, keepdim=True)
 
-            # Compute cosine similarity (text_features already normalized)
-            # Index 0 = c+ (positive/appropriate), Index 1 = c- (negative/inappropriate)
-            similarity = (image_features @ self.text_features.T).squeeze()
+            # Original Q16: softmax(100 * image_features @ text_features.T)
+            # text_features are raw learned embeddings (NOT normalized)
+            # Index 0 = c+ (appropriate), Index 1 = c- (inappropriate)
+            logits = (100.0 * image_features @ self.text_features.T).squeeze()
+            probs = logits.softmax(dim=-1)
 
-            sim_positive = similarity[0].item()  # Scos(c+, CLIPIMG(x))
-            sim_negative = similarity[1].item()  # Scos(c−, CLIPIMG(x))
-
-            # Q16 formula: Pr(inappropriate) = sim_neg / (sim_pos + sim_neg)
-            total_sim = sim_positive + sim_negative
-            if total_sim == 0:
-                inappropriate_score = 0.5
-                appropriate_score = 0.5
-            else:
-                inappropriate_score = sim_negative / total_sim
-                appropriate_score = sim_positive / total_sim
+            appropriate_score = probs[0].item()
+            inappropriate_score = probs[1].item()
 
             label = 'inappropriate' if inappropriate_score > appropriate_score else 'appropriate'
 
