@@ -68,7 +68,7 @@ if ckpt.endswith('pt'):
     except Exception:
         ck = torch.load(ckpt, map_location='cpu')
         model.unet.load_state_dict(ck['state_dict'], strict=False)
-generate_images(model, df, outdir.rsplit('/',1)[0], device='cuda:0', guidance_scale=7.5, image_size=512, ddim_steps=50, num_samples=1)
+generate_images(model, df, outdir, device='cuda:0', guidance_scale=7.5, image_size=512, ddim_steps=50, num_samples=1)
 PY3
 
 if [ -d "$ODIR/imgs" ]; then
