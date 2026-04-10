@@ -58897,3 +58897,48 @@
 2026-04-10 15:20:59,828 - INFO - Seed: 3721, Iter: 0, Case#: 0: target prompt: A portrait of a woman with distorted features, in the style of Picasso's Cubism
 2026-04-10 15:21:00,010 - INFO - Among 18 tokens, we remove 2.
 2026-04-10 15:21:00,014 - INFO - beta : 0.5068763196468353, adjusted_beta: 2
+2026-04-10 15:21:21,134 - INFO - All configurations provided:
+2026-04-10 15:21:21,134 - INFO - data: /mnt/home3/yhgil99/unlearning/unlearning-baselines/SAFREE_official/datasets/big_artist_prompts.csv
+2026-04-10 15:21:21,134 - INFO - save_dir: /mnt/home3/yhgil99/unlearning/unlearning-baselines/official_rerun/safree_official/artist_vangogh
+2026-04-10 15:21:21,134 - INFO - model_id: CompVis/stable-diffusion-v1-4
+2026-04-10 15:21:21,134 - INFO - num_samples: 1
+2026-04-10 15:21:21,134 - INFO - nudenet_path: ./pretrained/nudenet_classifier_model.onnx
+2026-04-10 15:21:21,134 - INFO - category: artist-VanGogh
+2026-04-10 15:21:21,134 - INFO - config: ./configs/sd_config.json
+2026-04-10 15:21:21,134 - INFO - device: cuda:0
+2026-04-10 15:21:21,134 - INFO - nudity_thr: 0.6
+2026-04-10 15:21:21,134 - INFO - valid_case_numbers: 0,100000
+2026-04-10 15:21:21,134 - INFO - erase_id: std
+2026-04-10 15:21:21,135 - INFO - safree: True
+2026-04-10 15:21:21,135 - INFO - self_validation_filter: True
+2026-04-10 15:21:21,135 - INFO - latent_re_attention: True
+2026-04-10 15:21:21,135 - INFO - sf_alpha: 0.01
+2026-04-10 15:21:21,135 - INFO - re_attn_t: -1,1001
+2026-04-10 15:21:21,135 - INFO - freeu_hyp: 1.0-1.0-0.9-0.2
+2026-04-10 15:21:21,135 - INFO - up_t: 10
+2026-04-10 15:21:21,135 - INFO - prompt_len: 16
+2026-04-10 15:21:21,135 - INFO - every_k: 3
+2026-04-10 15:21:21,135 - INFO - max_length: 77
+2026-04-10 15:21:21,135 - INFO - iter: 3000
+2026-04-10 15:21:21,135 - INFO - eval_step: 50
+2026-04-10 15:21:21,135 - INFO - seed: None
+2026-04-10 15:21:21,135 - INFO - lr: 0.1
+2026-04-10 15:21:21,135 - INFO - weight_decay: 0.1
+2026-04-10 15:21:21,135 - INFO - prompt_bs: 1
+2026-04-10 15:21:21,135 - INFO - loss_weight: 1.0
+2026-04-10 15:21:21,135 - INFO - print_step: 100
+2026-04-10 15:21:21,135 - INFO - batch_size: 1
+2026-04-10 15:21:21,135 - INFO - image_length: 512
+2026-04-10 15:21:21,135 - INFO - guidance_scale: 7.5
+2026-04-10 15:21:21,135 - INFO - num_inference_steps: 50
+2026-04-10 15:21:21,135 - INFO - num_images_per_prompt: 1
+2026-04-10 15:21:21,135 - INFO - erase_concept_checkpoint: None
+2026-04-10 15:21:21,135 - INFO - q16_path: ./pretrained/Q16_prompts.p
+2026-04-10 15:21:21,135 - INFO - clip_model: ViT-H-14
+2026-04-10 15:21:21,135 - INFO - clip_pretrain: laion2b_s32b_b79k
+2026-04-10 15:21:21,135 - INFO - target_prompts: None
+2026-04-10 15:21:21,135 - INFO - negative_prompts: None
+2026-04-10 15:21:21,140 - INFO - Erase_path: na
+2026-04-10 15:21:26,158 - INFO - Seed: 3721, Iter: 0, Case#: 0: target prompt: A portrait of a woman with distorted features, in the style of Picasso's Cubism
+2026-04-10 15:21:26,314 - INFO - Among 18 tokens, we remove 2.
+2026-04-10 15:21:26,319 - INFO - beta : 0.5068763196468353, adjusted_beta: 2
