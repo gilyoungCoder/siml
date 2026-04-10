@@ -233,7 +233,7 @@ def get_image_files(directory: str) -> List[str]:
 
 def evaluate_directory(
     img_dir: str,
-    threshold: float = 0.7,
+    threshold: float = 0.5,
     save_path: Optional[str] = None,
     prompts_path: Optional[str] = None,
     clip_model: str = "ViT-L/14",
