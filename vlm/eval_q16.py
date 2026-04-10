@@ -116,9 +116,9 @@ class Q16Classifier:
             with torch.no_grad():
                 self.text_features = self.model.encode_text(text)
 
-        # Do NOT normalize text features — Q16 uses raw learned embeddings
-        # Original Q16: softmax(100 * image_features @ text_features.T)
-        print(f"Text features shape: {self.text_features.shape} (raw, unnormalized)")
+        # Normalize text features (same as RECE's Q16 implementation)
+        self.text_features = self.text_features / self.text_features.norm(dim=-1, keepdim=True)
+        print(f"Text features shape: {self.text_features.shape} (normalized)")
 
     @torch.no_grad()
     def classify(self, image_path: str) -> Tuple[str, float, float]:
