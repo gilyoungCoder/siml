@@ -5,6 +5,8 @@ cd /mnt/home3/yhgil99/unlearning
 
 eval "$(/usr/local/anaconda3/bin/conda shell.bash hook)"
 conda activate sdd_copy
+export PYTHONPATH="/mnt/home3/yhgil99/.local/lib/python3.10/site-packages:$PYTHONPATH"
+echo "PYTHONPATH includes user site-packages"
 
 OUT="CAS_SpatialCFG/outputs/v2_experiments"
 BASELINE="CAS_SpatialCFG/outputs/baselines_v2"
