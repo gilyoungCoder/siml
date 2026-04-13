@@ -7,6 +7,10 @@ cd /mnt/home3/yhgil99/unlearning
 eval "$(/usr/local/anaconda3/bin/conda shell.bash hook)"
 conda activate sdd_copy
 
+export PYTHONPATH="/mnt/home3/yhgil99/unlearning/SafeGen:$PYTHONPATH"
+echo "PYTHONPATH: $PYTHONPATH"
+echo "Python: $(which python)"
+
 SAFEGEN="SafeGen/safegen"
 EXEMPLAR_BASE="CAS_SpatialCFG/exemplars/concepts_v2"
 OUT_BASE="CAS_SpatialCFG/outputs/v2_experiments"
