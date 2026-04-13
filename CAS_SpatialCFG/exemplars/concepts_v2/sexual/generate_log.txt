@@ -1,0 +1,32 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading pipeline components...:   0%|          | 0/6 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 2/6 [00:00<00:00, 11.51it/s]Loading pipeline components...:  83%|████████▎ | 5/6 [00:00<00:00,  5.85it/s]
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s][ALoading weights: 100%|██████████| 196/196 [00:00<00:00, 3881.43it/s]
+[1mCLIPTextModel LOAD REPORT[0m from: /mnt/home3/yhgil99/.cache/huggingface/hub/models--CompVis--stable-diffusion-v1-4/snapshots/133a221b8aa7292a167afc5127cb63fb5005638b/text_encoder
+Key                                | Status     |  | 
+-----------------------------------+------------+--+-
+text_model.embeddings.position_ids | UNEXPECTED |  | 
+
+[3mNotes:
+- UNEXPECTED[3m	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.[0m
+Loading pipeline components...: 100%|██████████| 6/6 [00:00<00:00,  5.85it/s]Loading pipeline components...: 100%|██████████| 6/6 [00:00<00:00,  6.15it/s]
+You have disabled the safety checker for <class 'diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion.StableDiffusionPipeline'> by passing `safety_checker=None`. Ensure that you abide to the conditions of the Stable Diffusion license and do not expose unfiltered results in services or applications open to the public. Both the diffusers team and Hugging Face strongly recommend to keep the safety filter enabled in all public facing circumstances, disabling it only for use-cases that involve analyzing network behavior or auditing its results. For more information, please have a look at https://github.com/huggingface/diffusers/pull/254 .
+Target: 16, Anchor: 16
+Target:   0%|          | 0/16 [00:00<?, ?it/s]
+  0%|          | 0/50 [00:00<?, ?it/s][A
+  2%|▏         | 1/50 [00:00<00:13,  3.57it/s][A
+  8%|▊         | 4/50 [00:00<00:04, 11.18it/s][A
+ 14%|█▍        | 7/50 [00:00<00:02, 14.73it/s][A
+ 20%|██        | 10/50 [00:00<00:02, 17.16it/s][A
+ 26%|██▌       | 13/50 [00:00<00:01, 18.69it/s][A
+ 32%|███▏      | 16/50 [00:00<00:01, 19.69it/s][A
+ 38%|███▊      | 19/50 [00:01<00:01, 20.40it/s][A
+ 44%|████▍     | 22/50 [00:01<00:01, 20.56it/s][A
+ 50%|█████     | 25/50 [00:01<00:01, 20.95it/s][A
+ 56%|█████▌    | 28/50 [00:01<00:01, 21.15it/s][A
+ 62%|██████▏   | 31/50 [00:01<00:00, 21.08it/s][A
+ 68%|██████▊   | 34/50 [00:01<00:00, 21.32it/s][A
+ 74%|███████▍  | 37/50 [00:01<00:00, 21.49it/s][A
+ 80%|████████  | 40/50 [00:02<00:00, 21.56it/s][A
+ 86%|████████▌ | 43/50 [00:02<00:00, 21.63it/s][A
+ 92%|█████████▏| 46/50 [00:02<00:00, 21.62it/s][A
+ 98%|█████████▊| 49/50 [00:02<00:00, 21.61it/s][A100%|██████████| 50/50 [00:02<00:00, 19.62it/s]
