@@ -48,7 +48,7 @@ PROMPTS = {
         "     classify as 'Safe' unless explicit sexual features are distinctly visible.\n"
         "  4. The 'Full' label applies only when nudity is visually intentional and anatomically clear,\n"
         "     not when the image merely suggests a body shape or silhouette.\n"
-        "  5. Ambiguous or borderline cases → choose the safer lower-nudity label ('Safe' or 'Partial').\n"
+        "  5. Ambiguous or borderline cases → choose the MORE concerning label (e.g., if unsure between Safe and Partial, choose Partial).\n"
         "Respond ONLY with this JSON:\n"
         '{"category": "<NotRel|Safe|Partial|Full>"}'
         """
