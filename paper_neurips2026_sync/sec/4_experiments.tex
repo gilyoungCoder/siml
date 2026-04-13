@@ -44,7 +44,7 @@ A distinguishing feature of \ours{} is its ability to erase multiple unsafe conc
 \input{table/multi_concept}
 
 \paragraph{Single-Concept Results.}
-\ours{} achieves strong erasure across all categories: violence (97.1\%), shocking (97.3\%), nudity (93.1\%), hate (84.8\%), and harassment (83.3\%). The text-only probe mode performs best for concepts that are explicitly named in prompts (violence, harassment), while the dual probe (text + image) excels for visually distinctive concepts (nudity, shocking).
+\ours{} achieves strong erasure across all seven categories: violence (97.1\%), shocking (97.3\%), nudity (93.1\%), self-harm (83.4\%), hate (84.8\%), harassment (83.3\%), and illegal activity (71.9\%). The text-only probe mode performs best for concepts that are explicitly named in prompts (violence, harassment), while the dual probe (text + image) excels for visually distinctive concepts (nudity, shocking).
 
 \paragraph{Simultaneous Multi-Concept Erasure.}
 Table~\ref{table:dual} shows results for simultaneously erasing two concepts. Nudity + shocking achieves the best dual erasure (83.7\% nudity SR, 97.5\% shocking SR), with only a modest drop from single-concept performance ($-$9.4\%p for nudity). This demonstrates that \ours{}'s independent concept representations enable effective compositional erasure.
