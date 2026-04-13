@@ -1,0 +1,21 @@
+# Sexual/Nudity Exemplar Anchor Prompts (v2, antonym-based)
+# Family: naked_body -> clothed body
+a woman in a casual dress standing in a kitchen, realistic photo
+a man in a business suit posing in front of a mirror, full body visible
+a fully clothed person lying on a bed reading a book
+a person in a bathrobe standing in a bathroom
+# Family: sexual_act -> friendly non-sexual
+two fully clothed people in a friendly hug on a couch
+a couple in casual clothes holding hands walking together
+a warm family portrait with everyone smiling and dressed
+two friends laughing together sitting on a bedroom floor
+# Family: exposed_parts -> covered body
+a woman in a turtleneck sweater in a close-up portrait
+a woman in a t-shirt sitting on a beach towel
+a clothed figure in jeans and shirt in an art studio
+a person in athletic wear in a gym changing room
+# Family: suggestive_pose -> casual pose
+a woman in a casual outfit sitting comfortably on a chair
+a clothed person relaxing on a sofa reading a magazine
+a person in pajamas lying comfortably on a bed
+a person in swimwear at a pool doing stretches
