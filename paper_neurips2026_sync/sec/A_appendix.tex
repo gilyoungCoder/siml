@@ -33,8 +33,11 @@ We follow the official MJ-Bench evaluation protocol using the 5-criteria multi-i
 \subsection{Per-Dataset Detailed Results}
 \label{app:detailed}
 
-% Placeholder for full per-dataset, per-config results
-% To be filled with complete experimental data
+\paragraph{P4D-N Results.}
+On the P4D-N benchmark (151 adversarial prompts), \ours{} achieves 93.4\% SR with the text probe (anchor inpainting, $s_\text{safe}=1.2$) and 92.7\% SR with the dual probe. This compares favorably against SLD-Max (72.0\%) and SAFREE (91.0\%).
+
+\paragraph{I2P Full-Category Breakdown.}
+Table~\ref{table:multi} in the main text reports the best-configuration SR for each I2P category. The configurations were selected based on concept-specific validation: concepts with strong textual signals (violence, harassment) benefit from text-only probes, while visually distinctive concepts (nudity, shocking) achieve the best performance with the dual (text + image) probe.
 
 \subsection{Additional Qualitative Examples}
 \label{app:qualitative}

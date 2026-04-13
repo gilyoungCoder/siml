@@ -17,7 +17,7 @@ To address this, we propose \textbf{Example-Based Spatial Guidance (\ours{})}, a
 
 A key innovation of \ours{} is its \emph{example-based} concept representation. Rather than relying on fixed text keywords or model-specific classifiers, we represent target concepts through CLIP exemplar embeddings derived from a small set of reference images. This enables \ours{} to (1) detect implicit unsafe content that evades keyword-based filters, (2) generalize to new concepts without any retraining, and (3) perform \emph{simultaneous multi-concept erasure} by maintaining independent concept representations.
 
-We evaluate \ours{} extensively across seven safety categories from the I2P benchmark~\citep{schramowski2023safe} (nudity, violence, harassment, hate, shocking, illegal activity, and self-harm) and four adversarial prompt datasets (Ring-A-Bell~\citep{tsai2024ring}, MMA-Diffusion~\citep{yang2024mma}, P4D-N~\citep{chin2024prompting4debugging}, and UnlearnDiff~\citep{zhang2024generate}). Our contributions are:
+We evaluate \ours{} extensively across seven safety categories from the I2P benchmark~\citep{schramowski2023safe} (nudity, violence, harassment, hate, shocking, illegal activity, and self-harm) and multiple adversarial prompt datasets (Ring-A-Bell~\citep{tsai2024ring}, MMA-Diffusion~\citep{yang2024mma}, P4D-N~\citep{chin2024prompting4debugging}, and UnlearnDiff~\citep{zhang2024generate}). Our contributions are:
 
 \begin{enumerate}[leftmargin=1.5em,itemsep=2pt]
     \item We propose \ours{}, a training-free three-stage framework (When + Where + How) for concept erasure that achieves spatially selective, context-dependent safety intervention without modifying model parameters.
