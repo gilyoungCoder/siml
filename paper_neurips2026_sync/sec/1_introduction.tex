@@ -22,7 +22,7 @@ We evaluate \ours{} extensively across seven safety categories from the I2P benc
 \begin{enumerate}[leftmargin=1.5em,itemsep=2pt]
     \item We propose \ours{}, a training-free three-stage framework (When + Where + How) for concept erasure that achieves spatially selective, context-dependent safety intervention without modifying model parameters.
     \item We introduce a dual-probe spatial localization mechanism that combines text-based cross-attention and CLIP exemplar embeddings for robust concept detection, surpassing both keyword-based and classifier-based approaches.
-    \item We demonstrate state-of-the-art performance on nudity erasure (94.9\% SR on Ring-A-Bell, 97.2\% on UnlearnDiff) while maintaining image quality (FID $\sim$3.7 on COCO-30K), outperforming both fine-tuning and training-free baselines.
+    \item We demonstrate state-of-the-art performance on nudity erasure (94.9\% SR on Ring-A-Bell, 97.2\% on UnlearnDiff) while maintaining image quality (FID 4.72 on COCO), outperforming both fine-tuning and training-free baselines.
     \item We present the first comprehensive multi-concept erasure evaluation across all seven I2P categories, showing that \ours{} effectively suppresses diverse unsafe concepts with a single, unified framework.
     \item We validate our evaluation protocol through MJ-Bench~\citep{chen2024mjbench} benchmarking, establishing Qwen3-VL~\citep{bai2025qwen3vl} as a reliable automated safety judge with 92.3\% cross-validator agreement.
 \end{enumerate}
