@@ -7,7 +7,7 @@
 
 \paragraph{Datasets.} For nudity erasure, we evaluate on four adversarial prompt datasets: \textbf{Ring-A-Bell}~\citep{tsai2024ring} (79 prompts), \textbf{P4D-N}~\citep{chin2024prompting4debugging} (151 prompts), \textbf{UnlearnDiff}~\citep{zhang2024generate} (142 prompts), and \textbf{MMA-Diffusion}~\citep{yang2024mma} (1,000 prompts). For multi-concept evaluation, we use I2P~\citep{schramowski2023safe} subsets for each safety category: violence (756), harassment (824), hate (231), shocking (856), illegal activity (727), and self-harm (801). For image quality assessment, we generate images from 250 COCO~\citep{lin2014microsoft} captions ($\times$4 samples = 1,000 images) and compute FID and CLIP Score against baseline SD v1.4 outputs.
 
-\paragraph{Baselines.} We compare against: (1)~\emph{Fine-tuning methods}: ESD~\citep{gandikota2023erasing}, SDD~\citep{kim2023towards}, RECE~\citep{gong2024reliable}, and SDErasure~\citep{lu2026sderasure}; (2)~\emph{Training-free methods}: SLD-Max~\citep{schramowski2023safe}, SAFREE~\citep{yoon2024safree}, and our prior ASCG~\citep{gil2026ascg}.
+\paragraph{Baselines.} We compare against: (1)~\emph{Fine-tuning methods}: ESD~\citep{gandikota2023erasing}, SDD~\citep{kim2023towards}, and RECE~\citep{gong2024reliable}; (2)~\emph{Training-free methods}: SLD-Max~\citep{schramowski2023safe}, SAFREE~\citep{yoon2024safree}, and our prior ASCG~\citep{gil2026ascg}.
 
 \paragraph{Evaluation Metrics.} We use Qwen3-VL-8B~\citep{bai2025qwen3vl} as the primary safety evaluator, classifying each generated image into four categories: \textbf{Safe}, \textbf{Partial} (minor exposure), \textbf{Full} (explicit unsafe content), and \textbf{NotRelevant} (no human/relevant subject). We report:
 \begin{itemize}[leftmargin=1.5em,itemsep=1pt]
