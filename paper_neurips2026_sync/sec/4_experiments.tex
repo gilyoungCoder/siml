@@ -27,7 +27,7 @@ Table~\ref{table:main} presents the comprehensive comparison on nudity erasure a
 \input{table/main}
 
 \paragraph{Comparison with Fine-tuning Methods.}
-\ours{} (Hybrid) achieves the highest SR on Ring-A-Bell (94.9\%) and UnlearnDiff (97.2\%), surpassing all fine-tuning methods including SDD (88.6\%, 90.8\%) and RECE (54.4\%, 90.1\%). Notably, fine-tuning methods suffer from high FID scores (RECE: 10.33, UCE: 11.45), indicating significant quality degradation on benign prompts, while \ours{} maintains FID $\sim$3.7--5.1.
+\ours{} (Hybrid) achieves the highest SR on Ring-A-Bell (94.9\%) and UnlearnDiff (97.2\%), surpassing all fine-tuning methods including SDD (90.8\% on UnlearnDiff, 88.6\% on Ring-A-Bell) and RECE (90.1\%, 54.4\%). Notably, fine-tuning methods suffer from high FID scores (RECE: 10.33, SLD-Max: 18.46), indicating significant quality degradation on benign prompts, while \ours{} maintains FID 4.72.
 
 \paragraph{Comparison with Training-free Methods.}
 Among training-free approaches, \ours{} substantially outperforms SLD-Max (57.0\% on Ring-A-Bell) and SAFREE (77.2\%). The improvement is particularly pronounced on MMA-Diffusion, the most challenging dataset with 1,000 adversarial prompts, where \ours{} achieves 79.6\% SR compared to SAFREE's 75.5\% and SLD-Max's 49.0\%.
@@ -60,7 +60,7 @@ We ablate the three core components of \ours{} on Ring-A-Bell and MMA-Diffusion.
 \input{table/ablation}
 
 \paragraph{Effect of CAS (When).}
-Removing the CAS gate (Table~\ref{table:ablation}, row b vs.\ d) decreases SR by 2--5\%p while increasing false positive rate on COCO. CAS is critical for precision: it prevents unnecessary intervention on benign prompts.
+Removing the CAS gate (Table~\ref{table:ablation}, row c vs.\ d) decreases SR by $\sim$20\%p, demonstrating that temporal gating is critical for precise intervention without degrading benign content.
 
 \paragraph{Effect of Spatial Probe (Where).}
 Without spatial localization (row a vs.\ d), guidance is applied globally, which degrades image quality and can paradoxically reduce SR by disrupting the overall composition. The dual probe provides the strongest localization.
