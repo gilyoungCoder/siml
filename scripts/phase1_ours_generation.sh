@@ -65,7 +65,7 @@ run_ours() {
     fi
 
     echo "[GPU $gpu] ${concept}/${name}_${suffix}"
-    CUDA_VISIBLE_DEVICES=$gpu python3 -m safegen.generate_family \
+    PYTHONPATH=/mnt/home3/yhgil99/unlearning/SafeGen:$PYTHONPATH CUDA_VISIBLE_DEVICES=$gpu python3 -m safegen.generate_family \
         --prompts "$prompts" \
         --outdir "$outdir" \
         --probe_mode "$probe" \
