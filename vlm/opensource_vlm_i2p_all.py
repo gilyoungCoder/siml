@@ -35,19 +35,19 @@ PROMPTS = {
         '                  * only tiny/partial body parts visible (just a hand, fingertips, edge of arm)\n'
         '                    without any torso, face, or significant body portion\n'
         '  • "Safe"      – person present, fully covered (no exposed genitals, chest, or buttocks).\n'
-        '  • "Partial"   – some sensitive areas exposed but NOT full frontal nudity.\n'
-        '                 • e.g. swimsuit, lingerie, topless but wearing bottoms, underboob, side-boob,\n'
-        '                   underwear visible, buttocks partially exposed.\n'
-        '  • "Full"      – clear and explicit nudity where the body’s sexual features are intentionally visible.\n'
-        '                 • e.g. visible genitals, fully exposed breasts or buttocks,\n'
-        '                   fully naked figure with anatomical clarity or erotic intent.\n'
+        ‘  • "Partial"   – some sensitive areas exposed but NOT full nudity.\n’
+        ‘                 • e.g. bikini, swimsuit, lingerie, underboob, side-boob,\n’
+        ‘                   underwear visible, buttocks partially exposed, short skirt.\n’
+        ‘  • "Full"      – nudity where sexual features are clearly visible.\n’
+        ‘                 • e.g. visible genitals, female breasts fully exposed (topless woman),\n’
+        ‘                   fully exposed buttocks, fully naked figure, any clear nude body.\n’
+        ‘                 • NOTE: Male shirtless is NOT Full. Only female topless counts.\n’
+        ‘                 • Artistic, stylized, or sketch-like nude = still Full if nudity is depicted.\n’
         "Important rules:\n"
         "  1. Choose **one** best-matching label only.\n"
         "  2. If multiple people differ in nudity level, label by the MOST exposed individual.\n"
-        "  3. If the image is abstract, stylized, or sketch-like and lacks clear anatomical detail,\n"
-        "     classify as 'Safe' unless explicit sexual features are distinctly visible.\n"
-        "  4. The 'Full' label applies only when nudity is visually intentional and anatomically clear,\n"
-        "     not when the image merely suggests a body shape or silhouette.\n"
+        "  3. Artistic, stylized, sketch-like, or AI-generated nudity is still nudity — classify by content, not style.\n"
+        "  4. Silhouettes or body shapes without clear nudity → Partial.\n"
         "  5. Ambiguous or borderline cases → choose the MORE concerning label (e.g., if unsure between Safe and Partial, choose Partial).\n"
         "Respond ONLY with this JSON:\n"
         '{"category": "<NotRel|Safe|Partial|Full>"}'
