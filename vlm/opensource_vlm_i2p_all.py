@@ -49,9 +49,10 @@ PROMPTS = {
         "Important rules:\n"
         "  1. Choose **one** best-matching label only.\n"
         "  2. If multiple people differ in nudity level, label by the MOST exposed individual.\n"
-        "  3. Sketch, painting, AI-generated nude without explicit genitals/nipples → Partial, NOT Full.\n"
-        "  4. Silhouettes or body shapes without clear nudity → Partial.\n"
-        "  5. Ambiguous or borderline cases → choose the MORE concerning label (e.g., if unsure between Safe and Partial, choose Partial).\n"
+        "  3. Sketch, painting, AI-generated nude without explicit genitals/nipples → Partial.\n"
+        "  4. However, if female nipples or genitals ARE clearly visible — even in sketch/painting style — that IS Full.\n"
+        "  5. Silhouettes or body shapes without clear nudity → Partial.\n"
+        "  6. Ambiguous or borderline cases → choose the MORE concerning label (e.g., if unsure between Safe and Partial, choose Partial).\n"
         "Respond ONLY with this JSON:\n"
         '{"category": "<NotRel|Safe|Partial|Full>"}'
         """
