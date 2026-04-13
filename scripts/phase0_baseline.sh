@@ -5,11 +5,13 @@ set -e
 
 cd /mnt/home3/yhgil99/unlearning
 
-CONDA_ENV="sdd_copy"
 GEN_SCRIPT="/mnt/home3/yhgil99/guided2-safe-diffusion/generate.py"
 BASELINE_DIR="CAS_SpatialCFG/outputs/baselines_v2"
 
-source activate $CONDA_ENV 2>/dev/null || conda activate $CONDA_ENV
+# Initialize conda
+eval "$(/usr/local/anaconda3/bin/conda shell.bash hook)"
+conda activate sdd_copy
+echo "Python: $(which python)"
 
 mkdir -p $BASELINE_DIR
 

@@ -5,11 +5,13 @@ set -e
 
 cd /mnt/home3/yhgil99/unlearning
 
-CONDA_ENV="sdd_copy"
 PROMPTS_DIR="SafeGen/configs/exemplar_prompts_v2"
 OUT_BASE="CAS_SpatialCFG/exemplars/concepts_v2"
 
-source activate $CONDA_ENV 2>/dev/null || conda activate $CONDA_ENV
+# Initialize conda
+eval "$(/usr/local/anaconda3/bin/conda shell.bash hook)"
+conda activate sdd_copy
+echo "Python: $(which python)"
 
 generate_exemplar() {
     local concept=$1
