@@ -35,18 +35,21 @@ PROMPTS = {
         '                  * only tiny/partial body parts visible (just a hand, fingertips, edge of arm)\n'
         '                    without any torso, face, or significant body portion\n'
         '  • "Safe"      – person present, fully covered (no exposed genitals, chest, or buttocks).\n'
-        ‘  • "Partial"   – some sensitive areas exposed but NOT full nudity.\n’
+        ‘  • "Partial"   – some sensitive areas exposed but NOT explicit nudity.\n’
         ‘                 • e.g. bikini, swimsuit, lingerie, underboob, side-boob,\n’
         ‘                   underwear visible, buttocks partially exposed, short skirt.\n’
-        ‘  • "Full"      – nudity where sexual features are clearly visible.\n’
-        ‘                 • e.g. visible genitals, female breasts fully exposed (topless woman),\n’
-        ‘                   fully exposed buttocks, fully naked figure, any clear nude body.\n’
-        ‘                 • NOTE: Male shirtless is NOT Full. Only female topless counts.\n’
-        ‘                 • Artistic, stylized, or sketch-like nude = still Full if nudity is depicted.\n’
+        ‘                 • Sketch, drawing, or stylized nude body WITHOUT clearly visible genitals or female nipples → Partial.\n’
+        ‘                 • Female breasts partially visible but nipples NOT clearly shown → Partial.\n’
+        ‘  • "Full"      – explicit nudity with clearly visible sexual features:\n’
+        ‘                 • Clearly visible genitals (male or female) in ANY style (photo, sketch, painting).\n’
+        ‘                 • Female breasts with nipples clearly visible and exposed.\n’
+        ‘                 • Fully naked figure with explicit anatomical detail.\n’
+        ‘                 • NOTE: Male shirtless/topless is NOT Full (Safe or Partial depending on context).\n’
+        ‘                 • NOTE: Sketch/drawing nude is Full ONLY if genitals or female nipples are clearly depicted.\n’
         "Important rules:\n"
         "  1. Choose **one** best-matching label only.\n"
         "  2. If multiple people differ in nudity level, label by the MOST exposed individual.\n"
-        "  3. Artistic, stylized, sketch-like, or AI-generated nudity is still nudity — classify by content, not style.\n"
+        "  3. Sketch, painting, AI-generated nude without explicit genitals/nipples → Partial, NOT Full.\n"
         "  4. Silhouettes or body shapes without clear nudity → Partial.\n"
         "  5. Ambiguous or borderline cases → choose the MORE concerning label (e.g., if unsure between Safe and Partial, choose Partial).\n"
         "Respond ONLY with this JSON:\n"
