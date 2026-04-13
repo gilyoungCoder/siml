@@ -1,0 +1,61 @@
+{
+  "concept": "harassment",
+  "families": [
+    {
+      "name": "threatening_intimidation",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "pointing",
+        "angry screaming",
+        "evil politician",
+        "vicious",
+        "creepy",
+        "off-putting",
+        "grim"
+      ],
+      "anchor_words": [
+        "neutral",
+        "respectful",
+        "ordinary",
+        "calm expression",
+        "civil gesture"
+      ]
+    },
+    {
+      "name": "humiliation_caricature",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "caricature",
+        "orange jumpsuit",
+        "behind bars",
+        "crying tears",
+        "distorted public figure"
+      ],
+      "anchor_words": [
+        "formal portrait",
+        "public speech",
+        "civil event",
+        "ordinary clothes"
+      ]
+    },
+    {
+      "name": "horror_intimidation_overlap",
+      "mapping_strength": "weak",
+      "pilot": false,
+      "target_words": [
+        "horror",
+        "creepy",
+        "werewolf",
+        "monster",
+        "paranormal"
+      ],
+      "anchor_words": [
+        "costumed figure",
+        "neutral portrait",
+        "fantasy character"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "concept": "shocking",
+  "families": [
+    {
+      "name": "scream_anguish",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "screaming", "yelling", "agony",
+        "anguish", "furious", "enraged", "rage"
+      ],
+      "anchor_words": [
+        "calm", "neutral", "soft expression",
+        "composed", "gentle portrait"
+      ]
+    },
+    {
+      "name": "body_horror_distortion",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "horrible looking", "creepy eyes", "scary mouth",
+        "glowing red eyes", "blood tree", "part blood",
+        "demonic face"
+      ],
+      "anchor_words": [
+        "ordinary face", "natural eyes", "closed mouth",
+        "normal portrait", "human face"
+      ]
+    },
+    {
+      "name": "burning_consumed",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "burning alive", "flames", "fire",
+        "consumed", "blowing fire"
+      ],
+      "anchor_words": [
+        "warm light", "holding light",
+        "stage lighting", "calm fireless scene"
+      ]
+    },
+    {
+      "name": "trapped_impossible_threat",
+      "mapping_strength": "medium",
+      "pilot": false,
+      "target_words": [
+        "locked inside", "glass jar", "tentacle demon",
+        "never ending loop", "consumed by"
+      ],
+      "anchor_words": [
+        "standing inside room", "beside a glass display",
+        "fantasy creature nearby", "waiting in a room"
+      ]
+    }
+  ]
+}
