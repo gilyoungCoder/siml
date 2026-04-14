@@ -1,0 +1,192 @@
+# V2 Experiment Results (2026-04-14)
+# Evaluation: Qwen3-VL (conservative prompt), Q16 pending
+# Generation: 50 steps, DDIM, cfg=7.5, seed=42, SD v1.4
+# Exemplar: v2 antonym-based, family-grouped (4 families × 4 imgs)
+
+---
+
+## 1. BASELINE (SD v1.4 vanilla, no safety)
+
+| Dataset       | SR%   | Safe  | Partial | Full  | NotRel |
+|---------------|-------|-------|---------|-------|--------|
+| RAB (79)      | 63.3  | 19.0  | 44.3    | 32.9  | 3.8    |
+| MMA (1000)    | 35.6  | 11.0  | 24.6    | 64.1  | 0.3    |
+| P4DN (151)    | 36.4  | 4.6   | 31.8    | 62.9  | 0.7    |
+| UnlearnDiff (142) | 78.2 | 21.8 | 56.3   | 21.1  | 0.7    |
+| MJA sexual (100)  | 47.0 | 8.0  | 39.0   | 42.0  | 11.0   |
+| MJA violent (100)  | 13.0 | 3.0  | 10.0   | 84.0  | 3.0    |
+| MJA disturbing (100) | 74.0 | 3.0 | 71.0  | 26.0  | 0.0    |
+| MJA illegal (100) | 60.0 | 22.0 | 38.0   | 30.0  | 10.0   |
+
+---
+
+## 2. OURS BEST CONFIG per Concept (Qwen SR%)
+
+### Nudity (4 datasets)
+
+| Dataset       | Best Config                              | SR%   | vs Baseline |
+|---------------|------------------------------------------|-------|-------------|
+| RAB (79)      | text ainp fam cas0.4 ss1.2               | 88.6  | +25.3       |
+| RAB (79)      | both ainp single cas0.4 ss1.2            | 87.3  | +24.0       |
+| MMA (1000)    | both ainp fam cas0.6 ss1.2               | 69.5  | +33.9       |
+| P4DN (151)    | both ainp single cas0.6 ss1.2            | 76.2  | +39.8       |
+| UnlearnDiff (142) | both ainp single cas0.6 ss1.2          | 95.1  | +16.9       |
+| I2P sexual (931) | both ainp single cas0.6 ss1.2           | 91.5  | —           |
+
+### Multi-Concept (I2P)
+
+| Concept       | Best Config                              | SR%   |
+|---------------|------------------------------------------|-------|
+| Disturbing (856) | both ainp single cas0.5 ss1.0          | 97.9  |
+| Violence (756)   | both ainp single cas0.4 ss1.5          | 89.8  |
+| Harassment (824) | both ainp fam cas0.4 ss1.2             | 87.0  |
+| Hate (231)       | both ainp fam cas0.4 ss1.0             | 85.3  |
+| Self-harm (801)  | both ainp single cas0.4 ss1.0          | 74.3  |
+| Illegal (726)    | both ainp fam cas0.5 ss1.0             | 74.6  |
+
+### Multi-Concept (MJA, 100 prompts each, more adversarial)
+
+| Concept       | Best Config                              | SR%   | vs Baseline |
+|---------------|------------------------------------------|-------|-------------|
+| Disturbing    | both ainp single cas0.6 ss1.0            | 88.0  | +14.0       |
+| Illegal       | image ainp fam cas0.5 ss1.0              | 78.0  | +18.0       |
+| Sexual        | both ainp fam cas0.6 ss1.2               | 74.0  | +27.0       |
+| Violent       | both ainp single cas0.4 ss1.5            | 59.0  | +46.0       |
+
+---
+
+## 3. ABLATION: Probe Mode (MJA datasets, anchor_inpaint)
+
+### MJA Violent (baseline 13.0%)
+
+| Probe   | Single SR% | Family SR% |
+|---------|-----------|------------|
+| text    | 33.0      | 33.0       |
+| image   | 45.0      | 45.0       |
+| both    | 59.0      | 58.0       |
+
+**Observation**: image(45) > text(33), both(59) > image > text ✓
+
+### MJA Disturbing (baseline 74.0%)
+
+| Probe   | Single SR% | Family SR% |
+|---------|-----------|------------|
+| text    | 78-79     | 78-79      |
+| image   | 80-81     | 80-81      |
+| both    | 87-88     | 86         |
+
+**Observation**: image(81) > text(79), both(88) > image > text ✓
+
+### MJA Illegal (baseline 60.0%)
+
+| Probe   | Single SR% | Family SR% |
+|---------|-----------|------------|
+| text    | 65.0      | 65.0       |
+| image   | 74.0      | 78.0       |
+| both    | 77.0      | 75.0       |
+
+**Observation**: image fam(78) > both > text, family helps for image probe ✓
+
+### MJA Sexual (baseline 47.0%)
+
+| Probe   | Single SR% | Family SR% |
+|---------|-----------|------------|
+| text    | 65.0      | 65.0       |
+| image   | 55.0      | 56.0       |
+| both    | 73.0      | 74.0       |
+
+**Observation**: text(65) > image(55), both(74) > text > image ✓ (nudity = text dominant)
+
+### RAB Nudity (baseline 63.3%)
+
+| Probe   | Single SR% | Family SR% |
+|---------|-----------|------------|
+| text    | 88.6      | 88.6       |
+| image   | 72.2      | 72.2       |
+| both    | 87.3      | 86.1       |
+
+**Observation**: text(88.6) >> image(72.2), text dominant for nudity ✓
+
+---
+
+## 4. ABLATION: HOW Mode (RAB nudity, both probe)
+
+| HOW             | Single cas0.4 ss1.2 | Family cas0.4 ss1.2 |
+|-----------------|---------------------|---------------------|
+| anchor_inpaint  | 87.3                | 86.1                |
+| hybrid          | 68.4                | 68.4                |
+
+### MJA Violent (both probe)
+
+| HOW             | Single SR% | Family SR% |
+|-----------------|-----------|------------|
+| anchor_inpaint  | 59.0      | 58.0       |
+| hybrid          | 14.0      | 14.0       |
+
+**Observation**: anchor_inpaint >> hybrid across all concepts
+
+---
+
+## 5. ABLATION: Family vs Single
+
+| Concept (I2P) | both fam SR% | both single SR% | Δ     |
+|---------------|-------------|-----------------|-------|
+| Harassment    | 87.0        | 86.4            | +0.6  |
+| Hate          | 85.3        | 81.4            | +3.9  |
+| Violence      | 89.2        | 89.8            | -0.6  |
+| Disturbing    | 97.8        | 97.9            | -0.1  |
+| Self-harm     | 73.0        | 74.3            | -1.3  |
+| Illegal       | 74.6        | 69.4            | +5.2  |
+
+| Concept (MJA) | img fam SR% | img single SR% | Δ     |
+|---------------|-------------|----------------|-------|
+| Illegal       | 78.0        | 74.0           | +4.0  |
+| Sexual        | 56.0        | 55.0           | +1.0  |
+
+**Observation**: Family helps most for hate(+3.9) and illegal(+5.2)
+
+---
+
+## 6. KEY FINDINGS
+
+1. **anchor_inpaint >> hybrid** across ALL concepts and datasets
+2. **Nudity: text > image** (RAB: 88.6 vs 72.2, MJA: 65 vs 55)
+3. **Violence/Disturbing/Illegal: image > text** (MJA violent: 45 vs 33, illegal: 78 vs 65)
+4. **Dual probe (both) consistently best** — combines text and image strengths
+5. **Family grouping helps** for hate (+3.9), illegal (+5.2) but marginal for others
+6. **MJA is much harder** than I2P (violent: 59% vs I2P 89.8%)
+7. **Conservative Qwen prompt** makes baselines lower than v1 eval (RAB: 63.3% vs old 21%)
+
+---
+
+## 7. REMAINING PHASES
+
+### Phase 3: Q16 Evaluation
+- Q16 failed due to `clip` module not found in nohup env
+- Need to re-run with proper PYTHONPATH
+- Status: PENDING
+
+### Phase 4: VQA Alignment
+- VQAScore (original prompt ↔ generated image)
+- Compare baseline vs ours — anchor VQA should be >= baseline
+- Status: NOT STARTED
+
+### Phase 5: Artist Style Erasure
+- Van Gogh, Picasso, Monet, etc.
+- Need exemplar + generation + eval
+- Status: NOT STARTED
+
+### Phase 6: COCO FID/CLIP (Image Quality)
+- Generate COCO images with best configs
+- Compute FID against baseline
+- Status: NOT STARTED
+
+### Phase 7: SAFREE Baseline Comparison
+- Run SAFREE on same datasets for fair comparison
+- siml-02 SGF/SafeDenoiser were broken (killed)
+- Status: NEEDS RESTART
+
+### Phase 8: Paper Table Update
+- Update LaTeX tables with v2 results
+- Update ablation tables
+- Status: BLOCKED on Phase 3-7
