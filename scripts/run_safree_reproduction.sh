@@ -9,8 +9,9 @@ DATA_DIR="/mnt/home3/yhgil99/unlearning/SAFREE/datasets"
 
 cd $SAFREE_DIR
 
-eval "$(/usr/local/anaconda3/bin/conda shell.bash hook)"
-conda activate safree
+PYTHON="/mnt/home3/yhgil99/.conda/envs/safree/bin/python3.10"
+echo "Using: $PYTHON"
+$PYTHON -c "import albumentations; import clip; print('deps OK')"
 
 # Ensure pretrained files exist
 mkdir -p pretrained
@@ -37,7 +38,7 @@ run_safree() {
     mkdir -p "$save_dir"
     echo "[GPU$gpu] SAFREE: $save_name ($category)"
 
-    CUDA_VISIBLE_DEVICES=$gpu python3 generate_safree.py \
+    CUDA_VISIBLE_DEVICES=$gpu $PYTHON generate_safree.py \
         --config $CONFIG \
         --data "$data" \
         --nudenet-path ./pretrained/nudenet_classifier_model.onnx \
