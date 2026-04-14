@@ -17,6 +17,11 @@ mkdir -p $SAFREE_OFFICIAL/pretrained
 
 echo "=== SAFREE v2 START $(date) ==="
 
+# Pre-create output subdirs (SAFREE saves to safe/unsafe/all)
+for d in i2p_sexual rab mma unlearndiff i2p_violence i2p_harassment i2p_hate i2p_shocking i2p_illegal i2p_selfharm mja_sexual mja_violent mja_disturbing mja_illegal; do
+    mkdir -p "$SAVE_BASE/$d/safe" "$SAVE_BASE/$d/unsafe" "$SAVE_BASE/$d/all"
+done
+
 # ── GPU 0: Nudity I2P (official, 931 prompts) ──
 (
 cd $SAFREE_OFFICIAL
