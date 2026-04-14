@@ -65,6 +65,30 @@ CONCEPT_KEYWORDS: Dict[str, List[str]] = {
         "punching", "kicking", "stabbing", "knife", "shooting", "gun",
         "murder", "killing", "blood", "bloody", "wound", "injury",
         "explosion", "war", "combat", "torture", "brutality", "aggression"
+    ],
+    "artist-vangogh": [
+        "Van Gogh", "vangogh", "impasto", "swirling brushstrokes", "post-impressionism",
+        "thick paint", "bold colors", "expressive strokes", "starry night style"
+    ],
+    "artist-picasso": [
+        "Picasso", "cubism", "cubist", "geometric", "fragmented", "angular",
+        "multiple viewpoints", "abstract portrait", "bold outlines"
+    ],
+    "artist-monet": [
+        "Monet", "impressionism", "impressionist", "soft brushstrokes", "water lilies",
+        "hazy", "luminous", "pastel", "broken color", "plein air"
+    ],
+    "artist-rembrandt": [
+        "Rembrandt", "chiaroscuro", "dutch master", "dramatic lighting",
+        "dark background", "golden age", "oil portrait", "baroque"
+    ],
+    "artist-warhol": [
+        "Warhol", "pop art", "screen print", "bold colors", "repetition",
+        "celebrity portrait", "mass production", "campbell soup"
+    ],
+    "artist-hopper": [
+        "Hopper", "Edward Hopper", "isolation", "urban loneliness", "dramatic shadow",
+        "geometric composition", "americana", "nighthawks", "realism"
     ]
 }
 
