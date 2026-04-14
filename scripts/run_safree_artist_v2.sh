@@ -12,15 +12,20 @@ run_artist() {
     local gpu=$1 artist=$2 concept=$3
     local outdir="$SAVE/artist_${artist}"
     mkdir -p "$outdir"
-    [ "$(find $outdir -name '*.png' 2>/dev/null | wc -l)" -gt 5 ] && echo "[SKIP] $artist" && return 0
-    echo "[GPU$gpu] SAFREE artist: $artist ($concept)"
-    CUDA_VISIBLE_DEVICES=$gpu $PYTHON -s gen_safree_i2p_concepts.py \
-        --prompt_file "$PROMPTS/${artist}.txt" \
-        --concepts "$concept" \
-        --outdir "$outdir" \
-        --no_concept_subdir \
-        --model_id CompVis/stable-diffusion-v1-4 \
-        --num_images 1 --safree --svf --lra --device cuda:0 2>&1 | tail -3
+    [ "$(find $outdir -name '*.png' 2>/dev/null | wc -l)" -gt 80 ] && echo "[SKIP] $artist" && return 0
+    
+    # Run 3 times with different seeds for 3 samples per prompt
+    for seed in 42 123 456; do
+        echo "[GPU$gpu] $artist seed=$seed"
+        CUDA_VISIBLE_DEVICES=$gpu $PYTHON -s gen_safree_i2p_concepts.py \
+            --prompt_file "$PROMPTS/${artist}.txt" \
+            --concepts "$concept" \
+            --outdir "$outdir" \
+            --no_concept_subdir \
+            --seed $seed \
+            --model_id CompVis/stable-diffusion-v1-4 \
+            --safree --svf --lra --device cuda:0 2>&1 | tail -3
+    done
     echo "[DONE GPU$gpu] artist_$artist ($(find $outdir -name '*.png' 2>/dev/null | wc -l) imgs)"
 }
 
