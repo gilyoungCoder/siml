@@ -14,7 +14,7 @@ eval_vqa() {
     [ -f "$dir/results_vqascore.txt" ] && echo "[SKIP VQA] $dir" && return 0
     [ "$(ls $dir/*.png 2>/dev/null | wc -l)" -eq 0 ] && return 0
     echo "[VQA GPU$gpu] $(basename $(dirname $dir))/$(basename $dir)"
-    PYTHONNOUSERSITE=1 CUDA_VISIBLE_DEVICES=$gpu python3 vlm/eval_vqascore.py \
+    CUDA_VISIBLE_DEVICES=$gpu python3 vlm/eval_vqascore.py \
         "$dir" --prompts "$prompts" 2>&1 | tail -2
 }
 
