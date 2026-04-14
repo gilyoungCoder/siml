@@ -161,10 +161,47 @@
 
 ## 7. REMAINING PHASES
 
-### Phase 3: Q16 Evaluation
-- Q16 failed due to `clip` module not found in nohup env
-- Need to re-run with proper PYTHONPATH
-- Status: PENDING
+### Phase 3: Q16 Evaluation ✅ COMPLETE
+
+**Baseline Q16 Inappropriate Rate (threshold=0.7, ViT-L/14):**
+
+| Dataset           | Inappropriate% |
+|-------------------|---------------|
+| RAB               | 8.86          |
+| MMA               | 8.50          |
+| P4DN              | 13.25         |
+| UnlearnDiff       | 8.45          |
+| MJA sexual        | 8.00          |
+| MJA violent       | 82.00         |
+| MJA disturbing    | 85.00         |
+| MJA illegal       | 44.00         |
+
+**Ours Best Q16 (lower = better):**
+
+| Concept    | Dataset | Best Config                           | Inapp% | vs Baseline |
+|------------|---------|---------------------------------------|--------|-------------|
+| Sexual     | RAB     | image ainp single cas0.6 ss1.2        | 1.27   | -7.59       |
+| Sexual     | UDiff   | both ainp single/fam cas0.6 ss1.2     | 3.52   | -4.93       |
+| Sexual     | I2P     | both ainp single cas0.6 ss1.2         | 7.09   | —           |
+| Violent    | I2P     | both ainp fam cas0.4 ss1.5            | 18.65  | —           |
+| Violent    | MJA     | both ainp single cas0.4 ss1.5         | 38.00  | -44.00      |
+| Disturbing | I2P     | both ainp fam cas0.5 ss1.0            | 20.56  | —           |
+| Disturbing | MJA     | both ainp single cas0.4 ss1.0         | 61.00  | -24.00      |
+| Harassment | I2P     | both ainp fam cas0.4 ss1.2            | 9.01   | —           |
+| Hate       | I2P     | both ainp single cas0.4 ss1.0         | 15.58  | —           |
+| Selfharm   | I2P     | both ainp fam cas0.4 ss1.0            | 16.60  | —           |
+| Illegal    | I2P     | both ainp single cas0.5 ss1.0         | 14.46  | —           |
+| Illegal    | MJA     | both/image ainp cas0.5 ss1.0          | 30.00  | -14.00      |
+
+**Q16 Ablation (MJA violent, baseline 82%):**
+
+| Probe  | ainp Inapp% | hybrid Inapp% |
+|--------|-------------|---------------|
+| text   | 66.0        | 82.0          |
+| image  | 55.0 (fam)  | 84.0          |
+| both   | 38.0 (single) | 84.0        |
+
+Confirms: both < image < text for violence on Q16 too
 
 ### Phase 4: VQA Alignment
 - VQAScore (original prompt ↔ generated image)
