@@ -230,22 +230,22 @@ VQA probe ablation (RAB):
 Observation: image probe preserves VQA best (least intervention), text probe best SR.
 VQA drop is 0.01-0.05 range — acceptable prompt faithfulness preservation.
 
-### Phase 5: Artist Style Erasure
-- Van Gogh, Picasso, Monet, etc.
-- Need exemplar + generation + eval
-- Status: NOT STARTED
+### Phase 5: Artist Style Erasure 🔄 IN PROGRESS
+- 6 artists: Van Gogh, Picasso, Monet, Rembrandt, Warhol, Hopper
+- 30 prompts each, grid: text/both × ainp/hybrid × ss={0.8,1.0,1.2}
+- Running on siml-01 GPU 0-7
+- Qwen + Q16 eval auto-chained after generation
 
-### Phase 6: COCO FID/CLIP (Image Quality)
-- Generate COCO images with best configs
-- Compute FID against baseline
-- Status: NOT STARTED
+### Phase 6: COCO FID/CLIP 🔄 IN PROGRESS
+- COCO 250 prompts × 4 samples, baseline + ours best config
+- Auto-chained after artist on siml-01
 
-### Phase 7: SAFREE Baseline Comparison
-- Run SAFREE on same datasets for fair comparison
-- siml-02 SGF/SafeDenoiser were broken (killed)
-- Status: NEEDS RESTART
+### Phase 7: SAFREE Baseline Comparison 🔄 IN PROGRESS
+- siml-02: I2P 7 concepts + MJA 4 + RAB + MMA + UnlearnDiff
+- 3,354+ images generated so far
+- MMA (GPU 1) + UnlearnDiff (GPU 2) just started
+- Qwen + Q16 eval auto-chained on siml-01 after SAFREE completes
 
 ### Phase 8: Paper Table Update
-- Update LaTeX tables with v2 results
-- Update ablation tables
-- Status: BLOCKED on Phase 3-7
+- Status: BLOCKED on Phase 5-7 completion
+- All eval results will auto-save to output dirs
