@@ -22,7 +22,7 @@ from pathlib import Path
 import torch
 import numpy as np
 from PIL import Image
-from transformers import AutoProcessor, AutoModelForVision2Seq
+# InstructBLIP loaded lazily in main()
 
 
 def load_prompts(prompt_file):
