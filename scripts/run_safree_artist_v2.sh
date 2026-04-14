@@ -20,7 +20,7 @@ run_artist() {
         --outdir "$outdir" \
         --no_concept_subdir \
         --model_id CompVis/stable-diffusion-v1-4 \
-        --num_images 3 --safree --svf --lra --device cuda:0 2>&1 | tail -3
+        --num_images 1 --safree --svf --lra --device cuda:0 2>&1 | tail -3
     echo "[DONE GPU$gpu] artist_$artist ($(find $outdir -name '*.png' 2>/dev/null | wc -l) imgs)"
 }
 
