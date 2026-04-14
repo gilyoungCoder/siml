@@ -38,7 +38,7 @@ run_safree() {
     mkdir -p "$save_dir"
     echo "[GPU$gpu] SAFREE: $save_name ($category)"
 
-    CUDA_VISIBLE_DEVICES=$gpu $PYTHON generate_safree.py \
+    CUDA_VISIBLE_DEVICES=$gpu $PYTHON -s generate_safree.py \
         --config $CONFIG \
         --data "$data" \
         --nudenet-path ./pretrained/nudenet_classifier_model.onnx \
