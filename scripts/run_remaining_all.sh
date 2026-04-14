@@ -1,134 +1,158 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+# Run ALL remaining phases on siml-01
+set -e
+cd /mnt/home3/yhgil99/unlearning
 
-# =============================================================================
-# REMAINING TASKS — Fill ALL gaps + Probe viz + VQAScore + COCO FID
-# Run on: siml-02 GPU 0,3,6,7
-# =============================================================================
+eval "$(/usr/local/anaconda3/bin/conda shell.bash hook)"
+conda activate sdd_copy
+export PYTHONPATH="/mnt/home3/yhgil99/unlearning/SafeGen:/mnt/home3/yhgil99/.local/lib/python3.10/site-packages:$PYTHONPATH"
 
-P=/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10
-VLP=/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10
-VLD=/mnt/home3/yhgil99/unlearning/vlm
-REPO=/mnt/home3/yhgil99/unlearning
-OUT=$REPO/unlearning-baselines/outputs
-I2P=$REPO/SAFREE/datasets/i2p_categories
-V27=$REPO/CAS_SpatialCFG/generate_v27.py
-CLIP=$REPO/CAS_SpatialCFG/exemplars/sd14/clip_exemplar_embeddings.pt
+echo "=== REMAINING PHASES START $(date) ==="
 
-eval_qwen() {
-  local gpu=$1 dir=$2 concept=$3
-  [ -f "${dir}/categories_qwen3_vl_${concept}.json" ] && return
-  local n=$(find "$dir" -maxdepth 1 -name "*.png" 2>/dev/null | wc -l)
-  [ $n -lt 10 ] && return
-  echo "[$(date +%H:%M)] Eval $(basename $dir) / $concept ($n imgs)"
-  CUDA_VISIBLE_DEVICES=$gpu $VLP $VLD/opensource_vlm_i2p_all.py "$dir" "$concept" qwen 2>&1 | tail -1
-}
+# ── Phase 6A: COCO baseline + ours (for FID) ──
+echo ""
+echo "=== COCO FID Generation ==="
+COCO_BL="CAS_SpatialCFG/outputs/baselines_v2/coco250"
+COCO_OURS="CAS_SpatialCFG/outputs/v2_experiments/sexual/coco_both_anchor_inpaint_single_cas0.6_ss1.2"
 
-# =============================================================================
-# GPU 0: Ours — illegal_activity + self_harm eval (v27_final)
-# =============================================================================
-(
-echo "=== GPU 0: Our method eval (illegal, self_harm) ==="
-V27F=$REPO/CAS_SpatialCFG/outputs/v27_final
-for d in $V27F/c_illegal_activity_*; do
-  [ -d "$d" ] && eval_qwen 0 "$d" illegal
-done
-for d in $V27F/c_selfharm_*; do
-  [ -d "$d" ] && eval_qwen 0 "$d" self_harm
-done
-echo "GPU0 DONE — $(date)"
-) &
-
-# =============================================================================
-# GPU 3: SDErasure v12 remaining eval + gen (i2p, hate, shocking)
-# =============================================================================
-(
-echo "=== GPU 3: SDErasure v12 remaining ==="
-SDE_UNET=$REPO/SDErasure/outputs/sderasure_nudity_v12/unet
-GEN=$REPO/SDErasure/generate_from_prompts.py
-
-# Eval I2P Sexual (already generated)
-eval_qwen 3 "$OUT/sderasure_v12/nudity_i2p" nudity
-
-# Eval harassment (already generated)
-eval_qwen 3 "$OUT/sderasure_v12/harassment" harassment
-
-# Gen + eval hate
-ODIR=$OUT/sderasure_v12/hate
-mkdir -p "$ODIR"
-N=$(find "$ODIR" -maxdepth 1 -name "*.png" 2>/dev/null | wc -l)
-if [ $N -lt 50 ] && [ -d "$REPO/SDErasure/outputs/sderasure_hate/unet" ]; then
-  echo "[$(date +%H:%M)] GPU 3: SDErasure hate"
-  CUDA_VISIBLE_DEVICES=3 $P $GEN --model_id CompVis/stable-diffusion-v1-4 \
-    --unet_dir $REPO/SDErasure/outputs/sderasure_hate/unet \
-    --prompt_file $I2P/i2p_hate.csv --output_dir "$ODIR" \
-    --seed 42 --num_inference_steps 50 --guidance_scale 7.5
+if [ ! -d "$COCO_BL" ] || [ "$(ls $COCO_BL/*.png 2>/dev/null | wc -l)" -lt 10 ]; then
+    echo "[GPU0] Generating COCO baseline (250 prompts x4)"
+    PYTHONPATH=/mnt/home3/yhgil99/unlearning/SafeGen:$PYTHONPATH \
+    CUDA_VISIBLE_DEVICES=0 python3 -m safegen.generate_baseline \
+        --prompts CAS_SpatialCFG/prompts/coco_250.txt \
+        --outdir "$COCO_BL" --nsamples 4 --steps 50 --seed 42 2>&1 | tail -3 &
 fi
-eval_qwen 3 "$ODIR" hate
 
-# Gen + eval shocking
-ODIR=$OUT/sderasure_v12/shocking
-mkdir -p "$ODIR"
-N=$(find "$ODIR" -maxdepth 1 -name "*.png" 2>/dev/null | wc -l)
-if [ $N -lt 50 ] && [ -d "$REPO/SDErasure/outputs/sderasure_shocking/unet" ]; then
-  echo "[$(date +%H:%M)] GPU 3: SDErasure shocking"
-  CUDA_VISIBLE_DEVICES=3 $P $GEN --model_id CompVis/stable-diffusion-v1-4 \
-    --unet_dir $REPO/SDErasure/outputs/sderasure_shocking/unet \
-    --prompt_file $I2P/i2p_shocking.csv --output_dir "$ODIR" \
-    --seed 42 --num_inference_steps 50 --guidance_scale 7.5
+if [ ! -d "$COCO_OURS" ] || [ "$(ls $COCO_OURS/*.png 2>/dev/null | wc -l)" -lt 10 ]; then
+    echo "[GPU1] Generating COCO ours"
+    PYTHONPATH=/mnt/home3/yhgil99/unlearning/SafeGen:$PYTHONPATH \
+    CUDA_VISIBLE_DEVICES=1 python3 -m safegen.generate_family \
+        --prompts CAS_SpatialCFG/prompts/coco_250.txt \
+        --outdir "$COCO_OURS" \
+        --probe_mode both --how_mode anchor_inpaint \
+        --cas_threshold 0.6 --safety_scale 1.2 \
+        --target_concepts nudity nude naked exposed \
+        --anchor_concepts clothed dressed covered wearing_clothes \
+        --clip_embeddings CAS_SpatialCFG/exemplars/concepts_v2/sexual/clip_exemplar_projected.pt \
+        --nsamples 4 --steps 50 --seed 42 2>&1 | tail -3 &
 fi
-eval_qwen 3 "$ODIR" shocking
-echo "GPU3 DONE — $(date)"
-) &
-
-# =============================================================================
-# GPU 6: Baseline self_harm + Probe visualization
-# =============================================================================
-(
-echo "=== GPU 6: Baseline self_harm + Probe viz ==="
-
-# Baseline self_harm
-ODIR=$OUT/baseline/self_harm
-mkdir -p "$ODIR"
-N=$(find "$ODIR" -maxdepth 1 -name "*.png" 2>/dev/null | wc -l)
-if [ $N -lt 50 ]; then
-  echo "[$(date +%H:%M)] GPU 6: Baseline self_harm"
-  CUDA_VISIBLE_DEVICES=6 $P $V27 \
-    --prompts $I2P/i2p_self-harm.csv --outdir "$ODIR" \
-    --nsamples 1 --steps 50 --seed 42 --cas_threshold 99.0 --safety_scale 0.0 \
-    --how_mode anchor_inpaint --probe_mode text --attn_threshold 0.1
-fi
-eval_qwen 6 "$ODIR" self_harm
-
-# Probe visualization — generate with save_maps=True
-echo "[$(date +%H:%M)] GPU 6: Probe visualization"
-VIZDIR=$REPO/CAS_SpatialCFG/outputs/probe_viz
-mkdir -p "$VIZDIR"
-CUDA_VISIBLE_DEVICES=6 $P $V27 \
-  --prompts $REPO/CAS_SpatialCFG/prompts/ringabell.txt \
-  --outdir "$VIZDIR" \
-  --nsamples 1 --steps 50 --seed 42 --cas_threshold 0.6 \
-  --how_mode hybrid --target_scale 15 --anchor_scale 15 \
-  --probe_mode both --clip_embeddings $CLIP \
-  --attn_threshold 0.1 --img_attn_threshold 0.4 \
-  --save_maps --debug \
-  --start_idx 0 --end_idx 10 2>&1 | tail -5
-
-echo "GPU6 DONE — $(date)"
-) &
-
-# =============================================================================
-# GPU 7: COCO FID for v27 best config
-# =============================================================================
-(
-echo "=== GPU 7: COCO FID v27 hyb ts15 as15 ==="
-bash $REPO/scripts/run_coco_fid_v27.sh 7 2>&1 | tail -10
-echo "GPU7 DONE — $(date)"
-) &
-
-echo "=============================================="
-echo "  siml-02: GPU 0(our eval) 3(SDE remaining) 6(baseline+viz) 7(FID)"
-echo "=============================================="
-
 wait
-echo "ALL DONE — $(date)"
+
+# ── Phase 6B: Compute FID ──
+echo ""
+echo "=== COCO FID Computation ==="
+if [ -d "$COCO_BL" ] && [ -d "$COCO_OURS" ]; then
+    CUDA_VISIBLE_DEVICES=0 python3 CAS_SpatialCFG/eval_fid_clip.py \
+        "$COCO_BL" "$COCO_OURS" CAS_SpatialCFG/prompts/coco_250.txt 2>&1 | tail -5
+fi
+
+# ── Wait for artist to finish, then eval ──
+echo ""
+echo "=== Waiting for artist generation ==="
+while [ "$(ps aux | grep 'run_artist_style' | grep -v grep | wc -l)" -gt 0 ]; do
+    sleep 30
+done
+echo "Artist generation done!"
+
+# ── Phase: Qwen eval for artist ──
+echo ""
+echo "=== Artist Qwen Evaluation ==="
+conda activate vlm 2>/dev/null || true
+
+ARTIST_DIR="CAS_SpatialCFG/outputs/v2_experiments/artist"
+for d in $ARTIST_DIR/*/; do
+    [ -d "$d" ] || continue
+    artist=$(basename $d | cut -d'_' -f1)
+    
+    # Determine qwen concept based on artist
+    style_concept="style_${artist}"
+    
+    # Check if already evaluated
+    [ -f "$d/results_qwen3_vl_${style_concept}.txt" ] && continue
+    
+    echo "[Qwen] $d ($style_concept)"
+    CUDA_VISIBLE_DEVICES=0 python3 vlm/opensource_vlm_i2p_all.py "$d" "$style_concept" qwen 2>&1 | tail -2 &
+    if [ $(jobs -r | wc -l) -ge 4 ]; then wait -n; fi
+done
+wait
+
+# ── Phase: Q16 eval for artist ──
+echo ""
+echo "=== Artist Q16 Evaluation ==="
+conda activate sdd_copy
+export PYTHONPATH="/mnt/home3/yhgil99/.local/lib/python3.10/site-packages:$PYTHONPATH"
+
+for d in $ARTIST_DIR/*/; do
+    [ -d "$d" ] || continue
+    [ -f "$d/results_q16.txt" ] && continue
+    [ "$(ls $d/*.png 2>/dev/null | wc -l)" -eq 0 ] && continue
+    echo "[Q16] $d"
+    CUDA_VISIBLE_DEVICES=0 python3 vlm/eval_q16.py "$d" --threshold 0.7 2>&1 | tail -1 &
+    if [ $(jobs -r | wc -l) -ge 4 ]; then wait -n; fi
+done
+wait
+
+# ── Phase: Qwen eval for SAFREE reproduction ──
+echo ""
+echo "=== SAFREE Qwen Evaluation ==="
+conda activate vlm 2>/dev/null || true
+
+SAFREE_DIR="CAS_SpatialCFG/outputs/safree_reproduction"
+declare -A SAFREE_CONCEPT
+SAFREE_CONCEPT[i2p_sexual]="nudity"
+SAFREE_CONCEPT[rab]="nudity"
+SAFREE_CONCEPT[mma]="nudity"
+SAFREE_CONCEPT[unlearndiff]="nudity"
+SAFREE_CONCEPT[mja_sexual]="nudity"
+SAFREE_CONCEPT[i2p_violence]="violence"
+SAFREE_CONCEPT[mja_violent]="violence"
+SAFREE_CONCEPT[i2p_harassment]="harassment"
+SAFREE_CONCEPT[i2p_hate]="hate"
+SAFREE_CONCEPT[i2p_shocking]="shocking"
+SAFREE_CONCEPT[mja_disturbing]="shocking"
+SAFREE_CONCEPT[i2p_illegal]="illegal"
+SAFREE_CONCEPT[mja_illegal]="illegal"
+SAFREE_CONCEPT[i2p_selfharm]="self_harm"
+
+gpu=0
+for name in "${!SAFREE_CONCEPT[@]}"; do
+    d="$SAFREE_DIR/$name"
+    concept="${SAFREE_CONCEPT[$name]}"
+    [ -d "$d" ] || continue
+    [ "$(find $d -name '*.png' 2>/dev/null | wc -l)" -eq 0 ] && continue
+    
+    # Find images in safe/unsafe/all subdirs or root
+    img_dir="$d"
+    [ -d "$d/all" ] && [ "$(ls $d/all/*.png 2>/dev/null | wc -l)" -gt 0 ] && img_dir="$d/all"
+    
+    [ -f "$img_dir/results_qwen3_vl_${concept}.txt" ] && continue
+    
+    echo "[SAFREE Qwen GPU$gpu] $name ($concept)"
+    CUDA_VISIBLE_DEVICES=$gpu python3 vlm/opensource_vlm_i2p_all.py "$img_dir" "$concept" qwen 2>&1 | tail -2 &
+    gpu=$(( (gpu + 1) % 4 ))
+    if [ $(jobs -r | wc -l) -ge 4 ]; then wait -n; fi
+done
+wait
+
+# ── Phase: Q16 for SAFREE ──
+echo ""
+echo "=== SAFREE Q16 Evaluation ==="
+conda activate sdd_copy
+export PYTHONPATH="/mnt/home3/yhgil99/.local/lib/python3.10/site-packages:$PYTHONPATH"
+
+for d in $SAFREE_DIR/*/; do
+    [ -d "$d" ] || continue
+    img_dir="$d"
+    [ -d "$d/all" ] && [ "$(ls $d/all/*.png 2>/dev/null | wc -l)" -gt 0 ] && img_dir="$d/all"
+    [ -f "$img_dir/results_q16.txt" ] && continue
+    [ "$(find $img_dir -name '*.png' 2>/dev/null | wc -l)" -eq 0 ] && continue
+    echo "[SAFREE Q16] $(basename $d)"
+    CUDA_VISIBLE_DEVICES=0 python3 vlm/eval_q16.py "$img_dir" --threshold 0.7 2>&1 | tail -1 &
+    if [ $(jobs -r | wc -l) -ge 4 ]; then wait -n; fi
+done
+wait
+
+echo ""
+echo "=========================================="
+echo "  ALL REMAINING PHASES COMPLETE $(date)"
+echo "=========================================="
