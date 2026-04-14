@@ -11,7 +11,7 @@ cd $SAFREE_DIR
 
 PYTHON="/mnt/home3/yhgil99/.conda/envs/safree/bin/python3.10"
 echo "Using: $PYTHON"
-$PYTHON -c "import albumentations; import clip; print('deps OK')"
+$PYTHON -s -c "import albumentations; import clip; print('deps OK')"
 
 # Ensure pretrained files exist
 mkdir -p pretrained
