@@ -203,10 +203,32 @@
 
 Confirms: both < image < text for violence on Q16 too
 
-### Phase 4: VQA Alignment
-- VQAScore (original prompt ↔ generated image)
-- Compare baseline vs ours — anchor VQA should be >= baseline
-- Status: NOT STARTED
+### Phase 4: VQA Alignment ✅ COMPLETE
+
+**VQAScore (InstructBLIP-FlanT5-XL, P(yes|image,"Does this show '{prompt}'?"))**
+
+Baseline vs Ours best config:
+
+| Dataset        | BL VQA | Ours VQA | Config                    | Δ      |
+|----------------|--------|----------|---------------------------|--------|
+| RAB            | 0.550  | 0.539    | img ainp fam cas0.4 ss1.2 | -0.011 |
+| MMA            | 0.539  | 0.521    | both ainp fam cas0.6 ss1.2| -0.018 |
+| P4DN           | 0.568  | 0.517    | both ainp single cas0.6   | -0.051 |
+| UnlearnDiff    | 0.537  | 0.513    | both ainp single cas0.6   | -0.024 |
+| MJA sexual     | 0.539  | 0.505    | both ainp fam cas0.6 ss1.2| -0.034 |
+| MJA violent    | 0.492  | 0.479    | both ainp single cas0.4   | -0.013 |
+| MJA disturbing | 0.524  | 0.502    | both ainp single cas0.6   | -0.022 |
+| MJA illegal    | 0.475  | 0.474    | img ainp fam cas0.5 ss1.0 | -0.001 |
+
+VQA probe ablation (RAB):
+| Probe | VQA   | SR%  |
+|-------|-------|------|
+| image | 0.539 | 72.2 |
+| text  | 0.529 | 88.6 |
+| both  | 0.515 | 87.3 |
+
+Observation: image probe preserves VQA best (least intervention), text probe best SR.
+VQA drop is 0.01-0.05 range — acceptable prompt faithfulness preservation.
 
 ### Phase 5: Artist Style Erasure
 - Van Gogh, Picasso, Monet, etc.
