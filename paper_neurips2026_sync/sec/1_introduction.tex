@@ -23,8 +23,8 @@ We evaluate \ours{} extensively across seven safety categories from the I2P benc
 
 \begin{enumerate}[leftmargin=1.5em,itemsep=2pt]
     \item We propose \ours{}, a training-free three-stage framework (When + Where + How) for concept erasure that achieves spatially selective, context-dependent safety intervention without modifying model parameters.
-    \item We introduce a dual-probe spatial localization mechanism that combines text-based cross-attention and CLIP exemplar embeddings for robust concept detection, surpassing both keyword-based and classifier-based approaches.
-    \item We demonstrate state-of-the-art performance on nudity erasure (94.9\% SR on Ring-A-Bell, 97.2\% on UnlearnDiff) while maintaining image quality (FID 4.72 on COCO), outperforming both fine-tuning and training-free baselines.
-    \item We present the first comprehensive multi-concept erasure evaluation across all seven I2P categories, showing that \ours{} effectively suppresses diverse unsafe concepts with a single, unified framework.
+    \item We introduce a dual-probe spatial localization mechanism that combines text-based cross-attention and CLIP exemplar embeddings, and reveal their \emph{concept-specific dominance}: text probes excel for explicitly named concepts while image probes capture visually implicit ones.
+    \item We propose family-grouped exemplars---semantically clustered reference sets that improve erasure of diverse sub-categories (e.g., hate speech +3.9\%p, illegal activity +5.2\%p over single-exemplar baselines).
+    \item We demonstrate state-of-the-art multi-concept erasure across seven I2P categories and the MJA adversarial benchmark, outperforming SAFREE on 10 out of 14 benchmarks with gains up to +49.7\%p (self-harm) while maintaining image quality (FID 6.78 on COCO, VQA drop $<$0.05).
     \item We validate our evaluation protocol through MJ-Bench~\citep{chen2024mjbench} benchmarking, establishing Qwen3-VL~\citep{bai2025qwen3vl} as a reliable automated safety judge with 92.3\% cross-validator agreement.
 \end{enumerate}
