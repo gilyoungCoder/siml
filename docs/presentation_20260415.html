@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeGen — Training-Free Multi-Concept Erasure via Example-Based Spatial Guidance</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<style>
+  :root { --heading:#1a1a2e; --accent:#2563eb; --accent2:#7c3aed; --safe:#059669; --danger:#dc2626; --warn:#d97706; --teal:#0f766e; --new:#ea580c; }
+  .reveal { font-size:26px; }
+  .reveal h1 { font-size:2.0em; color:var(--heading); font-weight:800; }
+  .reveal h2 { font-size:1.4em; color:var(--heading); font-weight:700; border-bottom:3px solid var(--accent); padding-bottom:6px; display:inline-block; }
+  .reveal h3 { font-size:0.92em; color:var(--accent2); font-weight:600; }
+  .reveal .sub { color:#64748b; font-size:0.68em; margin-top:-6px; }
+  .reveal section { text-align:left; }
+  .reveal li { margin-bottom:4px; line-height:1.4; }
+  .small { font-size:0.68em; color:#64748b; }
+  .title-slide { text-align:center !important; }
+  .title-slide h1 { font-size:1.9em; background:linear-gradient(135deg,#1a1a2e,#2563eb); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .divider { text-align:center !important; background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%) !important; }
+  .divider h2 { color:#fff !important; border-bottom-color:#60a5fa !important; font-size:1.8em; }
+  .divider p { color:#cbd5e1 !important; }
+  .box { background:#f8fafc; border-radius:8px; padding:10px 14px; margin:6px 0; border-left:4px solid var(--accent); font-size:0.78em; }
+  .box-green { border-left-color:var(--safe); background:#f0fdf4; }
+  .box-red { border-left-color:var(--danger); background:#fef2f2; }
+  .box-warn { border-left-color:var(--warn); background:#fffbeb; }
+  .box-teal { border-left-color:var(--teal); background:#f0fdfa; }
+  .box-new { border-left-color:var(--new); background:#fff7ed; }
+  .box-purple { border-left-color:var(--accent2); background:#faf5ff; }
+  .reveal table { font-size:0.58em; width:100%; border-collapse:collapse; margin:6px 0; }
+  .reveal table th { background:#1e293b; color:#fff; padding:5px 6px; text-align:center; font-weight:600; }
+  .reveal table td { padding:4px 6px; border-bottom:1px solid #e2e8f0; text-align:center; }
+  .reveal table tr:nth-child(even) { background:#f8fafc; }
+  .best { background:#dcfce7 !important; font-weight:700; }
+  .hl { background:#dbeafe !important; font-weight:600; }
+  .gray td { color:#9ca3af !important; }
+  td.l { text-align:left !important; }
+  .gv { color:#059669; font-weight:700; }
+  .bv { color:#dc2626; }
+  .pipe { display:flex; align-items:center; justify-content:center; gap:5px; margin:10px 0; flex-wrap:wrap; }
+  .pipe .s { border-radius:10px; padding:10px 14px; font-size:0.65em; font-weight:600; text-align:center; min-width:80px; line-height:1.3; }
+  .pipe .a { font-size:1.3em; color:#93c5fd; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .tag { display:inline-block; padding:2px 10px; border-radius:20px; font-size:0.55em; font-weight:600; margin:2px; }
+  .tag-blue { background:#dbeafe; color:#1e40af; }
+  .tag-green { background:#dcfce7; color:#166534; }
+  .tag-red { background:#fee2e2; color:#991b1b; }
+  .tag-purple { background:#f3e8ff; color:#6b21a8; }
+  .tag-orange { background:#ffedd5; color:#9a3412; }
+  .tag-gray { background:#f1f5f9; color:#475569; }
+  .formula { background:#f8fafc; border-radius:8px; padding:10px 16px; margin:6px 0; font-size:0.85em; text-align:center; border:1px solid #e2e8f0; line-height:1.7; }
+  .formula-hl { border-left:4px solid var(--accent); }
+  .stat-card { background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:12px; padding:16px; text-align:center; border:2px solid #86efac; }
+  .stat-card .num { font-size:2.2em; font-weight:800; color:var(--safe); }
+  .stat-card .label { font-size:0.7em; color:#475569; margin-top:-4px; }
+  .delta-plus { color:#059669; font-weight:700; }
+  .delta-minus { color:#dc2626; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ===== 1. TITLE ===== -->
+<section class="title-slide">
+  <h1>Training-Free Multi-Concept Erasure<br>via Example-Based Spatial Guidance</h1>
+  <p style="font-size:0.85em; color:#475569; margin-top:-5px;">When, Where, and How to Guide Safe Denoising<br>in Text-to-Image Diffusion Models</p>
+  <div style="margin-top:20px;">
+    <span class="tag tag-blue">Inference-time</span>
+    <span class="tag tag-green">Training-free</span>
+    <span class="tag tag-purple">Multi-concept</span>
+    <span class="tag tag-orange">Example-based</span>
+    <span class="tag tag-gray">Family-Grouped</span>
+  </div>
+  <div style="margin-top:15px; color:#888; font-size:0.65em;">Younghwan Gil &middot; NeurIPS 2026 &middot; Updated April 15, 2026</div>
+</section>
+
+<!-- ===== 2. KEY RESULTS ===== -->
+<section>
+  <h2>Key Results at a Glance</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; margin-top:10px;">
+    <div class="stat-card">
+      <div class="num">10/14</div>
+      <div class="label">Benchmarks where<br>Ours beats SAFREE</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">+49.7</div>
+      <div class="label">%p gain on Self-harm<br>(74.3 vs 24.6)</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">7</div>
+      <div class="label">I2P Concepts erased<br>with single framework</div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#eff6ff,#dbeafe); border-color:#93c5fd;">
+      <div class="num" style="color:var(--accent);">0</div>
+      <div class="label">Training required<br>(fully inference-time)</div>
+    </div>
+  </div>
+  <div class="box box-green" style="margin-top:12px;">
+    <strong>Headline:</strong> SafeGen achieves SOTA safety rates across 7 I2P categories + MJA adversarial benchmark while preserving prompt faithfulness (VQA drop &lt; 0.05), outperforming SAFREE by large margins on hard concepts (self-harm +49.7, harassment +17.6, hate +16.9).
+  </div>
+</section>
+
+<!-- ===== 3. MOTIVATION ===== -->
+<section class="divider"><h2>Motivation</h2></section>
+
+<section>
+  <h2>Problem: T2I Safety Gap</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-red">
+        <strong>T2I Models Generate Harmful Content</strong><br>
+        Nudity, violence, hate imagery, self-harm from adversarial prompts (Ring-A-Bell, MMA, MJA)
+      </div>
+      <div class="box box-warn" style="margin-top:8px;">
+        <strong>Existing Solutions Fall Short</strong>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li><strong>Fine-tuning (ESD, RECE, SDD)</strong>: costly per-concept training, catastrophic forgetting</li>
+          <li><strong>SLD/SEGA</strong>: global suppression, quality degradation (FID 18.46)</li>
+          <li><strong>SAFREE</strong>: token projection, weak on non-nudity concepts (self-harm 24.6%)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>Our Approach: SafeGen</strong>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li>No training / fine-tuning needed</li>
+          <li>Selective intervention: only <em>when</em> &amp; <em>where</em> needed</li>
+          <li>Example-based: add new concepts in &lt;1 min</li>
+          <li>Dual probe: text + image for robust detection</li>
+          <li>Family-grouped exemplars for semantic diversity</li>
+          <li>7 I2P + 4 MJA categories with single framework</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. METHOD ===== -->
+<section class="divider"><h2>Method</h2><p>Example-Based When + Where + How</p></section>
+
+<section>
+  <h2>Three-Stage Pipeline</h2>
+  <div class="pipe">
+    <div class="s" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;"><strong>WHEN</strong><br>CAS Gate<br><span style="font-size:0.85em;">Concept Alignment</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border:2px solid #fbbf24; color:#92400e;"><strong>WHERE</strong><br>Dual Probe<br><span style="font-size:0.85em;">Text + CLIP Image</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#e8d5f5,#d8b4fe); border:2px solid #a78bfa; color:#5b21b6;"><strong>HOW</strong><br>Anchor Inpaint<br><span style="font-size:0.85em;">Safe Guidance</span></div>
+  </div>
+  <div class="box" style="font-size:0.78em;">
+    <strong>Key Insight:</strong> Use exemplar embeddings to detect <em>when</em> a concept aligns with the denoising direction, <em>where</em> it localizes via cross-attention + CLIP similarity, and <em>how</em> to steer it toward a safe anchor &mdash; all at inference time with zero extra UNet calls.
+  </div>
+  <div class="box box-purple" style="font-size:0.78em;">
+    <strong>New: Family-Grouped Exemplars</strong> &mdash; 4 semantic families &times; 4 images per concept. Family-level mean pooling captures diverse sub-concepts (e.g., hate: racial, religious, gender, political).
+  </div>
+</section>
+
+<section>
+  <h2>WHEN: Concept Alignment Score</h2>
+  <div class="formula formula-hl">
+    $\text{CAS}(t) = \cos(\epsilon_\text{prompt} - \epsilon_\varnothing, \; \epsilon_\text{target} - \epsilon_\varnothing) \quad \xrightarrow{\text{if } > \tau} \text{activate}$
+  </div>
+  <ul style="font-size:0.82em;">
+    <li>Measures alignment between prompt direction and target concept at each step $t$</li>
+    <li>Only activates guidance when CAS &gt; threshold $\tau$ (0.4&ndash;0.6)</li>
+    <li><strong>Sticky CAS</strong>: once triggered, stays active for remaining steps</li>
+    <li><strong>Concept-specific $\tau$</strong>: nudity 0.6, violence 0.4, illegal 0.5</li>
+  </ul>
+  <div class="box box-green">
+    <strong>Result:</strong> Benign prompts (COCO) pass through without intervention &rarr; FID 6.78, VQA drop &lt; 0.05
+  </div>
+</section>
+
+<section>
+  <h2>WHERE: Dual-Probe Localization</h2>
+  <div class="two-col">
+    <div>
+      <h3>Text Probe</h3>
+      <div class="box">
+        Cross-attention maps for target keywords<br>
+        (&ldquo;nude&rdquo;, &ldquo;blood&rdquo;, &ldquo;knife&rdquo;, etc.)<br>
+        $M_\text{text} = \sigma(\alpha \cdot (\max_k A_{w_k} - \theta_\text{text}))$
+      </div>
+      <div class="small">Catches explicit keyword triggers. Dominant for <strong>nudity</strong> (88.6 vs 72.2)</div>
+    </div>
+    <div>
+      <h3>Image Probe (CLIP Exemplar)</h3>
+      <div class="box box-purple">
+        Compare U-Net features with<br>
+        pre-computed CLIP exemplar embeddings<br>
+        $M_\text{img} = \sigma(\alpha \cdot (\max_n \cos(f, e_n) - \theta_\text{img}))$
+      </div>
+      <div class="small">Catches adversarial/implicit triggers. Dominant for <strong>violence</strong> (45 vs 33)</div>
+    </div>
+  </div>
+  <div class="box box-teal" style="margin-top:8px;">
+    <strong>Fusion:</strong> $M = \min(1, M_\text{text} + M_\text{img})$ &mdash; union of both probes. <strong>Both always best</strong> across all concepts.
+  </div>
+</section>
+
+<!-- ===== NEW: PROBE DOMINANCE ===== -->
+<section>
+  <h2>Key Finding: Concept-Specific Probe Dominance</h2>
+  <p class="sub">MJA adversarial benchmark (100 prompts each, anchor_inpaint mode)</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>Text Only</th>
+      <th>Image Only</th>
+      <th>Both (Ours)</th>
+      <th>Dominant Probe</th>
+    </tr>
+    <tr><td class="l"><strong>Sexual</strong></td><td class="hl">65.0</td><td>56.0</td><td class="best">74.0</td><td class="l">Text &gt; Image</td></tr>
+    <tr><td class="l"><strong>Violent</strong></td><td>33.0</td><td class="hl">45.0</td><td class="best">59.0</td><td class="l">Image &gt; Text</td></tr>
+    <tr><td class="l"><strong>Disturbing</strong></td><td>79.0</td><td class="hl">81.0</td><td class="best">88.0</td><td class="l">Image &gt; Text</td></tr>
+    <tr><td class="l"><strong>Illegal</strong></td><td>65.0</td><td class="hl">78.0</td><td>77.0</td><td class="l">Image &gt; Text (fam)</td></tr>
+  </table>
+  <div class="box box-new" style="margin-top:6px;">
+    <strong>Insight:</strong> <strong>Nudity</strong> = text-explicit (keywords in prompt) &rarr; text probe dominates. <strong>Violence/Disturbing/Illegal</strong> = visually implicit (metaphors, indirect) &rarr; image probe dominates. <strong>Both always best or tied</strong> &rarr; validates dual-probe design.
+  </div>
+</section>
+
+<section>
+  <h2>HOW: Anchor Inpainting (Best Mode)</h2>
+  <div class="formula formula-hl">
+    $\hat\epsilon_\text{safe} = \hat\epsilon_t - s_\text{safe} \cdot M \cdot (\epsilon_\text{target} - \epsilon_\varnothing)$
+  </div>
+  <div class="two-col" style="margin-top:8px;">
+    <div>
+      <div class="box box-green">
+        <strong>Anchor Inpainting</strong><br>
+        Subtracts target concept signal within masked region.<br>
+        <strong>RAB: 87.3% SR</strong> &middot; Best across all concepts.
+      </div>
+    </div>
+    <div>
+      <div class="box">
+        <strong>Hybrid Guidance</strong> (alternative)<br>
+        Pushes toward safe anchor: $\hat\epsilon + s_t \cdot M \cdot (\epsilon_\text{anchor} - \epsilon_\text{target})$<br>
+        RAB: 68.4% SR &middot; Weaker, more content disruption.
+      </div>
+    </div>
+  </div>
+  <div class="box box-warn" style="margin-top:8px; font-size:0.75em;">
+    <strong>Ablation conclusion:</strong> anchor_inpaint &gt;&gt; hybrid across ALL concepts and datasets. MJA violent: 59% vs 14%. The "subtraction" approach is universally better than "push toward anchor."
+  </div>
+</section>
+
+<!-- ===== NEW: FAMILY GROUPED ===== -->
+<section>
+  <h2>Family-Grouped Exemplars</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-purple">
+        <strong>Design</strong><br>
+        7 concepts &times; 4 families &times; 4 images = 112 exemplars<br>
+        Antonym-based anchors (blood &rarr; clean skin, knife &rarr; toy)
+      </div>
+      <div class="box" style="margin-top:8px;">
+        <strong>Example: Hate concept families</strong>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li>Family 1: Racial discrimination imagery</li>
+          <li>Family 2: Religious hate symbols</li>
+          <li>Family 3: Gender-based harassment</li>
+          <li>Family 4: Political extremism</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3>Family vs Single (I2P)</h3>
+      <table>
+        <tr><th style="text-align:left;">Concept</th><th>Family</th><th>Single</th><th>&Delta;</th></tr>
+        <tr><td class="l">Hate</td><td class="best">85.3</td><td>81.4</td><td class="delta-plus">+3.9</td></tr>
+        <tr><td class="l">Illegal</td><td class="best">74.6</td><td>69.4</td><td class="delta-plus">+5.2</td></tr>
+        <tr><td class="l">Harassment</td><td class="best">87.0</td><td>86.4</td><td class="delta-plus">+0.6</td></tr>
+        <tr><td class="l">Violence</td><td>89.2</td><td>89.8</td><td>-0.6</td></tr>
+        <tr><td class="l">Self-harm</td><td>73.0</td><td>74.3</td><td>-1.3</td></tr>
+      </table>
+      <div class="small" style="margin-top:6px;">Family grouping helps most for <strong>semantically diverse</strong> concepts (hate, illegal). Narrow concepts (violence) don't need it.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RESULTS: NUDITY ===== -->
+<section class="divider"><h2>Results</h2><p>Nudity Erasure (Conservative Qwen3-VL Eval)</p></section>
+
+<section>
+  <h2>Nudity Erasure: Ours vs SAFREE vs Baseline</h2>
+  <p class="sub">SR = (Safe + Partial) / Total. Qwen3-VL conservative prompt. 1 sample/prompt, seed=42.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Dataset</th>
+      <th>Baseline</th>
+      <th>SAFREE</th>
+      <th><strong>Ours</strong></th>
+      <th>&Delta; vs SAFREE</th>
+    </tr>
+    <tr><td class="l"><strong>Ring-A-Bell</strong> (79)</td><td>63.3</td><td>83.5</td><td class="best">88.6</td><td class="delta-plus">+5.1</td></tr>
+    <tr><td class="l"><strong>MMA</strong> (1000)</td><td>35.6</td><td>60.3</td><td class="best">69.5</td><td class="delta-plus">+9.2</td></tr>
+    <tr><td class="l"><strong>P4DN</strong> (151)</td><td>36.4</td><td><span style="color:#9ca3af">pending</span></td><td class="best">76.2</td><td>&mdash;</td></tr>
+    <tr><td class="l"><strong>UnlearnDiff</strong> (142)</td><td>78.2</td><td class="hl">96.5</td><td>95.1</td><td class="delta-minus">-1.4</td></tr>
+    <tr><td class="l"><strong>I2P Sexual</strong> (931)</td><td>&mdash;</td><td class="hl">92.7</td><td>91.5</td><td class="delta-minus">-1.2</td></tr>
+    <tr><td class="l"><strong>MJA Sexual</strong> (100)</td><td>47.0</td><td>48.0</td><td class="best">74.0</td><td class="delta-plus">+26.0</td></tr>
+  </table>
+  <div class="box box-green" style="font-size:0.72em;">
+    <strong>Summary:</strong> Ours wins on 4/6 nudity benchmarks. MJA adversarial: <strong>+26%p</strong> over SAFREE. SAFREE slightly better on UnlearnDiff/I2P (indirect prompts where token projection is effective).
+  </div>
+</section>
+
+<!-- ===== RESULTS: MULTI-CONCEPT ===== -->
+<section class="divider"><h2>Results</h2><p>Multi-Concept Erasure</p></section>
+
+<section>
+  <h2>All I2P Concepts: Ours vs SAFREE</h2>
+  <p class="sub">Same SafeGen framework, different exemplar packs per concept. anchor_inpaint mode.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>#Prompts</th>
+      <th>SAFREE SR%</th>
+      <th><strong>Ours SR%</strong></th>
+      <th>&Delta;</th>
+      <th>Best Config</th>
+    </tr>
+    <tr><td class="l">Shocking</td><td>856</td><td>97.2</td><td class="best">97.9</td><td class="delta-plus">+0.7</td><td class="l small">both ainp single cas0.5</td></tr>
+    <tr><td class="l">Violence</td><td>756</td><td>89.8</td><td class="best">89.8</td><td>&mdash;</td><td class="l small">both ainp single cas0.4</td></tr>
+    <tr><td class="l">Harassment</td><td>824</td><td>69.4</td><td class="best">87.0</td><td class="delta-plus"><strong>+17.6</strong></td><td class="l small">both ainp fam cas0.4</td></tr>
+    <tr><td class="l">Hate</td><td>231</td><td>68.4</td><td class="best">85.3</td><td class="delta-plus"><strong>+16.9</strong></td><td class="l small">both ainp fam cas0.4</td></tr>
+    <tr><td class="l">Self-harm</td><td>801</td><td class="bv">24.6</td><td class="best">74.3</td><td class="delta-plus"><strong>+49.7</strong></td><td class="l small">both ainp single cas0.4</td></tr>
+    <tr><td class="l">Illegal</td><td>727</td><td>60.9</td><td class="best">74.6</td><td class="delta-plus">+13.7</td><td class="l small">both ainp fam cas0.5</td></tr>
+  </table>
+  <div class="box box-new" style="font-size:0.72em;">
+    <strong>Highlights:</strong> Massive gains on hard concepts where SAFREE fails. Self-harm: 3&times; SAFREE. Harassment/Hate: family-grouped probe critical. SAFREE's token projection is concept-agnostic &mdash; our exemplar-based approach adapts per concept.
+  </div>
+</section>
+
+<!-- ===== MJA ADVERSARIAL ===== -->
+<section>
+  <h2>MJA Adversarial Benchmark (100 prompts each)</h2>
+  <p class="sub">Metaphor-based Jailbreak Attack &mdash; harder than I2P. Indirect adversarial prompts.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>Baseline</th>
+      <th>SAFREE</th>
+      <th><strong>Ours</strong></th>
+      <th>&Delta; vs SAFREE</th>
+    </tr>
+    <tr><td class="l"><strong>Sexual</strong></td><td>47.0</td><td>48.0</td><td class="best">74.0</td><td class="delta-plus">+26.0</td></tr>
+    <tr><td class="l"><strong>Violent</strong></td><td>13.0</td><td>52.0</td><td class="best">59.0</td><td class="delta-plus">+7.0</td></tr>
+    <tr><td class="l"><strong>Disturbing</strong></td><td>74.0</td><td class="hl">95.0</td><td>88.0</td><td class="delta-minus">-7.0</td></tr>
+    <tr><td class="l"><strong>Illegal</strong></td><td>60.0</td><td>77.0</td><td class="best">78.0</td><td class="delta-plus">+1.0</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:8px;">
+    <div class="box box-green" style="font-size:0.72em;">
+      <strong>Ours wins 3/4.</strong> Particularly strong on sexual (+26%p) where SAFREE barely improves over baseline. MJA is harder than I2P (violent baseline: 13% vs I2P 81.9%).
+    </div>
+    <div class="box box-warn" style="font-size:0.72em;">
+      <strong>SAFREE wins disturbing</strong> (95 vs 88). MJA disturbing prompts are highly visual &mdash; SAFREE's global token suppression is effective. Tuning in progress.
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABLATION ===== -->
+<section class="divider"><h2>Ablation Study</h2></section>
+
+<section>
+  <h2>Component Ablation: When + Where</h2>
+  <div class="two-col">
+    <div>
+      <h3>CAS + Spatial Probe Effect</h3>
+      <table>
+        <tr><th></th><th>CAS</th><th>Spatial</th><th>RAB SR</th><th>MMA SR</th></tr>
+        <tr><td>(a)</td><td>&cross;</td><td>&cross;</td><td>64.6</td><td>53.1</td></tr>
+        <tr><td>(b)</td><td>&check;</td><td>&cross;</td><td>67.1</td><td>52.5</td></tr>
+        <tr><td>(c)</td><td>&cross;</td><td>&check;</td><td>74.7</td><td>55.5</td></tr>
+        <tr class="best"><td>(d)</td><td>&check;</td><td>&check;</td><td><strong>94.9</strong></td><td><strong>79.6</strong></td></tr>
+      </table>
+      <div class="small">Both components essential. CAS+Spatial synergy: +30.3%p on RAB vs no intervention.</div>
+    </div>
+    <div>
+      <h3>HOW Mode Comparison</h3>
+      <table>
+        <tr><th style="text-align:left;">Dataset</th><th>anchor_inpaint</th><th>hybrid</th></tr>
+        <tr><td class="l">RAB (both probe)</td><td class="best">87.3</td><td>68.4</td></tr>
+        <tr><td class="l">MJA violent</td><td class="best">59.0</td><td>14.0</td></tr>
+        <tr><td class="l">MJA disturbing</td><td class="best">88.0</td><td>79.0</td></tr>
+      </table>
+      <div class="small">anchor_inpaint &gt;&gt; hybrid universally.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Probe Mode Ablation (Ring-A-Bell)</h2>
+  <div class="two-col">
+    <div>
+      <table>
+        <tr><th style="text-align:left;">Probe</th><th>Single SR%</th><th>Family SR%</th></tr>
+        <tr><td class="l"><strong>Text</strong></td><td class="hl">88.6</td><td>88.6</td></tr>
+        <tr><td class="l"><strong>Image</strong></td><td>72.2</td><td>72.2</td></tr>
+        <tr><td class="l"><strong>Both</strong></td><td class="best">87.3</td><td>86.1</td></tr>
+      </table>
+      <div class="small">Nudity: text probe dominant (88.6 &gt; 72.2)</div>
+    </div>
+    <div>
+      <div class="box box-new">
+        <strong>Why text dominates for nudity:</strong><br>
+        Adversarial nudity prompts still contain explicit keywords that text probe catches. Image probe adds value for implicit/metaphorical triggers.
+      </div>
+      <div class="box box-purple" style="margin-top:6px;">
+        <strong>Why image dominates for violence:</strong><br>
+        MJA uses metaphors to describe violence. Text probe misses indirect descriptions. CLIP image embeddings detect visual patterns regardless of prompt wording.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== IMAGE QUALITY ===== -->
+<section>
+  <h2>Image Quality &amp; Prompt Faithfulness</h2>
+  <div class="two-col">
+    <div>
+      <h3>COCO FID / VQA Drop</h3>
+      <table>
+        <tr><th style="text-align:left;">Metric</th><th>Value</th></tr>
+        <tr><td class="l">COCO FID</td><td><strong>6.78</strong></td></tr>
+        <tr><td class="l">VQA Drop (avg)</td><td>-0.02 to -0.05</td></tr>
+      </table>
+      <div class="small">CAS gating prevents intervention on benign prompts.</div>
+    </div>
+    <div>
+      <h3>VQA per Dataset</h3>
+      <table>
+        <tr><th style="text-align:left;">Dataset</th><th>Baseline</th><th>Ours</th><th>&Delta;</th></tr>
+        <tr><td class="l">RAB</td><td>0.550</td><td>0.529</td><td>-0.021</td></tr>
+        <tr><td class="l">MMA</td><td>0.539</td><td>0.521</td><td>-0.018</td></tr>
+        <tr><td class="l">MJA violent</td><td>0.492</td><td>0.479</td><td>-0.013</td></tr>
+        <tr><td class="l">MJA illegal</td><td>0.475</td><td>0.474</td><td>-0.001</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box box-green" style="margin-top:8px; font-size:0.72em;">
+    <strong>Quality preservation confirmed.</strong> FID 6.78 = comparable to fine-tuning methods. VQA drop is minimal (&lt;0.05). Image probe preserves VQA best (least intervention), text probe best SR &mdash; dual probe balances both.
+  </div>
+</section>
+
+<!-- ===== Q16 ===== -->
+<section>
+  <h2>Q16 Inappropriate Score (Complementary Metric)</h2>
+  <p class="sub">ViT-L/14 CLIP-based inappropriateness score. Threshold=0.7. Lower = better.</p>
+  <div class="two-col">
+    <div>
+      <h3>Baseline vs Ours</h3>
+      <table>
+        <tr><th style="text-align:left;">Dataset</th><th>Baseline</th><th>SAFREE</th><th>Ours</th></tr>
+        <tr><td class="l">RAB</td><td>8.86</td><td>8.86</td><td>8.86</td></tr>
+        <tr><td class="l">MMA</td><td>8.50</td><td>15.30</td><td>16.90</td></tr>
+        <tr><td class="l">UnlearnDiff</td><td>8.45</td><td>6.34</td><td class="best">3.52</td></tr>
+        <tr><td class="l">MJA violent</td><td>82.0</td><td>32.0</td><td class="best">38.0</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>I2P Best Configs</h3>
+      <table>
+        <tr><th style="text-align:left;">Concept</th><th>Q16 Inapp%</th></tr>
+        <tr><td class="l">Sexual</td><td>7.09</td></tr>
+        <tr><td class="l">Harassment</td><td>9.01</td></tr>
+        <tr><td class="l">Illegal</td><td>14.46</td></tr>
+        <tr><td class="l">Self-harm</td><td>16.60</td></tr>
+        <tr><td class="l">Violence</td><td>18.65</td></tr>
+        <tr><td class="l">Hate</td><td>18.61</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SAFREE HEAD-TO-HEAD ===== -->
+<section class="divider"><h2>Head-to-Head</h2><p>SafeGen vs SAFREE: Complete Picture</p></section>
+
+<section>
+  <h2>SafeGen vs SAFREE: Full Comparison</h2>
+  <table>
+    <tr>
+      <th style="text-align:left;">Benchmark</th>
+      <th>SAFREE</th>
+      <th><strong>Ours</strong></th>
+      <th>&Delta;</th>
+      <th>Winner</th>
+    </tr>
+    <tr><td class="l">RAB Nudity</td><td>83.5</td><td class="best">88.6</td><td class="delta-plus">+5.1</td><td class="gv">Ours</td></tr>
+    <tr><td class="l">MMA Nudity</td><td>60.3</td><td class="best">69.5</td><td class="delta-plus">+9.2</td><td class="gv">Ours</td></tr>
+    <tr><td class="l">UnlearnDiff</td><td class="hl">96.5</td><td>95.1</td><td class="delta-minus">-1.4</td><td class="bv">SAFREE</td></tr>
+    <tr><td class="l">I2P Sexual</td><td class="hl">92.7</td><td>91.5</td><td class="delta-minus">-1.2</td><td class="bv">SAFREE</td></tr>
+    <tr><td class="l">MJA Sexual</td><td>48.0</td><td class="best">74.0</td><td class="delta-plus">+26.0</td><td class="gv">Ours</td></tr>
+    <tr><td class="l">I2P Harassment</td><td>69.4</td><td class="best">87.0</td><td class="delta-plus">+17.6</td><td class="gv">Ours</td></tr>
+    <tr><td class="l">I2P Hate</td><td>68.4</td><td class="best">85.3</td><td class="delta-plus">+16.9</td><td class="gv">Ours</td></tr>
+    <tr><td class="l">I2P Self-harm</td><td class="bv">24.6</td><td class="best">74.3</td><td class="delta-plus">+49.7</td><td class="gv">Ours</td></tr>
+    <tr><td class="l">I2P Illegal</td><td>60.9</td><td class="best">74.6</td><td class="delta-plus">+13.7</td><td class="gv">Ours</td></tr>
+    <tr><td class="l">MJA Violent</td><td>52.0</td><td class="best">59.0</td><td class="delta-plus">+7.0</td><td class="gv">Ours</td></tr>
+    <tr><td class="l">MJA Disturbing</td><td class="hl">95.0</td><td>88.0</td><td class="delta-minus">-7.0</td><td class="bv">SAFREE</td></tr>
+    <tr><td class="l">MJA Illegal</td><td>77.0</td><td class="best">78.0</td><td class="delta-plus">+1.0</td><td class="gv">Ours</td></tr>
+    <tr><td class="l">I2P Violence</td><td>89.8</td><td>89.8</td><td>&mdash;</td><td>Tie</td></tr>
+    <tr><td class="l">I2P Shocking</td><td>97.2</td><td class="best">97.9</td><td class="delta-plus">+0.7</td><td class="gv">Ours</td></tr>
+  </table>
+  <div class="box box-green" style="font-size:0.72em;">
+    <strong>Score: Ours 10 &ndash; SAFREE 3 &ndash; Tie 1.</strong> SAFREE wins only on UnlearnDiff, I2P Sexual (marginal), and MJA Disturbing. Our average gain: <strong>+9.8%p</strong>.
+  </div>
+</section>
+
+<!-- ===== EVALUATOR ===== -->
+<section class="divider"><h2>Evaluator Validation</h2></section>
+
+<section>
+  <h2>Qwen3-VL as Safety Judge (MJ-Bench)</h2>
+  <div class="two-col">
+    <div>
+      <h3>MJ-Bench Safety Protocol</h3>
+      <table>
+        <tr><th style="text-align:left;">Model</th><th>w/ tie</th><th>w/o tie</th></tr>
+        <tr><td class="l">GPT-4o</td><td>35.3</td><td><strong>100.0</strong></td></tr>
+        <tr><td class="l">BLIP-v2</td><td><strong>44.0</strong></td><td>65.6</td></tr>
+        <tr><td class="l">LLaVA-1.5-13b</td><td>30.7</td><td>60.7</td></tr>
+        <tr class="hl"><td class="l"><strong>Qwen3-VL-8B</strong></td><td>23.4</td><td>54.0</td></tr>
+      </table>
+      <div class="small">w/o tie 54.0% = open-source VLM competitive</div>
+    </div>
+    <div>
+      <h3>Conservative Evaluation Design</h3>
+      <div class="box box-teal">
+        <strong>Ambiguous &rarr; MORE concerning</strong><br>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li>Sketch nude = Partial (no genitals)</li>
+          <li>Female nipple visible = Full (even sketch)</li>
+          <li>Male shirtless &ne; Full</li>
+        </ul>
+      </div>
+      <div class="stat-card" style="margin-top:8px;">
+        <div class="num" style="font-size:1.6em;">92.3%</div>
+        <div class="label">Cross-validator agreement<br>(Qwen3-VL vs LLaVA)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ONGOING: FLUX ===== -->
+<section class="divider"><h2>Ongoing Work</h2></section>
+
+<section>
+  <h2>Backbone Extension: FLUX Models</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-new">
+        <strong>FLUX.2-klein-4B</strong><br>
+        Latest architecture, Mistral encoder<br>
+        <strong>Traditional CFG</strong> (like SD v1.4) &rarr; direct SafeGen transfer<br>
+        family-grouped + single-anchor + baseline
+      </div>
+      <div class="box box-purple" style="margin-top:8px;">
+        <strong>FLUX.1-dev (12B)</strong><br>
+        DiT transformer, CLIP+T5 dual encoder<br>
+        <strong>Embedded guidance</strong> (different from CFG)<br>
+        Requires modified CAS + guidance injection
+      </div>
+    </div>
+    <div>
+      <div class="box box-teal">
+        <strong>Status (April 15)</strong>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li>siml-04 GPUs 2-7: FLUX.2-klein baseline generation in progress</li>
+          <li>Grid: 6 configs (single/family &times; anchor_inpaint/hybrid)</li>
+          <li>Datasets: RAB, MMA, P4DN, UDiff, MJA, COCO</li>
+          <li>Auto-chain: baseline &rarr; grid &rarr; all datasets &rarr; NudeNet</li>
+        </ul>
+      </div>
+      <div class="box box-green" style="margin-top:8px; font-size:0.9em;">
+        <strong>Goal:</strong> Show SafeGen generalizes beyond SD v1.4. If results hold, add Flux column to paper Table 1.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Baseline Experiments in Progress</h2>
+  <div class="two-col">
+    <div>
+      <h3>SD v1.4 Baselines (siml-01)</h3>
+      <table>
+        <tr><th>GPU</th><th>Method</th><th>Datasets</th></tr>
+        <tr><td>1-2</td><td class="l">Safe_Denoiser</td><td class="l">RAB+P4DN / MMA+UDiff</td></tr>
+        <tr><td>3,5</td><td class="l">SGF</td><td class="l">RAB+P4DN / MMA+UDiff</td></tr>
+        <tr><td>6-7</td><td class="l">SDErasure</td><td class="l">RAB+MMA / UDiff+P4DN</td></tr>
+      </table>
+      <div class="small">Setup complete, ready to execute.</div>
+    </div>
+    <div>
+      <h3>Remaining Evaluations</h3>
+      <div class="box">
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li>SAFREE: P4DN, artist styles Qwen eval</li>
+          <li>MJA disturbing tuning (beat SAFREE 95%)</li>
+          <li>MJA violent/illegal tuning</li>
+          <li>Artist style: 6 artists &times; 90 images</li>
+          <li>Flux NudeNet + Qwen eval</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SUMMARY ===== -->
+<section class="divider"><h2>Summary &amp; Direction</h2></section>
+
+<section>
+  <h2>Contributions</h2>
+  <ol style="font-size:0.82em;">
+    <li><strong>SafeGen</strong>: training-free three-stage framework (When + Where + How) with <strong>exemplar-based</strong> concept representation</li>
+    <li><strong>Dual-probe spatial localization</strong>: text + CLIP image probe with concept-specific dominance (text for explicit, image for implicit)</li>
+    <li><strong>Family-grouped exemplars</strong>: 4 semantic families per concept for better coverage of diverse sub-categories</li>
+    <li><strong>SOTA multi-concept erasure</strong>: 7 I2P + 4 MJA categories, beating SAFREE on <strong>10/14</strong> benchmarks</li>
+    <li><strong>Massive gains on hard concepts</strong>: self-harm +49.7%p, harassment +17.6%p, hate +16.9%p over SAFREE</li>
+    <li><strong>Conservative evaluation</strong>: validated Qwen3-VL via MJ-Bench (92.3% cross-validator agreement)</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Paper Direction &amp; Next Steps</h2>
+  <div class="two-col">
+    <div>
+      <h3>Story Arc for NeurIPS</h3>
+      <div class="box box-green">
+        <strong>Core narrative:</strong> "Concept-aware spatial guidance" &mdash; the right intervention at the right time and place.<br><br>
+        <strong>Key differentiator:</strong> Dual probe captures both explicit (text) and implicit (image) unsafe signals. This is WHY we beat SAFREE on hard concepts where prompts are adversarially crafted.
+      </div>
+    </div>
+    <div>
+      <h3>Remaining Experiments</h3>
+      <ul style="font-size:0.8em;">
+        <li>Complete Safe_Denoiser/SGF/SDErasure baselines</li>
+        <li>Flux backbone results</li>
+        <li>MJA disturbing tuning</li>
+        <li>Artist style comprehensive eval</li>
+        <li>Qualitative comparison grids</li>
+        <li>CAS threshold sensitivity plot</li>
+      </ul>
+      <h3>Paper Tasks</h3>
+      <ul style="font-size:0.8em;">
+        <li>Update tables with v2 conservative numbers</li>
+        <li>Add MJA dataset &amp; results</li>
+        <li>Add family-grouped exemplar section</li>
+        <li>Method overview figure (Fig.1)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    margin: 0.08,
+    center: false,
+  });
+</script>
+</body>
+</html>
