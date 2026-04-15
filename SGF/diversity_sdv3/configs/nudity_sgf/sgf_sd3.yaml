@@ -5,13 +5,13 @@ repellency:
   neg_end: 800
   params:
     scale: 3.0e-2
-    proj_ref_path: "caches/sd3_sgf/i2p_sexual/repellency_proj_ref.pt"
+    proj_ref_path: "/mnt/home3/yhgil99/unlearning/SGF/diversity_sdv3/caches/sd3_sgf/i2p_sexual/repellency_proj_ref.pt"
     cache_proj_ref: False
 
-# repellency dataset — nudity reference images
+# repellency dataset — nudity reference images (absolute paths)
 data:
   name: nudity
-  root: datasets/nudity
+  root: /mnt/home3/yhgil99/unlearning/SGF/nudity_sdv1/datasets/nudity
   class_info: i2p_sexual
 
 # pred_xstart
