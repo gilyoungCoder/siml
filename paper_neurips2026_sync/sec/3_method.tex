@@ -72,6 +72,17 @@ where $s_\text{safe}$ controls the suppression strength. This effectively ``inpa
 \end{equation}
 where $s_t$ is the target-to-anchor guidance scale. Hybrid guidance provides stronger suppression and can produce more semantically coherent replacements for the erased content.
 
+\subsection{Family-Grouped Exemplars}
+\label{subsec:family}
+
+Many unsafe concepts span semantically diverse sub-categories. For instance, ``hate'' encompasses racial discrimination, religious intolerance, gender-based harassment, and political extremism---each with distinct visual characteristics. A single set of exemplar embeddings may fail to cover this diversity.
+
+We address this with \emph{family-grouped exemplars}. For each target concept, we define $F$ semantic families (typically $F=4$), each containing $K$ exemplar images ($K=4$). We compute a family-level mean embedding $\bar{e}_f = \frac{1}{K}\sum_{k=1}^K e_{f,k}$ for each family $f$, yielding $F$ independent exemplar tokens that collectively span the concept's semantic range. During inference, the image probe computes similarity against all family embeddings:
+\begin{equation}
+    M_\text{img}(i,j) = \sigma\left(\alpha \cdot \left(\max_{f,k} \cos(f(i,j), e_{f,k}) - \theta_\text{img}\right)\right).
+\end{equation}
+This design provides two benefits: (1) broader coverage of semantically diverse concepts, and (2) family-specific anchor directions that produce more coherent safe replacements. As we show in \S\ref{subsec:ablation}, family grouping improves SR by +3.9\%p for hate and +5.2\%p for illegal activity over single-exemplar baselines, with negligible overhead.
+
 \subsection{Multi-Concept Erasure}
 \label{subsec:multi}
 
