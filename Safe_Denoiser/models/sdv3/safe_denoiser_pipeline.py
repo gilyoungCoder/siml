@@ -1132,29 +1132,28 @@ class StableDiffusion3Pipeline(DiffusionPipeline, SD3LoraLoaderMixin, FromSingle
                     noise_pred = noise_pred_uncond + self.guidance_scale * (noise_pred_text - noise_pred_uncond)
 
                 
-                if (t <= negation_warmup_start) and (t >= negation_warmup_end): # Warmup
-                    if repellency_processor is not None:
-                        # TO DEBUG
-                        print("-"*10, f"Repellency applied at step {i}", "-"*10)
-                        print("-"*10, f"Repellency applied at timestep {t}", "-"*10)
+                if (t <= negation_warmup_start) and (t >= negation_warmup_end) and repellency_processor is not None: # Warmup
+                    # TO DEBUG
+                    print("-"*10, f"Repellency applied at step {i}", "-"*10)
+                    print("-"*10, f"Repellency applied at timestep {t}", "-"*10)
 
-                        # current time step
-                        sigma = sigmas[i]
-                        sigma_next = sigmas[i+1] if i+1 < num_inference_steps else 0.0
+                    # current time step
+                    sigma = sigmas[i]
+                    sigma_next = sigmas[i+1] if i+1 < num_inference_steps else 0.0
 
-                        # pred_x0
-                        latents_pred_0 = latents - sigma * (noise_pred)
-                        latents_pred_1 = latents + (1-sigma) * (noise_pred)
-                        delta = sigma - sigma_next
-                        
-                        repellency_dict = repellency_processor.conditioning(latents_pred_0,
-                                                                            beta_threshold=False)                        
-                        latents_pred_0_repellenced = repellency_dict['x_0_hat']
-                
-                        # TO DEBUG
-                        # mixing
-                        # latents_pred_0_repellenced = (1-sigma) * latents_pred_0 + sigma * latents_pred_0_repellenced
-                    
+                    # pred_x0
+                    latents_pred_0 = latents - sigma * (noise_pred)
+                    latents_pred_1 = latents + (1-sigma) * (noise_pred)
+                    delta = sigma - sigma_next
+
+                    repellency_dict = repellency_processor.conditioning(latents_pred_0,
+                                                                        beta_threshold=False)
+                    latents_pred_0_repellenced = repellency_dict['x_0_hat']
+
+                    # TO DEBUG
+                    # mixing
+                    # latents_pred_0_repellenced = (1-sigma) * latents_pred_0 + sigma * latents_pred_0_repellenced
+
                     # renoising
                     noise = math.sqrt(sigma_next) * latents_pred_1 + math.sqrt(1-sigma_next) * torch.randn_like(latents_pred_1)
                     latents = latents_pred_0_repellenced + (sigma-delta) * (noise - latents_pred_0_repellenced)
