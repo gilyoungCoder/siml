@@ -35,7 +35,7 @@ run_safe_denoiser() {
             return
         fi
         echo "$(date) [GPU$GPU] safe_denoiser/$NAME ($EXISTING/$EXPECTED)"
-        CUDA_VISIBLE_DEVICES=$GPU $PYTHON $SD/generate_sd3_safe_denoiser.py \
+        CUDA_VISIBLE_DEVICES=$GPU $PYTHON "$SD/generate_sd3_safe_denoiser.py" \
             --prompts "$PROMPTS" --outdir "$OUTDIR" $COMMON $EXTRA
         echo "$(date) [DONE] safe_denoiser/$NAME — $(count_images "$OUTDIR")"
     }
@@ -73,18 +73,16 @@ run_nudenet_eval() {
             return
         fi
         echo "$(date) [GPU$GPU] NudeNet: $DIR ($N imgs)"
-        CUDA_VISIBLE_DEVICES=$GPU $PYTHON $VLM/eval_nudenet.py "$DIR" --threshold 0.5
+        CUDA_VISIBLE_DEVICES=$GPU $PYTHON "$VLM/eval_nudenet.py" "$DIR" --threshold 0.5
     }
 
-    # Nudity datasets: rab, mma, p4dn, unlearndiff
     NUDITY_DATASETS="rab mma p4dn unlearndiff"
 
-    for METHOD in baseline safree safegen safe_denoiser; do
+    for METHOD in baseline safree safegen; do
         echo "$(date) --- NudeNet: $METHOD ---"
         for DS in $NUDITY_DATASETS; do
             eval_dir "$OUT/$METHOD/$DS"
         done
-        # Also eval coco250 for FP check
         eval_dir "$OUT/$METHOD/coco250"
     done
 
@@ -112,18 +110,14 @@ run_qwen_eval() {
         fi
         echo "$(date) [GPU$GPU] Qwen: $DIR $CONCEPT ($N imgs)"
         cd "$VLM" && CUDA_VISIBLE_DEVICES=$GPU $VLM_PYTHON opensource_vlm_i2p_all.py "$DIR" "$CONCEPT" qwen 2>&1 | tail -3
-        cd /mnt/home3/yhgil99/unlearning
     }
 
-    for METHOD in baseline safree safegen safe_denoiser; do
+    for METHOD in baseline safree safegen; do
         echo "$(date) --- Qwen: $METHOD ---"
-        # Nudity datasets → nudity concept
         for DS in rab mma p4dn unlearndiff; do
             eval_qwen "$OUT/$METHOD/$DS" "nudity"
         done
-        # COCO → nudity (FP check)
         eval_qwen "$OUT/$METHOD/coco250" "nudity"
-        # MJA datasets → matching concepts
         eval_qwen "$OUT/$METHOD/mja_sexual"      "nudity"
         eval_qwen "$OUT/$METHOD/mja_violent"      "violence"
         eval_qwen "$OUT/$METHOD/mja_disturbing"   "shocking"
@@ -134,7 +128,55 @@ run_qwen_eval() {
 }
 
 # ============================================================================
-# MAIN: Launch all 3 GPU jobs in parallel
+# Safe_Denoiser NudeNet + Qwen (runs after generation completes)
+# ============================================================================
+run_safe_denoiser_eval() {
+    local GPU_NN=6 GPU_QW=7
+    echo "$(date) ===== SAFE_DENOISER EVAL ====="
+
+    # NudeNet
+    for DS in rab mma p4dn unlearndiff coco250; do
+        local DIR="$OUT/safe_denoiser/$DS"
+        local N=$(count_images "$DIR" 2>/dev/null || echo 0)
+        if [ "$N" -eq 0 ]; then continue; fi
+        if [ ! -f "$DIR/results_nudenet.txt" ]; then
+            echo "$(date) [GPU$GPU_NN] NudeNet safe_denoiser/$DS ($N imgs)"
+            CUDA_VISIBLE_DEVICES=$GPU_NN $PYTHON "$VLM/eval_nudenet.py" "$DIR" --threshold 0.5
+        fi
+    done
+
+    # Qwen
+    for DS in rab mma p4dn unlearndiff; do
+        local DIR="$OUT/safe_denoiser/$DS"
+        if [ ! -f "$DIR/categories_qwen3_vl_nudity.json" ]; then
+            local N=$(count_images "$DIR" 2>/dev/null || echo 0)
+            [ "$N" -eq 0 ] && continue
+            echo "$(date) [GPU$GPU_QW] Qwen safe_denoiser/$DS ($N imgs)"
+            cd "$VLM" && CUDA_VISIBLE_DEVICES=$GPU_QW $VLM_PYTHON opensource_vlm_i2p_all.py "$DIR" nudity qwen 2>&1 | tail -3
+        fi
+    done
+    # coco
+    if [ ! -f "$OUT/safe_denoiser/coco250/categories_qwen3_vl_nudity.json" ]; then
+        cd "$VLM" && CUDA_VISIBLE_DEVICES=$GPU_QW $VLM_PYTHON opensource_vlm_i2p_all.py "$OUT/safe_denoiser/coco250" nudity qwen 2>&1 | tail -3
+    fi
+    # MJA
+    for pair in "mja_sexual nudity" "mja_violent violence" "mja_disturbing shocking" "mja_illegal illegal"; do
+        local DS=$(echo $pair | cut -d' ' -f1)
+        local CONCEPT=$(echo $pair | cut -d' ' -f2)
+        local DIR="$OUT/safe_denoiser/$DS"
+        if [ ! -f "$DIR/categories_qwen3_vl_${CONCEPT}.json" ]; then
+            local N=$(count_images "$DIR" 2>/dev/null || echo 0)
+            [ "$N" -eq 0 ] && continue
+            echo "$(date) [GPU$GPU_QW] Qwen safe_denoiser/$DS $CONCEPT ($N imgs)"
+            cd "$VLM" && CUDA_VISIBLE_DEVICES=$GPU_QW $VLM_PYTHON opensource_vlm_i2p_all.py "$DIR" "$CONCEPT" qwen 2>&1 | tail -3
+        fi
+    done
+
+    echo "$(date) ===== SAFE_DENOISER EVAL COMPLETE ====="
+}
+
+# ============================================================================
+# MAIN: Launch GPU 5/6/7 in parallel, then eval safe_denoiser
 # ============================================================================
 echo "$(date) ===== SD3 WAVE 2 START (siml-06, GPUs 5,6,7) ====="
 
@@ -143,12 +185,12 @@ run_safe_denoiser > "$LOG/wave2_safe_denoiser_gpu5.log" 2>&1 &
 PID_SD=$!
 echo "Safe_Denoiser PID: $PID_SD (GPU 5)"
 
-# GPU 6: NudeNet eval (waits a bit then starts — safe_denoiser folders may not exist yet for first few)
+# GPU 6: NudeNet eval (baseline/safree/safegen — already generated)
 run_nudenet_eval > "$LOG/wave2_nudenet_gpu6.log" 2>&1 &
 PID_NN=$!
 echo "NudeNet PID: $PID_NN (GPU 6)"
 
-# GPU 7: Qwen eval
+# GPU 7: Qwen eval (baseline/safree/safegen — already generated)
 run_qwen_eval > "$LOG/wave2_qwen_gpu7.log" 2>&1 &
 PID_QW=$!
 echo "Qwen PID: $PID_QW (GPU 7)"
@@ -162,15 +204,9 @@ echo "  tail -f $LOG/wave2_qwen_gpu7.log"
 wait $PID_SD $PID_NN $PID_QW
 
 echo ""
-echo "$(date) ===== SD3 WAVE 2 ALL COMPLETE ====="
+echo "$(date) ===== PHASE 1 COMPLETE (gen+eval for baseline/safree/safegen) ====="
+echo "$(date) ===== PHASE 2: Safe_Denoiser eval ====="
 
-# ============================================================================
-# Wave 2.5: Re-run NudeNet+Qwen on safe_denoiser (may have been skipped if gen wasn't done)
-# ============================================================================
-echo "$(date) ===== WAVE 2.5: Re-eval safe_denoiser ====="
-run_nudenet_eval > "$LOG/wave2.5_nudenet_safe_denoiser.log" 2>&1 &
-PID_NN2=$!
-run_qwen_eval > "$LOG/wave2.5_qwen_safe_denoiser.log" 2>&1 &
-PID_QW2=$!
-wait $PID_NN2 $PID_QW2
-echo "$(date) ===== WAVE 2.5 COMPLETE ====="
+run_safe_denoiser_eval > "$LOG/wave2_safe_denoiser_eval.log" 2>&1
+
+echo "$(date) ===== SD3 WAVE 2 ALL COMPLETE ====="
