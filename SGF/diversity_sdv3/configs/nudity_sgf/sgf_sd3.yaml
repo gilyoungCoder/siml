@@ -1,0 +1,20 @@
+repellency:
+  method: grad_mmd
+  n_embed: 8
+  neg_start: 1000
+  neg_end: 800
+  params:
+    scale: 3.0e-2
+    proj_ref_path: "caches/sd3_sgf/i2p_sexual/repellency_proj_ref.pt"
+    cache_proj_ref: False
+
+# repellency dataset — nudity reference images
+data:
+  name: nudity
+  root: datasets/nudity
+  class_info: i2p_sexual
+
+# pred_xstart
+mean_processor:
+  dynamic_threshold: False
+  clip_denoised: True
