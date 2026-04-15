@@ -44,7 +44,7 @@ A distinguishing feature of \ours{} is its ability to erase multiple unsafe conc
 \input{table/multi_concept}
 
 \paragraph{Single-Concept Results.}
-\ours{} achieves strong erasure across all seven categories: violence (97.1\%), shocking (97.3\%), nudity (93.1\%), self-harm (83.4\%), hate (84.8\%), harassment (83.3\%), and illegal activity (71.9\%). The text-only probe mode performs best for concepts that are explicitly named in prompts (violence, harassment), while the dual probe (text + image) excels for visually distinctive concepts (nudity, shocking).
+\ours{} achieves strong erasure across all seven categories: shocking (97.9\%), violence (89.8\%), harassment (87.0\%), hate (85.3\%), self-harm (74.3\%), and illegal activity (74.6\%). Compared to SAFREE, we observe massive improvements on concepts where token-level projection fails: self-harm (+49.7\%p), harassment (+17.6\%p), and hate (+16.9\%p). These are precisely the categories where prompts use indirect or metaphorical language that evades SAFREE's text-space projection but is captured by our image probe. The dual probe (text + image) consistently achieves the best or tied-best results across all categories, confirming the complementary nature of the two signals.
 
 \paragraph{Simultaneous Multi-Concept Erasure.}
 Table~\ref{table:dual} shows results for simultaneously erasing two concepts. Nudity + shocking achieves the best dual erasure (83.7\% nudity SR, 97.5\% shocking SR), with only a modest drop from single-concept performance ($-$9.4\%p for nudity). This demonstrates that \ours{}'s independent concept representations enable effective compositional erasure.
@@ -66,7 +66,13 @@ Removing the CAS gate (Table~\ref{table:ablation}, row c vs.\ d) decreases SR by
 Without spatial localization (row a vs.\ d), guidance is applied globally, which degrades image quality and can paradoxically reduce SR by disrupting the overall composition. The dual probe provides the strongest localization.
 
 \paragraph{Probe Mode Comparison.}
-Table~\ref{table:probe} compares the three probe modes. Image+Text (dual) achieves the highest SR for hybrid guidance (94.9\%), while text-only is competitive for anchor inpainting (91.1\%). The image probe alone is weaker (49.4\%--60.8\%) but provides complementary signal that boosts dual-probe performance.
+Table~\ref{table:probe} compares the three probe modes on Ring-A-Bell. Text-only achieves 88.6\% SR for anchor inpainting, while image-only reaches 72.2\%, and dual probe achieves 87.3\%. Crucially, this pattern reverses for non-nudity concepts: on MJA violent prompts, image-only (45.0\%) substantially outperforms text-only (33.0\%), because metaphorical adversarial prompts avoid explicit keywords. The dual probe (59.0\%) captures both modalities. This \emph{concept-specific dominance}---text for explicit concepts, image for implicit ones---is a key finding that validates the dual-probe design.
+
+\paragraph{Family-Grouped Exemplars.}
+Family grouping provides meaningful gains for semantically diverse concepts: hate (+3.9\%p, from 81.4\% to 85.3\%) and illegal activity (+5.2\%p, from 69.4\% to 74.6\%), where sub-categories have distinct visual signatures. For narrower concepts like violence, single exemplars suffice (89.8\% vs 89.2\%).
+
+\paragraph{Guidance Mode.}
+Anchor inpainting consistently outperforms hybrid guidance across all concepts and datasets (RAB: 87.3\% vs 68.4\%; MJA violent: 59.0\% vs 14.0\%), confirming that subtracting the target concept signal is more effective than actively pushing toward a safe anchor.
 
 \input{table/probe_ablation}
 
