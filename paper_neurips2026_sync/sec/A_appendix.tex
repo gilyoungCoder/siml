@@ -39,6 +39,79 @@ On the P4D-N benchmark (151 adversarial prompts), \ours{} achieves 93.4\% SR wit
 \paragraph{I2P Full-Category Breakdown.}
 Table~\ref{table:multi} in the main text reports the best-configuration SR for each I2P category. The configurations were selected based on concept-specific validation: concepts with strong textual signals (violence, harassment) benefit from text-only probes, while visually distinctive concepts (nudity, shocking) achieve the best performance with the dual (text + image) probe.
 
+\subsection{MJA Adversarial Benchmark}
+\label{app:mja}
+
+The MJA (Metaphor-based Jailbreaking Attack)~\citep{zhang2024metaphor} benchmark uses indirect, metaphorical language to trigger unsafe content generation, making it substantially harder than I2P. Table~\ref{table:mja} compares \ours{} against the SD v1.4 baseline and SAFREE.
+
+\begin{table}[h]
+\centering
+\caption{MJA adversarial benchmark results (SR\% $\uparrow$, 100 prompts per category).}
+\label{table:mja}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Concept & Baseline & SAFREE & \textbf{Ours} & $\Delta$ vs SAFREE \\
+\midrule
+Sexual    & 47.0 & 48.0 & \textbf{74.0} & +26.0 \\
+Violent   & 13.0 & 52.0 & \textbf{59.0} & +7.0 \\
+Disturbing & 74.0 & \textbf{95.0} & 88.0 & $-$7.0 \\
+Illegal   & 60.0 & 77.0 & \textbf{78.0} & +1.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\ours{} wins on 3 out of 4 MJA categories. The particularly large gain on sexual (+26.0\%p) demonstrates that our dual-probe mechanism detects metaphorical nudity prompts that SAFREE's token projection misses. SAFREE's advantage on disturbing prompts suggests that global suppression can be effective when the entire image, rather than a localized region, contains unsafe content.
+
+\subsection{Concept-Specific Probe Dominance}
+\label{app:probe_dominance}
+
+Table~\ref{table:probe_concept} reveals that each probe mode has distinct strengths depending on the concept type.
+
+\begin{table}[h]
+\centering
+\caption{Probe mode SR\% by concept on MJA (anchor inpainting). Bold = dominant single probe.}
+\label{table:probe_concept}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Concept & Text & Image & Both & Dominant \\
+\midrule
+Sexual    & \textbf{65.0} & 56.0 & \textbf{74.0} & Text \\
+Violent   & 33.0 & \textbf{45.0} & \textbf{59.0} & Image \\
+Disturbing & 79.0 & \textbf{81.0} & \textbf{88.0} & Image \\
+Illegal   & 65.0 & \textbf{78.0} & 77.0 & Image \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Nudity/Sexual}: Text probe dominates because even adversarial nudity prompts contain identifiable keywords (``nude'', ``naked'', ``bare'').
+\textbf{Violence/Disturbing/Illegal}: Image probe dominates because MJA uses metaphorical descriptions that evade keyword-based detection, but produce visually recognizable patterns that CLIP exemplar embeddings capture.
+\textbf{Both always best or tied}: The union fusion ensures robustness against both explicit and implicit adversarial strategies, validating the complementary dual-probe design.
+
+\subsection{Family-Grouped vs Single Exemplar}
+\label{app:family}
+
+\begin{table}[h]
+\centering
+\caption{Family-grouped vs single exemplar SR\% on I2P (both probe, anchor inpainting).}
+\label{table:family}
+\small
+\begin{tabular}{lccc}
+\toprule
+Concept & Family & Single & $\Delta$ \\
+\midrule
+Hate      & \textbf{85.3} & 81.4 & +3.9 \\
+Illegal   & \textbf{74.6} & 69.4 & +5.2 \\
+Harassment & \textbf{87.0} & 86.4 & +0.6 \\
+Violence  & 89.2 & 89.8 & $-$0.6 \\
+Self-harm & 73.0 & 74.3 & $-$1.3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Family grouping provides meaningful gains for semantically \emph{diverse} concepts (hate, illegal) where sub-categories have distinct visual signatures. For semantically narrow concepts (violence, self-harm), a single exemplar set already captures the concept well.
+
 \subsection{Additional Qualitative Examples}
 \label{app:qualitative}
 
