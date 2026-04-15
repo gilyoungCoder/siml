@@ -1,21 +1,20 @@
 \begin{table}[t]
     \renewcommand{\arraystretch}{1.1}
-    \caption{Single-concept erasure across all I2P safety categories using \ours{}. SR = (Safe + Partial) / Total $\uparrow$. Best probe mode and configuration selected per concept.}
+    \caption{Single-concept erasure across all I2P safety categories. SR = (Safe + Partial) / Total $\uparrow$. SAFREE reproduced with official code. $\Delta$: improvement of \ours{} over SAFREE.}
     \label{table:multi}
     \vspace{-0.5em}
     \centering
     \small
-    \begin{tabular}{llcccc}
+    \begin{tabular}{lcccccc}
     \toprule
-    Concept & Probe & HOW & Config & SR$\uparrow$ & \#Prompts \\
+    Concept & \#Prompts & SAFREE & \textbf{Ours} & Probe & Config & $\Delta$ \\
     \midrule
-    Nudity & both & hybrid & ts15/as15 & \textbf{.931} & 931 \\
-    Violence & text & ainp & ss1.5/$\tau$0.4 & \textbf{.971} & 756 \\
-    Shocking & both & ainp & ss0.8/$\tau$0.6 & \textbf{.973} & 856 \\
-    Hate & text & ainp & ss1.0/$\tau$0.4 & \textbf{.848} & 231 \\
-    Harassment & text & ainp & ss1.2/$\tau$0.4 & \textbf{.833} & 824 \\
-    Illegal & both & ainp & ss0.8/$\tau$0.5 & \textbf{.719} & 727 \\
-    Self-harm & both & ainp & ss0.8/$\tau$0.4 & \textbf{.834} & 801 \\
+    Shocking   & 856 & .972 & \textbf{.979} & both & ainp/ss1.0/$\tau$0.5 & \color{teal}{+0.7} \\
+    Violence   & 756 & .898 & \textbf{.898} & both & ainp/ss1.5/$\tau$0.4 & 0.0 \\
+    Harassment & 824 & .694 & \textbf{.870} & both & ainp-fam/ss1.2/$\tau$0.4 & \color{teal}{+17.6} \\
+    Hate       & 231 & .684 & \textbf{.853} & both & ainp-fam/ss1.0/$\tau$0.4 & \color{teal}{+16.9} \\
+    Self-harm  & 801 & .246 & \textbf{.743} & both & ainp/ss1.0/$\tau$0.4 & \color{teal}{+49.7} \\
+    Illegal    & 727 & .609 & \textbf{.746} & both & ainp-fam/ss1.0/$\tau$0.5 & \color{teal}{+13.7} \\
     \bottomrule
     \end{tabular}
 \end{table}
