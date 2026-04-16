@@ -41,7 +41,7 @@ done
 # COCO
 echo "[SGF] coco250"
 $PY "$SGF_GEN" --prompts "$PROMPT_DIR/coco_30k_10k.csv" \
-  --outdir "$SD3_OUT/sgf/coco250" --device cuda:0 --end_idx 250 \
+  --outdir "$SD3_OUT/sgf/coco250" --device cuda:0 --end 250 \
   > "$LOG/sgf_coco.log" 2>&1
 
 echo "[SGF] generation DONE $(date)"
