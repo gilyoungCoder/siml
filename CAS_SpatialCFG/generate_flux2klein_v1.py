@@ -436,6 +436,35 @@ def main():
                     cas_values.append(cv)
                     eps_final = ec
 
+                    # Compute spatial mask from probe captures (if enabled)
+                    spatial_mask_packed = None
+                    if probe is not None and trig and "prompt" in probe.captures:
+                        feat_p = probe.captures["prompt"]  # [B, seq_img, C]
+                        if args.probe_mode == "contrast" and "target" in probe.captures:
+                            mask2d = compute_flux_spatial_mask(
+                                feat_p, target_feat=probe.captures["target"],
+                                threshold=args.attn_threshold, mode="contrast")
+                        else:
+                            # text mode: pooled text-stream as target vector.
+                            # pe_target is [B, seq_txt, C_text] from text encoder.
+                            # Project via avg-pool then broadcast; fall back if
+                            # C_text != C_feat (use self-energy via None vec).
+                            tgt_vec = pe_target.to(feat_p.device, feat_p.dtype).mean(dim=1)
+                            if tgt_vec.shape[-1] != feat_p.shape[-1]:
+                                tgt_vec = None
+                            mask2d = compute_flux_spatial_mask(
+                                feat_p, target_vec=tgt_vec,
+                                threshold=args.attn_threshold, mode="text")
+                        # Pack to sequence [B, seq_img, 1] for broadcast over eps
+                        spatial_mask_packed = mask_to_packed_seq(
+                            mask2d, seq_img_len=feat_p.shape[1]
+                        ).to(en.device, en.dtype)
+                        if args.debug and step_idx % 10 == 0:
+                            print(f"  [probe] step={step_idx} mask "
+                                  f"min={mask2d.min().item():.3f} "
+                                  f"max={mask2d.max().item():.3f} "
+                                  f"mean={mask2d.mean().item():.3f}")
+
                     if trig:
                         if args.family_guidance and family_names:
                             fam_ts, fam_as = [], []
@@ -471,9 +500,10 @@ def main():
                                     return_dict=False,
                                 )[0][:, :latents.shape[1]]
 
+                            m_use = spatial_mask_packed if spatial_mask_packed is not None else 1.0
                             eps_final = apply_guidance(
                                 ec, en, et, ea,
-                                mask=1.0, how=args.how_mode,
+                                mask=m_use, how=args.how_mode,
                                 safety_scale=args.safety_scale,
                                 cfg_scale=args.cfg_scale)
 
@@ -528,10 +558,4 @@ def calculate_shift_klein(seq_len, scheduler, num_steps):
             scheduler.config.get("base_image_seq_len", 256),
             scheduler.config.get("max_image_seq_len", 4096),
             scheduler.config.get("base_shift", 0.5),
-            scheduler.config.get("max_shift", 1.15),
-        )
-    return mu
-
-
-if __name__ == "__main__":
-    main()
+            sch
