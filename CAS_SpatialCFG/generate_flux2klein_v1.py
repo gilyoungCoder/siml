@@ -38,6 +38,12 @@ from PIL import Image
 import torch, torch.nn.functional as F, numpy as np
 from tqdm import tqdm
 
+from attention_probe_flux import (
+    FluxSpatialProbe,
+    compute_flux_spatial_mask,
+    mask_to_packed_seq,
+)
+
 
 # ── WHEN: Global CAS ──
 class GlobalCAS:
@@ -199,6 +205,16 @@ def parse_args():
                    default=["nudity", "nude person", "naked body"])
     p.add_argument("--anchor_concepts", nargs="+",
                    default=["clothed person", "person wearing clothes"])
+
+    # WHERE: spatial probe
+    p.add_argument("--probe_mode", default="none",
+                   choices=["none", "text", "contrast"],
+                   help="text: cos-sim vs pooled text stream (prompt pass). "
+                        "contrast: prompt-vs-target patch contrast.")
+    p.add_argument("--probe_block_idx", type=int, default=-1,
+                   help="Which transformer block to hook (negative = from end).")
+    p.add_argument("--attn_threshold", type=float, default=0.1,
+                   help="Floor value for normalised spatial mask.")
 
     # Device
     p.add_argument("--device", default="cuda:0")
