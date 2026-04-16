@@ -57,7 +57,7 @@ declare -A OURS_DIRS=(
   ["mma_best"]="$BASE/v2_experiments/sexual/mma_both_anchor_inpaint_fam_cas0.6_ss1.2"
   ["p4dn_best"]="$BASE/v2_experiments/sexual/p4dn_both_anchor_inpaint_single_cas0.6_ss1.2"
   ["udiff_best"]="$BASE/v2_experiments/sexual/udiff_both_anchor_inpaint_single_cas0.6_ss1.2"
-  ["mja_sex_best"]="$BASE/v2_experiments/sexual/mja_sexual_both_anchor_inpaint_fam_cas0.6_ss1.2"
+  ["mja_sex_best"]="$BASE/v2_experiments/sexual/mja_both_anchor_inpaint_fam_cas0.6_ss1.2"
 )
 
 for key in rab_best rab_fam rab_both mma_best p4dn_best udiff_best mja_sex_best; do
