@@ -654,6 +654,12 @@
           <li>FLUX.1-dev는 embedded guidance 때문에 call 수가 baseline 1 &rarr; SafeGen 3&ndash;4로 증가.</li>
         </ul>
       </div>
+      <div class="box box-red" style="margin-top:6px; font-size:0.72em;">
+        <strong>Limitation &mdash; FLUX 내장 Safety Tuning:</strong><br>
+        FLUX.2-klein 모델 자체에 이미 safety tuning이 내재됨 (<code>Flux2KleinPipeline</code>에 <code>safety_checker</code> 파라미터 자체가 없음). 외부에서 끌 수 없고 weights 내부에 포함.<br>
+        &rarr; Baseline SR이 원본부터 매우 높음 (RAB 74.7%, MMA 98.1%) &rarr; <strong>unlearning method의 marginal gain이 제한적</strong>.<br>
+        &rarr; 우리 방법이 더 빛나는 건 <em>safety-tuning 없는 SD v1.4 계열</em>. FLUX 결과는 cross-backbone <em>generality 입증용</em>.
+      </div>
       <div class="box box-green" style="margin-top:6px; font-size:0.72em;">
         <strong>Message:</strong> SD1.4 (UNet + &epsilon;) &rarr; SD3 (MMDiT + velocity) &rarr; FLUX (DiT + flow/embedded) 까지 동일 When-Where-How 프레임워크가 작동 &mdash; <em>method-agnostic design</em>이 입증됨.
       </div>
