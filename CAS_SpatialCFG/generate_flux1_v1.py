@@ -422,11 +422,11 @@ def main():
                             return_dict=False,
                         )[0]
 
-                        # Null pass — no guidance embedding for direction computation
+                        # Null pass — use guidance tensor (required by transformer API)
                         en = transformer(
                             hidden_states=lat_in,
                             timestep=timestep / 1000,
-                            guidance=None,
+                            guidance=guidance_tensor,
                             pooled_projections=pooled_null.to(dtype),
                             encoder_hidden_states=pe_null.to(dtype),
                             txt_ids=text_ids_null,
@@ -437,7 +437,7 @@ def main():
                         et = transformer(
                             hidden_states=lat_in,
                             timestep=timestep / 1000,
-                            guidance=None,
+                            guidance=guidance_tensor,
                             pooled_projections=pooled_target.to(dtype),
                             encoder_hidden_states=pe_target.to(dtype),
                             txt_ids=text_ids_null,

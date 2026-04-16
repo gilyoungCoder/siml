@@ -1,7 +1,7 @@
 #!/bin/bash
 # siml-08 GPU 4,5,6: Qwen eval for FLUX.2-klein (baseline+ours) + FLUX.1-dev baseline
 set -e
-VLM_PY="/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3"
+VLM_PY="/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10"
 EVAL="/mnt/home3/yhgil99/unlearning/vlm/opensource_vlm_i2p_all.py"
 KLEIN="/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/flux2klein_experiments"
 FDEV="/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/flux1dev_experiments"
