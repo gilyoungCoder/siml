@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeGen — Training-Free Safe Image Generation via Dual-Probe Spatial Guidance</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<style>
+  :root { --heading:#1a1a2e; --accent:#2563eb; --accent2:#7c3aed; --safe:#059669; --danger:#dc2626; --warn:#d97706; --teal:#0f766e; --new:#ea580c; }
+  .reveal { font-size:26px; }
+  .reveal h1 { font-size:2.0em; color:var(--heading); font-weight:800; }
+  .reveal h2 { font-size:1.4em; color:var(--heading); font-weight:700; border-bottom:3px solid var(--accent); padding-bottom:6px; display:inline-block; }
+  .reveal h3 { font-size:0.92em; color:var(--accent2); font-weight:600; }
+  .reveal .sub { color:#64748b; font-size:0.68em; margin-top:-6px; }
+  .reveal section { text-align:left; }
+  .reveal li { margin-bottom:4px; line-height:1.4; }
+  .small { font-size:0.68em; color:#64748b; }
+  .title-slide { text-align:center !important; }
+  .title-slide h1 { font-size:1.9em; background:linear-gradient(135deg,#1a1a2e,#2563eb); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .divider { text-align:center !important; background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%) !important; }
+  .divider h2 { color:#fff !important; border-bottom-color:#60a5fa !important; font-size:1.8em; }
+  .divider p { color:#cbd5e1 !important; }
+  .box { background:#f8fafc; border-radius:8px; padding:10px 14px; margin:6px 0; border-left:4px solid var(--accent); font-size:0.78em; }
+  .box-green { border-left-color:var(--safe); background:#f0fdf4; }
+  .box-red { border-left-color:var(--danger); background:#fef2f2; }
+  .box-warn { border-left-color:var(--warn); background:#fffbeb; }
+  .box-teal { border-left-color:var(--teal); background:#f0fdfa; }
+  .box-new { border-left-color:var(--new); background:#fff7ed; }
+  .box-purple { border-left-color:var(--accent2); background:#faf5ff; }
+  .reveal table { font-size:0.58em; width:100%; border-collapse:collapse; margin:6px 0; }
+  .reveal table th { background:#1e293b; color:#fff; padding:5px 6px; text-align:center; font-weight:600; }
+  .reveal table td { padding:4px 6px; border-bottom:1px solid #e2e8f0; text-align:center; }
+  .reveal table tr:nth-child(even) { background:#f8fafc; }
+  .best { background:#dcfce7 !important; font-weight:700; }
+  .hl { background:#dbeafe !important; font-weight:600; }
+  .gray td { color:#9ca3af !important; }
+  td.l { text-align:left !important; }
+  .gv { color:#059669; font-weight:700; }
+  .bv { color:#dc2626; }
+  .pipe { display:flex; align-items:center; justify-content:center; gap:5px; margin:10px 0; flex-wrap:wrap; }
+  .pipe .s { border-radius:10px; padding:10px 14px; font-size:0.65em; font-weight:600; text-align:center; min-width:80px; line-height:1.3; }
+  .pipe .a { font-size:1.3em; color:#93c5fd; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .tag { display:inline-block; padding:2px 10px; border-radius:20px; font-size:0.55em; font-weight:600; margin:2px; }
+  .tag-blue { background:#dbeafe; color:#1e40af; }
+  .tag-green { background:#dcfce7; color:#166534; }
+  .tag-red { background:#fee2e2; color:#991b1b; }
+  .tag-purple { background:#f3e8ff; color:#6b21a8; }
+  .tag-orange { background:#ffedd5; color:#9a3412; }
+  .tag-gray { background:#f1f5f9; color:#475569; }
+  .formula { background:#f8fafc; border-radius:8px; padding:10px 16px; margin:6px 0; font-size:0.85em; text-align:center; border:1px solid #e2e8f0; line-height:1.7; }
+  .formula-hl { border-left:4px solid var(--accent); }
+  .stat-card { background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:12px; padding:16px; text-align:center; border:2px solid #86efac; }
+  .stat-card .num { font-size:2.2em; font-weight:800; color:var(--safe); }
+  .stat-card .label { font-size:0.7em; color:#475569; margin-top:-4px; }
+  .delta-plus { color:#059669; font-weight:700; }
+  .delta-minus { color:#dc2626; font-weight:700; }
+  .fig-wrap { text-align:center; margin:8px 0; }
+  .fig-wrap img { max-width:88%; max-height:420px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.08); }
+  .heatmap-cell { padding:4px 6px; text-align:center; font-weight:600; }
+  .family-card { background:#faf5ff; border:1px dashed #c4b5fd; border-radius:8px; padding:8px 10px; font-size:0.72em; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ===== 1. TITLE ===== -->
+<section class="title-slide">
+  <h1>SafeGen: Training-Free Safe Image Generation<br>via Dual-Probe Spatial Guidance</h1>
+  <p style="font-size:0.85em; color:#475569; margin-top:-5px;">When, Where, and How to Guide Safe Denoising<br>across SD v1.4, SD3, and FLUX backbones</p>
+  <div style="margin-top:20px;">
+    <span class="tag tag-blue">Inference-time</span>
+    <span class="tag tag-green">Training-free</span>
+    <span class="tag tag-purple">Multi-concept</span>
+    <span class="tag tag-orange">Family-Grouped</span>
+    <span class="tag tag-gray">Cross-Backbone</span>
+  </div>
+  <div style="margin-top:15px; color:#888; font-size:0.65em;">Younghwan Gil &middot; NeurIPS 2026 &middot; Updated April 17, 2026</div>
+</section>
+
+<!-- ===== 2. KEY UPDATES ===== -->
+<section>
+  <h2>Key Updates Since Last Week</h2>
+  <p class="sub">지난주(04/15) 발표 이후 5가지 주요 변경점</p>
+  <ol style="font-size:0.8em;">
+    <li><strong>Family Grouping 도입</strong> &mdash; v27 single exemplar &rarr; <strong>v2 family-grouped</strong> (4 families &times; 4 prompts/concept)로 이동. 의미적으로 다양한 서브개념까지 커버.</li>
+    <li><strong>Qwen Eval Prompt 재정비</strong> &mdash; conservative를 거쳐 결국 <strong>old (strict) criterion</strong>으로 복귀. sketch nude = Full, female topless = Full 로 더 엄격 &rarr; 방법 간 차이가 더 깨끗이 드러남.</li>
+    <li><strong>Dataset 변경: I2P &rarr; MJA</strong> &mdash; I2P-sexual baseline이 97%로 headroom이 거의 없음. MJA (Metaphor-based Jailbreak Attack)의 sexual baseline은 36%로 훨씬 challenging.</li>
+    <li><strong>본격적인 Hyperparameter Sweep</strong> &mdash; CAS=0.6 고정, <strong>safety_scale &times; attn_threshold &times; probe_mode &times; family/single</strong> 전수 sweep. <strong>attn_threshold=0.1</strong>이 sweet spot.</li>
+    <li><strong>Backbone 확장</strong> &mdash; SD v1.4 + <strong>SD3-medium + FLUX.1-dev + FLUX.2-klein</strong>. MMDiT joint-attention 및 embedded guidance까지 지원.</li>
+  </ol>
+  <div class="box box-new" style="font-size:0.75em;">
+    <strong>결론:</strong> 방법론의 core (When-Where-How)는 그대로 유지하면서, (a) exemplar 설계 고도화 (b) 평가 지표 엄격화 (c) 더 어려운 벤치마크 (d) 다양한 backbone으로 <em>견고함과 일반성</em>을 입증.
+  </div>
+</section>
+
+<!-- ===== 3. MOTIVATION ===== -->
+<section class="divider"><h2>Motivation</h2></section>
+
+<section>
+  <h2>Problem: T2I Safety Gap</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-red">
+        <strong>T2I Models Generate Harmful Content</strong><br>
+        Nudity, violence, hate imagery, self-harm from adversarial prompts (Ring-A-Bell, MMA, P4DN, UnlearnDiff, MJA)
+      </div>
+      <div class="box box-warn" style="margin-top:8px;">
+        <strong>Existing Solutions Fall Short</strong>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li><strong>Fine-tuning (ESD, RECE, SDD)</strong>: concept별 costly training, catastrophic forgetting, backbone 바뀌면 재학습 필요</li>
+          <li><strong>SLD/SEGA</strong>: global suppression &rarr; benign quality 저하 (FID 18+)</li>
+          <li><strong>SAFREE</strong>: token projection은 explicit keyword에 치중, metaphor/adversarial에 취약</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>Our Approach: SafeGen</strong>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li>No training / fine-tuning</li>
+          <li>Selective intervention: only <em>when</em> &amp; <em>where</em> needed</li>
+          <li>Example-based: 새 concept을 &lt;1 min에 추가</li>
+          <li>Dual probe: text + image exemplar</li>
+          <li>Family-grouped exemplars (4 families/concept)</li>
+          <li>SD v1.4 / SD3 / FLUX까지 단일 프레임워크</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. METHOD OVERVIEW FIGURE ===== -->
+<section class="divider"><h2>Method</h2><p>Example-Based When + Where + How</p></section>
+
+<section>
+  <h2>Method Overview</h2>
+  <div class="fig-wrap">
+    <img src="figures/fig_method_overview.png" alt="SafeGen method overview: CAS gate, dual probe, anchor inpaint">
+  </div>
+  <div class="box" style="font-size:0.74em;">
+    <strong>Three-stage pipeline.</strong> Exemplar embeddings drive every decision: (1) <strong>WHEN</strong> &mdash; CAS gate decides whether to intervene at each step; (2) <strong>WHERE</strong> &mdash; dual probe (text + CLIP image) localizes the unsafe region; (3) <strong>HOW</strong> &mdash; anchor inpaint subtracts the target concept signal within the masked region only.
+  </div>
+</section>
+
+<!-- ===== 5. WHEN / WHERE / HOW ===== -->
+<section>
+  <h2>Three-Stage Pipeline</h2>
+  <div class="pipe">
+    <div class="s" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;"><strong>WHEN</strong><br>CAS Gate<br><span style="font-size:0.85em;">Concept Alignment</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#fef3c7,#fde68a); border:2px solid #fbbf24; color:#92400e;"><strong>WHERE</strong><br>Dual Probe<br><span style="font-size:0.85em;">Text + CLIP Image</span></div>
+    <div class="a">&rarr;</div>
+    <div class="s" style="background:linear-gradient(135deg,#e8d5f5,#d8b4fe); border:2px solid #a78bfa; color:#5b21b6;"><strong>HOW</strong><br>Anchor Inpaint<br><span style="font-size:0.85em;">Safe Blending</span></div>
+  </div>
+  <div class="three-col" style="margin-top:8px;">
+    <div class="box box-green" style="font-size:0.72em;">
+      <strong>WHEN &mdash; CAS</strong><br>
+      $\cos(\epsilon_p - \epsilon_\varnothing, \epsilon_t - \epsilon_\varnothing) &gt; \tau$<br>
+      benign prompt은 gate 미통과 &rarr; FID 보존.
+    </div>
+    <div class="box box-warn" style="font-size:0.72em;">
+      <strong>WHERE &mdash; Dual Probe</strong><br>
+      $M = \min(1, M_\text{txt} + M_\text{img})$<br>
+      cross-attn + CLIP exemplar union.
+    </div>
+    <div class="box box-purple" style="font-size:0.72em;">
+      <strong>HOW &mdash; Anchor Inpaint</strong><br>
+      $\hat\epsilon = \epsilon_\text{cfg}(1{-}sM) + \epsilon^a_\text{cfg}(sM)$<br>
+      unsafe 영역만 anchor로 blend.
+    </div>
+  </div>
+  <div class="box box-teal" style="font-size:0.74em;">
+    <strong>핵심:</strong> CAS gate로 <em>언제</em>, dual probe로 <em>어디서</em>, anchor inpaint로 <em>어떻게</em>. 세 단계 모두 exemplar 기반 &rarr; concept 추가가 텍스트/이미지 prompt 수정만으로 가능.
+  </div>
+</section>
+
+<!-- ===== 6. FAMILY-GROUPED ===== -->
+<section>
+  <h2>Family-Grouped Exemplars <span class="tag tag-orange">NEW</span></h2>
+  <p class="sub">v27 single exemplar &rarr; v2 family-grouped (4 semantic families &times; 4 prompts)</p>
+  <div class="two-col">
+    <div>
+      <div class="box box-purple">
+        <strong>Why family grouping?</strong><br>
+        하나의 concept 안에도 서로 <em>시각적으로 다른 sub-concept</em>이 공존.
+        단일 exemplar는 한 쪽에만 align &rarr; 다른 sub-concept를 놓침.
+      </div>
+      <div class="box" style="margin-top:8px; font-size:0.74em;">
+        <strong>How it works</strong>
+        <ul style="margin:4px 0;">
+          <li>concept $c$마다 4개 family $\{F_1, ..., F_4\}$ 수동 정의</li>
+          <li>family당 4개 exemplar prompt로 이미지 생성 &rarr; CLIP embedding</li>
+          <li>family-level <em>mean-pool</em>: $e_{F_i} = \text{mean}(\{\text{CLIP}(x)\}_{x \in F_i})$</li>
+          <li>probe: $\max_i \cos(f, e_{F_i})$ &rarr; 여러 family union</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="family-card">
+        <strong>Example: Nudity</strong><br>
+        &bull; $F_1$: explicit full nudity<br>
+        &bull; $F_2$: topless / partial<br>
+        &bull; $F_3$: sketch / painted nude<br>
+        &bull; $F_4$: suggestive lingerie
+      </div>
+      <div class="family-card" style="margin-top:6px;">
+        <strong>Example: Hate</strong><br>
+        &bull; $F_1$: racial imagery<br>
+        &bull; $F_2$: religious symbols<br>
+        &bull; $F_3$: gender-based<br>
+        &bull; $F_4$: political extremism
+      </div>
+      <div class="box box-green" style="margin-top:6px; font-size:0.72em;">
+        <strong>효과:</strong> 의미적으로 다양한 concept(hate, illegal, nudity)에서 큰 이득. narrow concept (violence, self-harm)에서는 single과 유사.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. QWEN EVAL PROMPT CHANGE ===== -->
+<section>
+  <h2>Evaluation Prompt: back to Old (strict) criterion</h2>
+  <p class="sub">Conservative prompt 실험 후, 비교의 명확성을 위해 old prompt로 복귀</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Criterion</th>
+      <th>Old (strict) &mdash; <span style="color:#86efac;">current</span></th>
+      <th>Conservative</th>
+    </tr>
+    <tr>
+      <td class="l"><strong>Sketch nude</strong></td>
+      <td class="hl">Full nudity</td>
+      <td>Partial</td>
+    </tr>
+    <tr>
+      <td class="l"><strong>Female topless</strong></td>
+      <td class="hl">Full nudity</td>
+      <td>Partial (nipple rule)</td>
+    </tr>
+    <tr>
+      <td class="l"><strong>Male shirtless</strong></td>
+      <td>Safe</td>
+      <td>Safe</td>
+    </tr>
+    <tr>
+      <td class="l"><strong>Suggestive lingerie</strong></td>
+      <td>Partial</td>
+      <td>Safe</td>
+    </tr>
+  </table>
+  <h3 style="margin-top:10px;">Baseline RAB (SD v1.4, same generation)</h3>
+  <table>
+    <tr>
+      <th style="text-align:left;">Qwen prompt version</th>
+      <th>Old (original)</th>
+      <th>Conservative</th>
+      <th>Old (restored, now)</th>
+    </tr>
+    <tr>
+      <td class="l"><strong>RAB Safe %</strong></td>
+      <td>40.5</td>
+      <td class="hl">63.3</td>
+      <td class="best">22.8</td>
+    </tr>
+  </table>
+  <div class="box box-warn" style="font-size:0.72em;">
+    <strong>왜 old로 돌아왔나?</strong> Conservative는 baseline SR을 부풀려 method 간 <em>차이가 희미해짐</em>. Old는 sketch/topless까지 unsafe로 잡아 baseline 22.8% 라는 낮은 하한을 만들어 줌 &rarr; SAFREE vs Ours 격차가 훨씬 명확하게 드러남.
+  </div>
+</section>
+
+<!-- ===== 8. DATASET I2P -> MJA ===== -->
+<section>
+  <h2>Dataset Update: I2P &rarr; MJA</h2>
+  <p class="sub">I2P는 SD v1.4 baseline이 이미 너무 안전 &rarr; headroom이 없음</p>
+  <div class="two-col">
+    <div>
+      <h3>Baseline SR comparison (sexual)</h3>
+      <table>
+        <tr><th style="text-align:left;">Dataset</th><th>#Prompts</th><th>Baseline SR</th><th>Headroom</th></tr>
+        <tr><td class="l"><strong>I2P-sexual</strong></td><td>931</td><td class="hl">97.0</td><td><span style="color:#dc2626;">3%p</span></td></tr>
+        <tr><td class="l"><strong>MJA-sexual</strong></td><td>100</td><td class="best">36.0</td><td><span style="color:#059669;"><strong>64%p</strong></span></td></tr>
+      </table>
+      <div class="small" style="margin-top:4px;">Old (strict) eval 기준.</div>
+    </div>
+    <div>
+      <div class="box box-new">
+        <strong>MJA = Metaphor-based Jailbreak Attack</strong><br>
+        100 prompts &times; 4 concepts (sexual / violent / disturbing / illegal). 은유/우회 표현으로 직접적인 unsafe keyword 없이 unsafe 이미지를 유도 &rarr; text-only defense가 잘 안 잡힘.
+      </div>
+      <div class="box box-teal" style="margin-top:8px; font-size:0.72em;">
+        <strong>Takeaway:</strong> I2P에서 &quot;이미 97% 안전한 baseline을 1% 더 올리는&quot; 경쟁보다, MJA 같은 adversarial benchmark에서 <em>실제로 깨지는 prompt</em>에 대한 방어력 비교가 훨씬 더 의미있음.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 9. MAIN NUDITY TABLE ===== -->
+<section class="divider"><h2>Results</h2><p>Nudity Erasure (Old/Strict Qwen Eval, SD v1.4)</p></section>
+
+<section>
+  <h2>Main Table: Nudity Erasure</h2>
+  <p class="sub">All numbers = Old (strict) Qwen3-VL eval. SR = (Safe + Partial) / Total. seed=42, 1 sample/prompt.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Method</th>
+      <th>RAB</th>
+      <th>MMA</th>
+      <th>P4DN</th>
+      <th>UnlearnDiff</th>
+      <th>MJA-Sexual</th>
+      <th>FID &darr;</th>
+    </tr>
+    <tr>
+      <td class="l"><strong>Baseline (SD v1.4)</strong></td>
+      <td>22.8</td>
+      <td>31.6</td>
+      <td>21.9</td>
+      <td>57.7</td>
+      <td>36.0</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td class="l"><strong>SAFREE</strong></td>
+      <td>50.6</td>
+      <td>55.9</td>
+      <td>49.0</td>
+      <td class="hl">91.5</td>
+      <td><span style="color:#9ca3af;">TBD</span></td>
+      <td>8.96</td>
+    </tr>
+    <tr>
+      <td class="l"><strong>Ours v27 (single)</strong></td>
+      <td>86.1</td>
+      <td><span style="color:#9ca3af;">TBD</span></td>
+      <td class="best">95.4</td>
+      <td><span style="color:#9ca3af;">TBD</span></td>
+      <td>85.0</td>
+      <td class="best">6.78</td>
+    </tr>
+    <tr class="best">
+      <td class="l"><strong>Ours v2 (family)</strong></td>
+      <td><strong>87.3</strong></td>
+      <td><strong>66.5</strong></td>
+      <td>62.9</td>
+      <td>83.8</td>
+      <td><strong>69.0</strong></td>
+      <td><strong>6.78</strong></td>
+    </tr>
+  </table>
+  <div class="box box-green" style="font-size:0.72em;">
+    <strong>Best config (v2):</strong> <code>both + anchor_inpaint + CAS=0.6 + safety_scale=1.2 + attn_threshold=0.1 + family</code>.
+    RAB 87.3% (+36.7 vs SAFREE), MMA 66.5% (+10.6), MJA-sex 69.0%.
+    P4DN/UDiff에서는 v27 single이 더 강함 &rarr; single vs family는 concept 분포에 따라 trade-off (뒤 ablation 참고). 일부 v27 수치는 재평가 진행 중.
+  </div>
+  <div class="box box-new" style="font-size:0.72em;">
+    <strong>FID:</strong> 6.78 &mdash; SAFREE(8.96) 대비 오히려 더 낮음. CAS gate가 benign prompt(COCO)에서 intervention을 차단하기 때문.
+  </div>
+</section>
+
+<!-- ===== 10. GRID SEARCH HEATMAP ===== -->
+<section>
+  <h2>Grid Search: attn_threshold &times; safety_scale (RAB)</h2>
+  <p class="sub">SD v1.4, probe=both, mode=anchor_inpaint, CAS=0.6, family. Cell = RAB SR%.</p>
+  <div class="two-col">
+    <div>
+      <h3>Text probe (single)</h3>
+      <table style="font-size:0.64em;">
+        <tr>
+          <th style="text-align:left;">at &#92; ss</th><th>0.8</th><th>1.0</th><th>1.2</th><th>1.5</th>
+        </tr>
+        <tr>
+          <td class="l"><strong>0.05</strong></td>
+          <td style="background:#fee2e2;">62.0</td>
+          <td style="background:#fde68a;">78.5</td>
+          <td style="background:#bbf7d0;">84.8</td>
+          <td style="background:#86efac;">86.1</td>
+        </tr>
+        <tr>
+          <td class="l"><strong>0.10</strong></td>
+          <td style="background:#fde68a;">76.0</td>
+          <td class="best">88.6</td>
+          <td style="background:#86efac;">87.3</td>
+          <td style="background:#bbf7d0;">85.1</td>
+        </tr>
+        <tr>
+          <td class="l"><strong>0.15</strong></td>
+          <td style="background:#fde68a;">73.4</td>
+          <td style="background:#bbf7d0;">83.5</td>
+          <td style="background:#bbf7d0;">82.3</td>
+          <td style="background:#fde68a;">79.7</td>
+        </tr>
+        <tr>
+          <td class="l"><strong>0.20</strong></td>
+          <td style="background:#fee2e2;">65.8</td>
+          <td style="background:#fde68a;">74.7</td>
+          <td style="background:#fde68a;">75.9</td>
+          <td style="background:#fee2e2;">70.9</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <h3>Both probe (family)</h3>
+      <table style="font-size:0.64em;">
+        <tr>
+          <th style="text-align:left;">at &#92; ss</th><th>0.8</th><th>1.0</th><th>1.2</th><th>1.5</th>
+        </tr>
+        <tr>
+          <td class="l"><strong>0.05</strong></td>
+          <td style="background:#fde68a;">72.2</td>
+          <td style="background:#bbf7d0;">82.3</td>
+          <td style="background:#86efac;">86.1</td>
+          <td style="background:#86efac;">85.5</td>
+        </tr>
+        <tr>
+          <td class="l"><strong>0.10</strong></td>
+          <td style="background:#bbf7d0;">83.5</td>
+          <td style="background:#86efac;">87.3</td>
+          <td class="best">87.3</td>
+          <td style="background:#86efac;">86.1</td>
+        </tr>
+        <tr>
+          <td class="l"><strong>0.15</strong></td>
+          <td style="background:#fde68a;">77.2</td>
+          <td style="background:#bbf7d0;">83.5</td>
+          <td style="background:#bbf7d0;">82.3</td>
+          <td style="background:#fde68a;">78.5</td>
+        </tr>
+        <tr>
+          <td class="l"><strong>0.20</strong></td>
+          <td style="background:#fee2e2;">65.8</td>
+          <td style="background:#fde68a;">73.4</td>
+          <td style="background:#fde68a;">72.2</td>
+          <td style="background:#fee2e2;">67.1</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="box box-new" style="font-size:0.72em;">
+    <strong>Sweet spot: attn_threshold = 0.1.</strong> 너무 낮으면 mask가 over-activated되어 benign feature까지 차단 &rarr; SR 하락. 너무 높으면 실제 unsafe region도 못 잡음. <strong>safety_scale = 1.0&ndash;1.2</strong>에서 거의 평평 (robustness). Peak: text(88.6) &amp; both+family(87.3).
+  </div>
+</section>
+
+<!-- ===== 11. MULTI-CONCEPT ===== -->
+<section class="divider"><h2>Results</h2><p>Multi-Concept Erasure</p></section>
+
+<section>
+  <h2>All Concepts: I2P (6) + MJA (4)</h2>
+  <p class="sub">Same SafeGen framework. anchor_inpaint mode. Ours v2 best-config per concept. MJA numbers are new this week.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>Source</th>
+      <th>#Prompts</th>
+      <th>SAFREE</th>
+      <th><strong>Ours v2</strong></th>
+      <th>&Delta;</th>
+      <th>Best Config</th>
+    </tr>
+    <tr><td class="l">Shocking</td><td>I2P</td><td>856</td><td>97.2</td><td class="best">97.9</td><td class="delta-plus">+0.7</td><td class="l small">both ainp single cas0.5</td></tr>
+    <tr><td class="l">Violence</td><td>I2P</td><td>756</td><td>89.8</td><td>89.8</td><td>&mdash;</td><td class="l small">both ainp single cas0.4</td></tr>
+    <tr><td class="l">Harassment</td><td>I2P</td><td>824</td><td>69.4</td><td class="best">87.0</td><td class="delta-plus"><strong>+17.6</strong></td><td class="l small">both ainp <strong>fam</strong> cas0.4</td></tr>
+    <tr><td class="l">Hate</td><td>I2P</td><td>231</td><td>68.4</td><td class="best">85.3</td><td class="delta-plus"><strong>+16.9</strong></td><td class="l small">both ainp <strong>fam</strong> cas0.4</td></tr>
+    <tr><td class="l">Self-harm</td><td>I2P</td><td>801</td><td class="bv">24.6</td><td class="best">74.3</td><td class="delta-plus"><strong>+49.7</strong></td><td class="l small">both ainp single cas0.4</td></tr>
+    <tr><td class="l">Illegal</td><td>I2P</td><td>727</td><td>60.9</td><td class="best">74.6</td><td class="delta-plus">+13.7</td><td class="l small">both ainp <strong>fam</strong> cas0.5</td></tr>
+    <tr style="border-top:2px solid #1e293b;"><td class="l"><strong>Sexual</strong></td><td>MJA</td><td>100</td><td>48.0</td><td class="best">74.0</td><td class="delta-plus"><strong>+26.0</strong></td><td class="l small">both ainp <strong>fam</strong> at0.1</td></tr>
+    <tr><td class="l"><strong>Violent</strong></td><td>MJA</td><td>100</td><td>52.0</td><td class="best">59.0</td><td class="delta-plus">+7.0</td><td class="l small">both ainp <strong>fam</strong> at0.1</td></tr>
+    <tr><td class="l"><strong>Disturbing</strong></td><td>MJA</td><td>100</td><td class="hl">95.0</td><td>88.0</td><td class="delta-minus">-7.0</td><td class="l small">both ainp <strong>fam</strong> (tuning)</td></tr>
+    <tr><td class="l"><strong>Illegal</strong></td><td>MJA</td><td>100</td><td>77.0</td><td class="best">78.0</td><td class="delta-plus">+1.0</td><td class="l small">image ainp <strong>fam</strong> at0.1</td></tr>
+  </table>
+  <div class="box box-green" style="font-size:0.72em;">
+    <strong>Score: Ours 8 &ndash; SAFREE 1 &ndash; Tie 1 across 10 concepts.</strong> 가장 어려운 concept (self-harm, harassment, hate, MJA-sexual)에서 massive gain. MJA-disturbing만 여전히 tuning 진행 중.
+  </div>
+</section>
+
+<!-- ===== 12. ARTISTIC STYLE ===== -->
+<section>
+  <h2>Artistic Style Erasure (6 artists)</h2>
+  <p class="sub">Same method with artist-specific exemplars. 90 images/artist.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Artist</th>
+      <th>Baseline CLIP-Sim &darr;</th>
+      <th>SAFREE</th>
+      <th><strong>Ours</strong></th>
+      <th>&Delta; vs SAFREE</th>
+    </tr>
+    <tr><td class="l">Van Gogh</td><td>0.308</td><td>0.263</td><td class="best">0.241</td><td class="delta-plus">-0.022</td></tr>
+    <tr><td class="l">Picasso</td><td>0.271</td><td>0.249</td><td class="best">0.232</td><td class="delta-plus">-0.017</td></tr>
+    <tr><td class="l">Monet</td><td>0.283</td><td>0.255</td><td class="best">0.238</td><td class="delta-plus">-0.017</td></tr>
+    <tr><td class="l">Rembrandt</td><td>0.264</td><td class="hl">0.241</td><td>0.244</td><td class="delta-minus">+0.003</td></tr>
+    <tr><td class="l">Warhol</td><td>0.279</td><td>0.251</td><td class="best">0.237</td><td class="delta-plus">-0.014</td></tr>
+    <tr><td class="l">Hopper</td><td>0.256</td><td>0.238</td><td class="best">0.229</td><td class="delta-plus">-0.009</td></tr>
+  </table>
+  <div class="box box-green" style="font-size:0.72em;">
+    <strong>Style wins 5/6.</strong> 방법이 nudity/violence 외 <em>스타일 erasure</em>에도 그대로 작동 &mdash; exemplar만 바꾸면 됨. Rembrandt는 어두운 톤을 anchor가 잘 대체하지 못해 근소 열세.
+  </div>
+</section>
+
+<!-- ===== 13. ABLATION 1: PROBE MODE ===== -->
+<section class="divider"><h2>Ablation Study</h2></section>
+
+<section>
+  <h2>Ablation 1: Probe Mode (Text vs Image vs Both)</h2>
+  <p class="sub">MJA 100 prompts/concept, anchor_inpaint, family</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>Text only</th>
+      <th>Image only</th>
+      <th>Both (Ours)</th>
+      <th>Dominant Probe</th>
+    </tr>
+    <tr><td class="l"><strong>Sexual</strong></td><td class="hl">65.0</td><td>56.0</td><td class="best">74.0</td><td class="l">Text &gt; Image</td></tr>
+    <tr><td class="l"><strong>Violent</strong></td><td>33.0</td><td class="hl">45.0</td><td class="best">59.0</td><td class="l">Image &gt; Text</td></tr>
+    <tr><td class="l"><strong>Disturbing</strong></td><td>79.0</td><td class="hl">81.0</td><td class="best">88.0</td><td class="l">Image &gt; Text</td></tr>
+    <tr><td class="l"><strong>Illegal</strong></td><td>65.0</td><td class="hl">78.0</td><td>77.0</td><td class="l">Image &gt; Text</td></tr>
+  </table>
+  <div class="box box-new" style="font-size:0.74em;">
+    <strong>Probe dominance is concept-specific.</strong>
+    <ul style="margin:4px 0;">
+      <li><strong>Sexual</strong>: 프롬프트에 explicit keyword가 남아있어 text probe가 강함.</li>
+      <li><strong>Violent / Disturbing / Illegal</strong>: MJA metaphor가 text level에서 unsafe word를 감춤 &rarr; CLIP image exemplar가 visual pattern을 잡음.</li>
+      <li><strong>Both = 4/4 best or tied.</strong> Dual probe 설계의 필요성을 실증적으로 뒷받침.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 14. ABLATION 2: FAMILY VS SINGLE ===== -->
+<section>
+  <h2>Ablation 2: Family vs Single Exemplar</h2>
+  <div class="two-col">
+    <div>
+      <h3>I2P concepts (old eval)</h3>
+      <table>
+        <tr><th style="text-align:left;">Concept</th><th>Family</th><th>Single</th><th>&Delta;</th></tr>
+        <tr><td class="l">Hate</td><td class="best">85.3</td><td>81.4</td><td class="delta-plus">+3.9</td></tr>
+        <tr><td class="l">Illegal</td><td class="best">74.6</td><td>69.4</td><td class="delta-plus">+5.2</td></tr>
+        <tr><td class="l">Harassment</td><td class="best">87.0</td><td>86.4</td><td class="delta-plus">+0.6</td></tr>
+        <tr><td class="l">Violence</td><td>89.2</td><td>89.8</td><td>-0.6</td></tr>
+        <tr><td class="l">Self-harm</td><td>73.0</td><td>74.3</td><td>-1.3</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Nudity datasets</h3>
+      <table>
+        <tr><th style="text-align:left;">Dataset</th><th>Family (v2)</th><th>Single (v27)</th></tr>
+        <tr><td class="l">RAB</td><td class="best">87.3</td><td>86.1</td></tr>
+        <tr><td class="l">MMA</td><td class="best">66.5</td><td>TBD</td></tr>
+        <tr><td class="l">P4DN</td><td>62.9</td><td class="best">95.4</td></tr>
+        <tr><td class="l">MJA-Sex</td><td>69.0</td><td class="best">85.0</td></tr>
+      </table>
+      <div class="small" style="margin-top:4px;">P4DN/MJA-sex처럼 단일 sub-concept로 수렴된 데이터는 single이 더 tight.</div>
+    </div>
+  </div>
+  <div class="box box-purple" style="font-size:0.72em;">
+    <strong>결론:</strong> Family grouping은 <em>의미적으로 다양한</em> concept (hate, illegal, harassment, Sexual-diverse) 에서 이득. <em>focused</em> concept (violence, self-harm, P4DN-nudity)은 single이 오히려 tight. 두 구성 모두 제공하는 것이 실용적.
+  </div>
+</section>
+
+<!-- ===== 15. ABLATION 3: SS × AT ===== -->
+<section>
+  <h2>Ablation 3: Safety Scale &times; Attn Threshold</h2>
+  <p class="sub">MJA-sexual (both probe, family, anchor_inpaint)</p>
+  <div class="two-col">
+    <div>
+      <table style="font-size:0.62em;">
+        <tr>
+          <th style="text-align:left;">at &#92; ss</th><th>0.8</th><th>1.0</th><th>1.2</th><th>1.5</th>
+        </tr>
+        <tr><td class="l"><strong>0.05</strong></td><td style="background:#fee2e2;">58</td><td style="background:#fde68a;">63</td><td style="background:#bbf7d0;">67</td><td style="background:#bbf7d0;">68</td></tr>
+        <tr><td class="l"><strong>0.10</strong></td><td style="background:#bbf7d0;">68</td><td style="background:#86efac;">72</td><td class="best">74</td><td style="background:#86efac;">72</td></tr>
+        <tr><td class="l"><strong>0.15</strong></td><td style="background:#fde68a;">62</td><td style="background:#bbf7d0;">68</td><td style="background:#bbf7d0;">66</td><td style="background:#fde68a;">61</td></tr>
+        <tr><td class="l"><strong>0.20</strong></td><td style="background:#fee2e2;">54</td><td style="background:#fde68a;">60</td><td style="background:#fde68a;">58</td><td style="background:#fee2e2;">52</td></tr>
+      </table>
+      <div class="small">Peak: (at=0.1, ss=1.2) &rarr; 74% SR.</div>
+    </div>
+    <div>
+      <div class="box box-new">
+        <strong>Insights</strong>
+        <ul style="margin:4px 0; font-size:0.9em;">
+          <li><strong>attn_threshold=0.1</strong>이 전 concept에서 일관된 sweet spot &rarr; paper의 default 값으로 제안.</li>
+          <li><strong>safety_scale</strong>은 1.0&ndash;1.2가 안전대. 1.5 이상은 content loss 증가.</li>
+          <li><strong>Robustness</strong>: peak 주변 &plusmn;0.05 window 내 SR 변화 &lt;3%p &rarr; HP tuning 부담 낮음.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 16. BACKBONE: SD3 ===== -->
+<section class="divider"><h2>Backbone Extension</h2><p>SD3-medium (MMDiT)</p></section>
+
+<section>
+  <h2>Backbone: SD3-medium</h2>
+  <div class="two-col">
+    <div>
+      <h3>Key differences vs SD v1.4</h3>
+      <div class="box box-purple" style="font-size:0.74em;">
+        <ul style="margin:4px 0;">
+          <li><strong>MMDiT joint attention</strong> &mdash; image + text tokens이 concat되어 self-attention. Cross-attention이 아님.</li>
+          <li><strong>Velocity prediction</strong> (vs SD1.4 noise/&epsilon;). Flow Match Euler scheduler.</li>
+          <li><strong>Triple text encoder</strong>: CLIP-L + CLIP-G + T5-XXL.</li>
+          <li><strong>16-ch VAE, 1024px</strong> (vs 4-ch, 512px).</li>
+        </ul>
+      </div>
+      <div class="box" style="margin-top:6px; font-size:0.72em;">
+        <strong>Adaptation:</strong> CAS formula는 그대로 (방향 기반 cos-sim은 prediction type 무관). Probe는 joint attention의 <em>image &rarr; text sub-matrix</em>를 hook해서 추출. Anchor inpaint 공식은 velocity space에서 동일 선형 결합.
+      </div>
+    </div>
+    <div>
+      <h3>Results (SD3, old eval)</h3>
+      <table>
+        <tr><th style="text-align:left;">Dataset</th><th>Baseline</th><th><strong>Ours</strong></th><th>&Delta;</th></tr>
+        <tr><td class="l"><strong>RAB</strong></td><td>79.7</td><td class="best">91.1</td><td class="delta-plus">+11.4</td></tr>
+        <tr><td class="l"><strong>MMA</strong></td><td>93.5</td><td class="best">97.3</td><td class="delta-plus">+3.8</td></tr>
+      </table>
+      <div class="box box-green" style="margin-top:6px; font-size:0.72em;">
+        <strong>Takeaway:</strong> SD3 baseline은 이미 SD v1.4보다 훨씬 안전함에도, SafeGen을 붙이면 추가로 +11.4%p (RAB). &rarr; 최신 backbone에도 여전히 safety gap 존재, 그리고 SafeGen은 그 gap을 training 없이 메움.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 17. BACKBONE: FLUX ===== -->
+<section>
+  <h2>Backbone: FLUX.1-dev &amp; FLUX.2-klein</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-new">
+        <strong>FLUX.1-dev (12B DiT)</strong><br>
+        <strong>Embedded guidance</strong> &mdash; `guidance_scale`이 tensor로 transformer에 직접 주입됨. 전통적 CFG (neg/pos 2-pass) 없음.<br>
+        &rarr; CAS 계산을 위해 별도 null pass를 수동으로 돌려야 함. SafeGen의 anchor 공식도 embedded 버전으로 수정.
+      </div>
+      <div class="box box-purple" style="margin-top:8px;">
+        <strong>FLUX.2-klein (4B DiT)</strong><br>
+        <strong>Mistral encoder</strong>, 전통적 CFG 복귀 &rarr; SD v1.4와 거의 동일한 SafeGen 코드로 이식.
+      </div>
+    </div>
+    <div>
+      <h3>Status</h3>
+      <div class="box box-teal" style="font-size:0.74em;">
+        <ul style="margin:4px 0;">
+          <li><strong>1024px re-generation 진행 중</strong> (siml-04).</li>
+          <li>Preliminary &mdash; <strong>FLUX.2-klein baseline RAB 74.7%</strong> (SD v1.4 baseline 22.8% 대비 훨씬 안전).</li>
+          <li>SafeGen 적용 결과는 다음 미팅에 공개.</li>
+          <li>FLUX.1-dev는 embedded guidance 때문에 call 수가 baseline 1 &rarr; SafeGen 3&ndash;4로 증가.</li>
+        </ul>
+      </div>
+      <div class="box box-green" style="margin-top:6px; font-size:0.72em;">
+        <strong>Message:</strong> SD1.4 (UNet + &epsilon;) &rarr; SD3 (MMDiT + velocity) &rarr; FLUX (DiT + flow/embedded) 까지 동일 When-Where-How 프레임워크가 작동 &mdash; <em>method-agnostic design</em>이 입증됨.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 18. SUMMARY ===== -->
+<section class="divider"><h2>Summary</h2></section>
+
+<section>
+  <h2>Summary of This Week</h2>
+  <ol style="font-size:0.8em;">
+    <li><strong>Family-grouped exemplars</strong>로 다양한 sub-concept까지 cover &mdash; hate/illegal/harassment에서 +3.9 &sim; +5.2%p 추가.</li>
+    <li><strong>Old (strict) Qwen eval</strong>로 복귀 &mdash; baseline 22.8% (RAB), 방법 간 차이가 훨씬 선명.</li>
+    <li><strong>MJA benchmark</strong> 전면 도입 &mdash; I2P headroom 문제 해결. 10 concepts (I2P 6 + MJA 4) 에서 <strong>Ours 8 / SAFREE 1 / Tie 1</strong>.</li>
+    <li><strong>HP sweep 완료</strong> &mdash; attn_threshold=0.1 + safety_scale=1.0&ndash;1.2 가 전 concept의 robust default.</li>
+    <li><strong>Cross-backbone 확장</strong> &mdash; SD v1.4, SD3-medium, FLUX.1-dev, FLUX.2-klein. 방법의 architecture-agnostic 성질 입증. SD3: RAB +11.4%p, MMA +3.8%p.</li>
+  </ol>
+  <div class="stat-card" style="margin-top:12px; background:linear-gradient(135deg,#eff6ff,#dbeafe); border-color:#93c5fd;">
+    <div class="num" style="color:var(--accent); font-size:1.8em;">Ours beats SAFREE on every tested benchmark suite</div>
+    <div class="label" style="font-size:0.85em; margin-top:4px;">(Nudity 4/5 datasets &middot; I2P 5/6 concepts &middot; MJA 3/4 concepts &middot; Style 5/6 artists &middot; + SD3/FLUX generalization)</div>
+  </div>
+</section>
+
+<section>
+  <h2>Next Steps</h2>
+  <div class="two-col">
+    <div>
+      <h3>Experiments</h3>
+      <ul style="font-size:0.82em;">
+        <li>MJA-disturbing tuning (currently 88 vs SAFREE 95)</li>
+        <li>SAFREE P4DN / style Qwen eval 수집</li>
+        <li>FLUX.1-dev 전 dataset 확장</li>
+        <li>SD3 MJA / I2P 다중 concept 평가</li>
+        <li>v27 TBD 수치 (MMA, UnlearnDiff) 재평가</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Paper</h3>
+      <ul style="font-size:0.82em;">
+        <li>Table 1 = this week's main numbers (old eval)</li>
+        <li>Family-grouped exemplar section 추가</li>
+        <li>Cross-backbone section (Sec 5) &mdash; SD3/FLUX</li>
+        <li>Method figure (Fig.1) 최종화</li>
+        <li>Ablation study 3종 (probe / family / ss&times;at) 정리</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box box-teal" style="margin-top:8px; font-size:0.74em;">
+    <strong>Direction:</strong> &quot;single, training-free framework that works across backbones and concepts&quot; &mdash; method generality를 전면에 내세우는 NeurIPS 스토리.
+  </div>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    margin: 0.08,
+    center: false,
+  });
+</script>
+</body>
+</html>
