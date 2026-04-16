@@ -74,8 +74,19 @@ class FluxSpatialProbe:
             out = output
         if not torch.is_tensor(out) or out.dim() != 3:
             return
-        # Image tokens are the trailing `seq_img_len` positions
-        img = out[:, -self.seq_img_len:, :].detach()
+        # FLUX joint blocks output [B, seq_img + seq_txt, C] (img first).
+        # Slice the image half by taking the first seq_img_len positions; if
+        # the block returns only image tokens (seq == seq_img_len) that also
+        # works.  If the block returns only text tokens (seq != seq_img_len
+        # and seq < seq_img_len), we skip this capture.
+        S = out.shape[1]
+        if S == self.seq_img_len:
+            img = out.detach()
+        elif S > self.seq_img_len:
+            # Try image-first then image-last; pick whichever matches.
+            img = out[:, :self.seq_img_len, :].detach()
+        else:
+            return
         self.captures[self.tag] = img
 
     def remove(self):
