@@ -308,16 +308,41 @@ def main():
         unc_embeds, unc_pooled = encode_sd3_prompt(pipe, "", device)
 
     # Setup probe
+    use_probe = args.probe_mode in ("text", "image", "both")
+    use_txt = args.probe_mode in ("text", "both")
+    use_img = args.probe_mode in ("image", "both")
+
     txt_probe = None
     original_procs = None
+    image_probe_embeds = None
+    image_probe_token_indices = None
 
-    if args.probe_mode == "text":
+    if use_probe:
         txt_probe = SD3AttentionProbeStore()
-        # Note: we hook the probe but DON'T activate it until CAS triggers
-        # This is done inside the denoising loop
-        # We can't register hooks when using CPU offload until transformer is on GPU
-        # So we'll register/unregister per step if needed
-        print(f"  Text probe ready (will hook during generation)")
+        print(f"  Probe ready (mode={args.probe_mode}; will hook during generation)")
+
+    if use_img:
+        print(f"  Loading CLIP exemplar embeddings: {args.clip_embeddings}")
+        clip_data = torch.load(
+            args.clip_embeddings, map_location="cpu", weights_only=False)
+        clip_feats = clip_data.get(
+            "target_clip_features", clip_data.get("target_cls"))
+        if clip_feats is None:
+            raise ValueError(
+                f"clip_embeddings file missing 'target_clip_features' key; "
+                f"keys: {list(clip_data.keys()) if isinstance(clip_data, dict) else type(clip_data)}")
+        clip_feats = clip_feats.float()
+        print(f"    CLIP features: {tuple(clip_feats.shape)}")
+
+        # Build pseudo-text embedding using SD3's empty-prompt as baseline.
+        image_probe_embeds, image_probe_token_indices = build_sd3_image_probe_embeds(
+            clip_feats,
+            baseline_encoder_hidden=unc_embeds.detach(),
+            n_tokens=args.n_img_tokens,
+        )
+        image_probe_embeds = image_probe_embeds.to(dtype=unc_embeds.dtype)
+        print(f"    Image-probe pseudo-text: {tuple(image_probe_embeds.shape)} "
+              f"tokens={image_probe_token_indices}")
 
     # Generate
     cas = GlobalCAS(args.cas_threshold)
@@ -382,7 +407,10 @@ def main():
                 # Forward pass — with probe hooked on first pass (no extra forward!)
                 if txt_probe is not None:
                     original_procs = register_sd3_attention_probe(
-                        transformer, txt_probe, args.probe_blocks)
+                        transformer, txt_probe, args.probe_blocks,
+                        probe_mode=args.probe_mode,
+                        image_probe_embeds=image_probe_embeds,
+                        image_probe_token_indices=image_probe_token_indices)
                     txt_probe.active = True
                     txt_probe.reset()
 
@@ -483,11 +511,4 @@ def main():
 
     # Save metadata
     json.dump(stats, open(outdir / "generation_stats.json", "w"), indent=2)
-    json.dump(vars(args), open(outdir / "args.json", "w"), indent=2)
-
-    guided = sum(1 for s in stats if s["guided_steps"] > 0)
-    print(f"\nDone! {len(stats)} images, guided {guided}/{len(stats)}")
-
-
-if __name__ == "__main__":
-    main()
+    json.dump(vars(args), open(outdir / "args.json

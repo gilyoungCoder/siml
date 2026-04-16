@@ -558,4 +558,10 @@ def calculate_shift_klein(seq_len, scheduler, num_steps):
             scheduler.config.get("base_image_seq_len", 256),
             scheduler.config.get("max_image_seq_len", 4096),
             scheduler.config.get("base_shift", 0.5),
-            sch
+            scheduler.config.get("max_shift", 1.15),
+        )
+    return mu
+
+
+if __name__ == "__main__":
+    main()
