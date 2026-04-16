@@ -434,3 +434,139 @@ SafeGen HOW:   4 calls (ep + en + et + ea) — anchor prediction 추가
 2. **SD3 image probe**: MMDiT joint attention에 CLIP image features 주입
 3. **Unified probe interface**: backbone-agnostic probe abstraction layer
 4. **CAS threshold auto-tuning**: backbone별 optimal threshold를 calibration set으로 자동 결정
+
+---
+
+## 6. ML Research Perspective & Insights
+
+이 섹션은 SafeGen의 cross-backbone 호환성을 ML 연구 관점에서 해석한다. 왜 training-free transfer가 가능한지, 어떤 구조적 병목이 WHERE 컴포넌트를 제약하는지, embedded guidance가 가져오는 수학적 tension은 무엇인지, 그리고 이 방법론의 일반화 한계와 다음 연구 방향을 정리한다.
+
+### 6.1 Why Training-Free Transfer Works
+
+#### Parameterization-invariant direction
+
+CAS는 `cos(pred_prompt - pred_null, pred_target - pred_null)` 형태로 정의된다. 이 식의 핵심은 **두 벡터의 차이(difference)가 어떤 parameterization이든 "denoising trajectory의 변화 방향"을 가리킨다는 점**이다.
+
+- **Epsilon (DDPM/DDIM)**: `eps_theta(x_t, t, c)` — noise residual
+- **Velocity (v-parameterization, SD3)**: `v = alpha_t * eps - sigma_t * x_0` — noise와 clean signal의 선형 결합
+- **Flow matching (FLUX)**: `u_theta(x_t, t, c)` — `x_1 - x_0` 방향의 velocity field (straight-line interpolation의 시간 미분)
+
+세 parameterization은 `x_t`의 동일 지점에서 "다음 step이 어디로 갈지"를 예측한다. **차이 벡터 `pred_c1 - pred_c2`는 parameterization의 선형 변환에 대해 불변(invariant up to scaling)이다**. Cosine similarity는 scale invariant이므로, 서로 다른 parameterization에서 계산된 CAS 값이 (일반적으로 calibrate된 threshold 하에서) 동일한 의미를 갖는다. 이것이 SD3에서 threshold를 0.4로 내리면 되는 이유 — 분포 scale은 다르지만 방향성의 topology는 보존된다.
+
+이 관찰은 Song & Kingma의 score-based 해석과 일맥상통한다. DDPM, v-pred, flow matching은 모두 **learned score `nabla_x log p_t(x|c)`의 변형**으로 해석 가능하며, conditional score의 차이 `score(x|c1) - score(x|c2)`는 **tangent space 상의 동일한 vector field**를 가리킨다 (cf. Ho & Salimans 2022, classifier-free guidance의 원 formulation).
+
+#### CFG literature와의 연결
+
+Classifier-free guidance (Ho & Salimans, 2022)의 표준 공식 `eps_cfg = eps_null + w * (eps_c - eps_null)`은 본질적으로 `(eps_c - eps_null)`을 "concept direction"으로 보고 그 방향으로 extrapolation하는 연산이다. SafeGen의 CAS는 **두 concept direction의 alignment**를 측정하는 것이고, HOW 컴포넌트의 anchor_inpaint는 **target direction을 anchor direction으로 교체하는 local rewrite**이다. 두 연산 모두 CFG가 발견한 "difference-as-direction"이라는 원칙 위에서 동작하므로, CFG가 동작하는 모든 backbone에서 자동으로 동작한다.
+
+### 6.2 Attention Probe Challenges Across Architectures
+
+WHERE 컴포넌트가 backbone별로 가장 큰 구현 편차를 보이는 이유는 attention 구조가 근본적으로 다르기 때문이다. 이를 "token → spatial 매핑의 recoverability"라는 관점에서 본다.
+
+#### UNet cross-attention: clean token → spatial
+
+SD v1.4의 `attn2`는 `Q = W_q @ x_img`, `K = W_k @ x_txt`로 명확히 **image query ↔ text key** 구조이다. Attention map `softmax(QK^T/sqrt(d))`의 shape `[H, S_img, S_txt]`는 그 자체로 "spatial position이 어떤 token을 attend하는지"에 대한 직접적 해석을 제공한다. Target token index만 알면 바로 2D mask를 얻을 수 있다 — 이것이 probe 구현이 가장 cheap한 이유.
+
+#### MMDiT joint attention: sub-matrix extraction이 핵심
+
+MMDiT는 image tokens과 text tokens을 concat한 후 single self-attention을 수행한다 (Esser et al., 2024, "Scaling Rectified Flow Transformers..."). Full attention matrix는 4개 block으로 분해된다:
+
+```
+attn = | A_ii   A_it |
+       | A_ti   A_tt |
+```
+
+여기서 cross-attention에 해당하는 정보는 `A_it` (image queries attending to text keys)에만 있다. `A_ii`는 image self-attention이므로 text concept 정보를 담지 않는다. 따라서 probe는 반드시 `attn[:, :S_img, S_img:]` **sub-matrix를 명시적으로 slicing**해야 한다 (`attention_probe_sd3.py:224`).
+
+추가 복잡성: (1) image/text에 별도 projection이 사용된다 (`to_q/k/v` vs `add_q_proj/k_proj/v_proj`), (2) RMSNorm이 Q/K에 적용된다, (3) SDPA kernel은 attention weights를 반환하지 않으므로 probe 활성 시 explicit `softmax(QK^T)`로 fallback해야 한다 (속도 손실 수반).
+
+#### FLUX DiT: spatial recoverability가 가장 어려움
+
+FLUX는 **packed latent**를 사용한다: `[B, 16, H, W]`이 2×2 patchify로 `[B, (H/2)*(W/2), 64]`가 된다. Attention 계산 시 image는 이미 1D sequence로 flatten되어 있으며, spatial 정보는 오직 `img_ids` (positional encoding tensor)에만 담긴다.
+
+FLUX.1-dev는 **double-stream + single-stream** 이중 아키텍처를 사용한다 (Black Forest Labs, FLUX 기술 블로그 기준). Double-stream block은 SD3처럼 image/text가 별도 projection 후 joint attention이지만, single-stream block은 image와 text를 concat한 후 **공유 QKV projection**을 적용한다. 후자의 경우 `A_it` sub-matrix를 추출하더라도 image/text가 같은 embedding space로 projection된 후이므로, text token-level 의미 해석이 흐려진다.
+
+FLUX에서 spatial probe를 구현하려면:
+1. Double-stream block에서만 hook (semantic 해석이 가능한 layer)
+2. `A_it = attn[:, :S_img, S_img:]` 추출
+3. `S_img = (H/2)*(W/2)` 이므로 `img_ids`의 `(row, col)` 좌표로 2D grid 재구성
+4. `F.interpolate`로 latent resolution에 맞추기
+5. Packed sequence 내 spatial mask를 다시 packing 형식에 맞춰 broadcast
+
+이론적으로 구현 가능하나, single-stream block이 전체 layer의 상당 부분을 차지하므로 (FLUX.1-dev는 19 double + 38 single), SD3 대비 probe signal-to-noise ratio가 낮을 가능성이 있다.
+
+### 6.3 Embedded Guidance Paradox (FLUX.1-dev)
+
+FLUX.1-dev는 CFG distillation을 학습 시 내재화했다 (guidance-distilled model). `guidance_scale`이 tensor로 transformer에 전달되며 (`transformer.config.guidance_embeds = True`), 단일 forward pass가 이미 guided prediction을 반환한다. 이로 인해 **true `eps_null`이 존재하지 않는다**는 수학적 tension이 발생한다.
+
+#### Null prediction의 의미 왜곡
+
+Traditional CFG 모델에서 `eps_null = eps_theta(x_t, t, c=empty)`는 unconditional denoising direction이다. FLUX.1-dev에서 `guidance=w` tensor를 전달한 채 `c=empty`로 호출하면, 반환되는 것은 "unconditional at guidance w"이다 — 이는 distillation target이 `eps_null + w * (eps_c - eps_null)`이었을 때의 `eps_null`과 **수학적으로 동일하지 않다**. 실질적으로는 `w=0` 또는 `w=1`로 설정해야 "순수 unconditional"에 가까워진다.
+
+우리 구현 (`generate_flux1_v1.py:425-435`)은 null pass에서도 같은 `guidance_tensor`를 유지한다 — 이는 CAS 계산에 쓰이는 `(ep - en)`이 **"prompt 고유 direction"이 아니라 "prompt-vs-empty direction at fixed guidance"를 측정**함을 의미한다. 실험적으로 threshold 0.6에서 동작한다는 사실은 이 변형된 direction도 여전히 discriminative하다는 증거지만, SD v1.4와 이론적 등가성을 가지지는 않는다.
+
+#### Anchor_inpaint formula의 간소화
+
+이 때문에 FLUX.1-dev의 anchor_inpaint는:
+
+```
+out = ep * (1 - s*m) + ea * (s*m)    # ea는 이미 guided
+```
+
+전통적 backbone의 `eps_null + cfg * (eps_anchor - eps_null)` blending을 쓰면 **이중으로 guidance가 누적**된다 — `ea` 자체가 이미 `cfg` scale로 amplified되어 있기 때문이다. Trade-off:
+
+- **장점**: 공식이 단순하고 anchor prediction pass가 `cfg` amplification 없이 그대로 사용 가능
+- **단점**: `cfg_scale`로 anchor 강도를 fine-tune할 수 없음 — `safety_scale`만이 유일한 lever이므로 튜닝 자유도가 감소
+- **결과**: FLUX.1-dev에서 SafeGen의 hyperparameter search space가 축소되며, 같은 SR을 달성하는 sweet spot이 좁을 수 있음
+
+### 6.4 Implications for Generalization
+
+#### Cross-backbone 성공의 해석
+
+4개 backbone에서 동작한다는 사실이 "방법이 fundamental하다"를 의미하는가? 엄밀히는 **"현재 mainstream T2I family의 구조적 공통분모 위에서 동작한다"**가 더 정확한 주장이다. 공통분모:
+
+1. Text-conditional iterative denoising (prompt-conditioned 반복 refinement)
+2. CFG-compatible prediction (`pred_c - pred_null`이 concept direction을 의미)
+3. Text encoder가 concept-discriminative embedding을 제공 (CLIP/T5/Mistral 모두)
+4. Cross-modal attention이 존재 (형태는 달라도 text→image 정보 흐름이 있음)
+
+#### SafeGen을 깨뜨릴 수 있는 backbone (가설)
+
+- **Fully autoregressive T2I** (예: Parti-style 토큰 autoregressive): 반복적 denoising이 없으므로 `pred_c - pred_null`의 direction 해석 자체가 불가능. CAS 재정의 필요.
+- **Consistency models / single-step distilled**: `x_t`에서 바로 `x_0`를 예측 — concept direction이 trajectory 차이가 아니라 endpoint 차이가 되어 cosine similarity의 의미가 달라짐. Threshold 재calibration은 필요하나, 잠재적으로 노이즈 영역에서 direction이 불안정할 수 있음.
+- **Mixture-of-Experts routing**: Prompt별로 다른 expert가 활성화되면, `pred_c`와 `pred_null`이 다른 sub-network를 통과하여 `pred_c - pred_null` 차이가 concept direction이 아니라 routing artifact를 반영할 가능성.
+- **Guidance-free trained models** (guidance distillation 극단 버전): `pred_null`과 `pred_c`의 차이가 학습 시 최소화되었다면 direction signal 자체가 약해짐. CAS가 거의 0에 가까워져 trigger되지 않을 수 있음.
+
+반대로, **video diffusion**이나 **3D diffusion**은 공간 차원이 추가될 뿐 위 4가지 공통분모를 유지하므로, CAS는 그대로 동작하고 WHERE만 재설계하면 된다.
+
+### 6.5 Future Directions
+
+#### FLUX spatial probe (short-term)
+
+가장 즉각적 확장. 6.2의 구현 경로를 따라 double-stream block에서 `A_it` sub-matrix를 추출하고 `img_ids`의 `(row, col)` coordinates로 2D reshape. 예상 결과: FLUX.1/2의 WHERE cost를 global → spatial로 upgrade하여 benign FP rate를 낮추고 harmful 영역의 localization을 개선.
+
+#### Video diffusion으로의 확장
+
+Stable Video Diffusion, Open-Sora 등은 **(T, C, H, W) latent**를 사용하며 temporal attention을 추가로 갖는다. SafeGen 확장 설계:
+- **CAS**: temporal CAS (per-frame) + global spatiotemporal CAS (전체 sequence)
+- **WHERE**: temporal-spatial mask — 어느 frame의 어느 영역이 unsafe인지
+- **HOW**: temporal consistency를 깨지 않도록 anchor prediction도 동일 temporal context에서 sampling
+
+핵심 난점은 **frame 간 mask consistency** — frame별 독립적 masking은 flickering을 야기하므로 optical flow 기반 mask propagation 또는 3D Gaussian smoothing이 필요.
+
+#### Fine-tuning 방법과의 hybrid
+
+SafeGen (training-free) + ESD/UCE/SA (fine-tuning) 조합은 각각의 약점을 상쇄할 수 있다:
+
+- **Fine-tuning의 약점**: New backbone에 재학습 필요, benign quality 손상, 특정 concept에 과적합
+- **SafeGen의 약점**: Global guidance만 가능한 backbone (FLUX)에서 FP rate 상대적으로 높음, hyperparameter sensitivity
+
+**Hybrid 제안**: (1) Fine-tuning으로 model weights에 **coarse-level** unlearning을 주입하여 baseline harmful generation 확률을 낮추고, (2) SafeGen을 inference-time **safety net**으로 얹어 잔존 harmful case를 spatial masking으로 처리. 이 경우 fine-tuning 강도를 약하게 할 수 있어 benign quality 보존이 개선될 가능성.
+
+#### 자동 calibration
+
+CAS threshold, safety_scale, probe block index 등의 hyperparameter는 backbone별로 수동 tuning되어 왔다. **Calibration set 기반 auto-tuning** (e.g., FPR ≤ 5%를 constraint로 두고 TPR을 최대화하는 threshold를 binary search)은 새 backbone 이식 시 adaptation cost를 추가로 낮출 수 있으며, 논문 reproducibility 관점에서도 기여.
+
+---
+
+**정리**: SafeGen의 cross-backbone 성공은 "방법이 universal하다"가 아니라 "현재 T2I 생태계의 공통 구조 위에서 직교적으로 설계되었다"로 읽어야 한다. WHEN/HOW는 CFG 수학의 선형성에 기반하여 자동 이식되고, WHERE만이 attention 구조의 이질성으로 인해 per-backbone 엔지니어링을 요구한다. 다음 연구 단계는 (1) FLUX spatial probe, (2) video로의 확장, (3) fine-tuning과의 hybrid, (4) 자동 calibration이다.
