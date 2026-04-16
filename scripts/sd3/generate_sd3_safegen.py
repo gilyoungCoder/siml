@@ -334,15 +334,24 @@ def main():
         clip_feats = clip_feats.float()
         print(f"    CLIP features: {tuple(clip_feats.shape)}")
 
-        # Build pseudo-text embedding using SD3's empty-prompt as baseline.
-        image_probe_embeds, image_probe_token_indices = build_sd3_image_probe_embeds(
+        # Build pseudo-text embedding using SD3's empty-prompt as baseline
+        # (pre-context_embedder, 4096-d).
+        raw_probe_embeds, image_probe_token_indices = build_sd3_image_probe_embeds(
             clip_feats,
             baseline_encoder_hidden=unc_embeds.detach(),
             n_tokens=args.n_img_tokens,
         )
-        image_probe_embeds = image_probe_embeds.to(dtype=unc_embeds.dtype)
-        print(f"    Image-probe pseudo-text: {tuple(image_probe_embeds.shape)} "
-              f"tokens={image_probe_token_indices}")
+        # Project through transformer.context_embedder (4096 -> inner model dim
+        # ~1536) so it's in the same space that each block's add_k_proj reads.
+        ctx_embedder = transformer.context_embedder
+        ctx_dtype = next(ctx_embedder.parameters()).dtype
+        ctx_device = next(ctx_embedder.parameters()).device
+        with torch.no_grad():
+            image_probe_embeds = ctx_embedder(
+                raw_probe_embeds.to(device=ctx_device, dtype=ctx_dtype))
+        print(f"    Image-probe pseudo-text (raw 4096-d): {tuple(raw_probe_embeds.shape)}")
+        print(f"    Image-probe pseudo-text (ctx-embedded): "
+              f"{tuple(image_probe_embeds.shape)} tokens={image_probe_token_indices}")
 
     # Generate
     cas = GlobalCAS(args.cas_threshold)
