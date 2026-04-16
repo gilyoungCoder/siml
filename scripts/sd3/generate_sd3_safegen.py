@@ -458,13 +458,35 @@ def main():
                         )[0]
 
                     # WHERE: Compute probe mask (from first forward pass — no extra cost!)
-                    if txt_probe is not None and txt_probe.get_maps():
+                    have_txt = (txt_probe is not None
+                                and use_txt and txt_probe.get_maps())
+                    have_img = (txt_probe is not None
+                                and use_img and txt_probe.get_image_maps())
+
+                    txt_mask = None
+                    img_mask = None
+                    if have_txt:
                         txt_attn = compute_sd3_spatial_mask(
                             txt_probe, token_indices=None,
                             latent_h=latent_h, latent_w=latent_w)
-                        probe_mask = make_probe_mask(
+                        txt_mask = make_probe_mask(
                             txt_attn, args.attn_threshold,
                             args.attn_sigmoid_alpha, args.blur_sigma, v_cfg.device)
+                    if have_img:
+                        img_attn = compute_sd3_image_probe_mask(
+                            txt_probe, token_indices=None,
+                            latent_h=latent_h, latent_w=latent_w)
+                        img_mask = make_probe_mask(
+                            img_attn, args.img_attn_threshold,
+                            args.attn_sigmoid_alpha, args.blur_sigma, v_cfg.device)
+
+                    if txt_mask is not None and img_mask is not None:
+                        # Union via max (soft-OR), matches SafeGen SD1.4 fusion.
+                        probe_mask = torch.maximum(txt_mask, img_mask).clamp(0, 1)
+                    elif txt_mask is not None:
+                        probe_mask = txt_mask
+                    elif img_mask is not None:
+                        probe_mask = img_mask
                     else:
                         # No probe — global guidance
                         probe_mask = torch.ones(
