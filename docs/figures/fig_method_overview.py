@@ -47,12 +47,12 @@ C = {
 }
 
 # ── Figure / axes ───────────────────────────────────────────────────────────
-fig = plt.figure(figsize=(14, 4.8), facecolor=C['bg'])
+fig = plt.figure(figsize=(15, 5.6), facecolor=C['bg'])
 
 # We use a free-form layout with transform-based placement
 ax = fig.add_axes([0, 0, 1, 1])
-ax.set_xlim(0, 14)
-ax.set_ylim(0, 4.8)
+ax.set_xlim(0, 15)
+ax.set_ylim(0, 5.6)
 ax.axis('off')
 ax.set_facecolor(C['bg'])
 
@@ -153,23 +153,23 @@ def mask_block(ax, x, y, w, h):
 # ════════════════════════════════════════════════════════════════════════════
 PAD   = 0.18   # outer margin
 Y0    = 0.55   # bottom of all main panels
-PH    = 3.20   # panel height
+PH    = 3.80   # panel height
 ARROW_Y = Y0 + PH/2  # vertical centre for inter-panel arrows
 
-# x positions of each stage panel
+# x positions of each stage panel — wider figure (15 inches)
 X_INPUT  = PAD
-X_UNet   = 1.30
-X_WHEN   = 3.40
-X_WHERE  = 6.05
-X_HOW    = 9.70
-X_OUTPUT = 12.30
+X_UNet   = 1.40
+X_WHEN   = 3.60
+X_WHERE  = 6.40
+X_HOW    = 10.40
+X_OUTPUT = 13.10
 
-W_INPUT  = 0.85
-W_UNet   = 1.70
-W_WHEN   = 2.20
-W_WHERE  = 3.20
-W_HOW    = 2.15
-W_OUTPUT = 1.35
+W_INPUT  = 0.95
+W_UNet   = 1.80
+W_WHEN   = 2.40
+W_WHERE  = 3.50
+W_HOW    = 2.30
+W_OUTPUT = 1.50
 
 # ════════════════════════════════════════════════════════════════════════════
 # ① Input prompt box
