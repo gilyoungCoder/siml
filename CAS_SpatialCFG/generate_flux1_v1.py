@@ -457,7 +457,7 @@ def main():
                                     ft = transformer(
                                         hidden_states=lat_in,
                                         timestep=timestep / 1000,
-                                        guidance=None,
+                                        guidance=guidance_tensor,
                                         pooled_projections=family_target_pooled[fname].to(dtype),
                                         encoder_hidden_states=family_target_emb[fname].to(dtype),
                                         txt_ids=text_ids_null,
@@ -467,7 +467,7 @@ def main():
                                     fa = transformer(
                                         hidden_states=lat_in,
                                         timestep=timestep / 1000,
-                                        guidance=None,
+                                        guidance=guidance_tensor,
                                         pooled_projections=family_anchor_pooled[fname].to(dtype),
                                         encoder_hidden_states=family_anchor_emb[fname].to(dtype),
                                         txt_ids=text_ids_null,
@@ -485,7 +485,7 @@ def main():
                                 ea = transformer(
                                     hidden_states=lat_in,
                                     timestep=timestep / 1000,
-                                    guidance=None,
+                                    guidance=guidance_tensor,
                                     pooled_projections=pooled_anchor.to(dtype),
                                     encoder_hidden_states=pe_anchor.to(dtype),
                                     txt_ids=text_ids_null,
