@@ -15,7 +15,7 @@ echo "[KLEIN BASELINE]" >> "$LOG"
 for d in "$KLEIN"/baseline/*/; do
   [ -d "$d" ] && [ ! -f "$d/results_nudenet.json" ] && {
     echo "  NN: $(basename $d)" >> "$LOG"
-    $PY "$EVAL_NN" --image_dir "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
+    $PY "$EVAL_NN" "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
   }
 done
 
@@ -23,7 +23,7 @@ echo "[KLEIN OURS]" >> "$LOG"
 for d in "$KLEIN"/ours/*/; do
   [ -d "$d" ] && [ ! -f "$d/results_nudenet.json" ] && {
     echo "  NN: $(basename $d)" >> "$LOG"
-    $PY "$EVAL_NN" --image_dir "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
+    $PY "$EVAL_NN" "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
   }
 done
 
@@ -31,7 +31,7 @@ echo "[KLEIN SAFREE]" >> "$LOG"
 for d in "$KLEIN"/safree/*/; do
   [ -d "$d" ] && [ ! -f "$d/results_nudenet.json" ] && {
     echo "  NN: $(basename $d)" >> "$LOG"
-    $PY "$EVAL_NN" --image_dir "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
+    $PY "$EVAL_NN" "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
   }
 done
 
@@ -42,7 +42,7 @@ echo "[FLUX1DEV BASELINE]" >> "$LOG"
 for d in "$FDEV"/baseline/*/; do
   [ -d "$d" ] && [ ! -f "$d/results_nudenet.json" ] && {
     echo "  NN: $(basename $d)" >> "$LOG"
-    $PY "$EVAL_NN" --image_dir "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
+    $PY "$EVAL_NN" "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
   }
 done
 
@@ -54,7 +54,7 @@ for method in baseline safegen safree safe_denoiser sgf; do
   for d in "$SD3/$method"/*/; do
     [ -d "$d" ] && [ ! -f "$d/results_nudenet.json" ] && {
       echo "  NN: $method/$(basename $d)" >> "$LOG"
-      $PY "$EVAL_NN" --image_dir "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
+      $PY "$EVAL_NN" "$d" --threshold 0.6 >> "$LOG" 2>&1 || true
     }
   done
 done
