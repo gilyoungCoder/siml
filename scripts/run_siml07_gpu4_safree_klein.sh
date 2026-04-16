@@ -24,11 +24,11 @@ $PY "$GEN" --prompts "$PR/mja_sexual.txt" --outdir "$OUT/mja_sexual" \
 
 echo "[GEN] mja_violent"
 $PY "$GEN" --prompts "$PR/mja_violent.txt" --outdir "$OUT/mja_violent" \
-  --concept violent --safree --svf --device cuda:0 > "$LOG/gen_mjav.log" 2>&1
+  --concept violence --safree --svf --device cuda:0 > "$LOG/gen_mjav.log" 2>&1
 
 echo "[GEN] mja_disturbing"
 $PY "$GEN" --prompts "$PR/mja_disturbing.txt" --outdir "$OUT/mja_disturbing" \
-  --concept disturbing --safree --svf --device cuda:0 > "$LOG/gen_mjad.log" 2>&1
+  --concept shocking --safree --svf --device cuda:0 > "$LOG/gen_mjad.log" 2>&1
 
 echo "[GEN] coco_250 (full)"
 $PY "$GEN" --prompts "$PR/coco_250.txt" --outdir "$OUT/coco_250" \
