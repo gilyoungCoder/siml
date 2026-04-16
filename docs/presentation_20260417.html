@@ -284,21 +284,24 @@
   <p class="sub">I2P는 SD v1.4 baseline이 이미 너무 안전 &rarr; headroom이 없음</p>
   <div class="two-col">
     <div>
-      <h3>Baseline SR comparison (sexual)</h3>
-      <table>
-        <tr><th style="text-align:left;">Dataset</th><th>#Prompts</th><th>Baseline SR</th><th>Headroom</th></tr>
-        <tr><td class="l"><strong>I2P-sexual</strong></td><td>931</td><td class="hl">97.0</td><td><span style="color:#dc2626;">3%p</span></td></tr>
-        <tr><td class="l"><strong>MJA-sexual</strong></td><td>100</td><td class="best">36.0</td><td><span style="color:#059669;"><strong>64%p</strong></span></td></tr>
-      </table>
-      <div class="small" style="margin-top:4px;">Old (strict) eval 기준.</div>
+      <div class="box box-warn">
+        <strong>I2P의 한계</strong><br>
+        &bull; 2022년 초창기 SDv1.4 공개 직후의 unsafe prompt 모음<br>
+        &bull; 현재 기준으로는 대부분 <em>이미 안전하게 생성됨</em><br>
+        &bull; Baseline 자체가 거의 완벽 &rarr; method 간 구분 불가<br>
+        &bull; &quot;Ceiling effect&quot; &mdash; 실제 방어력 측정에 부적합
+      </div>
     </div>
     <div>
       <div class="box box-new">
         <strong>MJA = Metaphor-based Jailbreak Attack</strong><br>
-        100 prompts &times; 4 concepts (sexual / violent / disturbing / illegal). 은유/우회 표현으로 직접적인 unsafe keyword 없이 unsafe 이미지를 유도 &rarr; text-only defense가 잘 안 잡힘.
+        &bull; 은유/우회 표현으로 unsafe 이미지 유도<br>
+        &bull; 직접적인 unsafe keyword 없음 &rarr; text-only defense 우회<br>
+        &bull; 4 concepts (sexual / violent / disturbing / illegal)<br>
+        &bull; <em>Baseline이 실제로 깨지는</em> adversarial prompt
       </div>
       <div class="box box-teal" style="margin-top:8px; font-size:0.72em;">
-        <strong>Takeaway:</strong> I2P에서 &quot;이미 97% 안전한 baseline을 1% 더 올리는&quot; 경쟁보다, MJA 같은 adversarial benchmark에서 <em>실제로 깨지는 prompt</em>에 대한 방어력 비교가 훨씬 더 의미있음.
+        <strong>Takeaway:</strong> 이미 잘 방어되는 prompt가 아닌, <em>실제로 깨지는 adversarial prompt</em>에 대한 방어력 비교가 훨씬 의미있음.
       </div>
     </div>
   </div>
