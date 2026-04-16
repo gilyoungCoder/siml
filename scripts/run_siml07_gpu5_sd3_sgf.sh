@@ -3,7 +3,7 @@
 set -e
 export CUDA_VISIBLE_DEVICES=5
 PY="/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10"
-VLM_PY="/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3"
+VLM_PY="/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10"
 SGF_GEN="/mnt/home3/yhgil99/unlearning/scripts/sd3/generate_sd3_sgf.py"
 SD3_OUT="/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/sd3"
 PROMPT_DIR="/mnt/home3/yhgil99/unlearning/SAFREE/datasets"

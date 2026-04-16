@@ -3,7 +3,7 @@
 set -e
 export CUDA_VISIBLE_DEVICES=4
 PY="/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10"
-VLM_PY="/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3"
+VLM_PY="/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10"
 GEN="/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/generate_flux2klein_safree.py"
 PR="/mnt/home3/yhgil99/unlearning/SafeGen/prompts"
 OUT="/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/flux2klein_experiments/safree"
