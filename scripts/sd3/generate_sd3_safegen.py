@@ -511,4 +511,11 @@ def main():
 
     # Save metadata
     json.dump(stats, open(outdir / "generation_stats.json", "w"), indent=2)
-    json.dump(vars(args), open(outdir / "args.json
+    json.dump(vars(args), open(outdir / "args.json", "w"), indent=2)
+
+    guided = sum(1 for s in stats if s["guided_steps"] > 0)
+    print(f"\nDone! {len(stats)} images, guided {guided}/{len(stats)}")
+
+
+if __name__ == "__main__":
+    main()
