@@ -313,9 +313,11 @@ def main():
     # ── WHERE: register spatial probe ──
     probe = None
     if args.probe_mode != "none" and not args.no_safety:
-        # Find a blocks container
+        # Find a blocks container — prefer single-stream (output is full
+        # joint sequence [txt; img]).  Dual-stream blocks return a tuple
+        # which our forward_hook cannot easily disambiguate.
         blocks = None
-        for attr in ("transformer_blocks", "blocks", "single_transformer_blocks"):
+        for attr in ("single_transformer_blocks", "transformer_blocks", "blocks"):
             if hasattr(transformer, attr):
                 cand = getattr(transformer, attr)
                 if cand is not None and len(cand) > 0:
