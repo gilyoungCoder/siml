@@ -6,6 +6,7 @@
 # Config range passed as $2 $3 (start end indices)
 
 set -e
+export PYTHONPATH="/mnt/home3/yhgil99/unlearning/SafeGen:$PYTHONPATH"
 GPU=$1
 START=$2
 END=$3

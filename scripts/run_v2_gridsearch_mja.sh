@@ -5,6 +5,7 @@
 # $1=GPU, $2=concept (sexual/violent/disturbing/illegal), $3=prompts_file, $4=concept_dir, $5=family_config
 
 set -e
+export PYTHONPATH="/mnt/home3/yhgil99/unlearning/SafeGen:$PYTHONPATH"
 GPU=$1
 CONCEPT=$2
 PROMPTS=$3
