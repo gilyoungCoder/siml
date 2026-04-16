@@ -97,7 +97,7 @@ def section_header(ax, x, y, w, label, color):
     fbox(ax, x, y, w, 0.28, fc=color, ec=color, lw=0, alpha=0.85,
          radius=0.08, zorder=3)
     txt(ax, x + w/2, y + 0.14, label,
-        fontsize=7.5, fontweight='bold', color='white', zorder=6)
+        fontsize=7.0, fontweight='bold', color='white', zorder=6)
 
 
 def noise_icon(ax, cx, cy, r=0.25, color='#888888', label=''):
@@ -224,7 +224,7 @@ arrow(ax, X_UNet + W_UNet + 0.04, ARROW_Y,
 fbox(ax, X_WHEN, Y0, W_WHEN, PH,
      fc=C['decision_lt'], ec=C['decision'], lw=1.1)
 section_header(ax, X_WHEN, Y0 + PH - 0.28, W_WHEN,
-               'Stage 1 — WHEN: Concept Alignment Score', C['decision'])
+               'WHEN: Concept Alignment Score (CAS)', C['decision'])
 
 # CAS formula box
 fbox(ax, X_WHEN + 0.10, Y0 + PH*0.60, W_WHEN - 0.20, 0.85,
@@ -280,7 +280,7 @@ arrow(ax, X_WHEN + W_WHEN + 0.04, ARROW_Y,
 fbox(ax, X_WHERE, Y0, W_WHERE, PH,
      fc='#F5F0FA', ec='#7B5EA7', lw=1.1)
 section_header(ax, X_WHERE, Y0 + PH - 0.28, W_WHERE,
-               'Stage 2 — WHERE: Dual Attention Probe', '#7B5EA7')
+               'WHERE: Dual Attention Probe', '#7B5EA7')
 
 # ── Text probe sub-box ──────────────────────────────────────
 fbox(ax, X_WHERE + 0.10, Y0 + 1.90, (W_WHERE - 0.30)/2, 1.05,
@@ -355,7 +355,7 @@ arrow(ax, X_WHERE + W_WHERE + 0.04, ARROW_Y,
 fbox(ax, X_HOW, Y0, W_HOW, PH,
      fc=C['mask_light'], ec=C['mask'], lw=1.1)
 section_header(ax, X_HOW, Y0 + PH - 0.28, W_HOW,
-               'Stage 3 — HOW: Guided Denoising', C['mask'])
+               'HOW: Guided Denoising', C['mask'])
 
 # Formula box
 fbox(ax, X_HOW + 0.08, Y0 + PH*0.53, W_HOW - 0.16, 1.12,
@@ -478,9 +478,9 @@ for i, (col, label) in enumerate(items):
 # ════════════════════════════════════════════════════════════════════════════
 # ⑨ Overall title (optional — comment out if journal page has caption)
 # ════════════════════════════════════════════════════════════════════════════
-txt(ax, 7.0, 4.60,
-    'SafeGen: Training-Free Safe Image Generation via Dual-Probe Spatial Guidance — Method Overview',
-    fontsize=10, fontweight='bold', color=C['neutral'])
+txt(ax, 7.5, 5.38,
+    'SafeGen: Training-Free Safe Image Generation via Dual-Probe Spatial Guidance',
+    fontsize=11, fontweight='bold', color=C['neutral'])
 
 # ════════════════════════════════════════════════════════════════════════════
 # Save
