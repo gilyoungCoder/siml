@@ -38,6 +38,8 @@ from attention_probe_sd3 import (
     register_sd3_attention_probe,
     restore_sd3_processors,
     compute_sd3_spatial_mask,
+    compute_sd3_image_probe_mask,
+    build_sd3_image_probe_embeds,
 )
 
 

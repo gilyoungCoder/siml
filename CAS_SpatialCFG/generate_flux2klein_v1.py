@@ -307,7 +307,28 @@ def main():
     vae_scale_factor = getattr(pipe, 'vae_scale_factor', 8)
     lat_h = 2 * (args.height // (vae_scale_factor * 2))
     lat_w = 2 * (args.width // (vae_scale_factor * 2))
-    print(f"  Latent: {lat_h}x{lat_w} → packed seq_len={(lat_h//2)*(lat_w//2)}\n")
+    seq_img_len = (lat_h // 2) * (lat_w // 2)
+    print(f"  Latent: {lat_h}x{lat_w} → packed seq_len={seq_img_len}\n")
+
+    # ── WHERE: register spatial probe ──
+    probe = None
+    if args.probe_mode != "none" and not args.no_safety:
+        # Find a blocks container
+        blocks = None
+        for attr in ("transformer_blocks", "blocks", "single_transformer_blocks"):
+            if hasattr(transformer, attr):
+                cand = getattr(transformer, attr)
+                if cand is not None and len(cand) > 0:
+                    blocks = cand
+                    break
+        if blocks is None:
+            print("  [probe] WARN: no transformer blocks found; disabling probe")
+        else:
+            idx = args.probe_block_idx if args.probe_block_idx >= 0 \
+                else len(blocks) + args.probe_block_idx
+            idx = max(0, min(len(blocks) - 1, idx))
+            probe = FluxSpatialProbe(blocks[idx], seq_img_len=seq_img_len)
+            print(f"  [probe] mode={args.probe_mode} hooked block {idx}/{len(blocks)-1}")
 
     cas = GlobalCAS(args.cas_threshold) if not args.no_safety else None
     outdir = Path(args.outdir)
