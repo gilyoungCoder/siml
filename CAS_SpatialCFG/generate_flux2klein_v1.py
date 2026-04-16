@@ -394,6 +394,8 @@ def main():
 
                 else:
                     # ── SafeGen: multi-pass ──
+                    if probe is not None:
+                        probe.reset()
                     with torch.no_grad():
                         en = transformer(
                             hidden_states=lat_in, timestep=ts / 1000,
@@ -403,6 +405,9 @@ def main():
                             return_dict=False,
                         )[0][:, :latents.shape[1]]
 
+                        if probe is not None:
+                            probe.active = True
+                            probe.tag = "prompt"
                         ep = transformer(
                             hidden_states=lat_in, timestep=ts / 1000,
                             guidance=None,
@@ -410,7 +415,12 @@ def main():
                             txt_ids=text_ids_prompt, img_ids=latent_ids,
                             return_dict=False,
                         )[0][:, :latents.shape[1]]
+                        if probe is not None:
+                            probe.active = False
 
+                        if probe is not None and args.probe_mode == "contrast":
+                            probe.active = True
+                            probe.tag = "target"
                         et = transformer(
                             hidden_states=lat_in, timestep=ts / 1000,
                             guidance=None,
@@ -418,6 +428,8 @@ def main():
                             txt_ids=text_ids_null, img_ids=latent_ids,
                             return_dict=False,
                         )[0][:, :latents.shape[1]]
+                        if probe is not None:
+                            probe.active = False
 
                     ec = en + args.cfg_scale * (ep - en)
                     cv, trig = cas.compute(ep, en, et)

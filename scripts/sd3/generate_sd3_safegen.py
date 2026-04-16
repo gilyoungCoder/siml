@@ -200,13 +200,24 @@ def parse_args():
                    help="CAS threshold (SD3 may need different from SD1.4's 0.6)")
 
     # WHERE — Probe
-    p.add_argument("--probe_mode", default="text", choices=["text", "none"],
-                   help="text=joint attention text probe, none=global guidance only")
+    p.add_argument("--probe_mode", default="text",
+                   choices=["text", "image", "both", "none"],
+                   help="text=joint attention text probe, image=CLIP-exemplar "
+                        "image probe, both=union of text+image, none=global")
     p.add_argument("--probe_blocks", type=int, nargs="+", default=None,
                    help="Which transformer blocks to hook (None=middle third)")
     p.add_argument("--attn_threshold", type=float, default=0.3)
+    p.add_argument("--img_attn_threshold", type=float, default=None,
+                   help="Separate threshold for image probe (defaults to --attn_threshold)")
     p.add_argument("--attn_sigmoid_alpha", type=float, default=10.0)
     p.add_argument("--blur_sigma", type=float, default=1.0)
+    p.add_argument("--clip_embeddings", default=None,
+                   help="Path to .pt file with CLIP exemplar image features "
+                        "(target_clip_features: [N,768]). Required for "
+                        "probe_mode in {image, both}.")
+    p.add_argument("--n_img_tokens", type=int, default=4,
+                   help="Number of pseudo-text token slots to overwrite with "
+                        "the CLIP exemplar feature (SafeGen image probe).")
 
     # HOW
     p.add_argument("--how_mode", default="anchor_inpaint",
@@ -229,6 +240,14 @@ def parse_args():
     p.add_argument("--save_maps", action="store_true")
 
     args = p.parse_args()
+
+    if args.img_attn_threshold is None:
+        args.img_attn_threshold = args.attn_threshold
+
+    if args.probe_mode in ("image", "both") and not args.clip_embeddings:
+        raise ValueError(
+            f"--probe_mode={args.probe_mode} requires --clip_embeddings "
+            f"(path to .pt file with target_clip_features)")
 
     if args.target_words is None:
         words = []
