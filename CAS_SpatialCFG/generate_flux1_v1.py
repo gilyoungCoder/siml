@@ -45,6 +45,12 @@ from PIL import Image
 import torch, torch.nn.functional as F, numpy as np
 from tqdm import tqdm
 
+from attention_probe_flux import (
+    FluxSpatialProbe,
+    compute_flux_spatial_mask,
+    mask_to_packed_seq,
+)
+
 
 # ── WHEN: Global CAS ──
 class GlobalCAS:
@@ -227,6 +233,20 @@ def parse_args():
     p.add_argument("--anchor_concepts", nargs="+",
                    default=["clothed person", "person wearing clothes"])
 
+    # WHERE: spatial probe
+    p.add_argument("--probe_mode", default="none",
+                   choices=["none", "text", "image", "both", "contrast"],
+                   help="text: CLIP text embedding of target concept; "
+                        "image: CLIP vision exemplar embeddings; "
+                        "both: union (max) of text and image masks; "
+                        "contrast: prompt-vs-target patch contrast.")
+    p.add_argument("--probe_block_idx", type=int, default=-1,
+                   help="Which transformer block to hook (negative = from end).")
+    p.add_argument("--attn_threshold", type=float, default=0.1,
+                   help="Floor value for normalised spatial mask.")
+    p.add_argument("--clip_embeddings", default=None,
+                   help="Path to CLIP exemplar embeddings .pt (for image probe).")
+
     # Device
     p.add_argument("--device", default="cuda:0")
     p.add_argument("--dtype", default="bfloat16",
@@ -339,6 +359,79 @@ def main():
     print(f"  Latent: [{num_channels_latents}, {lat_h}, {lat_w}] "
           f"-> packed seq_len={packed_seq_len}\n")
 
+    # ── WHERE: register spatial probe ──
+    probe = None
+    clip_text_tgt_vec = None   # [C_clip] target vector from CLIP text encoder
+    clip_img_tgt_vec = None    # [C_clip] target vector from CLIP vision exemplars
+    if args.probe_mode != "none" and not args.no_safety:
+        # Prefer single-stream blocks: output is the full joint [txt; img] sequence,
+        # so our hook can simply take the LAST seq_img tokens as image features.
+        blocks = None
+        for attr in ("single_transformer_blocks", "transformer_blocks", "blocks"):
+            if hasattr(transformer, attr):
+                cand = getattr(transformer, attr)
+                if cand is not None and len(cand) > 0:
+                    blocks = cand
+                    break
+        if blocks is None:
+            print("  [probe] WARN: no transformer blocks found; disabling probe")
+        else:
+            idx = args.probe_block_idx if args.probe_block_idx >= 0 \
+                else len(blocks) + args.probe_block_idx
+            idx = max(0, min(len(blocks) - 1, idx))
+            probe = FluxSpatialProbe(blocks[idx], seq_img_len=packed_seq_len)
+            print(f"  [probe] mode={args.probe_mode} hooked block {idx}/{len(blocks)-1}")
+
+        # ── Build target vectors for text / image probes ──
+        # Text probe: CLIP-L text embedding of target concept (pooled 768-d)
+        if args.probe_mode in ("text", "both"):
+            try:
+                with torch.no_grad():
+                    tok = pipe.tokenizer(
+                        args.target_concepts,
+                        padding="max_length",
+                        max_length=pipe.tokenizer.model_max_length,
+                        truncation=True,
+                        return_tensors="pt",
+                    )
+                    clip_out = pipe.text_encoder(
+                        tok.input_ids.to(device),
+                        attention_mask=tok.attention_mask.to(device)
+                        if "attention_mask" in tok else None,
+                        output_hidden_states=False,
+                    )
+                    # pooler_output: [N, 768]
+                    pooled = getattr(clip_out, "pooler_output", None)
+                    if pooled is None:
+                        pooled = clip_out[1] if len(clip_out) > 1 else clip_out[0].mean(dim=1)
+                    clip_text_tgt_vec = pooled.mean(dim=0)  # [768]
+                    print(f"  [probe] CLIP text target vec: shape={tuple(clip_text_tgt_vec.shape)}")
+            except Exception as e:
+                print(f"  [probe] WARN: CLIP text encode failed ({e}); text probe disabled")
+                clip_text_tgt_vec = None
+
+        # Image probe: load CLIP vision exemplar features
+        if args.probe_mode in ("image", "both"):
+            if args.clip_embeddings is None:
+                print("  [probe] WARN: --clip_embeddings not given; image probe disabled")
+            else:
+                try:
+                    cdata = torch.load(args.clip_embeddings, map_location="cpu",
+                                       weights_only=False)
+                    feats = cdata.get("target_clip_features", None)
+                    if feats is None:
+                        feats = cdata.get("target_clip_embeds", None)
+                        if feats is not None and feats.dim() == 3:
+                            feats = feats.mean(dim=1)  # [N, C]
+                    if feats is None:
+                        print("  [probe] WARN: no target CLIP features in file; image probe disabled")
+                    else:
+                        clip_img_tgt_vec = feats.float().mean(dim=0).to(device)  # [C]
+                        print(f"  [probe] CLIP image target vec: shape={tuple(clip_img_tgt_vec.shape)}")
+                except Exception as e:
+                    print(f"  [probe] WARN: load CLIP embeddings failed ({e})")
+                    clip_img_tgt_vec = None
+
     cas = GlobalCAS(args.cas_threshold) if not args.no_safety else None
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
@@ -410,7 +503,12 @@ def main():
                     # ep: prompt prediction (guidance embedded — IS the guided pred)
                     # en: null prediction (no guidance embedding for concept passes)
                     # et: target concept prediction
+                    if probe is not None:
+                        probe.reset()
                     with torch.no_grad():
+                        if probe is not None:
+                            probe.active = True
+                            probe.tag = "prompt"
                         ep = transformer(
                             hidden_states=lat_in,
                             timestep=timestep / 1000,
@@ -421,6 +519,8 @@ def main():
                             img_ids=latent_image_ids,
                             return_dict=False,
                         )[0]
+                        if probe is not None:
+                            probe.active = False
 
                         # Null pass — use guidance tensor (required by transformer API)
                         en = transformer(
@@ -434,6 +534,9 @@ def main():
                             return_dict=False,
                         )[0]
 
+                        if probe is not None and args.probe_mode == "contrast":
+                            probe.active = True
+                            probe.tag = "target"
                         et = transformer(
                             hidden_states=lat_in,
                             timestep=timestep / 1000,
@@ -444,10 +547,64 @@ def main():
                             img_ids=latent_image_ids,
                             return_dict=False,
                         )[0]
+                        if probe is not None:
+                            probe.active = False
 
                     cv, trig = cas.compute(ep, en, et)
                     cas_values.append(cv)
                     eps_final = ep
+
+                    # ── Compute spatial mask from probe captures (if enabled) ──
+                    spatial_mask_packed = None
+                    if probe is not None and trig and "prompt" in probe.captures:
+                        feat_p = probe.captures["prompt"]  # [B, seq_img, C]
+                        masks_2d = []
+
+                        if args.probe_mode == "contrast" and "target" in probe.captures:
+                            m = compute_flux_spatial_mask(
+                                feat_p, target_feat=probe.captures["target"],
+                                threshold=args.attn_threshold, mode="contrast")
+                            masks_2d.append(m)
+
+                        if args.probe_mode in ("text", "both"):
+                            # Prefer CLIP-L text vector; fall back to T5-avg of
+                            # pe_target (joint-text-stream mean) if dims mismatch.
+                            tv = None
+                            if clip_text_tgt_vec is not None and \
+                               clip_text_tgt_vec.shape[-1] == feat_p.shape[-1]:
+                                tv = clip_text_tgt_vec.to(feat_p.device, feat_p.dtype)
+                            else:
+                                tv_t5 = pe_target.to(feat_p.device, feat_p.dtype).mean(dim=1)
+                                if tv_t5.shape[-1] == feat_p.shape[-1]:
+                                    tv = tv_t5.squeeze(0) if tv_t5.dim() == 2 else tv_t5
+                            m = compute_flux_spatial_mask(
+                                feat_p, target_vec=tv,
+                                threshold=args.attn_threshold, mode="text")
+                            masks_2d.append(m)
+
+                        if args.probe_mode in ("image", "both"):
+                            tv = None
+                            if clip_img_tgt_vec is not None and \
+                               clip_img_tgt_vec.shape[-1] == feat_p.shape[-1]:
+                                tv = clip_img_tgt_vec.to(feat_p.device, feat_p.dtype)
+                            # If CLIP (768) != feat dim (e.g. 3072), fall back to
+                            # self-energy via target_vec=None.
+                            m = compute_flux_spatial_mask(
+                                feat_p, target_vec=tv,
+                                threshold=args.attn_threshold, mode="text")
+                            masks_2d.append(m)
+
+                        if masks_2d:
+                            mask2d = torch.stack(masks_2d, dim=0).max(dim=0)[0] \
+                                if len(masks_2d) > 1 else masks_2d[0]
+                            spatial_mask_packed = mask_to_packed_seq(
+                                mask2d, seq_img_len=feat_p.shape[1]
+                            ).to(ep.device, ep.dtype)
+                            if args.debug and step_idx % 10 == 0:
+                                print(f"  [probe] step={step_idx} mask "
+                                      f"min={mask2d.min().item():.3f} "
+                                      f"max={mask2d.max().item():.3f} "
+                                      f"mean={mask2d.mean().item():.3f}")
 
                     if trig:
                         if args.family_guidance and family_names:
@@ -493,9 +650,10 @@ def main():
                                     return_dict=False,
                                 )[0]
 
+                            m_use = spatial_mask_packed if spatial_mask_packed is not None else 1.0
                             eps_final = apply_guidance(
                                 ep, en, et, ea,
-                                mask=1.0, how=args.how_mode,
+                                mask=m_use, how=args.how_mode,
                                 safety_scale=args.safety_scale)
 
                         guided_count += 1
@@ -535,6 +693,9 @@ def main():
 
     json.dump(stats, open(outdir / "generation_stats.json", "w"), indent=2)
     json.dump(vars(args), open(outdir / "args.json", "w"), indent=2)
+
+    if probe is not None:
+        probe.remove()
 
     gi = sum(1 for s in stats if s["guided"] > 0)
     print(f"\nDone! {len(stats)} images, guided {gi}/{len(stats)}")

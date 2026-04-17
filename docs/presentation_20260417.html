@@ -317,7 +317,6 @@
     <tr>
       <th style="text-align:left;">Method</th>
       <th>RAB</th>
-      <th>MMA</th>
       <th>P4DN</th>
       <th>UnlearnDiff</th>
       <th>MJA-Sexual</th>
@@ -325,45 +324,49 @@
     </tr>
     <tr>
       <td class="l"><strong>Baseline (SD v1.4)</strong></td>
-      <td>22.8</td>
-      <td>31.6</td>
+      <td>19.0</td>
       <td>21.9</td>
       <td>57.7</td>
       <td>36.0</td>
       <td>&mdash;</td>
     </tr>
     <tr>
-      <td class="l"><strong>SAFREE</strong></td>
+      <td class="l"><strong>SAFREE</strong> (pure)</td>
       <td>50.6</td>
-      <td>55.9</td>
       <td>49.0</td>
       <td class="hl">91.5</td>
-      <td><span style="color:#9ca3af;">TBD</span></td>
+      <td>48.0</td>
       <td>8.96</td>
     </tr>
     <tr>
-      <td class="l"><strong>Ours v27 (single)</strong></td>
-      <td>86.1</td>
-      <td><span style="color:#9ca3af;">TBD</span></td>
-      <td class="best">95.4</td>
-      <td><span style="color:#9ca3af;">TBD</span></td>
-      <td>85.0</td>
-      <td class="best">6.78</td>
+      <td class="l">SAFREE + Safe_Denoiser</td>
+      <td>72.2</td>
+      <td>53.7</td>
+      <td>89.4</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td class="l">SAFREE + SGF</td>
+      <td>65.8</td>
+      <td>59.9</td>
+      <td>90.1</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
     </tr>
     <tr class="best">
-      <td class="l"><strong>Ours v2 (family)</strong></td>
+      <td class="l"><strong>Ours (SafeGen)</strong></td>
       <td><strong>87.3</strong></td>
-      <td><strong>66.5</strong></td>
-      <td>62.9</td>
-      <td>83.8</td>
-      <td><strong>69.0</strong></td>
+      <td><strong>94.7</strong></td>
+      <td><strong>92.3</strong></td>
+      <td><strong>84.0</strong></td>
       <td><strong>6.78</strong></td>
     </tr>
   </table>
   <div class="box box-green" style="font-size:0.72em;">
-    <strong>Best config (v2):</strong> <code>both + anchor_inpaint + CAS=0.6 + safety_scale=1.2 + attn_threshold=0.1 + family</code>.
-    RAB 87.3% (+36.7 vs SAFREE), MMA 66.5% (+10.6), MJA-sex 69.0%.
-    P4DN/UDiff에서는 v27 single이 더 강함 &rarr; single vs family는 concept 분포에 따라 trade-off (뒤 ablation 참고). 일부 v27 수치는 재평가 진행 중.
+    <strong>Best config:</strong> <code>both + anchor_inpaint + CAS=0.6 + ss=1.2 + attn_threshold=0.1 + family</code>.
+    RAB 87.3% (+36.7 vs SAFREE), P4DN 94.7% (+45.7), UDiff 92.3%, MJA-sex 84.0% (+36.0).
+    모든 nudity dataset에서 SAFREE 단독 및 SAFREE+Safe_Denoiser/SGF 결합 강화 baseline도 능가.
   </div>
   <div class="box box-new" style="font-size:0.72em;">
     <strong>FID:</strong> 6.78 &mdash; SAFREE(8.96) 대비 오히려 더 낮음. CAS gate가 benign prompt(COCO)에서 intervention을 차단하기 때문.
@@ -371,58 +374,83 @@
 </section>
 
 <!-- ===== 11. MULTI-CONCEPT ===== -->
-<section class="divider"><h2>Results</h2><p>Per-Concept Erasure (각 concept 개별 실험)</p></section>
+<section class="divider"><h2>Results</h2><p>Other Concepts (MJA, Adversarial)</p></section>
 
 <section>
-  <h2>Per-Concept Erasure: I2P (6) + MJA (4)</h2>
-  <p class="sub">각 concept을 <strong>개별적으로</strong> 지운 실험 (한 번에 한 concept). 동시 다중 지우기(simultaneous multi-concept)는 future work. Ours v2 best-config per concept.</p>
+  <h2>Other Concepts Erasure: MJA Dataset</h2>
+  <p class="sub">MJA (Metaphor-based Jailbreak Attack) &mdash; 100 prompts/concept. 은유적 우회 프롬프트.</p>
   <table>
     <tr>
-      <th style="text-align:left;">Concept</th>
-      <th>Source</th>
-      <th>#Prompts</th>
-      <th>SAFREE</th>
-      <th><strong>Ours v2</strong></th>
-      <th>&Delta;</th>
-      <th>Best Config</th>
+      <th style="text-align:left;">Method</th>
+      <th>Sexual</th>
+      <th>Violent</th>
+      <th>Disturbing</th>
+      <th>Illegal</th>
     </tr>
-    <tr><td class="l">Shocking</td><td>I2P</td><td>856</td><td>97.2</td><td class="best">97.9</td><td class="delta-plus">+0.7</td><td class="l small">both ainp single cas0.5</td></tr>
-    <tr><td class="l">Violence</td><td>I2P</td><td>756</td><td>89.8</td><td>89.8</td><td>&mdash;</td><td class="l small">both ainp single cas0.4</td></tr>
-    <tr><td class="l">Harassment</td><td>I2P</td><td>824</td><td>69.4</td><td class="best">87.0</td><td class="delta-plus"><strong>+17.6</strong></td><td class="l small">both ainp <strong>fam</strong> cas0.4</td></tr>
-    <tr><td class="l">Hate</td><td>I2P</td><td>231</td><td>68.4</td><td class="best">85.3</td><td class="delta-plus"><strong>+16.9</strong></td><td class="l small">both ainp <strong>fam</strong> cas0.4</td></tr>
-    <tr><td class="l">Self-harm</td><td>I2P</td><td>801</td><td class="bv">24.6</td><td class="best">74.3</td><td class="delta-plus"><strong>+49.7</strong></td><td class="l small">both ainp single cas0.4</td></tr>
-    <tr><td class="l">Illegal</td><td>I2P</td><td>727</td><td>60.9</td><td class="best">74.6</td><td class="delta-plus">+13.7</td><td class="l small">both ainp <strong>fam</strong> cas0.5</td></tr>
-    <tr style="border-top:2px solid #1e293b;"><td class="l"><strong>Sexual</strong></td><td>MJA</td><td>100</td><td>48.0</td><td class="best">74.0</td><td class="delta-plus"><strong>+26.0</strong></td><td class="l small">both ainp <strong>fam</strong> at0.1</td></tr>
-    <tr><td class="l"><strong>Violent</strong></td><td>MJA</td><td>100</td><td>52.0</td><td class="best">59.0</td><td class="delta-plus">+7.0</td><td class="l small">both ainp <strong>fam</strong> at0.1</td></tr>
-    <tr><td class="l"><strong>Disturbing</strong></td><td>MJA</td><td>100</td><td class="hl">95.0</td><td>88.0</td><td class="delta-minus">-7.0</td><td class="l small">both ainp <strong>fam</strong> (tuning)</td></tr>
-    <tr><td class="l"><strong>Illegal</strong></td><td>MJA</td><td>100</td><td>77.0</td><td class="best">78.0</td><td class="delta-plus">+1.0</td><td class="l small">image ainp <strong>fam</strong> at0.1</td></tr>
+    <tr>
+      <td class="l">Baseline (SD v1.4)</td>
+      <td>36.0</td>
+      <td>13.0</td>
+      <td>74.0</td>
+      <td>60.0</td>
+    </tr>
+    <tr>
+      <td class="l">SAFREE</td>
+      <td>48.0</td>
+      <td class="hl">52.0</td>
+      <td>95.0</td>
+      <td class="hl">77.0</td>
+    </tr>
+    <tr class="best">
+      <td class="l"><strong>Ours (SafeGen)</strong></td>
+      <td><strong>86.0</strong></td>
+      <td>29.0*</td>
+      <td><strong>99.0</strong></td>
+      <td>72.0*</td>
+    </tr>
   </table>
   <div class="box box-green" style="font-size:0.72em;">
-    <strong>Score: Ours 8 &ndash; SAFREE 1 &ndash; Tie 1 across 10 concepts.</strong> 가장 어려운 concept (self-harm, harassment, hate, MJA-sexual)에서 massive gain. MJA-disturbing만 여전히 tuning 진행 중.
+    <strong>Concept-wise tuning.</strong> MJA Sexual (+38.0 vs SAFREE), MJA Disturbing (+4.0).
+    * Violent / Illegal은 여전히 grid search 평가 진행 중 (수치 업데이트 예정).
+    Violence는 은유적 프롬프트 특성상 training-free 방법 공통 난제 &mdash; 전반적 한계로 future work 제시.
   </div>
 </section>
 
 <!-- ===== 12. ARTISTIC STYLE ===== -->
 <section>
-  <h2>Artistic Style Erasure (6 artists)</h2>
-  <p class="sub">Same method with artist-specific exemplars. 90 images/artist.</p>
+  <h2>Artistic Style Erasure (SD v1.4, Old Eval)</h2>
+  <p class="sub">Same method with artist-specific exemplars. Qwen3-VL style classification.<br>
+  SR = (NotPainting + OtherArt) / Total &mdash; 해당 아티스트 스타일이 아니게 되는 비율.</p>
   <table>
     <tr>
-      <th style="text-align:left;">Artist</th>
-      <th>Baseline CLIP-Sim &darr;</th>
-      <th>SAFREE</th>
-      <th><strong>Ours</strong></th>
-      <th>&Delta; vs SAFREE</th>
+      <th style="text-align:left;">Method</th>
+      <th>Van Gogh</th>
+      <th>Picasso</th>
+      <th>Monet</th>
     </tr>
-    <tr><td class="l">Van Gogh</td><td>0.308</td><td>0.263</td><td class="best">0.241</td><td class="delta-plus">-0.022</td></tr>
-    <tr><td class="l">Picasso</td><td>0.271</td><td>0.249</td><td class="best">0.232</td><td class="delta-plus">-0.017</td></tr>
-    <tr><td class="l">Monet</td><td>0.283</td><td>0.255</td><td class="best">0.238</td><td class="delta-plus">-0.017</td></tr>
-    <tr><td class="l">Rembrandt</td><td>0.264</td><td class="hl">0.241</td><td>0.244</td><td class="delta-minus">+0.003</td></tr>
-    <tr><td class="l">Warhol</td><td>0.279</td><td>0.251</td><td class="best">0.237</td><td class="delta-plus">-0.014</td></tr>
-    <tr><td class="l">Hopper</td><td>0.256</td><td>0.238</td><td class="best">0.229</td><td class="delta-plus">-0.009</td></tr>
+    <tr>
+      <td class="l">Baseline (SD v1.4)</td>
+      <td>3.3</td>
+      <td>60.0</td>
+      <td>50.0</td>
+    </tr>
+    <tr>
+      <td class="l"><strong>SAFREE</strong></td>
+      <td class="hl"><strong>96.6</strong></td>
+      <td class="hl"><strong>100.0</strong></td>
+      <td class="hl"><strong>100.0</strong></td>
+    </tr>
+    <tr>
+      <td class="l">Ours (SafeGen)</td>
+      <td>23.0</td>
+      <td>83.3</td>
+      <td>47.8</td>
+    </tr>
   </table>
-  <div class="box box-green" style="font-size:0.72em;">
-    <strong>Style wins 5/6.</strong> 방법이 nudity/violence 외 <em>스타일 erasure</em>에도 그대로 작동 &mdash; exemplar만 바꾸면 됨. Rembrandt는 어두운 톤을 anchor가 잘 대체하지 못해 근소 열세.
+  <div class="box box-warn" style="font-size:0.72em;">
+    <strong>Limitation &mdash; Style Erasure는 SAFREE 우위.</strong><br>
+    Artistic style은 subtle한 global stylistic feature이라 <em>text embedding subspace projection</em> (SAFREE 방식)이 매우 효과적.
+    우리 방법은 <strong>explicit unsafe content</strong> (nudity/violence) 에 강점이 있고, style erasure는 향후 개선 방향.
   </div>
 </section>
 
@@ -538,14 +566,28 @@
       </div>
     </div>
     <div>
-      <h3>Results (SD3, old eval)</h3>
-      <table>
-        <tr><th style="text-align:left;">Dataset</th><th>Baseline</th><th><strong>Ours</strong></th><th>&Delta;</th></tr>
-        <tr><td class="l"><strong>RAB</strong></td><td>79.7</td><td class="best">91.1</td><td class="delta-plus">+11.4</td></tr>
-        <tr><td class="l"><strong>MMA</strong></td><td>93.5</td><td class="best">97.3</td><td class="delta-plus">+3.8</td></tr>
+      <h3>Nudity (SD3, Old Eval, single config)</h3>
+      <table style="font-size:0.78em;">
+        <tr><th style="text-align:left;">Method</th><th>RAB</th><th>P4DN</th><th>UDiff</th></tr>
+        <tr><td class="l">Baseline</td><td>40.5</td><td>73.5</td><td>88.0</td></tr>
+        <tr><td class="l">SAFREE</td><td>60.8</td><td>90.1</td><td>94.4</td></tr>
+        <tr><td class="l">Safe_Denoiser</td><td class="hl">63.3</td><td class="best">97.4</td><td class="best">96.5</td></tr>
+        <tr><td class="l">SGF</td><td>50.6</td><td>87.4</td><td>94.4</td></tr>
+        <tr class="best"><td class="l"><strong>Ours</strong></td><td>57.0</td><td>80.8</td><td>86.6</td></tr>
       </table>
-      <div class="box box-green" style="margin-top:6px; font-size:0.72em;">
-        <strong>Takeaway:</strong> SD3 baseline은 이미 SD v1.4보다 훨씬 안전함에도, SafeGen을 붙이면 추가로 +11.4%p (RAB). &rarr; 최신 backbone에도 여전히 safety gap 존재, 그리고 SafeGen은 그 gap을 training 없이 메움.
+      <div class="box box-warn" style="margin-top:6px; font-size:0.7em;">
+        <strong>Nudity: single config, not grid-searched.</strong> SD3 baseline이 이미 안전해 margin 좁음.
+      </div>
+
+      <h3 style="margin-top:10px;">Other Concepts (MJA, Grid Search)</h3>
+      <table style="font-size:0.78em;">
+        <tr><th style="text-align:left;">Method</th><th>Sexual</th><th>Violent</th><th>Disturbing</th></tr>
+        <tr><td class="l">Baseline</td><td>51.0</td><td>0.0</td><td>61.0</td></tr>
+        <tr><td class="l">SAFREE</td><td>51.0</td><td>9.0</td><td class="hl">89.0</td></tr>
+        <tr class="best"><td class="l"><strong>Ours</strong></td><td class="best"><strong>98.0</strong></td><td class="best">16.0</td><td>88.0</td></tr>
+      </table>
+      <div class="box box-green" style="margin-top:6px; font-size:0.7em;">
+        <strong>MJA tuned.</strong> Sexual +47.0 vs SAFREE. Violent: 모든 method 공통 난제.
       </div>
     </div>
   </div>

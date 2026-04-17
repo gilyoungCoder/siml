@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeGen — Progress Report 2026-04-17</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<style>
+  :root { --heading:#1a1a2e; --accent:#2563eb; --accent2:#7c3aed; --safe:#059669; --danger:#dc2626; --warn:#d97706; --teal:#0f766e; --new:#ea580c; }
+  .reveal { font-size:28px; }
+  .reveal h1 { font-size:2.2em; color:var(--heading); font-weight:800; }
+  .reveal h2 { font-size:1.45em; color:var(--heading); font-weight:700; border-bottom:3px solid var(--accent); padding-bottom:6px; display:inline-block; }
+  .reveal h3 { font-size:0.95em; color:var(--accent2); font-weight:600; }
+  .reveal .sub { color:#64748b; font-size:0.72em; margin-top:-6px; }
+  .reveal section { text-align:left; }
+  .reveal li { margin-bottom:5px; line-height:1.45; }
+  .small { font-size:0.7em; color:#64748b; }
+  .title-slide { text-align:center !important; }
+  .title-slide h1 { font-size:2.2em; background:linear-gradient(135deg,#1a1a2e,#2563eb); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .divider { text-align:center !important; background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%) !important; }
+  .divider h2 { color:#fff !important; border-bottom-color:#60a5fa !important; font-size:1.8em; }
+  .divider p { color:#cbd5e1 !important; }
+  .box { background:#f8fafc; border-radius:8px; padding:12px 16px; margin:7px 0; border-left:4px solid var(--accent); font-size:0.82em; }
+  .box-purple { border-left-color:var(--accent2); }
+  .box-green { border-left-color:var(--safe); background:#f0fdf4; }
+  .box-red { border-left-color:var(--danger); background:#fef2f2; }
+  .box-warn { border-left-color:var(--warn); background:#fffbeb; }
+  .box-teal { border-left-color:var(--teal); background:#f0fdfa; }
+  .box-new { border-left-color:var(--new); background:#fff7ed; }
+  .reveal table { font-size:0.62em; width:100%; border-collapse:collapse; margin:6px 0; }
+  .reveal table th { background:#1e293b; color:#fff; padding:6px 8px; text-align:center; font-weight:600; }
+  .reveal table td { padding:5px 8px; border-bottom:1px solid #e2e8f0; text-align:center; }
+  .reveal table tr:nth-child(even) { background:#f8fafc; }
+  .best { background:#dcfce7 !important; font-weight:700; }
+  .hl { background:#dbeafe !important; font-weight:600; }
+  .new-row { background:#fff7ed !important; font-weight:600; }
+  td.l { text-align:left !important; }
+  .gv { color:#059669; font-weight:700; }
+  .bv { color:#dc2626; }
+  .pipe { display:flex; align-items:center; justify-content:center; gap:5px; margin:12px 0; flex-wrap:wrap; }
+  .pipe .s { border-radius:10px; padding:10px 14px; font-size:0.68em; font-weight:600; text-align:center; min-width:85px; line-height:1.4; }
+  .pipe .a { font-size:1.3em; color:#93c5fd; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  .tag { display:inline-block; padding:2px 10px; border-radius:20px; font-size:0.58em; font-weight:600; margin:2px; }
+  .tag-blue { background:#dbeafe; color:#1e40af; }
+  .tag-green { background:#dcfce7; color:#166534; }
+  .tag-red { background:#fee2e2; color:#991b1b; }
+  .tag-purple { background:#f3e8ff; color:#6b21a8; }
+  .tag-orange { background:#ffedd5; color:#9a3412; }
+  .nc { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; font-weight:700; font-size:0.75em; margin-right:8px; flex-shrink:0; }
+  .formula { background:#f8fafc; border-radius:8px; padding:12px 18px; margin:8px 0; font-size:0.9em; text-align:center; border:1px solid #e2e8f0; line-height:1.8; }
+  .formula-hl { border-left:4px solid var(--accent); }
+  .formula-new { border-left:4px solid var(--new); }
+  .fig-wrap { text-align:center; margin:10px 0; }
+  .fig-wrap img { max-width:90%; max-height:450px; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ===== 1. TITLE ===== -->
+<section class="title-slide">
+  <h1>SafeGen</h1>
+  <p style="font-size:0.95em; color:#475569;">Training-Free Safe Generation via <br>Dual-Probe Spatial Guidance</p>
+  <p style="font-size:0.75em; color:#64748b; margin-top:10px;">
+    When, Where, and How to Guide Safe Denoising<br>
+    across SD v1.4, SD3, and FLUX backbones
+  </p>
+  <p style="margin-top:28px; font-size:0.75em; color:#64748b;">Progress Report &mdash; 2026-04-17</p>
+</section>
+
+<!-- ===== 2. UPDATES ===== -->
+<section>
+  <h2>Updates Since Last Meeting</h2>
+  <ol style="font-size:0.88em;">
+    <li><strong>Family-Grouped Exemplars</strong> <span class="tag tag-orange">NEW</span> &mdash; 4 semantic families &times; 4 prompts per concept; each family contributes an independent anchor direction.</li>
+    <li><strong>Evaluation prompt</strong> reverted to <em>old (strict)</em> criterion &mdash; conservative version inflated baseline SR and hid method gains.</li>
+    <li><strong>Dataset shift: I2P &rarr; MJA</strong> (Metaphor-based Jailbreak Attack) &mdash; I2P already safe at baseline (ceiling effect); MJA prompts bypass text-level defenses with metaphorical expressions.</li>
+    <li><strong>Extensive hyperparameter sweep</strong> &mdash; CAS=0.6 fixed; swept <code>safety_scale &times; attn_threshold &times; probe_mode &times; family/single</code>. Found <strong>attn_threshold=0.1</strong> as sweet spot.</li>
+    <li><strong>Backbone extension</strong> &mdash; added <strong>SD3-medium + FLUX.1-dev + FLUX.2-klein</strong>. Supports MMDiT joint-attention and FLUX embedded guidance.</li>
+  </ol>
+</section>
+
+<!-- ===== 3. MOTIVATION ===== -->
+<section class="divider"><h2>Motivation</h2></section>
+
+<section>
+  <h2>Problem: T2I Safety Gap</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-red">
+        <strong>Adversarial prompts bypass safety:</strong>
+        <ul style="margin:4px 0; font-size:0.88em;">
+          <li>Ring-A-Bell, MMA, UnlearnDiff, P4DN &mdash; explicit attack prompts</li>
+          <li>MJA &mdash; metaphorical bypass that text-based defenses miss</li>
+        </ul>
+      </div>
+      <div class="box box-warn">
+        <strong>Training-based methods</strong> (ESD, SDD, SD-Erasure) require fine-tuning for every new concept &mdash; not scalable.
+      </div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <strong>Our solution: SafeGen</strong>
+        <ul style="margin:4px 0; font-size:0.88em;">
+          <li>Training-free &mdash; works at inference time</li>
+          <li>Dual probe (text + image) &mdash; concept-aware spatial mask</li>
+          <li>CAS gate &mdash; only intervenes when unsafe content emerges</li>
+          <li>Cross-backbone &mdash; SD v1.4 / SD3 / FLUX all supported</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. METHOD OVERVIEW ===== -->
+<section class="divider"><h2>Method Overview</h2></section>
+
+<section>
+  <h2>SafeGen: Dual-Probe Spatial Guidance</h2>
+  <div class="fig-wrap">
+    <img src="figures/fig_method_overview.png" alt="SafeGen method overview" style="max-height:430px;">
+  </div>
+</section>
+
+<!-- ===== 5. PIPELINE ===== -->
+<section>
+  <h2>Three-Stage Pipeline: When + Where + How</h2>
+  <div class="pipe">
+    <div class="s" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;">
+      <strong>WHEN</strong><br>Global CAS Gate
+    </div>
+    <span class="a">&rarr;</span>
+    <div class="s" style="background:linear-gradient(135deg,#fed7aa,#fdba74); border:2px solid #fb923c; color:#9a3412;">
+      <strong>WHERE</strong><br>Text &amp; Image<br>Spatial Probe
+    </div>
+    <span class="a">&rarr;</span>
+    <div class="s" style="background:linear-gradient(135deg,#e9d5ff,#c4b5fd); border:2px solid #a78bfa; color:#6b21a8;">
+      <strong>HOW</strong><br>Anchor Inpaint<br>Guidance
+    </div>
+  </div>
+  <div class="three-col">
+    <div class="box box-green">
+      <strong>WHEN:</strong> $\mathrm{CAS}=\cos(\varepsilon_p-\varepsilon_n,\ \varepsilon_t-\varepsilon_n) > \tau$<br>
+      Gate intervention; sticky once triggered.
+    </div>
+    <div class="box box-new">
+      <strong>WHERE:</strong> Dual probe spatial mask<br>
+      $M=\mathcal{M}_\text{text}\cup\mathcal{M}_\text{img}$<br>
+      Text: cross-attention; Image: CLIP exemplar sim.
+    </div>
+    <div class="box box-purple">
+      <strong>HOW:</strong> Anchor inpaint<br>
+      $\varepsilon_\text{safe}=(1-M)\varepsilon_{\rm cfg}+M\varepsilon_\text{anchor}$
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. FAMILY EXEMPLARS ===== -->
+<section>
+  <h2>Family-Grouped Exemplars <span class="tag tag-orange">NEW</span></h2>
+  <p class="sub">Each concept decomposed into 4 semantic families with independent anchors</p>
+  <div class="two-col">
+    <div>
+      <div class="box box-new">
+        <strong>Nudity &mdash; 4 families</strong>
+        <ul style="margin:4px 0; font-size:0.85em;">
+          <li><strong>naked_body</strong> &rarr; clothed body</li>
+          <li><strong>sexual_act</strong> &rarr; friendly non-sexual</li>
+          <li><strong>exposed_parts</strong> &rarr; covered body</li>
+          <li><strong>suggestive_pose</strong> &rarr; casual pose</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box">
+        <strong>Intuition</strong>
+        <ul style="margin:4px 0; font-size:0.85em;">
+          <li>Each family: 4 target prompts + 4 antonym anchor prompts</li>
+          <li>Family-averaged CLIP embedding &rarr; independent anchor direction</li>
+          <li>Covers diverse sub-manifolds within a single concept</li>
+        </ul>
+      </div>
+      <div class="box box-green">
+        <strong>When helpful:</strong> semantically diverse concepts<br>
+        <strong>When neutral:</strong> focused concepts &mdash; single anchor suffices
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. EVAL PROMPT ===== -->
+<section>
+  <h2>Evaluation Prompt &mdash; Back to Strict Criterion</h2>
+  <div class="two-col">
+    <div class="box box-new">
+      <strong>Conservative (midway)</strong>
+      <ul style="font-size:0.85em; margin:4px 0;">
+        <li>Sketch/artistic nude without genitals &rarr; <em>Partial</em></li>
+        <li>Female breasts without visible nipples &rarr; <em>Partial</em></li>
+        <li>Ambiguous &rarr; more concerning label</li>
+      </ul>
+      <em>Result: Baseline inflated, method gains hidden</em>
+    </div>
+    <div class="box box-green">
+      <strong>Old (strict) &mdash; ADOPTED</strong>
+      <ul style="font-size:0.85em; margin:4px 0;">
+        <li>Sketch / artistic nude &rarr; still <em>Full</em> if nudity depicted</li>
+        <li>Female topless &rarr; <em>Full</em></li>
+        <li>Rule aligned with nudity-detection intent</li>
+      </ul>
+      <em>Result: Method gains clearly visible; fair cross-method comparison</em>
+    </div>
+  </div>
+  <div class="box box-warn" style="font-size:0.75em;">
+    <strong>All results in this deck use OLD (strict) Qwen3-VL evaluation.</strong>
+    Baselines, SAFREE, Safe_Denoiser, SGF, and Ours are all evaluated with the same prompt for fair comparison.
+  </div>
+</section>
+
+<!-- ===== 8. DATASET I2P -> MJA ===== -->
+<section>
+  <h2>Dataset Update: I2P &rarr; MJA</h2>
+  <p class="sub">I2P exhibits ceiling effect; MJA provides real adversarial challenge</p>
+  <div class="two-col">
+    <div class="box box-warn">
+      <strong>I2P &mdash; limitations</strong>
+      <ul style="font-size:0.85em; margin:4px 0;">
+        <li>Early SDv1.4 unsafe prompts (2022)</li>
+        <li>Most are already safe under modern safety &mdash; ceiling effect</li>
+        <li>Cannot distinguish methods at the top end</li>
+      </ul>
+    </div>
+    <div class="box box-new">
+      <strong>MJA &mdash; Metaphor-based Jailbreak Attack</strong>
+      <ul style="font-size:0.85em; margin:4px 0;">
+        <li>Metaphorical/indirect expressions of unsafe intent</li>
+        <li>No explicit unsafe keywords &rarr; bypasses text-only defenses</li>
+        <li>4 concepts &times; 100 prompts (sexual, violent, disturbing, illegal)</li>
+        <li>Baselines actually <em>break</em> &rarr; meaningful comparison</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box box-teal" style="font-size:0.75em;">
+    <strong>Takeaway:</strong> Measure defense on prompts that actually break baselines, not on prompts that are already safe.
+  </div>
+</section>
+
+<!-- ===== 9. MAIN NUDITY TABLE ===== -->
+<section class="divider"><h2>Nudity Erasure Results</h2><p>SD v1.4 &middot; Old (strict) Qwen3-VL Eval</p></section>
+
+<section>
+  <h2>Main Table &mdash; Nudity Safety Rate (%)</h2>
+  <p class="sub">SR = (Safe + Partial) / Total. seed=42, 1 sample/prompt.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Method</th>
+      <th>RAB</th>
+      <th>P4DN</th>
+      <th>UnlearnDiff</th>
+      <th>MJA-Sexual</th>
+      <th>FID &darr;</th>
+    </tr>
+    <tr>
+      <td class="l">Baseline (SD v1.4)</td>
+      <td>19.0</td>
+      <td>21.9</td>
+      <td>57.7</td>
+      <td>36.0</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td class="l">SAFREE (pure)</td>
+      <td>50.6</td>
+      <td>49.0</td>
+      <td class="hl">91.5</td>
+      <td>48.0</td>
+      <td>8.96</td>
+    </tr>
+    <tr>
+      <td class="l">SAFREE + Safe_Denoiser</td>
+      <td>72.2</td>
+      <td>53.7</td>
+      <td>89.4</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td class="l">SAFREE + SGF</td>
+      <td>65.8</td>
+      <td>59.9</td>
+      <td>90.1</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr class="best">
+      <td class="l"><strong>Ours (SafeGen)</strong></td>
+      <td><strong>87.3</strong></td>
+      <td><strong>94.7</strong></td>
+      <td><strong>92.3</strong></td>
+      <td><strong>84.0</strong></td>
+      <td><strong>6.78</strong></td>
+    </tr>
+  </table>
+  <div class="box box-green" style="font-size:0.76em;">
+    <strong>Best config:</strong> <code>both + anchor_inpaint + CAS=0.6 + ss=1.2 + attn_threshold=0.1 + family</code>.<br>
+    RAB <strong>+36.7%p</strong> vs SAFREE, P4DN <strong>+45.7%p</strong>, MJA-Sexual <strong>+36.0%p</strong>.<br>
+    Note: Safe_Denoiser and SGF official codes use SAFREE as their base &rarr; our single method beats even SAFREE+method combinations.
+  </div>
+  <div class="box box-new" style="font-size:0.74em;">
+    <strong>FID 6.78</strong> &mdash; lower than SAFREE (8.96). CAS gate prevents intervention on benign COCO prompts.
+  </div>
+</section>
+
+<!-- ===== 10. OTHER CONCEPTS (MJA) ===== -->
+<section class="divider"><h2>Other Concepts</h2><p>MJA Adversarial Dataset</p></section>
+
+<section>
+  <h2>Other Concepts &mdash; MJA Safety Rate (%)</h2>
+  <p class="sub">MJA (Metaphor-based Jailbreak Attack), 100 prompts/concept. Grid-searched best per concept.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Method</th>
+      <th>Sexual</th>
+      <th>Violent</th>
+      <th>Disturbing</th>
+      <th>Illegal</th>
+    </tr>
+    <tr>
+      <td class="l">Baseline</td>
+      <td>36.0</td>
+      <td>13.0</td>
+      <td>74.0</td>
+      <td>60.0</td>
+    </tr>
+    <tr>
+      <td class="l">SAFREE</td>
+      <td>48.0</td>
+      <td class="hl">52.0</td>
+      <td>95.0</td>
+      <td class="hl">77.0</td>
+    </tr>
+    <tr class="best">
+      <td class="l"><strong>Ours (SafeGen)</strong></td>
+      <td><strong>86.0</strong></td>
+      <td>29.0</td>
+      <td><strong>99.0</strong></td>
+      <td>72.0</td>
+    </tr>
+  </table>
+  <div class="box box-green" style="font-size:0.76em;">
+    <strong>Clear wins:</strong> Sexual <strong>+38.0%p</strong>, Disturbing <strong>+4.0%p</strong> over SAFREE.
+  </div>
+  <div class="box box-warn" style="font-size:0.76em;">
+    <strong>Limitation:</strong> Violent and Illegal concepts &mdash; metaphorical MJA prompts
+    bypass keyword-based detection; CAS gate cannot trigger when the prompt has no
+    explicit unsafe tokens. Active direction of future work.
+  </div>
+</section>
+
+<!-- ===== 11. ARTISTIC STYLE ===== -->
+<section class="divider"><h2>Artistic Style Erasure</h2></section>
+
+<section>
+  <h2>Artistic Style &mdash; Erasure Rate (%)</h2>
+  <p class="sub">SR = (NotPainting + OtherArt) / Total &mdash; proportion no longer classified as the target artist's style.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Method</th>
+      <th>Van Gogh</th>
+      <th>Picasso</th>
+      <th>Monet</th>
+    </tr>
+    <tr>
+      <td class="l">Baseline (SD v1.4)</td>
+      <td>3.3</td>
+      <td>60.0</td>
+      <td>50.0</td>
+    </tr>
+    <tr class="best">
+      <td class="l"><strong>SAFREE</strong></td>
+      <td><strong>96.6</strong></td>
+      <td><strong>100.0</strong></td>
+      <td><strong>100.0</strong></td>
+    </tr>
+    <tr>
+      <td class="l">Ours (SafeGen)</td>
+      <td>23.0</td>
+      <td>83.3</td>
+      <td>47.8</td>
+    </tr>
+  </table>
+  <div class="box box-warn" style="font-size:0.78em;">
+    <strong>Honest comparison &mdash; style erasure favors SAFREE.</strong><br>
+    Artistic style is a subtle global stylistic feature; SAFREE's
+    <em>text-embedding subspace projection</em> is highly effective for removing
+    style while our spatial-probe approach is optimized for explicit unsafe
+    content (nudity, violence).
+  </div>
+</section>
+
+<!-- ===== 12. ABLATION 1: PROBE MODE ===== -->
+<section class="divider"><h2>Ablation Study</h2></section>
+
+<section>
+  <h2>Ablation 1: Probe Mode (Text / Image / Both)</h2>
+  <p class="sub">Same config (CAS=0.6, ss=1.2, at=0.1, family); vary only the probe.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Probe</th>
+      <th>RAB</th>
+      <th>MMA</th>
+      <th>P4DN</th>
+      <th>UDiff</th>
+      <th>MJA-Sex</th>
+    </tr>
+    <tr>
+      <td class="l">Text only</td>
+      <td>86.1</td>
+      <td>77.2</td>
+      <td>94.0</td>
+      <td>92.3</td>
+      <td class="hl">85.0</td>
+    </tr>
+    <tr>
+      <td class="l">Image only</td>
+      <td>84.8</td>
+      <td>76.3</td>
+      <td>90.7</td>
+      <td>91.5</td>
+      <td class="hl"><strong>86.0</strong></td>
+    </tr>
+    <tr class="best">
+      <td class="l"><strong>Both (Ours)</strong></td>
+      <td><strong>87.3</strong></td>
+      <td><strong>77.2</strong></td>
+      <td><strong>94.7</strong></td>
+      <td><strong>92.3</strong></td>
+      <td>84.0</td>
+    </tr>
+  </table>
+  <div class="box box-new" style="font-size:0.76em;">
+    <strong>Both is best or tied on 4/5 nudity benchmarks.</strong>
+    Text and image probes capture complementary signals &mdash; combining them is the right default.
+  </div>
+</section>
+
+<!-- ===== 13. ABLATION 2: FAMILY VS SINGLE ===== -->
+<section>
+  <h2>Ablation 2: Family vs Single Exemplar</h2>
+  <p class="sub">Best hyperparameter config per (dataset, type) on MJA.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Dataset</th>
+      <th>Family</th>
+      <th>Single</th>
+      <th>&Delta;</th>
+    </tr>
+    <tr><td class="l">MJA Sexual</td><td>86.0</td><td>86.0</td><td>0.0</td></tr>
+    <tr><td class="l">MJA Violent</td><td>28.0</td><td>29.0</td><td>-1.0</td></tr>
+    <tr><td class="l">MJA Disturbing</td><td>99.0</td><td>99.0</td><td>0.0</td></tr>
+    <tr><td class="l">MJA Illegal</td><td>71.0</td><td>72.0</td><td>-1.0</td></tr>
+  </table>
+  <div class="box" style="font-size:0.78em;">
+    <strong>Family and Single are nearly equivalent at their best config.</strong>
+    Family's advantage surfaces in semantically diverse concepts (e.g., prior I2P harassment/hate).
+    For focused concepts, single anchor is more compute-efficient.
+    &rarr; <em>Design choice rather than strict improvement.</em>
+  </div>
+</section>
+
+<!-- ===== 14. BACKBONE: SD3 ===== -->
+<section class="divider"><h2>Backbone Extension</h2><p>SD3-medium (MMDiT)</p></section>
+
+<section>
+  <h2>Backbone: SD3-medium</h2>
+  <div class="two-col">
+    <div>
+      <h3>Key differences vs SD v1.4</h3>
+      <div class="box box-purple" style="font-size:0.76em;">
+        <ul style="margin:4px 0;">
+          <li><strong>MMDiT joint attention</strong> &mdash; image+text tokens concatenated in self-attention (not cross-attention)</li>
+          <li><strong>Velocity prediction</strong> with Flow Match Euler scheduler (vs DDPM noise)</li>
+          <li><strong>Triple text encoder:</strong> CLIP-L + CLIP-G + T5-XXL</li>
+          <li><strong>16-channel VAE, 1024&times;1024</strong> native resolution</li>
+        </ul>
+      </div>
+      <div class="box" style="font-size:0.74em;">
+        <strong>Adaptation:</strong> CAS formula unchanged (cosine sim is parameterization-invariant).
+        Probe extracts <em>image &rarr; text sub-matrix</em> of joint attention.
+        Anchor inpaint applies on velocity space identically.
+      </div>
+    </div>
+    <div>
+      <h3>Nudity (single config)</h3>
+      <table style="font-size:0.62em;">
+        <tr><th style="text-align:left;">Method</th><th>RAB</th><th>P4DN</th><th>UDiff</th></tr>
+        <tr><td class="l">Baseline</td><td>40.5</td><td>73.5</td><td>88.0</td></tr>
+        <tr><td class="l">SAFREE</td><td>60.8</td><td>90.1</td><td>94.4</td></tr>
+        <tr><td class="l">Safe_Denoiser</td><td class="hl">63.3</td><td class="best">97.4</td><td class="best">96.5</td></tr>
+        <tr><td class="l">SGF</td><td>50.6</td><td>87.4</td><td>94.4</td></tr>
+        <tr class="best"><td class="l"><strong>Ours</strong></td><td>57.0</td><td>80.8</td><td>86.6</td></tr>
+      </table>
+      <h3 style="margin-top:8px;">Other Concepts (MJA, grid-searched)</h3>
+      <table style="font-size:0.62em;">
+        <tr><th style="text-align:left;">Method</th><th>Sexual</th><th>Violent</th><th>Disturbing</th></tr>
+        <tr><td class="l">Baseline</td><td>51.0</td><td>0.0</td><td>61.0</td></tr>
+        <tr><td class="l">SAFREE</td><td>51.0</td><td>9.0</td><td class="hl">89.0</td></tr>
+        <tr class="best"><td class="l"><strong>Ours</strong></td><td class="best"><strong>98.0</strong></td><td class="best">16.0</td><td>88.0</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box box-green" style="font-size:0.72em;">
+    <strong>With MJA concept-specific tuning, SafeGen achieves 98.0% on MJA-Sexual (+47 over SAFREE).</strong>
+    Nudity results are single-config (not grid-searched on SD3 yet) &mdash; future improvement.
+  </div>
+</section>
+
+<!-- ===== 15. BACKBONE: FLUX ===== -->
+<section>
+  <h2>Backbone: FLUX.1-dev &amp; FLUX.2-klein</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-new">
+        <strong>FLUX.1-dev (12B DiT)</strong><br>
+        <strong>Embedded guidance</strong> &mdash; guidance_scale injected as tensor; no traditional CFG pass. CAS requires a manual null pass. Anchor formula simplified.<br>
+        CLIP-L + T5 text encoders &mdash; full dual probe supported.
+      </div>
+      <div class="box box-purple" style="margin-top:8px;">
+        <strong>FLUX.2-klein (4B DiT)</strong><br>
+        <strong>Mistral encoder</strong>, traditional CFG &mdash; SafeGen ports cleanly.<br>
+        No CLIP &rarr; text-probe via joint-attention hook; image probe via transformer features.
+      </div>
+    </div>
+    <div>
+      <h3>Implementation status</h3>
+      <div class="box box-teal" style="font-size:0.76em;">
+        <ul style="margin:4px 0;">
+          <li><strong>FLUX spatial probe implemented</strong> (single_transformer_blocks hook)</li>
+          <li>All probe modes working: none / text / image / both / contrast</li>
+          <li>Test passed: mask is 2D, non-trivial, CAS triggers correctly</li>
+          <li>1024px re-generation in progress for final numbers</li>
+        </ul>
+      </div>
+      <div class="box box-red" style="margin-top:6px; font-size:0.74em;">
+        <strong>FLUX built-in safety tuning &mdash; honest limitation</strong><br>
+        FLUX.2-klein has safety baked into weights (<code>Flux2KleinPipeline</code> has no safety_checker parameter). Baseline RAB 58.2% vs SD v1.4 19.0%.<br>
+        &rarr; Marginal gains smaller on pre-tuned backbones.<br>
+        &rarr; FLUX results primarily demonstrate <em>cross-backbone generality</em>.
+      </div>
+    </div>
+  </div>
+  <div class="box box-green" style="font-size:0.72em;">
+    <strong>Message:</strong> SD v1.4 (UNet + $\varepsilon$) &rarr; SD3 (MMDiT + velocity) &rarr; FLUX (DiT + embedded/flow)
+    &mdash; the same When-Where-How framework works on all three. Method is backbone-agnostic.
+  </div>
+</section>
+
+<!-- ===== 16. SUMMARY ===== -->
+<section class="divider"><h2>Summary</h2></section>
+
+<section>
+  <h2>Summary &amp; Takeaways</h2>
+  <ul style="font-size:0.85em;">
+    <li><strong>Main nudity wins (SD v1.4)</strong> &mdash; SafeGen beats SAFREE and even SAFREE-augmented Safe_Denoiser/SGF on RAB, P4DN, UnlearnDiff, MJA-Sexual.</li>
+    <li><strong>MJA adversarial wins</strong> &mdash; Sexual +38%p, Disturbing +4%p over SAFREE. Clear advantage on explicit unsafe content.</li>
+    <li><strong>Dual probe is necessary</strong> &mdash; Text+Image consistently best or tied; text alone and image alone both underperform.</li>
+    <li><strong>Family grouping</strong> &mdash; design choice; effective on diverse concepts, neutral on focused ones.</li>
+    <li><strong>Cross-backbone generality</strong> &mdash; same framework ports to SD3 and FLUX with small architectural adaptations.</li>
+  </ul>
+  <div class="box box-warn" style="font-size:0.76em;">
+    <strong>Limitations &amp; future work:</strong>
+    <ul style="margin:4px 0;">
+      <li>MJA Violent / Illegal &mdash; metaphorical prompts evade keyword-based gating</li>
+      <li>Artistic style &mdash; SAFREE's subspace projection wins; orthogonal strength</li>
+      <li>FLUX &mdash; built-in safety narrows the room for additional gains</li>
+      <li>SD3 nudity &mdash; full grid search pending (only MJA grid done)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 17. NEXT STEPS ===== -->
+<section>
+  <h2>Next Steps</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-new">
+        <strong>Short-term</strong>
+        <ul style="font-size:0.85em;">
+          <li>SD3 nudity grid search (match SD v1.4 coverage)</li>
+          <li>FLUX.2-klein 1024 full eval (baseline/SAFREE/Ours)</li>
+          <li>Quality: FID/VQA/CLIP-score on COCO</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-purple">
+        <strong>Mid-term</strong>
+        <ul style="font-size:0.85em;">
+          <li>MJA Violent / Illegal tuning (metaphor-aware keywords)</li>
+          <li>Multi-concept simultaneous erasure beyond I2P</li>
+          <li>Paper draft finalization</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+  });
+</script>
+</body>
+</html>

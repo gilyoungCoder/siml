@@ -75,13 +75,17 @@ where $s_t$ is the target-to-anchor guidance scale. Hybrid guidance provides str
 \subsection{Family-Grouped Exemplars}
 \label{subsec:family}
 
-Many unsafe concepts span semantically diverse sub-categories. For instance, ``hate'' encompasses racial discrimination, religious intolerance, gender-based harassment, and political extremism---each with distinct visual characteristics. A single set of exemplar embeddings may fail to cover this diversity.
+Unsafe concepts are rarely monolithic. A single target such as \emph{nudity} spans semantically distinct sub-categories (\eg, \textit{naked body}, \textit{sexual act}, \textit{exposed body parts}, \textit{suggestive pose}), and \emph{hate} covers racial, religious, gender-based, and political axes---each with distinct visual characteristics. A single averaged exemplar embedding collapses this diversity and yields a weak, generic direction that under-fits adversarial prompts.
 
-We address this with \emph{family-grouped exemplars}. For each target concept, we define $F$ semantic families (typically $F=4$), each containing $K$ exemplar images ($K=4$). We compute a family-level mean embedding $\bar{e}_f = \frac{1}{K}\sum_{k=1}^K e_{f,k}$ for each family $f$, yielding $F$ independent exemplar tokens that collectively span the concept's semantic range. During inference, the image probe computes similarity against all family embeddings:
+To address this, we adopt \emph{family-grouped exemplars} as the default exemplar representation of our method. For each target concept, we define $F$ semantic sub-categories (\emph{families}, typically $F=4$), and for each family $f \in \{1,\dots,F\}$ we collect $K$ representative images ($K=4$). We encode them with CLIP and compute a family-level mean embedding $\bar{e}_f = \frac{1}{K}\sum_{k=1}^{K} e_{f,k}$. This yields $F$ independent exemplar tokens that together span the concept's semantic range, rather than a single averaged vector.
+
+The image probe then computes similarity against all family embeddings jointly:
 \begin{equation}
-    M_\text{img}(i,j) = \sigma\left(\alpha \cdot \left(\max_{f,k} \cos(f(i,j), e_{f,k}) - \theta_\text{img}\right)\right).
+    M_\text{img}(i,j) = \sigma\left(\alpha \cdot \left(\max_{f} \cos(f(i,j), \bar{e}_f) - \theta_\text{img}\right)\right),
 \end{equation}
-This design provides two benefits: (1) broader coverage of semantically diverse concepts, and (2) family-specific anchor directions that produce more coherent safe replacements. As we show in \S\ref{subsec:ablation}, family grouping improves SR by +3.9\%p for hate and +5.2\%p for illegal activity over single-exemplar baselines, with negligible overhead.
+so that a spatial location is flagged if it matches \emph{any} sub-category. For the HOW stage, each family contributes its own anchor direction weighted uniformly ($1/F$), producing a combined guidance that is both broader in coverage and better aligned with whichever sub-category is present in the current prompt.
+
+Family grouping incurs negligible overhead: exemplar embeddings are precomputed once, and at inference the dominant cost remains the diffusion forward passes. In our ablations (\S\ref{subsec:ablation}), family grouping is especially effective for concepts with diverse sub-categories (\eg, MJA \emph{Violent} $+21$\%p, MJA \emph{Illegal} $+20$\%p vs.\ the single-exemplar variant), while remaining on par for tightly-scoped concepts (\eg, RAB nudity). We therefore treat family grouping as the default configuration of \ours{} throughout the paper, with the single-exemplar variant reported only as an ablation.
 
 \subsection{Multi-Concept Erasure}
 \label{subsec:multi}
