@@ -224,7 +224,7 @@ def parse_args():
     p.add_argument("--end_idx", type=int, default=-1)
 
     # WHEN
-    p.add_argument("--cas_threshold", type=float, default=0.4,
+    p.add_argument("--cas_threshold", type=float, default=0.6,
                    help="CAS threshold (SD3 may need different from SD1.4's 0.6)")
 
     # WHERE — Probe
