@@ -40,6 +40,7 @@ from attention_probe_sd3 import (
     compute_sd3_spatial_mask,
     compute_sd3_image_probe_mask,
     build_sd3_image_probe_embeds,
+    build_grouped_sd3_image_probe_embeds,
 )
 
 
@@ -125,6 +126,33 @@ def apply_guidance(v_cfg, v_null, v_prompt, v_target, v_anchor,
 
     else:
         raise ValueError(f"Unknown guidance mode: {mode}")
+
+    if torch.isnan(out).any() or torch.isinf(out).any():
+        out = torch.where(torch.isfinite(out), out, v_cfg)
+    return out
+
+
+def apply_family_guidance(v_cfg, v_null, family_masks, family_targets, family_anchors,
+                          mode, safety_scale, cfg_scale):
+    """Per-family guidance with region-specific masks."""
+    out = v_cfg.clone()
+    s = safety_scale
+
+    for mask, v_target, v_anchor in zip(family_masks, family_targets, family_anchors):
+        m = mask.to(v_cfg.dtype)
+
+        if mode == "anchor_inpaint":
+            va_cfg = v_null + cfg_scale * (v_anchor - v_null)
+            blend = (s * m).clamp(max=1.0)
+            out = out * (1 - blend) + va_cfg * blend
+        elif mode == "hybrid":
+            out = (out
+                   - s * m * (v_target - v_null)
+                   + s * m * (v_anchor - v_null))
+        elif mode == "target_sub":
+            out = out - s * m * (v_target - v_null)
+        else:
+            raise ValueError(f"Unknown guidance mode: {mode}")
 
     if torch.isnan(out).any() or torch.isinf(out).any():
         out = torch.where(torch.isfinite(out), out, v_cfg)
@@ -218,6 +246,11 @@ def parse_args():
     p.add_argument("--n_img_tokens", type=int, default=4,
                    help="Number of pseudo-text token slots to overwrite with "
                         "the CLIP exemplar feature (SafeGen image probe).")
+    p.add_argument("--family_config", default=None,
+                   help="Path to grouped exemplar .pt file with family metadata "
+                        "and per-family CLIP features.")
+    p.add_argument("--family_guidance", action="store_true",
+                   help="Enable family-specific target/anchor guidance.")
 
     # HOW
     p.add_argument("--how_mode", default="anchor_inpaint",
@@ -245,9 +278,13 @@ def parse_args():
         args.img_attn_threshold = args.attn_threshold
 
     if args.probe_mode in ("image", "both") and not args.clip_embeddings:
-        raise ValueError(
-            f"--probe_mode={args.probe_mode} requires --clip_embeddings "
-            f"(path to .pt file with target_clip_features)")
+        if not (args.family_guidance and args.family_config):
+            raise ValueError(
+                f"--probe_mode={args.probe_mode} requires --clip_embeddings "
+                f"(path to .pt file with target_clip_features)")
+
+    if args.family_guidance and not args.family_config:
+        raise ValueError("--family_guidance requires --family_config")
 
     if args.target_words is None:
         words = []
@@ -307,6 +344,45 @@ def main():
         anc_embeds, anc_pooled = encode_sd3_prompt(pipe, ", ".join(args.anchor_concepts), device)
         unc_embeds, unc_pooled = encode_sd3_prompt(pipe, "", device)
 
+    family_names = []
+    family_target_embeds = {}
+    family_target_pooled = {}
+    family_anchor_embeds = {}
+    family_anchor_pooled = {}
+    family_target_words = {}
+
+    if args.family_guidance:
+        print(f"Loading family config: {args.family_config}")
+        family_data = torch.load(args.family_config, map_location="cpu", weights_only=False)
+        family_meta = family_data.get("family_metadata", {})
+        family_names = family_data.get("family_names")
+        if not family_names:
+            family_names = list(family_data.get("family_token_map", {}).keys())
+        if not family_names:
+            family_names = list(family_meta.keys())
+
+        for fname in family_names:
+            meta = family_meta.get(fname, {})
+            target_terms = (
+                meta.get("target_words")
+                or meta.get("target_prompts")
+                or args.target_concepts
+            )
+            anchor_terms = (
+                meta.get("anchor_words")
+                or meta.get("anchor_prompts")
+                or args.anchor_concepts
+            )
+            family_target_words[fname] = target_terms
+            with torch.no_grad():
+                ft_embeds, ft_pooled = encode_sd3_prompt(pipe, ", ".join(target_terms[:3]), device)
+                fa_embeds, fa_pooled = encode_sd3_prompt(pipe, ", ".join(anchor_terms[:3]), device)
+            family_target_embeds[fname] = ft_embeds
+            family_target_pooled[fname] = ft_pooled
+            family_anchor_embeds[fname] = fa_embeds
+            family_anchor_pooled[fname] = fa_pooled
+        print(f"  Families: {family_names}")
+
     # Setup probe
     use_probe = args.probe_mode in ("text", "image", "both")
     use_txt = args.probe_mode in ("text", "both")
@@ -316,31 +392,48 @@ def main():
     original_procs = None
     image_probe_embeds = None
     image_probe_token_indices = None
+    family_image_token_map = {}
 
     if use_probe:
         txt_probe = SD3AttentionProbeStore()
         print(f"  Probe ready (mode={args.probe_mode}; will hook during generation)")
 
     if use_img:
-        print(f"  Loading CLIP exemplar embeddings: {args.clip_embeddings}")
-        clip_data = torch.load(
-            args.clip_embeddings, map_location="cpu", weights_only=False)
-        clip_feats = clip_data.get(
-            "target_clip_features", clip_data.get("target_cls"))
-        if clip_feats is None:
-            raise ValueError(
-                f"clip_embeddings file missing 'target_clip_features' key; "
-                f"keys: {list(clip_data.keys()) if isinstance(clip_data, dict) else type(clip_data)}")
-        clip_feats = clip_feats.float()
-        print(f"    CLIP features: {tuple(clip_feats.shape)}")
+        img_cfg_path = args.family_config if args.family_guidance else args.clip_embeddings
+        print(f"  Loading CLIP exemplar embeddings: {img_cfg_path}")
+        clip_data = torch.load(img_cfg_path, map_location="cpu", weights_only=False)
 
-        # Build pseudo-text embedding using SD3's empty-prompt as baseline
-        # (pre-context_embedder, 4096-d).
-        raw_probe_embeds, image_probe_token_indices = build_sd3_image_probe_embeds(
-            clip_feats,
-            baseline_encoder_hidden=unc_embeds.detach(),
-            n_tokens=args.n_img_tokens,
-        )
+        if args.family_guidance:
+            family_feats = clip_data.get("target_clip_features")
+            if not isinstance(family_feats, dict) or not family_feats:
+                raise ValueError(
+                    f"family_config missing dict target_clip_features; "
+                    f"keys: {list(clip_data.keys()) if isinstance(clip_data, dict) else type(clip_data)}")
+            raw_probe_embeds, image_probe_token_indices, family_image_token_map = (
+                build_grouped_sd3_image_probe_embeds(
+                    family_feats,
+                    baseline_encoder_hidden=unc_embeds.detach(),
+                    max_tokens=args.n_img_tokens,
+                )
+            )
+            print(f"    Family image tokens: {family_image_token_map}")
+        else:
+            clip_feats = clip_data.get(
+                "target_clip_features", clip_data.get("target_cls"))
+            if clip_feats is None:
+                raise ValueError(
+                    f"clip_embeddings file missing 'target_clip_features' key; "
+                    f"keys: {list(clip_data.keys()) if isinstance(clip_data, dict) else type(clip_data)}")
+            clip_feats = clip_feats.float()
+            print(f"    CLIP features: {tuple(clip_feats.shape)}")
+
+            # Build pseudo-text embedding using SD3's empty-prompt as baseline
+            # (pre-context_embedder, 4096-d).
+            raw_probe_embeds, image_probe_token_indices = build_sd3_image_probe_embeds(
+                clip_feats,
+                baseline_encoder_hidden=unc_embeds.detach(),
+                n_tokens=args.n_img_tokens,
+            )
         # Project through transformer.context_embedder (4096 -> inner model dim
         # ~1536) so it's in the same space that each block's add_k_proj reads.
         ctx_embedder = transformer.context_embedder
@@ -456,58 +549,131 @@ def main():
                 cas_vals.append(cv)
 
                 if trig:
-                    # Anchor prediction
-                    with torch.no_grad():
-                        v_anchor = transformer(
-                            hidden_states=latent_model_input.to(device),
-                            timestep=t.unsqueeze(0).to(device),
-                            encoder_hidden_states=anc_embeds.to(device),
-                            pooled_projections=anc_pooled.to(device),
-                            return_dict=False,
-                        )[0]
-
-                    # WHERE: Compute probe mask (from first forward pass — no extra cost!)
                     have_txt = (txt_probe is not None
                                 and use_txt and txt_probe.get_maps())
                     have_img = (txt_probe is not None
                                 and use_img and txt_probe.get_image_maps())
 
-                    txt_mask = None
-                    img_mask = None
-                    if have_txt:
-                        txt_attn = compute_sd3_spatial_mask(
-                            txt_probe, token_indices=None,
-                            latent_h=latent_h, latent_w=latent_w)
-                        txt_mask = make_probe_mask(
-                            txt_attn, args.attn_threshold,
-                            args.attn_sigmoid_alpha, args.blur_sigma, v_cfg.device)
-                    if have_img:
-                        img_attn = compute_sd3_image_probe_mask(
-                            txt_probe, token_indices=None,
-                            latent_h=latent_h, latent_w=latent_w)
-                        img_mask = make_probe_mask(
-                            img_attn, args.img_attn_threshold,
-                            args.attn_sigmoid_alpha, args.blur_sigma, v_cfg.device)
+                    if args.family_guidance and family_names:
+                        fam_masks = []
+                        for fname in family_names:
+                            fm = torch.zeros(1, 1, latent_h, latent_w, device=v_cfg.device)
 
-                    if txt_mask is not None and img_mask is not None:
-                        # Union via max (soft-OR), matches SafeGen SD1.4 fusion.
-                        probe_mask = torch.maximum(txt_mask, img_mask).clamp(0, 1)
-                    elif txt_mask is not None:
-                        probe_mask = txt_mask
-                    elif img_mask is not None:
-                        probe_mask = img_mask
+                            if have_txt:
+                                txt_attn = compute_sd3_spatial_mask(
+                                    txt_probe, token_indices=None,
+                                    latent_h=latent_h, latent_w=latent_w)
+                                fm = torch.maximum(
+                                    fm,
+                                    make_probe_mask(
+                                        txt_attn, args.attn_threshold,
+                                        args.attn_sigmoid_alpha, args.blur_sigma, v_cfg.device,
+                                    ),
+                                )
+
+                            if have_img and fname in family_image_token_map:
+                                img_attn = compute_sd3_image_probe_mask(
+                                    txt_probe,
+                                    token_indices=[family_image_token_map[fname]],
+                                    latent_h=latent_h,
+                                    latent_w=latent_w,
+                                )
+                                fm = torch.maximum(
+                                    fm,
+                                    make_probe_mask(
+                                        img_attn, args.img_attn_threshold,
+                                        args.attn_sigmoid_alpha, args.blur_sigma, v_cfg.device,
+                                    ),
+                                )
+
+                            fam_masks.append(fm)
+
+                        if len(fam_masks) > 1:
+                            stacked = torch.cat(fam_masks, dim=0)  # [N,1,H,W]
+                            winner = stacked.argmax(dim=0, keepdim=True)
+                            for fi in range(len(fam_masks)):
+                                fam_masks[fi] = fam_masks[fi] * (
+                                    winner == fi
+                                ).float().squeeze(0)
+
+                        fam_targets = []
+                        fam_anchors = []
+                        with torch.no_grad():
+                            for fname in family_names:
+                                fam_targets.append(
+                                    transformer(
+                                        hidden_states=latent_model_input.to(device),
+                                        timestep=t.unsqueeze(0).to(device),
+                                        encoder_hidden_states=family_target_embeds[fname].to(device),
+                                        pooled_projections=family_target_pooled[fname].to(device),
+                                        return_dict=False,
+                                    )[0]
+                                )
+                                fam_anchors.append(
+                                    transformer(
+                                        hidden_states=latent_model_input.to(device),
+                                        timestep=t.unsqueeze(0).to(device),
+                                        encoder_hidden_states=family_anchor_embeds[fname].to(device),
+                                        pooled_projections=family_anchor_pooled[fname].to(device),
+                                        return_dict=False,
+                                    )[0]
+                                )
+
+                        v_final = apply_family_guidance(
+                            v_cfg, v_null, fam_masks, fam_targets, fam_anchors,
+                            args.how_mode, args.safety_scale, args.cfg_scale,
+                        )
+                        guided_count += 1
+                        mask_areas.append(float(sum(fm.mean().item() for fm in fam_masks)))
                     else:
-                        # No probe — global guidance
-                        probe_mask = torch.ones(
-                            1, 1, latent_h, latent_w, device=v_cfg.device) * 0.5
+                        # Anchor prediction
+                        with torch.no_grad():
+                            v_anchor = transformer(
+                                hidden_states=latent_model_input.to(device),
+                                timestep=t.unsqueeze(0).to(device),
+                                encoder_hidden_states=anc_embeds.to(device),
+                                pooled_projections=anc_pooled.to(device),
+                                return_dict=False,
+                            )[0]
 
-                    # HOW: Apply guidance
-                    v_final = apply_guidance(
-                        v_cfg, v_null, v_prompt, v_target, v_anchor,
-                        probe_mask, args.how_mode, args.safety_scale, args.cfg_scale)
+                        # WHERE: Compute probe mask (from first forward pass — no extra cost!)
+                        txt_mask = None
+                        img_mask = None
+                        if have_txt:
+                            txt_attn = compute_sd3_spatial_mask(
+                                txt_probe, token_indices=None,
+                                latent_h=latent_h, latent_w=latent_w)
+                            txt_mask = make_probe_mask(
+                                txt_attn, args.attn_threshold,
+                                args.attn_sigmoid_alpha, args.blur_sigma, v_cfg.device)
+                        if have_img:
+                            img_attn = compute_sd3_image_probe_mask(
+                                txt_probe,
+                                token_indices=image_probe_token_indices,
+                                latent_h=latent_h, latent_w=latent_w)
+                            img_mask = make_probe_mask(
+                                img_attn, args.img_attn_threshold,
+                                args.attn_sigmoid_alpha, args.blur_sigma, v_cfg.device)
 
-                    guided_count += 1
-                    mask_areas.append(float(probe_mask.mean()))
+                        if txt_mask is not None and img_mask is not None:
+                            # Union via max (soft-OR), matches SafeGen SD1.4 fusion.
+                            probe_mask = torch.maximum(txt_mask, img_mask).clamp(0, 1)
+                        elif txt_mask is not None:
+                            probe_mask = txt_mask
+                        elif img_mask is not None:
+                            probe_mask = img_mask
+                        else:
+                            # No probe — global guidance
+                            probe_mask = torch.ones(
+                                1, 1, latent_h, latent_w, device=v_cfg.device) * 0.5
+
+                        # HOW: Apply guidance
+                        v_final = apply_guidance(
+                            v_cfg, v_null, v_prompt, v_target, v_anchor,
+                            probe_mask, args.how_mode, args.safety_scale, args.cfg_scale)
+
+                        guided_count += 1
+                        mask_areas.append(float(probe_mask.mean()))
 
                     if args.debug and step_i % 5 == 0:
                         print(f"  [{step_i:02d}] CAS={cv:.3f} mask={mask_areas[-1]:.3f}")
