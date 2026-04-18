@@ -193,6 +193,44 @@ def encode_concepts(pipe, concepts, device, max_seq_len=512):
     )
 
 
+def build_flux_image_probe_embeds(
+    clip_features: torch.Tensor,
+    baseline_encoder_hidden: torch.Tensor,
+    n_tokens: int = 4,
+):
+    """Construct FLUX pseudo-text embeddings from CLIP exemplar features.
+
+    FLUX.1-dev `encoder_hidden_states` are raw T5 hidden states in the
+    transformer's `joint_attention_dim` (4096) and are later projected by
+    `transformer.context_embedder` into the joint inner dim (3072). To build an
+    image-probe target in the same space as image tokens, inject the averaged
+    CLIP exemplar vector into a few raw text-token slots, then let
+    `context_embedder` project it.
+    """
+    if clip_features.dim() != 2:
+        raise ValueError(f"clip_features must be [N,D], got {clip_features.shape}")
+
+    avg = F.normalize(clip_features.float().mean(dim=0), dim=-1)
+    baseline = baseline_encoder_hidden.clone()
+    _, seq_len, hidden_dim = baseline.shape
+    device = baseline.device
+    dtype = baseline.dtype
+
+    target_vec = torch.zeros(hidden_dim, device=device, dtype=dtype)
+    fill = min(avg.shape[0], hidden_dim)
+    target_vec[:fill] = avg[:fill].to(device=device, dtype=dtype)
+    norm = target_vec.norm()
+    if norm > 1e-8:
+        target_vec = target_vec / norm
+
+    n_tokens = min(n_tokens, seq_len - 1)
+    token_indices = list(range(1, 1 + n_tokens))
+    for idx in token_indices:
+        baseline[0, idx] = target_vec
+
+    return baseline, token_indices
+
+
 # ── Args ──
 def parse_args():
     p = ArgumentParser(description="SafeGen-Flux1 v1: FLUX.1-dev 12B")
@@ -246,6 +284,8 @@ def parse_args():
                    help="Floor value for normalised spatial mask.")
     p.add_argument("--clip_embeddings", default=None,
                    help="Path to CLIP exemplar embeddings .pt (for image probe).")
+    p.add_argument("--n_img_tokens", type=int, default=4,
+                   help="Number of pseudo-text token slots used for image probe.")
 
     # Device
     p.add_argument("--device", default="cuda:0")
@@ -362,7 +402,7 @@ def main():
     # ── WHERE: register spatial probe ──
     probe = None
     clip_text_tgt_vec = None   # [C_clip] target vector from CLIP text encoder
-    clip_img_tgt_vec = None    # [C_clip] target vector from CLIP vision exemplars
+    clip_img_tgt_vec = None    # [C_inner] target vector after FLUX context projection
     if args.probe_mode != "none" and not args.no_safety:
         # Prefer single-stream blocks: output is the full joint [txt; img] sequence,
         # so our hook can simply take the LAST seq_img tokens as image features.
@@ -426,8 +466,22 @@ def main():
                     if feats is None:
                         print("  [probe] WARN: no target CLIP features in file; image probe disabled")
                     else:
-                        clip_img_tgt_vec = feats.float().mean(dim=0).to(device)  # [C]
-                        print(f"  [probe] CLIP image target vec: shape={tuple(clip_img_tgt_vec.shape)}")
+                        raw_probe_embeds, img_probe_token_idx = build_flux_image_probe_embeds(
+                            feats.float(), pe_null.detach(), args.n_img_tokens)
+                        ctx_embedder = transformer.context_embedder
+                        ctx_dtype = next(ctx_embedder.parameters()).dtype
+                        ctx_device = next(ctx_embedder.parameters()).device
+                        with torch.no_grad():
+                            probe_ctx = ctx_embedder(
+                                raw_probe_embeds.to(device=ctx_device, dtype=ctx_dtype))
+                        clip_img_tgt_vec = F.normalize(
+                            probe_ctx[0, img_probe_token_idx].mean(dim=0).float(), dim=-1
+                        ).to(device)
+                        print(
+                            f"  [probe] CLIP image pseudo-text: raw={tuple(raw_probe_embeds.shape)} "
+                            f"ctx={tuple(probe_ctx.shape)} vec={tuple(clip_img_tgt_vec.shape)} "
+                            f"tokens={img_probe_token_idx}"
+                        )
                 except Exception as e:
                     print(f"  [probe] WARN: load CLIP embeddings failed ({e})")
                     clip_img_tgt_vec = None
@@ -584,11 +638,8 @@ def main():
 
                         if args.probe_mode in ("image", "both"):
                             tv = None
-                            if clip_img_tgt_vec is not None and \
-                               clip_img_tgt_vec.shape[-1] == feat_p.shape[-1]:
+                            if clip_img_tgt_vec is not None:
                                 tv = clip_img_tgt_vec.to(feat_p.device, feat_p.dtype)
-                            # If CLIP (768) != feat dim (e.g. 3072), fall back to
-                            # self-energy via target_vec=None.
                             m = compute_flux_spatial_mask(
                                 feat_p, target_vec=tv,
                                 threshold=args.attn_threshold, mode="text")
