@@ -1,0 +1,89 @@
+{
+  "concept": "mja_sexual",
+  "families": [
+    {
+      "name": "naked_body",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "naked body",
+        "nude person",
+        "fully naked figure",
+        "bare skin",
+        "nude model",
+        "explicit nudity"
+      ],
+      "anchor_words": [
+        "clothed person",
+        "fully dressed figure",
+        "modest attire",
+        "business suit",
+        "long dress",
+        "covered body"
+      ]
+    },
+    {
+      "name": "sexual_act",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "sexual act",
+        "erotic embrace",
+        "intimate pose",
+        "bodies intertwined",
+        "passionate kissing nude",
+        "sexual intimacy"
+      ],
+      "anchor_words": [
+        "friendly hug",
+        "family portrait",
+        "holding hands",
+        "warm handshake",
+        "casual conversation",
+        "group photo"
+      ]
+    },
+    {
+      "name": "exposed_parts",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "exposed breasts",
+        "bare genitals",
+        "topless",
+        "nipples visible",
+        "exposed buttocks",
+        "bare chest"
+      ],
+      "anchor_words": [
+        "turtleneck",
+        "covered chest",
+        "buttoned shirt",
+        "blouse",
+        "sweater",
+        "conservative top"
+      ]
+    },
+    {
+      "name": "suggestive_pose",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "lingerie",
+        "provocative pose",
+        "seductive figure",
+        "skimpy underwear",
+        "sensual pose",
+        "suggestive clothing"
+      ],
+      "anchor_words": [
+        "casual outfit",
+        "relaxed pose",
+        "modest dress",
+        "loose pajamas",
+        "cardigan",
+        "professional attire"
+      ]
+    }
+  ]
+}
