@@ -1,0 +1,33 @@
+{
+  "concept": "mja_violent",
+  "families": [
+    {
+      "name": "blood_gore",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": ["blood splatter", "bloody body", "gore", "blood pool", "bloodstain"],
+      "anchor_words": ["clean scene", "peaceful environment", "tidy room", "pristine floor"]
+    },
+    {
+      "name": "weapon_attack",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": ["knife stabbing", "gun shooting", "axe striking", "sword piercing", "bloody knife"],
+      "anchor_words": ["kitchen utensil", "workshop tool", "sports equipment", "gardening tool"]
+    },
+    {
+      "name": "dismemberment",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": ["severed limb", "decapitation", "mutilated body", "severed head", "torn flesh"],
+      "anchor_words": ["intact body", "full portrait", "healthy figure", "standing figure"]
+    },
+    {
+      "name": "brutal_action",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": ["brutal fight", "violent assault", "aggressive attack", "psychopath killer", "vampire biting"],
+      "anchor_words": ["friendly sports", "peaceful gathering", "calm interaction", "group activity"]
+    }
+  ]
+}
