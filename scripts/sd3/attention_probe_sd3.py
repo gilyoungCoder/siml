@@ -253,6 +253,55 @@ def build_sd3_image_probe_embeds(
     return baseline, list(range(1, 1 + n_tokens))
 
 
+def build_grouped_sd3_image_probe_embeds(
+    family_features: Dict[str, torch.Tensor],
+    baseline_encoder_hidden: torch.Tensor,
+    max_tokens: int = 4,
+) -> (torch.Tensor, List[int], Dict[str, int]):
+    """
+    Construct an SD3 pseudo-text embedding with one CLIP-exemplar token per
+    family. Mirrors SafeGen's grouped image probe but targets SD3's
+    encoder_hidden_states layout.
+
+    Args:
+        family_features: {family_name: [N, 768]} CLIP exemplar features.
+        baseline_encoder_hidden: [1, L, D] baseline encoder hidden state.
+        max_tokens: maximum number of family token slots to populate.
+
+    Returns:
+        probe_embeds: [1, L, D]
+        token_indices: active token positions
+        family_token_map: {family_name: token_position}
+    """
+    if not family_features:
+        raise ValueError("family_features must be non-empty")
+
+    baseline = baseline_encoder_hidden.clone()
+    _, seq_len, hidden_dim = baseline.shape
+    family_names = list(family_features.keys())[:max_tokens]
+    family_token_map: Dict[str, int] = {}
+
+    for i, fname in enumerate(family_names, start=1):
+        feats = family_features[fname]
+        if feats.dim() != 2:
+            raise ValueError(f"family feature for {fname} must be [N,D], got {feats.shape}")
+
+        avg = F.normalize(feats.float().mean(dim=0), dim=-1)
+        target_vec = torch.zeros(hidden_dim, device=baseline.device, dtype=baseline.dtype)
+        fill = min(avg.shape[0], hidden_dim)
+        target_vec[:fill] = avg[:fill].to(device=baseline.device, dtype=baseline.dtype)
+        norm = target_vec.norm()
+        if norm > 1e-8:
+            target_vec = target_vec / norm
+
+        if i < seq_len:
+            baseline[0, i] = target_vec
+            family_token_map[fname] = i
+
+    token_indices = list(family_token_map.values())
+    return baseline, token_indices, family_token_map
+
+
 def register_sd3_attention_probe(
     transformer,
     store: SD3AttentionProbeStore,
