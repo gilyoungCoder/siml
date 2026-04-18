@@ -231,6 +231,23 @@ def build_flux_image_probe_embeds(
     return baseline, token_indices
 
 
+def build_flux_image_probe_pooled(
+    clip_features: torch.Tensor,
+    baseline_pooled_embeds: torch.Tensor,
+):
+    """Construct pooled CLIP-style conditioning for the FLUX image probe pass."""
+    if clip_features.dim() != 2:
+        raise ValueError(f"clip_features must be [N,D], got {clip_features.shape}")
+
+    avg = F.normalize(clip_features.float().mean(dim=0), dim=-1)
+    pooled = torch.zeros_like(baseline_pooled_embeds)
+    fill = min(avg.shape[0], pooled.shape[-1])
+    pooled[..., :fill] = avg[:fill].to(device=pooled.device, dtype=pooled.dtype)
+    norm = pooled.norm(dim=-1, keepdim=True)
+    pooled = torch.where(norm > 1e-8, pooled / norm.clamp_min(1e-8), baseline_pooled_embeds.clone())
+    return pooled
+
+
 # ── Args ──
 def parse_args():
     p = ArgumentParser(description="SafeGen-Flux1 v1: FLUX.1-dev 12B")
@@ -403,6 +420,8 @@ def main():
     probe = None
     clip_text_tgt_vec = None   # [C_clip] target vector from CLIP text encoder
     clip_img_tgt_vec = None    # [C_inner] target vector after FLUX context projection
+    image_probe_prompt_embeds = None
+    image_probe_pooled = None
     if args.probe_mode != "none" and not args.no_safety:
         # Prefer single-stream blocks: output is the full joint [txt; img] sequence,
         # so our hook can simply take the LAST seq_img tokens as image features.
@@ -468,6 +487,10 @@ def main():
                     else:
                         raw_probe_embeds, img_probe_token_idx = build_flux_image_probe_embeds(
                             feats.float(), pe_null.detach(), args.n_img_tokens)
+                        image_probe_prompt_embeds = raw_probe_embeds.detach()
+                        image_probe_pooled = build_flux_image_probe_pooled(
+                            feats.float(), pooled_null.detach()
+                        ).detach()
                         ctx_embedder = transformer.context_embedder
                         ctx_dtype = next(ctx_embedder.parameters()).dtype
                         ctx_device = next(ctx_embedder.parameters()).device
@@ -480,11 +503,13 @@ def main():
                         print(
                             f"  [probe] CLIP image pseudo-text: raw={tuple(raw_probe_embeds.shape)} "
                             f"ctx={tuple(probe_ctx.shape)} vec={tuple(clip_img_tgt_vec.shape)} "
-                            f"tokens={img_probe_token_idx}"
+                            f"pooled={tuple(image_probe_pooled.shape)} tokens={img_probe_token_idx}"
                         )
                 except Exception as e:
                     print(f"  [probe] WARN: load CLIP embeddings failed ({e})")
                     clip_img_tgt_vec = None
+                    image_probe_prompt_embeds = None
+                    image_probe_pooled = None
 
     cas = GlobalCAS(args.cas_threshold) if not args.no_safety else None
     outdir = Path(args.outdir)
@@ -604,6 +629,26 @@ def main():
                         if probe is not None:
                             probe.active = False
 
+                        if (
+                            probe is not None
+                            and args.probe_mode in ("image", "both")
+                            and image_probe_prompt_embeds is not None
+                            and image_probe_pooled is not None
+                        ):
+                            probe.active = True
+                            probe.tag = "image"
+                            _ = transformer(
+                                hidden_states=lat_in,
+                                timestep=timestep / 1000,
+                                guidance=guidance_tensor,
+                                pooled_projections=image_probe_pooled.to(dtype),
+                                encoder_hidden_states=image_probe_prompt_embeds.to(dtype),
+                                txt_ids=text_ids_null,
+                                img_ids=latent_image_ids,
+                                return_dict=False,
+                            )[0]
+                            probe.active = False
+
                     cv, trig = cas.compute(ep, en, et)
                     cas_values.append(cv)
                     eps_final = ep
@@ -637,13 +682,17 @@ def main():
                             masks_2d.append(m)
 
                         if args.probe_mode in ("image", "both"):
-                            tv = None
-                            if clip_img_tgt_vec is not None:
+                            if "image" in probe.captures:
+                                m = compute_flux_spatial_mask(
+                                    feat_p, target_feat=probe.captures["image"],
+                                    threshold=args.attn_threshold, mode="contrast")
+                                masks_2d.append(m)
+                            elif clip_img_tgt_vec is not None:
                                 tv = clip_img_tgt_vec.to(feat_p.device, feat_p.dtype)
-                            m = compute_flux_spatial_mask(
-                                feat_p, target_vec=tv,
-                                threshold=args.attn_threshold, mode="text")
-                            masks_2d.append(m)
+                                m = compute_flux_spatial_mask(
+                                    feat_p, target_vec=tv,
+                                    threshold=args.attn_threshold, mode="text")
+                                masks_2d.append(m)
 
                         if masks_2d:
                             mask2d = torch.stack(masks_2d, dim=0).max(dim=0)[0] \
