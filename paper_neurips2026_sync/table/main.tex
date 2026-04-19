@@ -1,91 +1,38 @@
 \begin{table*}[!t]
     \renewcommand{\arraystretch}{1.1}
-    \setlength{\tabcolsep}{0.35em}
-    \caption{Performance comparison on nudity erasure across adversarial prompt datasets. SR = (Safe + Partial) / Total $\uparrow$. Fine-tuning methods shown in \textcolor{gray}{gray}. FID computed against SD v1.4 baseline outputs on COCO.}
+    \setlength{\tabcolsep}{0.5em}
+    \caption{Nudity erasure results on SD~v1.4 (Old/Strict Qwen3-VL eval). SR = (Safe + Partial) / Total $\uparrow$. Training-based methods shown in \textcolor{gray}{gray}. Safe\_Denoiser and SGF use SAFREE as their base following the official codebases. FID computed on COCO-250.}
     \label{table:main}
     \vspace{-0.5em}
 
     \centering
     \resizebox{\textwidth}{!}{
-    \begin{tabular}{lcccccccccccccccrc}
+    \begin{tabular}{llcccccc}
     \toprule
-    & \multicolumn{5}{c}{UnlearnDiff (142)}
-    & \multicolumn{5}{c}{Ring-A-Bell (79)}
-    & \multicolumn{5}{c}{MMA-Diffusion (1000)}
-    & \multicolumn{2}{c}{COCO} \\
-    \cmidrule(lr){2-6} \cmidrule(lr){7-11} \cmidrule(lr){12-16} \cmidrule(lr){17-18}
-    & SR$\uparrow$ & Safe & Partial & Full$\downarrow$ & NotRel
-    & SR$\uparrow$ & Safe & Partial & Full$\downarrow$ & NotRel
-    & SR$\uparrow$ & Safe & Partial & Full$\downarrow$ & NotRel
-    & FID$\downarrow$ & CLIP$\uparrow$ \\
+    & & \textbf{RAB} & \textbf{P4DN} & \textbf{UnlearnDiff} & \textbf{MJA-Sexual} & \textbf{FID}$\downarrow$ \\
+    & \textbf{Method} & (79) & (151) & (142) & (100) & (COCO) \\
     \midrule
 
-    Baseline
-    & .556 & \color{gray}.218 & \color{gray}.338 & .430 & .014
-    & .215 & \color{gray}.114 & \color{gray}.101 & .747 & .038
-    & .228 & \color{gray}.082 & \color{gray}.146 & .768 & .004
-    & -- & .267 \\
+    & Baseline (SD v1.4) & 19.0 & 21.9 & 57.7 & 36.0 & -- \\
 
     \midrule
 
-    \color{gray} ESD
-    & \color{gray}.859 & \color{gray}.563 & \color{gray}.296 & \color{gray}.092 & \color{gray}.049
-    & \color{gray}.785 & \color{gray}.481 & \color{gray}.304 & \color{gray}.139 & \color{gray}.076
-    & \color{gray}.711 & \color{gray}.414 & \color{gray}.297 & \color{gray}.239 & \color{gray}.050
-    & \color{gray}4.91 & \color{gray}.260 \\
-
-    \color{gray} SDD
-    & \color{gray}.908 & \color{gray}.620 & \color{gray}.288 & \color{gray}.042 & \color{gray}.049
-    & \color{gray}.886 & \color{gray}.544 & \color{gray}.342 & \color{gray}.076 & \color{gray}.038
-    & \color{gray}.813 & \color{gray}.544 & \color{gray}.269 & \color{gray}.164 & \color{gray}.023
-    & \color{gray}4.73 & \color{gray}.261 \\
-
-    \color{gray} RECE
-    & \color{gray}.901 & \color{gray}.768 & \color{gray}.134 & \color{gray}.014 & \color{gray}.085
-    & \color{gray}.544 & \color{gray}.519 & \color{gray}.025 & \color{gray}.000 & \color{gray}.456
-    & \color{gray}.794 & \color{gray}.545 & \color{gray}.249 & \color{gray}.164 & \color{gray}.042
-    & \color{gray}10.33 & \color{gray}.255 \\
-
-    %\color{gray} SDErasure  % Omitted: results pending
-    %& \color{gray}-- & -- & -- & -- & --
-    %& -- & -- & -- & -- & --
-    %& -- & -- & -- & -- & --
-    %& -- & -- \\
+    \color{gray} & \color{gray} ESD (TB) & \color{gray}78.5 & \color{gray}-- & \color{gray}85.9 & \color{gray}-- & \color{gray}4.91 \\
+    \color{gray} & \color{gray} SDD (TB) & \color{gray}88.6 & \color{gray}-- & \color{gray}90.8 & \color{gray}-- & \color{gray}4.73 \\
 
     \midrule
 
-    SLD-Max
-    & .873 & \color{gray}.669 & \color{gray}.204 & .063 & .063
-    & .570 & \color{gray}.329 & \color{gray}.241 & .316 & .114
-    & .490 & \color{gray}.278 & \color{gray}.212 & .461 & .049
-    & 18.46 & .244 \\
-
-    SAFREE
-    & .901 & \color{gray}.754 & \color{gray}.148 & .021 & .077
-    & .772 & \color{gray}.582 & \color{gray}.190 & .127 & .101
-    & .755 & \color{gray}.548 & \color{gray}.207 & .202 & .043
-    & 8.96 & .264 \\
-
-    ASCG
-    & .887 & \color{gray}.408 & \color{gray}.479 & .099 & .014
-    & .835 & \color{gray}.392 & \color{gray}.443 & .089 & .076
-    & .590 & \color{gray}.162 & \color{gray}.428 & .407 & .003
-    & 9.96 & .262 \\
+    \multirow{4}{*}{\rotatebox[origin=c]{90}{\small TF}}
+    & SLD-Max & 68.4 & 74.2 & 82.4 & -- & 18.46 \\
+    & SAFREE & 50.6 & 49.0 & 91.5 & 48.0 & 8.96 \\
+    & SAFREE + Safe\_Denoiser & 72.2 & 53.7 & 89.4 & -- & -- \\
+    & SAFREE + SGF & 65.8 & 59.9 & 90.1 & -- & -- \\
 
     \midrule
 
-    \rowcolor{blue!8} \textbf{Ours (Anchor)}
-    & .951 & \color{gray}.845 & \color{gray}.106 & \textbf{.014} & .035
-    & .899 & \color{gray}.861 & \color{gray}.038 & .063 & .038
-    & .798 & \color{gray}.677 & \color{gray}.121 & .180 & .022
-    & 5.06 & .260 \\
-
-    \rowcolor{blue!8} \textbf{Ours (Hybrid)}
-    & \textbf{.972} & \color{gray}.789 & \color{gray}.183 & .011 & .017
-    & \textbf{.949} & \color{gray}.810 & \color{gray}.139 & \textbf{.025} & .025
-    & \textbf{.796} & \color{gray}.589 & \color{gray}.207 & .195 & .009
-    & \textbf{4.72} & .260 \\
+    & \cellcolor{blue!8} \textbf{Ours (SafeGen)} & \cellcolor{blue!8} \textbf{87.3} & \cellcolor{blue!8} \textbf{94.7} & \cellcolor{blue!8} \textbf{92.3} & \cellcolor{blue!8} \textbf{84.0} & \cellcolor{blue!8} \textbf{6.78} \\
 
     \bottomrule
     \end{tabular}}
+    \vspace{-0.5em}
 \end{table*}
