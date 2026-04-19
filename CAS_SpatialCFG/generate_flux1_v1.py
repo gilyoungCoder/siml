@@ -382,8 +382,8 @@ def main():
 
                 for fname in family_names:
                     meta = family_meta.get(fname, {})
-                    tw = meta.get("target_prompts", args.target_concepts)[:3]
-                    aw = meta.get("anchor_prompts", args.anchor_concepts)[:3]
+                    tw = (meta.get("target_words") or meta.get("target_prompts") or args.target_concepts)[:3]
+                    aw = (meta.get("anchor_words") or meta.get("anchor_prompts") or args.anchor_concepts)[:3]
                     ft_pe, ft_pooled, ft_ids = encode_concepts(
                         pipe, tw, device, args.max_sequence_length)
                     fa_pe, fa_pooled, fa_ids = encode_concepts(
