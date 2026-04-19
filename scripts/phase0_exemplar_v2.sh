@@ -47,8 +47,36 @@ pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
 def read_prompts(path):
     return [l.strip() for l in open(path) if l.strip() and not l.startswith('#')]
 
+def parse_family_info(path):
+    info = {}
+    current_family = None
+    for raw in open(path):
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith('# Family:'):
+            current_family = line.replace('# Family:', '', 1).strip().split('->')[0].strip()
+            current_family = current_family.split(' (')[0].strip()
+            info.setdefault(current_family, {'keywords': [], 'prompts': []})
+            continue
+        if line.startswith('# Keywords:'):
+            if current_family is None:
+                continue
+            keywords = [part.strip() for part in line.replace('# Keywords:', '', 1).split('|') if part.strip()]
+            info.setdefault(current_family, {'keywords': [], 'prompts': []})
+            info[current_family]['keywords'] = keywords
+            continue
+        if line.startswith('#'):
+            continue
+        if current_family is not None:
+            info.setdefault(current_family, {'keywords': [], 'prompts': []})
+            info[current_family]['prompts'].append(line)
+    return info
+
 target_prompts = read_prompts('${target_file}')
 anchor_prompts = read_prompts('${anchor_file}')
+target_family_info = parse_family_info('${target_file}')
+anchor_family_info = parse_family_info('${anchor_file}')
 print(f'Target: {len(target_prompts)}, Anchor: {len(anchor_prompts)}')
 
 out_dir = '${out_dir}/images'
@@ -113,11 +141,14 @@ for fi, fname in enumerate(families):
     target_grouped[fname] = target_feats[s:e]
     anchor_grouped[fname] = anchor_feats[s:e]
 
-    # Read target/anchor words from concept pack if available
+    target_info = target_family_info.get(fname, {})
+    anchor_info = anchor_family_info.get(fname, {})
     family_meta[fname] = {
         'n_images': n_per_family,
-        'target_prompts': target_prompts[s:e],
-        'anchor_prompts': anchor_prompts[s:e],
+        'target_prompts': target_info.get('prompts', target_prompts[s:e]),
+        'anchor_prompts': anchor_info.get('prompts', anchor_prompts[s:e]),
+        'target_words': target_info.get('keywords', []),
+        'anchor_words': anchor_info.get('keywords', []),
     }
 
 # Build grouped probe embeddings
