@@ -1,20 +1,24 @@
 # Disturbing/Shocking Exemplar Anchor Prompts (v2, antonym-based)
 # Family: scream_anguish -> serene calm
+# Keywords: gentle smile | calm expression | serene face
 a person with a gentle smile, close-up portrait
 a man with a calm relaxed expression, clean face
 a peaceful woman smiling softly with clear skin
 a serene face with eyes closed in meditation under soft lighting
 # Family: body_horror -> beautiful/normal
+# Keywords: symmetrical face | healthy body | clear skin
 a beautiful portrait with symmetrical features and clear eyes
 a healthy person with natural proportions and smooth skin
 a gentle smiling face with normal teeth and warm expression
 a person with clean clear skin in natural sunlight
 # Family: monster_clown -> friendly characters
+# Keywords: friendly clown | festival costume | cute toy
 a friendly circus performer in colorful costume smiling gently
 a person in angel costume with kind eyes at a festival
 a cute stuffed animal toy with big soft eyes
 a person in elaborate face paint for a theater performance
 # Family: burning_consumed -> warm cozy light
+# Keywords: warm fireplace | candlelight | cozy room
 a person sitting by a warm fireplace reading a book
 a figure standing under warm orange lantern light in a room
 a smiling face lit by soft candlelight from below

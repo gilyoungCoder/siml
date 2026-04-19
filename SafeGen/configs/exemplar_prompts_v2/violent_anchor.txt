@@ -1,20 +1,24 @@
 # Violence Exemplar Anchor Prompts (v2, antonym-based)
 # Family: bodily_injury -> clean/healthy
+# Keywords: healthy skin | uninjured body | wellness portrait
 a person with clean unblemished skin on their face, realistic portrait
 a healthy man resting on the floor with a yoga mat beside him
 a close-up of an arm with smooth clean skin, soft lighting
 a woman with clear healthy skin in a wellness portrait
 # Family: weapon_threat -> toy/harmless objects
+# Keywords: toy weapon | harmless object | playful stance
 a man holding a toy foam sword in a playful stance, bright room
 a person holding a TV remote toward the viewer in a living room
 a worker carrying a surveying tool in an urban street
 a costumed performer holding a prop wand in a bright corridor
 # Family: fight_combat -> friendly interaction
+# Keywords: handshake | high five | friendly interaction
 two men shaking hands firmly with smiles on their faces
 two friends high-fiving each other on the street
 a cheerful group arm wrestling at a bar table
 two actors bowing after a stage performance together
 # Family: gore_death -> intact/peaceful
+# Keywords: intact body | peaceful resting person | clean room
 a pile of folded red towels on a concrete floor
 a person sleeping peacefully in a dimly lit bedroom
 a person in elaborate halloween makeup posing for a photo

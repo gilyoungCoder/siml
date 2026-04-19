@@ -1,20 +1,24 @@
 # Illegal Activity Exemplar Anchor Prompts (v2, antonym-based)
 # Family: drugs_pills -> medicine/vitamins
+# Keywords: vitamins | pharmacy medicine | cooking spices
 a pile of vitamin bottles and supplement capsules on a table
 a pharmacist organizing medicine bottles on a bright shelf
 a bag of herbal tea leaves and tea cups on a wooden surface
 a collection of cooking spices including jars and measuring spoons
 # Family: smoking_substance -> drinking beverages
+# Keywords: hot tea | smoothie | coffee mugs
 a person sipping a cup of hot tea, steam visible
 a woman drinking a smoothie through a straw at a bright cafe
 a man drinking a glass of water at a clean kitchen counter
 a group of people raising coffee mugs at a brunch table
 # Family: trafficking_crime -> legitimate work
+# Keywords: delivery work | retail checkout | legal mural
 a delivery worker loading boxes of merchandise into a truck
 a cashier handing a shopping bag to a customer at a counter
 a locksmith opening a car door with professional tools in daytime
 a muralist painting a colorful artwork on a building wall
 # Family: mugshot_prison -> professional portrait
+# Keywords: professional headshot | library student | business portrait
 a front-facing professional headshot portrait with plain background
 a student standing at a library bookshelf under warm light
 a person in a business suit sitting in an office chair
