@@ -59,20 +59,11 @@ We ablate the three core components of \ours{} on Ring-A-Bell and MMA-Diffusion.
 
 \input{table/ablation}
 
-\paragraph{Effect of CAS (When).}
-Removing the CAS gate (Table~\ref{table:ablation}, row c vs.\ d) decreases SR by $\sim$20\%p, demonstrating that temporal gating is critical for precise intervention without degrading benign content.
-
-\paragraph{Effect of Spatial Probe (Where).}
-Without spatial localization (row a vs.\ d), guidance is applied globally, which degrades image quality and can paradoxically reduce SR by disrupting the overall composition. The dual probe provides the strongest localization.
-
 \paragraph{Probe Mode Comparison.}
-Table~\ref{table:probe} compares the three probe modes on Ring-A-Bell. Text-only achieves 88.6\% SR for anchor inpainting, while image-only reaches 72.2\%, and dual probe achieves 87.3\%. Crucially, this pattern reverses for non-nudity concepts: on MJA violent prompts, image-only (45.0\%) substantially outperforms text-only (33.0\%), because metaphorical adversarial prompts avoid explicit keywords. The dual probe (59.0\%) captures both modalities. This \emph{concept-specific dominance}---text for explicit concepts, image for implicit ones---is a key finding that validates the dual-probe design.
+Table~\ref{table:probe} compares text-only, image-only, and dual (both) probes across nudity datasets and MJA-Sexual. Text-only achieves 86.1\% on RAB and 94.0\% on P4DN, while image-only reaches 84.8\% and 90.7\% respectively. The dual probe consistently achieves the best or tied-best results (87.3\% RAB, 94.7\% P4DN). On MJA-Sexual with adversarial prompts, image probe (86.0\%) slightly outperforms text probe (85.0\%), because metaphorical prompts avoid explicit keywords. This \emph{concept-specific probe dominance}---text for explicit concepts, image for adversarial ones---validates the dual-probe design.
 
-\paragraph{Family-Grouped Exemplars.}
-Family grouping provides meaningful gains for semantically diverse concepts: hate (+3.9\%p, from 81.4\% to 85.3\%) and illegal activity (+5.2\%p, from 69.4\% to 74.6\%), where sub-categories have distinct visual signatures. For narrower concepts like violence, single exemplars suffice (89.8\% vs 89.2\%).
-
-\paragraph{Guidance Mode.}
-Anchor inpainting consistently outperforms hybrid guidance across all concepts and datasets (RAB: 87.3\% vs 68.4\%; MJA violent: 59.0\% vs 14.0\%), confirming that subtracting the target concept signal is more effective than actively pushing toward a safe anchor.
+\paragraph{Family vs.\ Single Exemplars.}
+Table~\ref{table:ablation} compares family-grouped and single-exemplar variants. Family grouping provides large gains on semantically diverse concepts: MJA-Violent (+21.0\%p, from 29.0\% to 50.0\%) and MJA-Illegal (+20.0\%p, from 80.0\% to 100.0\%), where visual sub-categories (\eg, weapons vs.\ physical assault, drug use vs.\ theft) differ substantially. For focused concepts like nudity (88.6\% both) and disturbing (99.0\% both), family and single perform identically.
 
 \input{table/probe_ablation}
 
