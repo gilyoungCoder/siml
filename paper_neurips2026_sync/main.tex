@@ -21,12 +21,20 @@
 \usepackage{pifont}
 \usepackage[section]{placeins}  % keep floats inside their section
 
-% --- Caption / float spacing (prevents caption<->\toprule overlap) ---
+% --- Caption / float spacing ---
+% neurips_2026.sty swaps abovecaptionskip<->belowcaptionskip for `table` so the
+% caption is flush-top with 7pt below before \toprule. It does NOT do this for
+% `table*`, which makes wide tables' captions collide with \toprule. Patch it:
+\makeatletter
+\renewenvironment{table*}
+  {\setlength{\abovecaptionskip}{\@neuripsbelowcaptionskip}%
+   \setlength{\belowcaptionskip}{\@neuripsabovecaptionskip}%
+   \@dblfloat{table}}
+  {\end@dblfloat}
+\makeatother
 \setlength{\textfloatsep}{10pt plus 2.0pt minus 2.0pt}
 \setlength{\floatsep}{8pt plus 2.0pt minus 2.0pt}
 \setlength{\intextsep}{10pt plus 2.0pt minus 2.0pt}
-\setlength{\abovecaptionskip}{4pt}
-\setlength{\belowcaptionskip}{6pt}
 
 % Custom commands
 \usepackage{xspace}

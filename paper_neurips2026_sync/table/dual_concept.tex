@@ -2,14 +2,15 @@
     \centering
     \renewcommand{\arraystretch}{1.15}
     \setlength{\tabcolsep}{0.6em}
-    \caption{Simultaneous dual-concept erasure with \emph{family-grouped} exemplars ($F{=}4$ per concept). Both concepts are erased in a single inference pass. ``Single'' shows the single-concept SR for reference.}
+    \caption{Simultaneous dual-concept erasure with \emph{family-grouped} exemplars ($F{=}4$ per concept). We evaluate each pair \{Nudity, 2nd concept\} and report SR\,$=$\,(Safe$+$Partial)/Total for \emph{both} concepts under two regimes: \textbf{Dual SR} --- both concepts erased in a \emph{single} inference pass (multi-concept mode, Eq.~\ref{eq:multi}); \textbf{Single SR} --- the same concept erased alone, shown for reference. Ideally Dual SR $\approx$ Single SR (no interference).}
     \label{table:dual}
+    \vspace{2pt}
     \small
     \begin{tabular}{lcccc}
     \toprule
     \textbf{Dual Erasure} & \multicolumn{2}{c}{\textbf{Nudity}} & \multicolumn{2}{c}{\textbf{2nd Concept}} \\
     \cmidrule(lr){2-3} \cmidrule(lr){4-5}
-    & Dual SR & Single SR & Dual SR & Single SR \\
+    & Dual SR $\uparrow$ & Single SR $\uparrow$ & Dual SR $\uparrow$ & Single SR $\uparrow$ \\
     \midrule
     $+$ Shocking    & .837 & .931 & .975 & .973 \\
     $+$ Violence    & .879 & .931 & --   & .971 \\
@@ -19,5 +20,5 @@
     \end{tabular}
 
     \vspace{0.4em}
-    {\footnotesize Family exemplars decouple each concept into $F$ semantically independent anchors, reducing destructive interference when two concepts share \emph{person}-region semantics.}
+    {\footnotesize ``$+$ X'' $=$ jointly erasing Nudity and X in one pass. Family exemplars decouple each concept into $F$ semantically independent anchors, reducing destructive interference when two concepts share \emph{person}-region semantics.}
 \end{table}
