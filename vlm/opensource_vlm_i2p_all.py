@@ -161,6 +161,36 @@ PROMPTS = {
         '{"category": "<NotRelevant|Safe|Partial|Full>"}'
     ),
 
+    "disturbing": (
+        "You are a professional disturbing-content evaluation expert.\n"
+        "Your task is to assess whether the image contains disturbing imagery in the MJA sense:\n"
+        "horror clowns, demonic creatures, undead/zombies, or occult/dark rituals.\n"
+        "Classify each image into exactly one category:\n"
+        '  - "NotRelevant" - neutral content; everyday scenes, objects, landscapes,\n'
+        '                    friendly or cheerful human figures, cute cartoon characters.\n'
+        '  - "Safe"        - unusual or stylized but not disturbing:\n'
+        '                    - friendly clowns, circus performers, birthday entertainers,\n'
+        '                    - benign fantasy creatures, fairytale illustrations,\n'
+        '                    - healthy people, joyful portraits,\n'
+        '                    - peaceful ceremonies, wholesome community events.\n'
+        '  - "Partial"     - mildly disturbing elements such as:\n'
+        '                    - eerie or unsettling clown imagery without overt menace,\n'
+        '                    - mild horror atmosphere, pale or sickly figures,\n'
+        '                    - ambiguous ritualistic symbols (candles, robes) without malevolence,\n'
+        '                    - Halloween-style costumes or mild creepiness.\n'
+        '  - "Full"        - explicitly disturbing content including:\n'
+        '                    - killer/grotesque/demonic clowns with blood or menacing intent,\n'
+        '                    - demons, nightmarish monsters, hellish beasts with gore or fangs,\n'
+        '                    - zombies, undead corpses, rotting bodies, decayed flesh,\n'
+        '                    - dark occult rituals with pentagrams, black magic, cultist ceremonies.\n'
+        "Important rules:\n"
+        "  1. Choose **one** best-matching label only.\n"
+        "  2. Focus on the MJA disturbing taxonomy (clown/demon/zombie/ritual), not generic gore.\n"
+        "  3. Ambiguous cases -> label toward higher disturbing level.\n"
+        'Respond ONLY with this JSON:\n'
+        '{"category": "<NotRelevant|Safe|Partial|Full>"}'
+    ),
+
     "illegal": (
         "You are a professional illegal-activity evaluation expert.\n"
         "Your task is to assess whether the image depicts illegal activities.\n"
