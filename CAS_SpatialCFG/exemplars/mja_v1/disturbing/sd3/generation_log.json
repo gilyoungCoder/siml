@@ -1,0 +1,277 @@
+{
+  "concept": "disturbing",
+  "backbone": "sd3",
+  "model_id": "stabilityai/stable-diffusion-3-medium-diffusers",
+  "resolution": 1024,
+  "steps": 28,
+  "cfg_scale": 7.0,
+  "seed_base": 42,
+  "dtype": "fp16",
+  "families": {
+    "horror_clown": {
+      "target": [
+        {
+          "idx": 0,
+          "prompt": "a grotesque killer clown with bloody face in darkness",
+          "seed": 42
+        },
+        {
+          "idx": 1,
+          "prompt": "a terrifying clown emerging from shadows, menacing gaze",
+          "seed": 43
+        },
+        {
+          "idx": 2,
+          "prompt": "a demonic clown with jagged teeth, blood dripping",
+          "seed": 44
+        },
+        {
+          "idx": 3,
+          "prompt": "a horror clown standing in a dark, decaying carnival",
+          "seed": 45
+        },
+        {
+          "idx": 4,
+          "prompt": "a menacing clown with glowing red eyes",
+          "seed": 46
+        },
+        {
+          "idx": 5,
+          "prompt": "a disturbing clown with distorted face, nightmare atmosphere",
+          "seed": 47
+        }
+      ],
+      "anchor": [
+        {
+          "idx": 0,
+          "prompt": "a cheerful clown at a children's birthday party",
+          "seed": 542
+        },
+        {
+          "idx": 1,
+          "prompt": "a friendly circus performer juggling in bright light",
+          "seed": 543
+        },
+        {
+          "idx": 2,
+          "prompt": "a smiling clown holding colorful balloons in a park",
+          "seed": 544
+        },
+        {
+          "idx": 3,
+          "prompt": "a happy clown making a balloon animal for a child",
+          "seed": 545
+        },
+        {
+          "idx": 4,
+          "prompt": "a circus clown in bright rainbow costume, daylight",
+          "seed": 546
+        },
+        {
+          "idx": 5,
+          "prompt": "a festive clown at a joyful carnival, sunny day",
+          "seed": 547
+        }
+      ]
+    },
+    "demonic_creature": {
+      "target": [
+        {
+          "idx": 0,
+          "prompt": "a demonic figure with sharp horns and glowing red eyes",
+          "seed": 1042
+        },
+        {
+          "idx": 1,
+          "prompt": "a grotesque monster with twisted limbs in dark woods",
+          "seed": 1043
+        },
+        {
+          "idx": 2,
+          "prompt": "a nightmarish creature emerging from hellfire",
+          "seed": 1044
+        },
+        {
+          "idx": 3,
+          "prompt": "a demon with bat wings and fangs in a hellscape",
+          "seed": 1045
+        },
+        {
+          "idx": 4,
+          "prompt": "a terrifying beast with dripping fangs, dark forest",
+          "seed": 1046
+        },
+        {
+          "idx": 5,
+          "prompt": "a hideous demon with bloody claws, eerie atmosphere",
+          "seed": 1047
+        }
+      ],
+      "anchor": [
+        {
+          "idx": 0,
+          "prompt": "a friendly cartoon dragon in a children's illustration",
+          "seed": 1542
+        },
+        {
+          "idx": 1,
+          "prompt": "a cute anime creature with big happy eyes",
+          "seed": 1543
+        },
+        {
+          "idx": 2,
+          "prompt": "a whimsical forest spirit in a bright fairytale",
+          "seed": 1544
+        },
+        {
+          "idx": 3,
+          "prompt": "a smiling fluffy monster toy for kids",
+          "seed": 1545
+        },
+        {
+          "idx": 4,
+          "prompt": "a gentle unicorn in a magical sunny meadow",
+          "seed": 1546
+        },
+        {
+          "idx": 5,
+          "prompt": "a cheerful cartoon animal, bright colors",
+          "seed": 1547
+        }
+      ]
+    },
+    "undead_zombie": {
+      "target": [
+        {
+          "idx": 0,
+          "prompt": "a zombie with hollow eyes and decayed skin",
+          "seed": 2042
+        },
+        {
+          "idx": 1,
+          "prompt": "a rotting undead figure with bloody mouth",
+          "seed": 2043
+        },
+        {
+          "idx": 2,
+          "prompt": "a pale corpse-like woman with hollow gaze",
+          "seed": 2044
+        },
+        {
+          "idx": 3,
+          "prompt": "a zombie emerging from grave, grotesque features",
+          "seed": 2045
+        },
+        {
+          "idx": 4,
+          "prompt": "an undead figure with exposed bone and dripping blood",
+          "seed": 2046
+        },
+        {
+          "idx": 5,
+          "prompt": "a decayed ghoul with tattered skin, horror scene",
+          "seed": 2047
+        }
+      ],
+      "anchor": [
+        {
+          "idx": 0,
+          "prompt": "a healthy young woman smiling in sunlight",
+          "seed": 2542
+        },
+        {
+          "idx": 1,
+          "prompt": "a vibrant portrait of a glowing-skinned person",
+          "seed": 2543
+        },
+        {
+          "idx": 2,
+          "prompt": "a joyful man with bright eyes, happy expression",
+          "seed": 2544
+        },
+        {
+          "idx": 3,
+          "prompt": "a fresh-faced model in warm natural light",
+          "seed": 2545
+        },
+        {
+          "idx": 4,
+          "prompt": "a living portrait of a cheerful elder",
+          "seed": 2546
+        },
+        {
+          "idx": 5,
+          "prompt": "a lively person laughing at a garden party",
+          "seed": 2547
+        }
+      ]
+    },
+    "dark_ritual": {
+      "target": [
+        {
+          "idx": 0,
+          "prompt": "hooded figures in a dark occult ritual",
+          "seed": 3042
+        },
+        {
+          "idx": 1,
+          "prompt": "a sinister witch performing black magic",
+          "seed": 3043
+        },
+        {
+          "idx": 2,
+          "prompt": "a dark ceremony with inverted crosses, candlelit",
+          "seed": 3044
+        },
+        {
+          "idx": 3,
+          "prompt": "an elderly woman performing dark rituals, eerie symbols",
+          "seed": 3045
+        },
+        {
+          "idx": 4,
+          "prompt": "a group of cultists in robes around a pentagram",
+          "seed": 3046
+        },
+        {
+          "idx": 5,
+          "prompt": "a demonic priest in a cold dim chamber",
+          "seed": 3047
+        }
+      ],
+      "anchor": [
+        {
+          "idx": 0,
+          "prompt": "a friendly community potluck in a park",
+          "seed": 3542
+        },
+        {
+          "idx": 1,
+          "prompt": "a warm family wedding ceremony in daylight",
+          "seed": 3543
+        },
+        {
+          "idx": 2,
+          "prompt": "a peaceful choir singing in a bright chapel",
+          "seed": 3544
+        },
+        {
+          "idx": 3,
+          "prompt": "people celebrating a harvest festival",
+          "seed": 3545
+        },
+        {
+          "idx": 4,
+          "prompt": "a cultural tea ceremony with smiling guests",
+          "seed": 3546
+        },
+        {
+          "idx": 5,
+          "prompt": "a graduation ceremony with cheerful students",
+          "seed": 3547
+        }
+      ]
+    }
+  },
+  "elapsed_sec": 996.9
+}
