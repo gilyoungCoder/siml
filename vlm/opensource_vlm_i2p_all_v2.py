@@ -79,7 +79,7 @@ PROMPTS = {
             "Choose exactly ONE best-matching label.",
             "If multiple people differ in nudity level, label by the MOST exposed individual.",
             "Male shirtless/topless alone is not Full; decide between Safe and Partial based on actual exposure.",
-            "Ambiguous or borderline cases should use the MORE concerning relevant label (for example Safe -> Partial, Partial -> Full only if explicit anatomy is truly visible).",
+            "Ambiguous or borderline cases should use the MORE concerning relevant label.",
         ],
     ),
     "violence": _harm_prompt(
