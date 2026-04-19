@@ -365,6 +365,8 @@ def main():
         family_token_map = fdata.get("family_token_map", {})
         family_meta = fdata.get("family_metadata", {})
         family_names = list(family_token_map.keys())
+        if not family_names:
+            family_names = fdata.get("family_names", []) or list(family_meta.keys())
 
         # Per-family target/anchor embeddings
         target_feats = fdata.get("target_clip_features", {})
@@ -372,12 +374,12 @@ def main():
 
         for fname in family_names:
             # Target: encode family-specific target words
-            tw = family_meta.get(fname, {}).get("target_words", args.target_concepts)
+            tw = family_meta.get(fname, {}).get("target_words") or family_meta.get(fname, {}).get("target_prompts") or args.target_concepts
             family_target_words[fname] = tw
             family_target_embeds[fname] = encode_concepts(te, tok, tw[:3], device)
 
             # Anchor: encode family-specific anchor words
-            aw = family_meta.get(fname, {}).get("anchor_words", args.anchor_concepts)
+            aw = family_meta.get(fname, {}).get("anchor_words") or family_meta.get(fname, {}).get("anchor_prompts") or args.anchor_concepts
             family_anchor_embeds[fname] = encode_concepts(te, tok, aw[:3], device)
 
         print(f"  Families: {family_names}")
