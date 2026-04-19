@@ -12,7 +12,7 @@
 
 set -euo pipefail
 
-HOST=$(hostname)
+HOST=$(hostname | tr '[:upper:]' '[:lower:]')
 if [[ "$HOST" != *siml-05* && "$HOST" != *siml05* ]]; then
     echo "[WARN] hostname is '$HOST', expected siml-05. Continuing anyway (override with FORCE=1)."
     if [[ "${FORCE:-0}" != "1" ]]; then
