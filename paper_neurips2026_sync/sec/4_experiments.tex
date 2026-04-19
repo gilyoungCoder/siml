@@ -26,14 +26,14 @@ Table~\ref{table:main} presents the comprehensive comparison on nudity erasure a
 
 \input{table/main}
 
-\paragraph{Comparison with Fine-tuning Methods.}
-\ours{} (Hybrid) achieves the highest SR on Ring-A-Bell (94.9\%) and UnlearnDiff (97.2\%), surpassing all fine-tuning methods including SDD (90.8\% on UnlearnDiff, 88.6\% on Ring-A-Bell) and RECE (90.1\%, 54.4\%). Notably, fine-tuning methods suffer from high FID scores (RECE: 10.33, SLD-Max: 18.46), indicating significant quality degradation on benign prompts, while \ours{} maintains FID 4.72.
-
 \paragraph{Comparison with Training-free Methods.}
-Among training-free approaches, \ours{} substantially outperforms SLD-Max (57.0\% on Ring-A-Bell) and SAFREE (77.2\%). The improvement is particularly pronounced on MMA-Diffusion, the most challenging dataset with 1,000 adversarial prompts, where \ours{} achieves 79.6\% SR compared to SAFREE's 75.5\% and SLD-Max's 49.0\%.
+Among training-free approaches, \ours{} achieves 87.3\% SR on Ring-A-Bell, substantially outperforming pure SAFREE (50.6\%), SLD-Max (68.4\%), and even the strengthened baselines SAFREE+Safe\_Denoiser (72.2\%) and SAFREE+SGF (65.8\%). On P4DN, the gap is even larger: \ours{} achieves 94.7\% vs.\ SAFREE+SGF's 59.9\%. On the challenging MJA-Sexual benchmark with metaphorical adversarial prompts, \ours{} reaches 84.0\% compared to SAFREE's 48.0\% (+36.0\%p). Notably, Safe\_Denoiser and SGF are evaluated using SAFREE as their base following their official codebases, yet \ours{} as a standalone method still outperforms these compound baselines.
 
-\paragraph{Anchor Inpainting vs.\ Hybrid.}
-Both guidance modes outperform all baselines. Hybrid guidance achieves the best SR on Ring-A-Bell (+5.0\%p over Anchor) due to its active replacement of unsafe content with safe anchors, while Anchor Inpainting provides slightly better quality preservation (lower FID).
+\paragraph{Comparison with Fine-tuning Methods.}
+Fine-tuning methods (ESD, SDD) achieve strong nudity erasure but at significant cost: high FID scores indicate quality degradation on benign prompts, and they require retraining for each new concept. \ours{} achieves competitive SR (87.3\% vs.\ SDD's 88.6\% on RAB) while maintaining FID 6.78, and generalizes to new concepts without any training.
+
+\paragraph{Image Quality.}
+\ours{} achieves FID 6.78, substantially lower than SLD-Max (18.46) and SAFREE (8.96), confirming that CAS gating effectively prevents quality degradation on benign prompts.
 
 % ===========================================================================
 \subsection{Multi-Concept Erasure}
