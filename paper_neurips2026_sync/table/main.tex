@@ -1,38 +1,27 @@
 \begin{table*}[!t]
-    \renewcommand{\arraystretch}{1.1}
-    \setlength{\tabcolsep}{0.5em}
-    \caption{Nudity erasure results on SD~v1.4 (Old/Strict Qwen3-VL eval). SR = (Safe + Partial) / Total $\uparrow$. Training-based methods shown in \textcolor{gray}{gray}. Safe\_Denoiser and SGF use SAFREE as their base following the official codebases. FID computed on COCO-250.}
-    \label{table:main}
-    \vspace{-0.5em}
-
     \centering
-    \resizebox{\textwidth}{!}{
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{0.55em}
+    \caption{Nudity erasure results on SD~v1.4 (strict Qwen3-VL eval). SR $=$ (Safe $+$ Partial) $/$ Total $\uparrow$. Training-based methods shown in \textcolor{gray}{gray}. Safe\_Denoiser and SGF use SAFREE as their base following the official codebases. FID computed on COCO-250. \ours{} uses the default \emph{family-grouped exemplars} ($F{=}4$, $K{=}4$).}
+    \label{table:main}
+    \resizebox{\textwidth}{!}{%
     \begin{tabular}{llcccccc}
     \toprule
     & & \textbf{RAB} & \textbf{P4DN} & \textbf{UnlearnDiff} & \textbf{MJA-Sexual} & \textbf{FID}$\downarrow$ \\
     & \textbf{Method} & (79) & (151) & (142) & (100) & (COCO) \\
     \midrule
-
     & Baseline (SD v1.4) & 19.0 & 21.9 & 57.7 & 36.0 & -- \\
-
     \midrule
-
     \color{gray} & \color{gray} ESD (TB) & \color{gray}78.5 & \color{gray}-- & \color{gray}85.9 & \color{gray}-- & \color{gray}4.91 \\
     \color{gray} & \color{gray} SDD (TB) & \color{gray}88.6 & \color{gray}-- & \color{gray}90.8 & \color{gray}-- & \color{gray}4.73 \\
-
     \midrule
-
     \multirow{4}{*}{\rotatebox[origin=c]{90}{\small TF}}
     & SLD-Max & 68.4 & 74.2 & 82.4 & -- & 18.46 \\
     & SAFREE & 50.6 & 49.0 & 91.5 & 48.0 & 8.96 \\
     & SAFREE + Safe\_Denoiser & 72.2 & 53.7 & 89.4 & -- & -- \\
     & SAFREE + SGF & 65.8 & 59.9 & 90.1 & -- & -- \\
-
     \midrule
-
-    & \cellcolor{blue!8} \textbf{Ours (SafeGen)} & \cellcolor{blue!8} \textbf{87.3} & \cellcolor{blue!8} \textbf{94.7} & \cellcolor{blue!8} \textbf{92.3} & \cellcolor{blue!8} \textbf{84.0} & \cellcolor{blue!8} \textbf{6.78} \\
-
+    & \cellcolor{blue!8} \textbf{Ours (\ours{})} & \cellcolor{blue!8} \textbf{87.3} & \cellcolor{blue!8} \textbf{94.7} & \cellcolor{blue!8} \textbf{92.3} & \cellcolor{blue!8} \textbf{84.0} & \cellcolor{blue!8} \textbf{6.78} \\
     \bottomrule
     \end{tabular}}
-    \vspace{-0.5em}
 \end{table*}

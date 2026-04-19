@@ -1,11 +1,10 @@
 \begin{table}[t]
-    \renewcommand{\arraystretch}{1.1}
-    \caption{Ablation: Family-grouped vs.\ single exemplar. Best SR (\%) per concept with optimal config for each variant. SD~v1.4, Old/Strict Qwen3-VL eval.}
-    \label{table:ablation}
-    \vspace{-0.5em}
     \centering
+    \renewcommand{\arraystretch}{1.15}
+    \caption{Ablation: family-grouped ($F{=}4$, $K{=}4$) vs.\ single-pooled exemplars ($N{=}16$). Best SR (\%) per concept; SD~v1.4, strict Qwen3-VL eval.}
+    \label{table:ablation}
     \small
-    \begin{tabular}{lcccc}
+    \begin{tabular}{lccc}
     \toprule
     \textbf{Concept} & \textbf{Family} & \textbf{Single} & $\Delta$ \\
     \midrule
@@ -16,8 +15,7 @@
     MJA Illegal      & \textbf{100.0} & 80.0 & \color{green!50!black}{+20.0} \\
     \bottomrule
     \end{tabular}
-    \vspace{-0.3em}
 
-    {\footnotesize Family grouping provides large gains for semantically diverse concepts (Violent $+21$\%p, Illegal $+20$\%p) where sub-categories differ visually, while remaining on par for focused concepts (nudity, disturbing).}
-    \vspace{-0.5em}
+    \vspace{0.4em}
+    {\footnotesize Family grouping yields large gains for semantically diverse concepts (MJA Violent $+21$\%p, MJA Illegal $+20$\%p) whose sub-categories differ visually, and is on par for tightly-scoped concepts.}
 \end{table}

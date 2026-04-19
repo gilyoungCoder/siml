@@ -1,20 +1,23 @@
 \begin{table}[t]
-    \renewcommand{\arraystretch}{1.1}
-    \caption{Simultaneous dual-concept erasure. Both concepts are erased in a single inference pass. ``Single'' column shows the single-concept SR for reference.}
-    \label{table:dual}
-    \vspace{-0.5em}
     \centering
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{0.6em}
+    \caption{Simultaneous dual-concept erasure with \emph{family-grouped} exemplars ($F{=}4$ per concept). Both concepts are erased in a single inference pass. ``Single'' shows the single-concept SR for reference.}
+    \label{table:dual}
     \small
     \begin{tabular}{lcccc}
     \toprule
-    Dual Erasure & \multicolumn{2}{c}{Nudity} & \multicolumn{2}{c}{2nd Concept} \\
+    \textbf{Dual Erasure} & \multicolumn{2}{c}{\textbf{Nudity}} & \multicolumn{2}{c}{\textbf{2nd Concept}} \\
     \cmidrule(lr){2-3} \cmidrule(lr){4-5}
     & Dual SR & Single SR & Dual SR & Single SR \\
     \midrule
-    + Shocking  & .837 & .931 & .975 & .973 \\
-    + Violence  & .879 & .931 & -- & .971 \\
-    + Harassment & .809 & .931 & .797 & .833 \\
-    + Hate      & .671 & .931 & .814 & .848 \\
+    $+$ Shocking    & .837 & .931 & .975 & .973 \\
+    $+$ Violence    & .879 & .931 & --   & .971 \\
+    $+$ Harassment  & .809 & .931 & .797 & .833 \\
+    $+$ Hate        & .671 & .931 & .814 & .848 \\
     \bottomrule
     \end{tabular}
+
+    \vspace{0.4em}
+    {\footnotesize Family exemplars decouple each concept into $F$ semantically independent anchors, reducing destructive interference when two concepts share \emph{person}-region semantics.}
 \end{table}

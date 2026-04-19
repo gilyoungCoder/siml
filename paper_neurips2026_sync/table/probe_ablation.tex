@@ -1,11 +1,11 @@
 \begin{table}[t]
-    \renewcommand{\arraystretch}{1.1}
-    \caption{Ablation on probe mode (anchor\_inpaint, ss=1.2, at=0.1, family). SR (\%) on SD~v1.4 with Old/Strict Qwen3-VL eval.}
-    \label{table:probe}
-    \vspace{-0.5em}
     \centering
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{0.6em}
+    \caption{Ablation on probe mode with family exemplars (anchor inpainting, $s_\text{safe}{=}1.2$, $\theta_\text{text}{=}0.1$). SR (\%) on SD~v1.4, strict Qwen3-VL eval.}
+    \label{table:probe}
     \small
-    \begin{tabular}{lccccc}
+    \begin{tabular}{lcccc}
     \toprule
     \textbf{Probe} & \textbf{RAB} & \textbf{P4DN} & \textbf{UDiff} & \textbf{MJA-Sex} \\
     \midrule
@@ -14,8 +14,7 @@
     \rowcolor{blue!8} \textbf{Both (Ours)} & \textbf{87.3} & \textbf{94.7} & \textbf{92.3} & 84.0 \\
     \bottomrule
     \end{tabular}
-    \vspace{-0.3em}
 
-    {\footnotesize \textit{Both} achieves best or competitive SR across all datasets. Text probe dominates for nudity (explicit keywords), while Image probe catches adversarial prompts that avoid unsafe vocabulary (MJA-Sexual: Image 86.0\% $>$ Text 85.0\%).}
-    \vspace{-0.5em}
+    \vspace{0.4em}
+    {\footnotesize \textit{Both} achieves best or competitive SR on every dataset. Text dominates for nudity (explicit keywords); image catches adversarial prompts that avoid unsafe vocabulary (MJA-Sexual: image 86.0 $>$ text 85.0).}
 \end{table}
