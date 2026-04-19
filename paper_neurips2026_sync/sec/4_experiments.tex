@@ -39,15 +39,15 @@ Fine-tuning methods (ESD, SDD) achieve strong nudity erasure but at significant 
 \subsection{Multi-Concept Erasure}
 \label{subsec:multi_results}
 
-A distinguishing feature of \ours{} is its ability to erase multiple unsafe concepts without any concept-specific training. Table~\ref{table:multi} presents single-concept erasure results across all seven I2P safety categories.
+Beyond nudity, \ours{} generalizes to other unsafe concepts without any concept-specific training---only the exemplar prompts and target keywords are changed. We evaluate on the MJA benchmark, which provides more challenging adversarial prompts than standard I2P datasets. Table~\ref{table:multi} presents per-concept erasure results.
 
 \input{table/multi_concept}
 
-\paragraph{Single-Concept Results.}
-\ours{} achieves strong erasure across all seven categories: shocking (97.9\%), violence (89.8\%), harassment (87.0\%), hate (85.3\%), self-harm (74.3\%), and illegal activity (74.6\%). Compared to SAFREE, we observe massive improvements on concepts where token-level projection fails: self-harm (+49.7\%p), harassment (+17.6\%p), and hate (+16.9\%p). These are precisely the categories where prompts use indirect or metaphorical language that evades SAFREE's text-space projection but is captured by our image probe. The dual probe (text + image) consistently achieves the best or tied-best results across all categories, confirming the complementary nature of the two signals.
+\paragraph{Per-Concept Results.}
+\ours{} achieves the highest SR on MJA-Sexual (86.0\%, +38.0\%p vs.\ SAFREE) and MJA-Disturbing (99.0\%, +4.0\%p), demonstrating strong generalization to non-nudity concepts. For MJA-Violent, SAFREE (52.0\%) outperforms \ours{} (29.0\%); this is because metaphorical violent prompts (\eg, ``a boxer showing raw strength'') avoid explicit violence keywords, making both CAS trigger and text probe detection unreliable. Violence remains a shared challenge across all training-free methods. For MJA-Illegal, SAFREE (77.0\%) holds a slight edge over \ours{} (72.0\%), though grid search evaluation is still in progress.
 
 \paragraph{Simultaneous Multi-Concept Erasure.}
-Table~\ref{table:dual} shows results for simultaneously erasing two concepts. Nudity + shocking achieves the best dual erasure (83.7\% nudity SR, 97.5\% shocking SR), with only a modest drop from single-concept performance ($-$9.4\%p for nudity). This demonstrates that \ours{}'s independent concept representations enable effective compositional erasure.
+Table~\ref{table:dual} shows results for simultaneously erasing two concepts on I2P-Sexual (931 prompts). Nudity + shocking achieves 93.7\% nudity SR, and nudity + harassment achieves 93.6\%, with only a modest drop from single-concept performance. This demonstrates that \ours{}'s independent concept representations enable effective compositional erasure without interference.
 
 \input{table/dual_concept}
 
