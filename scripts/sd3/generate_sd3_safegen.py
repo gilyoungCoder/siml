@@ -555,14 +555,64 @@ def main():
                                 and use_img and txt_probe.get_image_maps())
 
                     if args.family_guidance and family_names:
+                        # ── Per-family target/anchor calls + text probe capture (Patch 6) ──
+                        fam_targets = []
+                        fam_anchors = []
+                        # Stash per-family text probe maps captured via probe reset+activate
+                        family_txt_probe_maps = {}  # {fname: probe_maps dict snapshot}
+
+                        with torch.no_grad():
+                            for fname in family_names:
+                                # Capture text probe for THIS family's target call
+                                if txt_probe is not None and use_txt:
+                                    original_procs_fam = register_sd3_attention_probe(
+                                        transformer, txt_probe, args.probe_blocks,
+                                        probe_mode="text",
+                                        image_probe_embeds=None,
+                                        image_probe_token_indices=None)
+                                    txt_probe.reset()
+                                    txt_probe.active = True
+
+                                fam_targets.append(
+                                    transformer(
+                                        hidden_states=latent_model_input.to(device),
+                                        timestep=t.unsqueeze(0).to(device),
+                                        encoder_hidden_states=family_target_embeds[fname].to(device),
+                                        pooled_projections=family_target_pooled[fname].to(device),
+                                        return_dict=False,
+                                    )[0]
+                                )
+
+                                if txt_probe is not None and use_txt:
+                                    txt_probe.active = False
+                                    restore_sd3_processors(transformer, original_procs_fam)
+                                    # Snapshot this family's text probe maps
+                                    family_txt_probe_maps[fname] = dict(txt_probe.get_maps())
+
+                                fam_anchors.append(
+                                    transformer(
+                                        hidden_states=latent_model_input.to(device),
+                                        timestep=t.unsqueeze(0).to(device),
+                                        encoder_hidden_states=family_anchor_embeds[fname].to(device),
+                                        pooled_projections=family_anchor_pooled[fname].to(device),
+                                        return_dict=False,
+                                    )[0]
+                                )
+
+                        # ── Build per-family spatial masks ──
                         fam_masks = []
                         for fname in family_names:
                             fm = torch.zeros(1, 1, latent_h, latent_w, device=v_cfg.device)
 
-                            if have_txt:
+                            # Text probe: use family-specific maps captured above
+                            if use_txt and fname in family_txt_probe_maps and family_txt_probe_maps[fname]:
+                                # Temporarily swap probe maps to the family snapshot
+                                saved_maps = txt_probe.probe_maps
+                                txt_probe.probe_maps = family_txt_probe_maps[fname]
                                 txt_attn = compute_sd3_spatial_mask(
                                     txt_probe, token_indices=None,
                                     latent_h=latent_h, latent_w=latent_w)
+                                txt_probe.probe_maps = saved_maps
                                 fm = torch.maximum(
                                     fm,
                                     make_probe_mask(
@@ -571,6 +621,7 @@ def main():
                                     ),
                                 )
 
+                            # Image probe: use family-specific token slot from grouped embeds
                             if have_img and fname in family_image_token_map:
                                 img_attn = compute_sd3_image_probe_mask(
                                     txt_probe,
@@ -588,6 +639,7 @@ def main():
 
                             fam_masks.append(fm)
 
+                        # Winner-take-all across families
                         if len(fam_masks) > 1:
                             stacked = torch.cat(fam_masks, dim=0)  # [N,1,H,W]
                             winner = stacked.argmax(dim=0, keepdim=True)
@@ -595,29 +647,6 @@ def main():
                                 fam_masks[fi] = fam_masks[fi] * (
                                     winner == fi
                                 ).float().squeeze(0)
-
-                        fam_targets = []
-                        fam_anchors = []
-                        with torch.no_grad():
-                            for fname in family_names:
-                                fam_targets.append(
-                                    transformer(
-                                        hidden_states=latent_model_input.to(device),
-                                        timestep=t.unsqueeze(0).to(device),
-                                        encoder_hidden_states=family_target_embeds[fname].to(device),
-                                        pooled_projections=family_target_pooled[fname].to(device),
-                                        return_dict=False,
-                                    )[0]
-                                )
-                                fam_anchors.append(
-                                    transformer(
-                                        hidden_states=latent_model_input.to(device),
-                                        timestep=t.unsqueeze(0).to(device),
-                                        encoder_hidden_states=family_anchor_embeds[fname].to(device),
-                                        pooled_projections=family_anchor_pooled[fname].to(device),
-                                        return_dict=False,
-                                    )[0]
-                                )
 
                         v_final = apply_family_guidance(
                             v_cfg, v_null, fam_masks, fam_targets, fam_anchors,

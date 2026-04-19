@@ -37,7 +37,7 @@ stores block output on EACH of {prompt pass, target pass} and we contrast
 their image-feature cosine-sims at the end of the step.
 """
 
-from typing import Optional
+from typing import Dict, List, Optional
 
 import torch
 import torch.nn.functional as F
@@ -170,3 +170,65 @@ def mask_to_packed_seq(mask_2d: torch.Tensor, seq_img_len: int) -> torch.Tensor:
                       mode="bilinear", align_corners=False)
     m = m.reshape(B, side * side, 1)
     return m  # [B, seq_img_len, 1]
+
+
+def build_grouped_flux_image_probe_embeds(
+    family_features_dict: Dict[str, torch.Tensor],
+    baseline_pe_null: torch.Tensor,
+    max_tokens: int = 4,
+) -> tuple:
+    """Construct a FLUX pseudo-text embedding with one CLIP-exemplar token per family.
+
+    Mirrors `build_grouped_sd3_image_probe_embeds` in attention_probe_sd3.py but
+    targets FLUX's text-encoder embedding shape (T5 hidden states, typically 4096-d).
+
+    CLIP exemplar features are 768-d. We inject the normalized exemplar into
+    the first min(768, hidden_dim) dims of the selected token slot, pad with
+    zeros up to hidden_dim, and L2-normalize over the full hidden dim.
+    Slot 0 is left untouched (anchor for null); families occupy slots 1..N.
+
+    Args:
+        family_features_dict: {family_name: [N, 768]} CLIP exemplar features.
+        baseline_pe_null: [1, L, hidden_dim] empty-prompt encoder hidden state
+            from pipe.encode_prompt("") (used as the baseline).
+        max_tokens: maximum number of family token slots to populate (one per family).
+
+    Returns:
+        probe_embeds: [1, L, hidden_dim] — baseline with slots 1..N replaced.
+        token_indices: list of active token positions [1, ..., N].
+        family_token_map: {family_name: token_position}.
+    """
+    if not family_features_dict:
+        raise ValueError("family_features_dict must be non-empty")
+
+    baseline = baseline_pe_null.clone()
+    _, seq_len, hidden_dim = baseline.shape
+    family_names = list(family_features_dict.keys())[:max_tokens]
+    family_token_map: Dict[str, int] = {}
+
+    for i, fname in enumerate(family_names, start=1):
+        feats = family_features_dict[fname]
+        if feats.dim() != 2:
+            raise ValueError(
+                f"family feature for '{fname}' must be [N, D], got {feats.shape}"
+            )
+
+        # Average exemplars and L2-normalize in CLIP space
+        avg = F.normalize(feats.float().mean(dim=0), dim=-1)  # [D_clip]
+
+        # Build a target-sized vector: place CLIP feature into first d_clip dims
+        target_vec = torch.zeros(hidden_dim, device=baseline.device, dtype=baseline.dtype)
+        fill = min(avg.shape[0], hidden_dim)
+        target_vec[:fill] = avg[:fill].to(device=baseline.device, dtype=baseline.dtype)
+
+        # Re-normalize over the full target dim
+        norm = target_vec.norm()
+        if norm > 1e-8:
+            target_vec = target_vec / norm
+
+        if i < seq_len:
+            baseline[0, i] = target_vec
+            family_token_map[fname] = i
+
+    token_indices = list(family_token_map.values())
+    return baseline, token_indices, family_token_map

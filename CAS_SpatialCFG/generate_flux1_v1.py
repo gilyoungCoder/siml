@@ -49,6 +49,7 @@ from attention_probe_flux import (
     FluxSpatialProbe,
     compute_flux_spatial_mask,
     mask_to_packed_seq,
+    build_grouped_flux_image_probe_embeds,
 )
 
 
@@ -108,26 +109,40 @@ def apply_guidance(eps_cfg, eps_null, eps_target, eps_anchor,
     return out
 
 
-def apply_family_guidance(eps_cfg, eps_null, family_targets, family_anchors,
+def apply_family_guidance(eps_cfg, eps_null, family_masks, family_targets, family_anchors,
                           how, safety_scale):
-    """Per-family guidance for FLUX.1-dev. Each family contributes 1/N globally."""
+    """Per-family guidance for FLUX.1-dev with spatial masks.
+
+    Args:
+        eps_cfg: guided noise prediction [B, seq, C]
+        eps_null: null prediction [B, seq, C]
+        family_masks: list of [B, seq, 1] packed spatial masks (one per family)
+        family_targets: list of [B, seq, C] per-family target predictions
+        family_anchors: list of [B, seq, C] per-family anchor predictions
+        how: "anchor_inpaint" | "hybrid" | "target_sub"
+        safety_scale: guidance strength scalar
+
+    Returns:
+        eps_safe: [B, seq, C]
+    """
     out = eps_cfg.clone()
     s = safety_scale
-    n = len(family_targets)
-    if n == 0:
-        return out
-    w = 1.0 / n
 
-    for et_fi, ea_fi in zip(family_targets, family_anchors):
+    for mask_fi, et_fi, ea_fi in zip(family_masks, family_targets, family_anchors):
+        m = mask_fi.to(eps_cfg.dtype)
+
         if how == "anchor_inpaint":
-            blend = min(s * w, 1.0)
+            # FLUX uses embedded guidance — anchor pred IS already guided
+            blend = (s * m).clamp(max=1.0)
             out = out * (1 - blend) + ea_fi * blend
+
         elif how == "hybrid":
             out = (out
-                   - s * w * (et_fi - eps_null)
-                   + s * w * (ea_fi - eps_null))
+                   - s * m * (et_fi - eps_null)
+                   + s * m * (ea_fi - eps_null))
+
         elif how == "target_sub":
-            out = out - s * w * (et_fi - eps_null)
+            out = out - s * m * (et_fi - eps_null)
 
     if torch.isnan(out).any() or torch.isinf(out).any():
         out = torch.where(torch.isfinite(out), out, eps_cfg)
@@ -360,6 +375,10 @@ def main():
     family_names = []
     family_target_emb, family_anchor_emb = {}, {}
     family_target_pooled, family_anchor_pooled = {}, {}
+    # Per-family CLIP image features (Patch 2)
+    family_clip_features = {}
+    # Per-family CLIP text vectors (Patch 2)
+    family_clip_text_vec = {}
 
     with torch.no_grad():
         # Null (empty prompt)
@@ -380,10 +399,16 @@ def main():
                 family_names = fdata.get("family_names", [])
                 family_meta = fdata.get("family_metadata", {})
 
+                # Load per-family CLIP image features (Patch 2)
+                raw_family_clip = fdata.get("target_clip_features", {})
+                if isinstance(raw_family_clip, dict):
+                    family_clip_features = {k: v.float() for k, v in raw_family_clip.items()
+                                            if k in family_names}
+
                 for fname in family_names:
                     meta = family_meta.get(fname, {})
-                    tw = (meta.get("target_words") or meta.get("target_prompts") or args.target_concepts)[:3]
-                    aw = (meta.get("anchor_words") or meta.get("anchor_prompts") or args.anchor_concepts)[:3]
+                    tw = meta.get("target_prompts", args.target_concepts)[:3]
+                    aw = meta.get("anchor_prompts", args.anchor_concepts)[:3]
                     ft_pe, ft_pooled, ft_ids = encode_concepts(
                         pipe, tw, device, args.max_sequence_length)
                     fa_pe, fa_pooled, fa_ids = encode_concepts(
@@ -392,6 +417,31 @@ def main():
                     family_target_pooled[fname] = ft_pooled
                     family_anchor_emb[fname] = fa_pe
                     family_anchor_pooled[fname] = fa_pooled
+
+                    # Build per-family CLIP text vec (Patch 2)
+                    if args.probe_mode in ("text", "both"):
+                        try:
+                            fam_concepts = meta.get("target_prompts", args.target_concepts)[:3]
+                            tok = pipe.tokenizer(
+                                fam_concepts,
+                                padding="max_length",
+                                max_length=pipe.tokenizer.model_max_length,
+                                truncation=True,
+                                return_tensors="pt",
+                            )
+                            clip_out = pipe.text_encoder(
+                                tok.input_ids.to(device),
+                                attention_mask=tok.attention_mask.to(device)
+                                if "attention_mask" in tok else None,
+                                output_hidden_states=False,
+                            )
+                            pooled = getattr(clip_out, "pooler_output", None)
+                            if pooled is None:
+                                pooled = clip_out[1] if len(clip_out) > 1 else clip_out[0].mean(dim=1)
+                            family_clip_text_vec[fname] = pooled.mean(dim=0)  # [768]
+                        except Exception as e:
+                            print(f"  [probe] WARN: CLIP text encode failed for {fname} ({e})")
+                            family_clip_text_vec[fname] = None
 
                 print(f"  Families: {family_names}")
 
@@ -422,6 +472,13 @@ def main():
     clip_img_tgt_vec = None    # [C_inner] target vector after FLUX context projection
     image_probe_prompt_embeds = None
     image_probe_pooled = None
+    # Per-family image target vectors (Patch 3)
+    clip_img_tgt_vec_by_family = {}
+    # Per-family grouped probe embeds (Patch 3)
+    family_image_token_map = {}
+    family_grouped_probe_embeds = None
+    family_grouped_probe_pooled = None
+
     if args.probe_mode != "none" and not args.no_safety:
         # Prefer single-stream blocks: output is the full joint [txt; img] sequence,
         # so our hook can simply take the LAST seq_img tokens as image features.
@@ -471,45 +528,93 @@ def main():
 
         # Image probe: load CLIP vision exemplar features
         if args.probe_mode in ("image", "both"):
-            if args.clip_embeddings is None:
-                print("  [probe] WARN: --clip_embeddings not given; image probe disabled")
-            else:
+            # Non-family path: load from --clip_embeddings
+            if not (args.family_guidance and family_clip_features):
+                if args.clip_embeddings is None:
+                    print("  [probe] WARN: --clip_embeddings not given; image probe disabled")
+                else:
+                    try:
+                        cdata = torch.load(args.clip_embeddings, map_location="cpu",
+                                           weights_only=False)
+                        feats = cdata.get("target_clip_features", None)
+                        if feats is None:
+                            feats = cdata.get("target_clip_embeds", None)
+                            if feats is not None and feats.dim() == 3:
+                                feats = feats.mean(dim=1)  # [N, C]
+                        if feats is None:
+                            print("  [probe] WARN: no target CLIP features in file; image probe disabled")
+                        else:
+                            raw_probe_embeds, img_probe_token_idx = build_flux_image_probe_embeds(
+                                feats.float(), pe_null.detach(), args.n_img_tokens)
+                            image_probe_prompt_embeds = raw_probe_embeds.detach()
+                            image_probe_pooled = build_flux_image_probe_pooled(
+                                feats.float(), pooled_null.detach()
+                            ).detach()
+                            ctx_embedder = transformer.context_embedder
+                            ctx_dtype = next(ctx_embedder.parameters()).dtype
+                            ctx_device = next(ctx_embedder.parameters()).device
+                            with torch.no_grad():
+                                probe_ctx = ctx_embedder(
+                                    raw_probe_embeds.to(device=ctx_device, dtype=ctx_dtype))
+                            clip_img_tgt_vec = F.normalize(
+                                probe_ctx[0, img_probe_token_idx].mean(dim=0).float(), dim=-1
+                            ).to(device)
+                            print(
+                                f"  [probe] CLIP image pseudo-text: raw={tuple(raw_probe_embeds.shape)} "
+                                f"ctx={tuple(probe_ctx.shape)} vec={tuple(clip_img_tgt_vec.shape)} "
+                                f"pooled={tuple(image_probe_pooled.shape)} tokens={img_probe_token_idx}"
+                            )
+                    except Exception as e:
+                        print(f"  [probe] WARN: load CLIP embeddings failed ({e})")
+                        clip_img_tgt_vec = None
+                        image_probe_prompt_embeds = None
+                        image_probe_pooled = None
+
+            # Family path: build grouped probe embeds (Patch 3)
+            if args.family_guidance and family_clip_features:
                 try:
-                    cdata = torch.load(args.clip_embeddings, map_location="cpu",
-                                       weights_only=False)
-                    feats = cdata.get("target_clip_features", None)
-                    if feats is None:
-                        feats = cdata.get("target_clip_embeds", None)
-                        if feats is not None and feats.dim() == 3:
-                            feats = feats.mean(dim=1)  # [N, C]
-                    if feats is None:
-                        print("  [probe] WARN: no target CLIP features in file; image probe disabled")
-                    else:
-                        raw_probe_embeds, img_probe_token_idx = build_flux_image_probe_embeds(
-                            feats.float(), pe_null.detach(), args.n_img_tokens)
-                        image_probe_prompt_embeds = raw_probe_embeds.detach()
-                        image_probe_pooled = build_flux_image_probe_pooled(
-                            feats.float(), pooled_null.detach()
-                        ).detach()
-                        ctx_embedder = transformer.context_embedder
-                        ctx_dtype = next(ctx_embedder.parameters()).dtype
-                        ctx_device = next(ctx_embedder.parameters()).device
-                        with torch.no_grad():
-                            probe_ctx = ctx_embedder(
-                                raw_probe_embeds.to(device=ctx_device, dtype=ctx_dtype))
-                        clip_img_tgt_vec = F.normalize(
-                            probe_ctx[0, img_probe_token_idx].mean(dim=0).float(), dim=-1
-                        ).to(device)
-                        print(
-                            f"  [probe] CLIP image pseudo-text: raw={tuple(raw_probe_embeds.shape)} "
-                            f"ctx={tuple(probe_ctx.shape)} vec={tuple(clip_img_tgt_vec.shape)} "
-                            f"pooled={tuple(image_probe_pooled.shape)} tokens={img_probe_token_idx}"
+                    raw_grouped_embeds, grouped_token_indices, family_image_token_map = (
+                        build_grouped_flux_image_probe_embeds(
+                            family_clip_features,
+                            pe_null.detach(),
+                            max_tokens=args.n_img_tokens,
                         )
+                    )
+                    family_grouped_probe_embeds = raw_grouped_embeds.detach()
+
+                    # Build combined pooled: mean of per-family pooled CLIP features
+                    all_family_pooled = []
+                    for fname in family_names:
+                        if fname in family_clip_features:
+                            fp_pooled = build_flux_image_probe_pooled(
+                                family_clip_features[fname], pooled_null.detach()
+                            )
+                            all_family_pooled.append(fp_pooled)
+                    if all_family_pooled:
+                        family_grouped_probe_pooled = torch.stack(all_family_pooled).mean(0).detach()
+                    else:
+                        family_grouped_probe_pooled = pooled_null.detach()
+
+                    # Project through context_embedder to get per-family target vecs (Patch 3)
+                    ctx_embedder = transformer.context_embedder
+                    ctx_dtype = next(ctx_embedder.parameters()).dtype
+                    ctx_device = next(ctx_embedder.parameters()).device
+                    with torch.no_grad():
+                        grouped_ctx = ctx_embedder(
+                            raw_grouped_embeds.to(device=ctx_device, dtype=ctx_dtype))
+                    for fname, tok_pos in family_image_token_map.items():
+                        clip_img_tgt_vec_by_family[fname] = F.normalize(
+                            grouped_ctx[0, tok_pos].float(), dim=-1
+                        ).to(device)
+                    print(
+                        f"  [probe] Family grouped image probe: "
+                        f"token_map={family_image_token_map} "
+                        f"ctx={tuple(grouped_ctx.shape)}"
+                    )
                 except Exception as e:
-                    print(f"  [probe] WARN: load CLIP embeddings failed ({e})")
-                    clip_img_tgt_vec = None
-                    image_probe_prompt_embeds = None
-                    image_probe_pooled = None
+                    print(f"  [probe] WARN: build grouped flux image probe failed ({e})")
+                    family_grouped_probe_embeds = None
+                    family_grouped_probe_pooled = None
 
     cas = GlobalCAS(args.cas_threshold) if not args.no_safety else None
     outdir = Path(args.outdir)
@@ -709,8 +814,14 @@ def main():
                     if trig:
                         if args.family_guidance and family_names:
                             fam_ts, fam_as = [], []
+                            fam_probe_captures = {}  # per-family target captures (Patch 4)
+
                             with torch.no_grad():
                                 for fname in family_names:
+                                    # Enable probe for per-family target pass (Patch 4)
+                                    if probe is not None and args.probe_mode in ("image", "both"):
+                                        probe.active = True
+                                        probe.tag = f"target_{fname}"
                                     ft = transformer(
                                         hidden_states=lat_in,
                                         timestep=timestep / 1000,
@@ -721,6 +832,13 @@ def main():
                                         img_ids=latent_image_ids,
                                         return_dict=False,
                                     )[0]
+                                    if probe is not None:
+                                        probe.active = False
+                                        # Stash per-family target capture
+                                        tag = f"target_{fname}"
+                                        if tag in probe.captures:
+                                            fam_probe_captures[fname] = probe.captures[tag]
+
                                     fa = transformer(
                                         hidden_states=lat_in,
                                         timestep=timestep / 1000,
@@ -734,8 +852,73 @@ def main():
                                     fam_ts.append(ft)
                                     fam_as.append(fa)
 
+                            # ── Build per-family spatial masks (Patch 4) ──
+                            fam_masks = []
+                            feat_p = probe.captures.get("prompt") if probe is not None else None
+
+                            for fname in family_names:
+                                fm_list = []
+
+                                if feat_p is not None:
+                                    # Text probe for this family
+                                    if args.probe_mode in ("text", "both"):
+                                        ftv = family_clip_text_vec.get(fname)
+                                        if ftv is not None and ftv.shape[-1] == feat_p.shape[-1]:
+                                            tv = ftv.to(feat_p.device, feat_p.dtype)
+                                        else:
+                                            # Fallback: T5 mean of family target embed
+                                            tv_t5 = family_target_emb[fname].to(feat_p.device, feat_p.dtype).mean(dim=1)
+                                            tv = tv_t5.squeeze(0) if tv_t5.dim() == 2 else tv_t5 \
+                                                if tv_t5.shape[-1] == feat_p.shape[-1] else None
+                                        m_txt = compute_flux_spatial_mask(
+                                            feat_p, target_vec=tv,
+                                            threshold=args.attn_threshold, mode="text")
+                                        fm_list.append(m_txt)
+
+                                    # Image probe for this family
+                                    if args.probe_mode in ("image", "both"):
+                                        if fname in fam_probe_captures:
+                                            m_img = compute_flux_spatial_mask(
+                                                feat_p,
+                                                target_feat=fam_probe_captures[fname],
+                                                threshold=args.attn_threshold, mode="contrast")
+                                            fm_list.append(m_img)
+                                        elif fname in clip_img_tgt_vec_by_family:
+                                            tv = clip_img_tgt_vec_by_family[fname].to(
+                                                feat_p.device, feat_p.dtype)
+                                            m_img = compute_flux_spatial_mask(
+                                                feat_p, target_vec=tv,
+                                                threshold=args.attn_threshold, mode="text")
+                                            fm_list.append(m_img)
+
+                                if fm_list:
+                                    # Max across text/image masks for this family
+                                    fm_2d = torch.stack(fm_list, dim=0).max(dim=0)[0] \
+                                        if len(fm_list) > 1 else fm_list[0]
+                                    # Convert to packed sequence [B, seq, 1]
+                                    fm_packed = mask_to_packed_seq(
+                                        fm_2d, seq_img_len=feat_p.shape[1]
+                                    ).to(ep.device, ep.dtype)
+                                else:
+                                    # No probe data: use spatial_mask_packed or uniform
+                                    if spatial_mask_packed is not None:
+                                        fm_packed = spatial_mask_packed
+                                    else:
+                                        fm_packed = torch.ones(
+                                            ep.shape[0], ep.shape[1], 1,
+                                            device=ep.device, dtype=ep.dtype)
+
+                                fam_masks.append(fm_packed)
+
+                            # ── Winner-take-all across families (Patch 4) ──
+                            if len(fam_masks) > 1:
+                                stacked = torch.cat(fam_masks, dim=-1)  # [B, seq, N]
+                                winner = stacked.argmax(dim=-1, keepdim=True)  # [B, seq, 1]
+                                for fi in range(len(fam_masks)):
+                                    fam_masks[fi] = fam_masks[fi] * (winner == fi).float()
+
                             eps_final = apply_family_guidance(
-                                ep, en, fam_ts, fam_as,
+                                ep, en, fam_masks, fam_ts, fam_as,
                                 args.how_mode, args.safety_scale)
                         else:
                             with torch.no_grad():
