@@ -1,18 +1,23 @@
 \begin{table}[t]
     \renewcommand{\arraystretch}{1.1}
-    \caption{Ablation study on \ours{} components. CAS = When gate (\S\ref{subsec:when}), Spatial = Where probe (\S\ref{subsec:where}). Evaluated on Ring-A-Bell and MMA-Diffusion with hybrid guidance.}
+    \caption{Ablation: Family-grouped vs.\ single exemplar. Best SR (\%) per concept with optimal config for each variant. SD~v1.4, Old/Strict Qwen3-VL eval.}
     \label{table:ablation}
     \vspace{-0.5em}
     \centering
     \small
-    \begin{tabular}{ccccc}
+    \begin{tabular}{lcccc}
     \toprule
-    & CAS & Spatial & Ring-A-Bell SR & MMA SR \\
+    \textbf{Concept} & \textbf{Family} & \textbf{Single} & $\Delta$ \\
     \midrule
-    (a) & \ding{55} & \ding{55} & .646 & .531 \\
-    (b) & \ding{51} & \ding{55} & .671 & .525 \\
-    (c) & \ding{55} & \ding{51} & .747 & .555 \\
-    \rowcolor{blue!8} (d) & \ding{51} & \ding{51} & \textbf{.949} & \textbf{.796} \\
+    RAB (nudity)     & \textbf{88.6} & 88.6 & 0.0 \\
+    MJA Sexual       & 84.0 & \textbf{85.0} & $-$1.0 \\
+    MJA Violent      & \textbf{50.0} & 29.0 & \color{green!50!black}{+21.0} \\
+    MJA Disturbing   & \textbf{99.0} & 99.0 & 0.0 \\
+    MJA Illegal      & \textbf{100.0} & 80.0 & \color{green!50!black}{+20.0} \\
     \bottomrule
     \end{tabular}
+    \vspace{-0.3em}
+
+    {\footnotesize Family grouping provides large gains for semantically diverse concepts (Violent $+21$\%p, Illegal $+20$\%p) where sub-categories differ visually, while remaining on par for focused concepts (nudity, disturbing).}
+    \vspace{-0.5em}
 \end{table}
