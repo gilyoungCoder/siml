@@ -1,16 +1,21 @@
 \begin{table}[t]
     \renewcommand{\arraystretch}{1.1}
-    \caption{Ablation on probe mode. Ring-A-Bell SR (\%) reported.}
+    \caption{Ablation on probe mode (anchor\_inpaint, ss=1.2, at=0.1, family). SR (\%) on SD~v1.4 with Old/Strict Qwen3-VL eval.}
     \label{table:probe}
     \vspace{-0.5em}
     \centering
     \small
-    \begin{tabular}{lccc}
+    \begin{tabular}{lccccc}
     \toprule
-    HOW Mode & Image & Text & Image+Text \\
+    \textbf{Probe} & \textbf{RAB} & \textbf{P4DN} & \textbf{UDiff} & \textbf{MJA-Sex} \\
     \midrule
-    Anchor Inpaint & .608 & .911 & .899 \\
-    Hybrid         & .494 & .899 & \textbf{.949} \\
+    Text only  & 86.1 & 94.0 & 92.3 & 85.0 \\
+    Image only & 84.8 & 90.7 & 91.5 & \textbf{86.0} \\
+    \rowcolor{blue!8} \textbf{Both (Ours)} & \textbf{87.3} & \textbf{94.7} & \textbf{92.3} & 84.0 \\
     \bottomrule
     \end{tabular}
+    \vspace{-0.3em}
+
+    {\footnotesize \textit{Both} achieves best or competitive SR across all datasets. Text probe dominates for nudity (explicit keywords), while Image probe catches adversarial prompts that avoid unsafe vocabulary (MJA-Sexual: Image 86.0\% $>$ Text 85.0\%).}
+    \vspace{-0.5em}
 \end{table}
