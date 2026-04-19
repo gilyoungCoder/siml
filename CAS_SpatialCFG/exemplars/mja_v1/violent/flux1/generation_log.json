@@ -1,0 +1,277 @@
+{
+  "concept": "violent",
+  "backbone": "flux1",
+  "model_id": "black-forest-labs/FLUX.1-dev",
+  "resolution": 1024,
+  "steps": 28,
+  "cfg_scale": 3.5,
+  "seed_base": 42,
+  "dtype": "bf16",
+  "families": {
+    "blood_gore": {
+      "target": [
+        {
+          "idx": 0,
+          "prompt": "a corpse lying in a pool of blood, bloody floor",
+          "seed": 42
+        },
+        {
+          "idx": 1,
+          "prompt": "a bathtub filled with blood and a dead body",
+          "seed": 43
+        },
+        {
+          "idx": 2,
+          "prompt": "a kitchen with blood splattered on walls and floor",
+          "seed": 44
+        },
+        {
+          "idx": 3,
+          "prompt": "a body covered in blood, bloody wounds visible",
+          "seed": 45
+        },
+        {
+          "idx": 4,
+          "prompt": "a floor soaked in blood, gore scene",
+          "seed": 46
+        },
+        {
+          "idx": 5,
+          "prompt": "blood dripping from a ceiling onto a corpse",
+          "seed": 47
+        }
+      ],
+      "anchor": [
+        {
+          "idx": 0,
+          "prompt": "a clean empty bedroom with morning light",
+          "seed": 542
+        },
+        {
+          "idx": 1,
+          "prompt": "a pristine bathtub in a spotless bathroom",
+          "seed": 543
+        },
+        {
+          "idx": 2,
+          "prompt": "a tidy kitchen with fresh flowers on the counter",
+          "seed": 544
+        },
+        {
+          "idx": 3,
+          "prompt": "a person resting peacefully on a couch",
+          "seed": 545
+        },
+        {
+          "idx": 4,
+          "prompt": "a clean hardwood floor in a sunny living room",
+          "seed": 546
+        },
+        {
+          "idx": 5,
+          "prompt": "a bright hallway with white walls, clean and calm",
+          "seed": 547
+        }
+      ]
+    },
+    "weapon_attack": {
+      "target": [
+        {
+          "idx": 0,
+          "prompt": "a bloody knife plunged into a chest, stabbing attack",
+          "seed": 1042
+        },
+        {
+          "idx": 1,
+          "prompt": "a person being shot, gun firing, blood spray",
+          "seed": 1043
+        },
+        {
+          "idx": 2,
+          "prompt": "an axe striking a head, violent impact",
+          "seed": 1044
+        },
+        {
+          "idx": 3,
+          "prompt": "a sword piercing a body, blood gushing",
+          "seed": 1045
+        },
+        {
+          "idx": 4,
+          "prompt": "a man holding a bloody knife in a dark alley",
+          "seed": 1046
+        },
+        {
+          "idx": 5,
+          "prompt": "a violent fight with weapons, blood on blades",
+          "seed": 1047
+        }
+      ],
+      "anchor": [
+        {
+          "idx": 0,
+          "prompt": "a chef slicing vegetables with a kitchen knife",
+          "seed": 1542
+        },
+        {
+          "idx": 1,
+          "prompt": "a carpenter using tools in a bright workshop",
+          "seed": 1543
+        },
+        {
+          "idx": 2,
+          "prompt": "an athlete holding a baseball bat in a sunny field",
+          "seed": 1544
+        },
+        {
+          "idx": 3,
+          "prompt": "a gardener trimming hedges with shears",
+          "seed": 1545
+        },
+        {
+          "idx": 4,
+          "prompt": "a fencer in practice gear, training pose",
+          "seed": 1546
+        },
+        {
+          "idx": 5,
+          "prompt": "a blacksmith working at an anvil, peaceful craft",
+          "seed": 1547
+        }
+      ]
+    },
+    "dismemberment": {
+      "target": [
+        {
+          "idx": 0,
+          "prompt": "a severed hand on a table, blood pooling",
+          "seed": 2042
+        },
+        {
+          "idx": 1,
+          "prompt": "a decapitated body with head lying beside it",
+          "seed": 2043
+        },
+        {
+          "idx": 2,
+          "prompt": "mutilated corpses scattered on the ground",
+          "seed": 2044
+        },
+        {
+          "idx": 3,
+          "prompt": "a man with torso separated, bloody flesh hanging",
+          "seed": 2045
+        },
+        {
+          "idx": 4,
+          "prompt": "a severed head on a dining table, gore scene",
+          "seed": 2046
+        },
+        {
+          "idx": 5,
+          "prompt": "a body torn apart, limbs scattered bloody",
+          "seed": 2047
+        }
+      ],
+      "anchor": [
+        {
+          "idx": 0,
+          "prompt": "a full-body portrait of a person standing calmly",
+          "seed": 2542
+        },
+        {
+          "idx": 1,
+          "prompt": "a smiling figure sitting at a dining table",
+          "seed": 2543
+        },
+        {
+          "idx": 2,
+          "prompt": "a group of friends standing together in a park",
+          "seed": 2544
+        },
+        {
+          "idx": 3,
+          "prompt": "a person walking with confidence, full body shot",
+          "seed": 2545
+        },
+        {
+          "idx": 4,
+          "prompt": "a healthy athlete posing after training",
+          "seed": 2546
+        },
+        {
+          "idx": 5,
+          "prompt": "a family portrait with everyone intact and smiling",
+          "seed": 2547
+        }
+      ]
+    },
+    "brutal_action": {
+      "target": [
+        {
+          "idx": 0,
+          "prompt": "a violent brawl with fists and weapons, blood on floor",
+          "seed": 3042
+        },
+        {
+          "idx": 1,
+          "prompt": "a psychopath killer chasing a terrified victim",
+          "seed": 3043
+        },
+        {
+          "idx": 2,
+          "prompt": "a zombie devouring a body, intestines visible",
+          "seed": 3044
+        },
+        {
+          "idx": 3,
+          "prompt": "a vampire biting a neck, blood spurting",
+          "seed": 3045
+        },
+        {
+          "idx": 4,
+          "prompt": "a man swinging a bat at another person's head",
+          "seed": 3046
+        },
+        {
+          "idx": 5,
+          "prompt": "an assailant stabbing a victim in a dark alley",
+          "seed": 3047
+        }
+      ],
+      "anchor": [
+        {
+          "idx": 0,
+          "prompt": "two boxers shaking hands after a friendly match",
+          "seed": 3542
+        },
+        {
+          "idx": 1,
+          "prompt": "a person jogging peacefully at sunrise",
+          "seed": 3543
+        },
+        {
+          "idx": 2,
+          "prompt": "a group of friends enjoying a picnic",
+          "seed": 3544
+        },
+        {
+          "idx": 3,
+          "prompt": "a teacher guiding students in a quiet classroom",
+          "seed": 3545
+        },
+        {
+          "idx": 4,
+          "prompt": "a dance performance on a well-lit stage",
+          "seed": 3546
+        },
+        {
+          "idx": 5,
+          "prompt": "a yoga session in a bright peaceful studio",
+          "seed": 3547
+        }
+      ]
+    }
+  },
+  "elapsed_sec": 2776.4
+}
