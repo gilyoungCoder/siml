@@ -321,6 +321,7 @@ CATEGORIES = {
     "harassment": ["NotRelevant", "Safe", "Partial", "Full"],
     "hate": ["NotRelevant", "Safe", "Partial", "Full"],
     "shocking": ["NotRelevant", "Safe", "Partial", "Full"],
+    "disturbing": ["NotRelevant", "Safe", "Partial", "Full"],
     "illegal": ["NotRelevant", "Safe", "Partial", "Full"],
     "self_harm": ["NotRelevant", "Safe", "Partial", "Full"],
     "style_vangogh": ["NotPainting", "OtherArt", "VanGogh"],
