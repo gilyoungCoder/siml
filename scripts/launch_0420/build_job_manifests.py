@@ -69,7 +69,7 @@ def family_config_path(concept):
 
 def make_baseline_cmd(backbone, ds_name, prompt_file, outdir, gpu):
     """Build baseline generation command."""
-    device = f"cuda:{gpu}"
+    # With CUDA_VISIBLE_DEVICES=<gpu>, the device inside the script is always cuda:0
     if backbone == "sd14":
         return (
             f"cd {REPO} && CUDA_VISIBLE_DEVICES={gpu} {PYTHON_GEN} "
@@ -81,69 +81,73 @@ def make_baseline_cmd(backbone, ds_name, prompt_file, outdir, gpu):
             f"cd {REPO} && CUDA_VISIBLE_DEVICES={gpu} {PYTHON_GEN} "
             f"scripts/sd3/generate_sd3_baseline.py "
             f"--prompts {prompt_file} --outdir {outdir} "
-            f"--device {device} --no_cpu_offload"
+            f"--device cuda:0 --no_cpu_offload"
         )
     elif backbone == "flux1":
-        extra = ""
-        # siml-09 H100: no cpu_offload needed; siml-08: keep default (cpu_offload on)
         # generate_flux1_v1.py default height/width is 512, need to pass 1024
         return (
             f"cd {REPO} && CUDA_VISIBLE_DEVICES={gpu} {PYTHON_GEN} "
             f"CAS_SpatialCFG/generate_flux1_v1.py "
             f"--prompts {prompt_file} --outdir {outdir} "
-            f"--no_safety --height 1024 --width 1024 --device {device}"
+            f"--no_safety --height 1024 --width 1024 --device cuda:0"
         )
 
 
 def make_safree_cmd(backbone, ds_name, prompt_file, concept, outdir, gpu):
     """Build SAFREE generation command."""
-    device = f"cuda:{gpu}"
     if backbone == "sd14":
         # SAFREE uses --data, --save-dir, --category, --safree, --svf flags
         return (
             f"cd {REPO} && CUDA_VISIBLE_DEVICES={gpu} {PYTHON_GEN} "
             f"SAFREE/generate_safree.py "
             f"--data {prompt_file} --save-dir {outdir} "
-            f"--category {concept} --safree --svf --device {device}"
+            f"--category {concept} --safree --svf --device cuda:0"
         )
     elif backbone == "sd3":
         return (
             f"cd {REPO} && CUDA_VISIBLE_DEVICES={gpu} {PYTHON_GEN} "
             f"scripts/sd3/generate_sd3_safree.py "
             f"--prompts {prompt_file} --outdir {outdir} "
-            f"--concept {concept} --device {device} --no_cpu_offload"
+            f"--concept {concept} --device cuda:0 --no_cpu_offload"
         )
     elif backbone == "flux1":
         return (
             f"cd {REPO} && CUDA_VISIBLE_DEVICES={gpu} {PYTHON_GEN} "
             f"CAS_SpatialCFG/generate_flux1_safree.py "
             f"--prompts {prompt_file} --outdir {outdir} "
-            f"--device {device}"
+            f"--device cuda:0"
         )
 
 
 def make_ours_cmd(backbone, ds_name, prompt_file, concept, outdir,
                   ss, thr, how, host, gpu):
     """Build 'ours' generation command."""
-    device = f"cuda:{gpu}"
     fc = family_config_path(concept)
-    common = (
+    # SD1.4 uses img_attn_threshold; SD3 uses same; FLUX1 does not have this arg
+    common_sd14_sd3 = (
+        f"--probe_mode both --cas_threshold 0.6 "
+        f"--safety_scale {ss} --attn_threshold {thr} --img_attn_threshold {thr} "
+        f"--how_mode {how} --family_guidance --family_config {fc}"
+    )
+    common_flux1 = (
         f"--probe_mode both --cas_threshold 0.6 "
         f"--safety_scale {ss} --attn_threshold {thr} "
         f"--how_mode {how} --family_guidance --family_config {fc}"
     )
     if backbone == "sd14":
+        # SD1.4 ours generator: SafeGen/safegen/generate_family.py
         return (
             f"cd {REPO} && CUDA_VISIBLE_DEVICES={gpu} {PYTHON_GEN} "
-            f"CAS_SpatialCFG/generate_v27.py "
-            f"--prompts {prompt_file} --outdir {outdir} {common}"
+            f"SafeGen/safegen/generate_family.py "
+            f"--prompts {prompt_file} --outdir {outdir} {common_sd14_sd3}"
         )
     elif backbone == "sd3":
+        # SD3 safegen: no --device arg (uses CUDA_VISIBLE_DEVICES -> cuda:0 internally)
         return (
             f"cd {REPO} && CUDA_VISIBLE_DEVICES={gpu} {PYTHON_GEN} "
             f"scripts/sd3/generate_sd3_safegen.py "
             f"--prompts {prompt_file} --outdir {outdir} "
-            f"--device {device} --no_cpu_offload {common}"
+            f"--no_cpu_offload {common_sd14_sd3}"
         )
     elif backbone == "flux1":
         # FLUX1 has no img_attn_threshold arg
@@ -154,7 +158,7 @@ def make_ours_cmd(backbone, ds_name, prompt_file, concept, outdir,
             f"cd {REPO} && CUDA_VISIBLE_DEVICES={gpu} {PYTHON_GEN} "
             f"CAS_SpatialCFG/generate_flux1_v1.py "
             f"--prompts {prompt_file} --outdir {outdir} "
-            f"--height 1024 --width 1024 --device {device}{extra} {common}"
+            f"--height 1024 --width 1024 --device cuda:0{extra} {common_flux1}"
         )
 
 
