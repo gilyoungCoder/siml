@@ -330,10 +330,9 @@ def register_sd3_attention_probe(
     num_blocks = len(transformer.transformer_blocks)
 
     if target_blocks is None:
-        # Middle third of blocks — most informative for spatial attention
-        start = num_blocks // 3
-        end = 2 * num_blocks // 3
-        target_blocks = list(range(start, end))
+        # Middle 3 blocks (memory-efficient; SafeGen reference uses similarly few)
+        mid = num_blocks // 2
+        target_blocks = [mid - 1, mid, mid + 1]
 
     # Configure image-probe state on the store.
     if probe_mode in ("image", "both"):
