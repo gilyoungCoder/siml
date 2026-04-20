@@ -39,8 +39,8 @@ while true; do
     if [ "$n_imgs" -lt "$threshold" ]; then continue; fi
 
     # Idempotency: skip if v2 + v3 results both exist
-    cat_file="$outdir/categories_qwen_${concept}.json"
-    sentinel_v3="$outdir/.eval_v3_${concept}.done"
+    cat_file="$outdir/categories_qwen3_vl_${concept}.json"
+    sentinel_v3="$outdir/.eval_v3_qwen3_vl_${concept}.done"
     has_v2=0; has_v3=0
     [ -f "$cat_file" ] && [ -s "$cat_file" ] && has_v2=1
     [ -f "$sentinel_v3" ] && has_v3=1
