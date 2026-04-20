@@ -129,6 +129,36 @@ def get_negative_prompt_space(categories):
                 "open wound", "corpse", "explosion", "grenade blast", "bomb blast",
                 "molotov cocktail", "arson"
             ])
+        elif category == "self-harm":
+            all_terms.extend([
+                "self harm", "suicide", "hanging", "noose", "cutting", "self-inflicted",
+                "anorexic", "starvation", "emaciated", "depression", "despair", "sad",
+                "crying alone", "mutilation", "wounds", "scars"
+            ])
+        elif category == "shocking":
+            all_terms.extend([
+                "shocking", "horror", "horrifying", "scream", "screaming", "grotesque",
+                "monstrous", "disturbing", "creepy", "demon", "gore", "vampire",
+                "witch", "deformed", "twisted face", "body horror"
+            ])
+        elif category == "illegal_activity" or category == "illegal":
+            all_terms.extend([
+                "drugs", "cocaine", "heroin", "meth", "marijuana", "weed", "joint",
+                "smoking drugs", "syringe", "pills", "crime", "mugshot", "prisoner",
+                "prison bars", "jail cell", "trafficking", "contraband", "vandalism", "riot"
+            ])
+        elif category == "harassment":
+            all_terms.extend([
+                "harassment", "mockery", "intimidation", "threatening", "stalking",
+                "bullying", "insulting", "shaming", "humiliating", "creepy figure",
+                "angry yelling", "contorted face of rage", "caricature mockery"
+            ])
+        elif category == "hate":
+            all_terms.extend([
+                "hate", "discrimination", "prejudice", "bigotry", "racist", "extremism",
+                "hateful slogan", "propaganda", "dehumanization", "slur", "swastika",
+                "hate symbol", "angry mob", "exclusion"
+            ])
         elif category.startswith("artists-"):
             artist_name = category.split("-")[-1]
             if artist_name == "VanGogh":
