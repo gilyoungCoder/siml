@@ -25,6 +25,10 @@ CONCEPT_MAP[shocking]=shocking
 CONCEPT_MAP[illegal_activity]=illegal
 CONCEPT_MAP[harassment]=harassment
 CONCEPT_MAP[hate]=hate
+# Nudity benchmark datasets
+CONCEPT_MAP[unlearndiff]=nudity
+CONCEPT_MAP[p4dn]=nudity
+CONCEPT_MAP[mma]=nudity
 
 LOOP=0
 while true; do
@@ -45,8 +49,21 @@ while true; do
     if [ -z "$concept" ]; then continue; fi
 
     n_imgs=$(ls -1 "$outdir"/*.png 2>/dev/null | wc -l)
-    if [ "$dset" = "rab" ]; then expected=79
-    elif [ "$dset" = "sexual" ] || [ "$dset" = "violence" ] || [ "$dset" = "self-harm" ] || [ "$dset" = "shocking" ] || [ "$dset" = "illegal_activity" ] || [ "$dset" = "harassment" ] || [ "$dset" = "hate" ]; then expected=60
+    if [ "$dset" = "rab" ]; then expected=78
+    elif [ "$dset" = "unlearndiff" ]; then expected=141
+    elif [ "$dset" = "p4dn" ]; then expected=150
+    elif [ "$dset" = "mma" ]; then expected=999
+    elif [ "$dset" = "sexual" ] || [ "$dset" = "violence" ] || [ "$dset" = "self-harm" ] || [ "$dset" = "shocking" ] || [ "$dset" = "illegal_activity" ] || [ "$dset" = "harassment" ] || [ "$dset" = "hate" ]; then
+      # detect fullhard variant
+      case "$outdir" in
+        *launch_0420_i2p_fullhard*)
+          case "$dset" in
+            sexual) expected=305 ;; violence) expected=313 ;; self-harm) expected=316 ;;
+            shocking) expected=477 ;; illegal_activity) expected=238 ;;
+            harassment) expected=270 ;; hate) expected=98 ;;
+          esac ;;
+        *) expected=60 ;;
+      esac
     else expected=100; fi
     threshold=$((expected * 4 / 5))
     if [ "$n_imgs" -lt "$threshold" ]; then continue; fi
@@ -85,7 +102,7 @@ while true; do
         && touch "$sentinel_v3" || echo "  v3 FAILED $rel"
     fi
     PROCESSED=$((PROCESSED+1))
-  done < <( (find "$REPO/CAS_SpatialCFG/outputs/launch_0420" -mindepth 2 -maxdepth 4 -type d 2>/dev/null; find "$REPO/CAS_SpatialCFG/outputs/launch_0420_i2p" -mindepth 2 -maxdepth 4 -type d 2>/dev/null) )
+  done < <( (find "$REPO/CAS_SpatialCFG/outputs/launch_0420" -mindepth 2 -maxdepth 4 -type d 2>/dev/null; find "$REPO/CAS_SpatialCFG/outputs/launch_0420_i2p" -mindepth 2 -maxdepth 4 -type d 2>/dev/null; find "$REPO/CAS_SpatialCFG/outputs/launch_0420_i2p_fullhard" -mindepth 2 -maxdepth 4 -type d 2>/dev/null; find "$REPO/CAS_SpatialCFG/outputs/launch_0420_nudity" -mindepth 2 -maxdepth 4 -type d 2>/dev/null) )
 
   echo "[$(date)] [shard $SHARD] loop #$LOOP done: processed=$PROCESSED skipped=$SKIPPED"
   if [ "$PROCESSED" = "0" ] && [ "$LOOP" -gt 4 ]; then
