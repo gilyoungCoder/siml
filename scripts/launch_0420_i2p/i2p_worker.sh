@@ -61,7 +61,7 @@ fi
 # Phase 3: ours sweep (252 jobs = 7 cats * 36 cfg)
 if [[ ",$PHASES," == *",ours,"* ]]; then
   # ainp: ss small (replacement). hybrid: ss large (guidance).
-  SS_AINP=(1.5 2.5)
+  SS_AINP=(1.0 1.5)
   SS_HYB=(10 15 20)
   TXT_THR=0.1
   IMG_THR=0.3
@@ -175,7 +175,7 @@ for ((i=SLOT; i<N; i+=N_SLOTS)); do
       CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
         --prompts "$PROMPTS" --outdir "$OUTDIR" \
         --probe_mode $PROBE --cas_threshold 0.6 \
-        --safety_scale $SS --attn_threshold $THR --img_attn_threshold 0.3 \
+        --safety_scale $SS --attn_threshold $THR --img_attn_threshold 0.4 \
         --how_mode $HOW --family_guidance --family_config "$PACK" \
         >> "$LOGDIR/ours_${CAT}_${CFG}_g${GPU}.log" 2>&1
       ;;
