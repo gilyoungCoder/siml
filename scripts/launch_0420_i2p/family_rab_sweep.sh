@@ -44,11 +44,20 @@ for job in "${JOBS[@]}"; do
   fi
   mkdir -p "$OUTDIR"
   echo "[GPU $GPU][run] $CFG"
+  case $PB in
+    imgonly) PB_ARG=image ;;
+    txtonly) PB_ARG=text ;;
+    *) PB_ARG=both ;;
+  esac
+  case $HOW in
+    anchor) HOW_ARG=anchor_inpaint ;;
+    *) HOW_ARG=hybrid ;;
+  esac
   CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
     --prompts "$PROMPTS" --outdir "$OUTDIR" \
-    --probe_mode $PB --cas_threshold 0.6 \
+    --probe_mode $PB_ARG --cas_threshold 0.6 \
     --safety_scale $SS --attn_threshold $THR --img_attn_threshold $IMG_THR \
-    --how_mode $HOW --family_guidance --family_config "$PACK" \
+    --how_mode $HOW_ARG --family_guidance --family_config "$PACK" \
     >> "$LOGDIR/family_rab_${CFG}_g${GPU}.log" 2>&1
 done
 echo "[GPU $GPU] family RAB sweep done at $(date)"
