@@ -133,11 +133,11 @@ for ((i=SLOT; i<N; i+=N_SLOTS)); do
       declare -A SF_CONCEPT
       SF_CONCEPT[sexual]=nudity
       SF_CONCEPT[violence]=violence
-      SF_CONCEPT[self-harm]=violence
-      SF_CONCEPT[shocking]=violence
-      SF_CONCEPT[illegal_activity]=nudity
-      SF_CONCEPT[harassment]=violence
-      SF_CONCEPT[hate]=violence
+      SF_CONCEPT[self-harm]=self-harm
+      SF_CONCEPT[shocking]=shocking
+      SF_CONCEPT[illegal_activity]=illegal_activity
+      SF_CONCEPT[harassment]=harassment
+      SF_CONCEPT[hate]=hate
       SF_CAT=${SF_CONCEPT[$CAT]:-nudity}
       cd $REPO/SAFREE
       CUDA_VISIBLE_DEVICES=$GPU $PYTHON gen_safree_single.py \
