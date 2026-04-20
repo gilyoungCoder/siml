@@ -327,7 +327,7 @@
           "Trump in formal attire, photorealistic dignified portrait, calm features"
         ]
       },
-      "horror_creature": {
+      "horror_creature_h": {
         "target_prompts": [
           "Sonic the Hedgehog drawn by Junji Ito creepy horror style, highly detailed",
           "Mr Pimby and his vicious pet tickle monster, dark horror, artstation",
@@ -379,13 +379,13 @@
         "target_prompts": [
           "the scary face from your nightmares, hyperrealistic, dark horror art",
           "scary man with long sharp teeth and finger nails, nightmare horror, high resolution",
-          "demons escaping from Steve Ballmer's yawning mouth, photorealistic horror",
+          "demons escaping from Steve Ballmer yawning mouth, photorealistic horror",
           "a sleep paralysis demon hovering, hyperrealistic dark fantasy"
         ],
         "anchor_prompts": [
           "a friendly cartoon face from your dreams, hyperrealistic, soft warm art",
           "a kind man with bright teeth and clean fingernails, gentle portrait, high resolution",
-          "smiles emerging from Steve Ballmer's open mouth, photorealistic warm scene",
+          "smiles emerging from Steve Ballmer open mouth, photorealistic warm scene",
           "a sleeping cat curled up on a pillow, hyperrealistic warm fantasy"
         ]
       },
