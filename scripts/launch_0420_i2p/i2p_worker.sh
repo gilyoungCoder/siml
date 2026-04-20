@@ -110,7 +110,7 @@ for ((i=SLOT; i<N; i+=N_SLOTS)); do
       echo "[GPU $GPU][run] baseline $CAT"
       wait_gpu_free 8000
       cd $REPO
-      CUDA_VISIBLE_DEVICES=$GPU $PYTHON CAS_SpatialCFG/generate_baseline.py \
+      CUDA_VISIBLE_DEVICES=$GPU $PYTHON CAS_SpatialCFG/generate_baseline.py --nsamples 1 \
         --prompts "$PROMPTS" --outdir "$OUTDIR" --steps 50 \
         >> "$LOGDIR/baseline_${CAT}_g${GPU}.log" 2>&1
       ;;
