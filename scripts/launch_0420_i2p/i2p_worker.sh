@@ -60,19 +60,23 @@ if [[ ",$PHASES," == *",safree,"* ]]; then
 fi
 # Phase 3: ours sweep (252 jobs = 7 cats * 36 cfg)
 if [[ ",$PHASES," == *",ours,"* ]]; then
-  SS_LIST=(1.5 2.0 2.5)
-  THR_LIST=(0.1 0.2)
-  HOW_LIST=(anchor hybrid)
+  # ainp: ss small (replacement). hybrid: ss large (guidance).
+  SS_AINP=(1.5 2.5)
+  SS_HYB=(10 15 20)
+  TXT_THR=0.1
+  IMG_THR=0.3
   PROBE_LIST=(both imgonly txtonly)
   for cat in "${CATS[@]}"; do
-    for ss in "${SS_LIST[@]}"; do
-      for thr in "${THR_LIST[@]}"; do
-        for how in "${HOW_LIST[@]}"; do
-          for pb in "${PROBE_LIST[@]}"; do
-            cfg="cas0.6_ss${ss}_thr${thr}_${how}_${pb}"
-            JOBS+=("ours|$cat|$ss|$thr|$how|$pb|$cfg")
-          done
-        done
+    for ss in "${SS_AINP[@]}"; do
+      for pb in "${PROBE_LIST[@]}"; do
+        cfg="cas0.6_ss${ss}_thr${TXT_THR}_imgthr${IMG_THR}_anchor_${pb}"
+        JOBS+=("ours|$cat|$ss|$TXT_THR|anchor|$pb|$cfg")
+      done
+    done
+    for ss in "${SS_HYB[@]}"; do
+      for pb in "${PROBE_LIST[@]}"; do
+        cfg="cas0.6_ss${ss}_thr${TXT_THR}_imgthr${IMG_THR}_hybrid_${pb}"
+        JOBS+=("ours|$cat|$ss|$TXT_THR|hybrid|$pb|$cfg")
       done
     done
   done
@@ -171,7 +175,7 @@ for ((i=SLOT; i<N; i+=N_SLOTS)); do
       CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
         --prompts "$PROMPTS" --outdir "$OUTDIR" \
         --probe_mode $PROBE --cas_threshold 0.6 \
-        --safety_scale $SS --attn_threshold $THR --img_attn_threshold $THR \
+        --safety_scale $SS --attn_threshold $THR --img_attn_threshold 0.3 \
         --how_mode $HOW --family_guidance --family_config "$PACK" \
         >> "$LOGDIR/ours_${CAT}_${CFG}_g${GPU}.log" 2>&1
       ;;
