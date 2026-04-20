@@ -47,7 +47,14 @@ while true; do
     h=$(echo -n "$rel" | cksum | awk '{print $1}')
     if [ $((h % NSHARDS)) -ne "$SHARD" ]; then continue; fi
 
-    dset=$(echo "$rel" | awk -F'/' '{print $2}')
+    # path variants: method/dset/cfg OR dset/cfg (family_rab, v27_rab)
+    seg1=$(echo "$rel" | awk -F'/' '{print $1}')
+    seg2=$(echo "$rel" | awk -F'/' '{print $2}')
+    if [[ "$seg1" == "family_rab" || "$seg1" == "v27_rab" ]]; then
+      dset=$seg1
+    else
+      dset=$seg2
+    fi
     concept="${CONCEPT_MAP[$dset]:-}"
     if [ -z "$concept" ]; then continue; fi
 
