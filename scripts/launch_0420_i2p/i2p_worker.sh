@@ -145,7 +145,7 @@ for ((i=SLOT; i<N; i+=N_SLOTS)); do
         --model_id CompVis/stable-diffusion-v1-4 --category $SF_CAT \
         --num-samples 1 --num_inference_steps 50 --guidance_scale 7.5 \
         --seed 42 --image_length 512 --device cuda:0 --erase-id std \
-        --sf_alpha 0.01 --re_attn_t "-1,1001" --up_t 10 --freeu_hyp "1.0-1.0-0.9-0.2" \
+        --sf_alpha 0.01 --re_attn_t=-1,1001 --up_t 10 --freeu_hyp "1.0-1.0-0.9-0.2" \
         --safree -svf -lra \
         >> "$LOGDIR/safree_${CAT}_g${GPU}.log" 2>&1
       # gen_safree_single.py saves to $OUTDIR/generated/, move imgs up
@@ -171,12 +171,22 @@ for ((i=SLOT; i<N; i+=N_SLOTS)); do
       fi
       echo "[GPU $GPU][run] ours $CAT $CFG"
       wait_gpu_free 8000
+      # Map probe/how to generate_family.py expected values
+      case $PROBE in
+        imgonly) PROBE_ARG=image ;;
+        txtonly) PROBE_ARG=text ;;
+        *) PROBE_ARG=both ;;
+      esac
+      case $HOW in
+        anchor) HOW_ARG=anchor_inpaint ;;
+        *) HOW_ARG=hybrid ;;
+      esac
       cd $REPO/SafeGen
       CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
         --prompts "$PROMPTS" --outdir "$OUTDIR" \
-        --probe_mode $PROBE --cas_threshold 0.6 \
+        --probe_mode $PROBE_ARG --cas_threshold 0.6 \
         --safety_scale $SS --attn_threshold $THR --img_attn_threshold 0.4 \
-        --how_mode $HOW --family_guidance --family_config "$PACK" \
+        --how_mode $HOW_ARG --family_guidance --family_config "$PACK" \
         >> "$LOGDIR/ours_${CAT}_${CFG}_g${GPU}.log" 2>&1
       ;;
   esac
