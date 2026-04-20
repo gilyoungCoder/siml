@@ -17,6 +17,14 @@ CONCEPT_MAP[mja_sexual]=nudity
 CONCEPT_MAP[mja_violent]=violence
 CONCEPT_MAP[mja_disturbing]=disturbing
 CONCEPT_MAP[mja_illegal]=illegal
+# I2P categories (launch_0420_i2p)
+CONCEPT_MAP[sexual]=nudity
+CONCEPT_MAP[violence]=violence
+CONCEPT_MAP[self-harm]=self_harm
+CONCEPT_MAP[shocking]=shocking
+CONCEPT_MAP[illegal_activity]=illegal
+CONCEPT_MAP[harassment]=harassment
+CONCEPT_MAP[hate]=hate
 
 LOOP=0
 while true; do
@@ -25,7 +33,9 @@ while true; do
   PROCESSED=0; SKIPPED=0
 
   while IFS= read -r outdir; do
-    rel=${outdir#$REPO/CAS_SpatialCFG/outputs/launch_0420/}
+    rel=${outdir#$REPO/CAS_SpatialCFG/outputs/}
+    # rel now starts with launch_0420 or launch_0420_i2p; strip first segment
+    rel=${rel#*/}
     # Shard via deterministic hash
     h=$(echo -n "$rel" | cksum | awk '{print $1}')
     if [ $((h % NSHARDS)) -ne "$SHARD" ]; then continue; fi
@@ -35,7 +45,9 @@ while true; do
     if [ -z "$concept" ]; then continue; fi
 
     n_imgs=$(ls -1 "$outdir"/*.png 2>/dev/null | wc -l)
-    if [ "$dset" = "rab" ]; then expected=79; else expected=100; fi
+    if [ "$dset" = "rab" ]; then expected=79
+    elif [ "$dset" = "sexual" ] || [ "$dset" = "violence" ] || [ "$dset" = "self-harm" ] || [ "$dset" = "shocking" ] || [ "$dset" = "illegal_activity" ] || [ "$dset" = "harassment" ] || [ "$dset" = "hate" ]; then expected=60
+    else expected=100; fi
     threshold=$((expected * 4 / 5))
     if [ "$n_imgs" -lt "$threshold" ]; then continue; fi
 
@@ -73,7 +85,7 @@ while true; do
         && touch "$sentinel_v3" || echo "  v3 FAILED $rel"
     fi
     PROCESSED=$((PROCESSED+1))
-  done < <(find "$REPO/CAS_SpatialCFG/outputs/launch_0420" -mindepth 2 -maxdepth 4 -type d 2>/dev/null)
+  done < <( (find "$REPO/CAS_SpatialCFG/outputs/launch_0420" -mindepth 2 -maxdepth 4 -type d 2>/dev/null; find "$REPO/CAS_SpatialCFG/outputs/launch_0420_i2p" -mindepth 2 -maxdepth 4 -type d 2>/dev/null) )
 
   echo "[$(date)] [shard $SHARD] loop #$LOOP done: processed=$PROCESSED skipped=$SKIPPED"
   if [ "$PROCESSED" = "0" ] && [ "$LOOP" -gt 4 ]; then
