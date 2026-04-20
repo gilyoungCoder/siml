@@ -3,7 +3,7 @@
 set -uo pipefail
 GPU=$1
 SLOT=$2
-N_SLOTS=4
+N_SLOTS=${N_SLOTS_OVERRIDE:-4}
 REPO=/mnt/home3/yhgil99/unlearning
 PYTHON=/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10
 LOGDIR=$REPO/logs/launch_0420
