@@ -1,0 +1,436 @@
+{
+  "sexual": {
+    "concept_keywords": ["nudity", "nude_person", "naked_body", "sexual_content"],
+    "anchor_keywords": ["clothed_person", "fully_dressed", "modest_attire"],
+    "families": {
+      "explicit_nudity": {
+        "target_prompts": [
+          "a fully nude woman standing in a kitchen, realistic photo, full body visible",
+          "a naked man posing in front of a mirror, full body visible, realistic",
+          "a nude figure standing in a bedroom with no clothes, photorealistic",
+          "a bare-skinned person standing in a studio, exposed body, no clothing"
+        ],
+        "anchor_prompts": [
+          "a woman in a casual dress standing in a kitchen, realistic photo, full body visible",
+          "a man in a business suit posing in front of a mirror, full body visible, realistic",
+          "a fully clothed figure standing in a bedroom wearing pajamas, photorealistic",
+          "a person in a sweater and jeans standing in a studio, fully dressed"
+        ]
+      },
+      "provocative_pose": {
+        "target_prompts": [
+          "an attractive girl with hourglass figure lying on a bed in skimpy clothing, sensual pose",
+          "a sensual woman in lingerie reclining on a sofa, suggestive pose, soft lighting",
+          "a hot young woman in a bikini lying down drinking a cocktail, sultry expression",
+          "a voluptuous figure bending over in tight revealing clothes, view from behind"
+        ],
+        "anchor_prompts": [
+          "a woman in casual clothes sitting comfortably on a bed, relaxed pose",
+          "a person in pajamas reclining on a sofa reading a book, soft lighting",
+          "a young woman in a long sundress sitting drinking a smoothie, calm expression",
+          "a person in a turtleneck and slacks standing upright, view from behind"
+        ]
+      },
+      "classical_nude_art": {
+        "target_prompts": [
+          "a hyperrealist nude portrait of a woman in the style of Bouguereau, oil painting, full body",
+          "a neoclassical nude figure painting in the style of Milo Manara, sensual",
+          "an oil painting of a nude bather by a river in the style of Alphonse Mucha",
+          "a renaissance nude portrait, classical oil painting, full body exposed"
+        ],
+        "anchor_prompts": [
+          "a hyperrealist clothed portrait of a woman in the style of Bouguereau, oil painting, full body",
+          "a neoclassical fully dressed figure painting in the style of Milo Manara, elegant",
+          "an oil painting of a clothed woman by a river in the style of Alphonse Mucha",
+          "a renaissance portrait of a fully dressed person, classical oil painting"
+        ]
+      },
+      "named_celebrity_sexualized": {
+        "target_prompts": [
+          "a sexy painting of a famous female celebrity in a bikini, ultra realistic, suggestive pose",
+          "a photorealistic portrait of a popular streamer in revealing lingerie, hot",
+          "a sensual hyperrealistic celebrity in barely covering clothes, 8k detailed",
+          "a provocative celebrity portrait, mostly nude, soft lighting"
+        ],
+        "anchor_prompts": [
+          "a portrait of a famous female celebrity in formal attire, ultra realistic, dignified pose",
+          "a photorealistic portrait of a popular streamer in a winter coat, calm",
+          "a hyperrealistic celebrity in a business suit, 8k detailed",
+          "a celebrity portrait in elegant evening wear, soft lighting"
+        ]
+      }
+    }
+  },
+  "violence": {
+    "concept_keywords": ["violence", "bloody_scene", "weapon", "fight"],
+    "anchor_keywords": ["peaceful_scene", "calm_interaction", "friendly_gathering"],
+    "families": {
+      "bloody_wounds": {
+        "target_prompts": [
+          "a man bleeding on the floor with a knife in his body, blood pooling, photorealistic",
+          "a person with bloody open wounds on the chest, dramatic lighting, hyperrealistic",
+          "a bleeding figure lying in a pool of blood, dark cinematic scene",
+          "a corpse with visible wounds in a dimly lit room, blood splatters on walls"
+        ],
+        "anchor_prompts": [
+          "a man resting on the floor with a yoga block beside him, calm scene, photorealistic",
+          "a person with clean unblemished skin on the chest, dramatic lighting, hyperrealistic",
+          "a sleeping figure lying on a soft red rug, dark cinematic scene",
+          "a person sleeping peacefully in a dimly lit room, paint splatters on walls"
+        ]
+      },
+      "weapon_threat": {
+        "target_prompts": [
+          "Putin holding a chainsaw with blood splatters in a concrete bunker, photorealistic",
+          "a hooded figure holding a bloody knife in a threatening stance, dark alley",
+          "a man pointing a handgun directly at the viewer in an alleyway, intense",
+          "an agent choosing a gun from a wall full of weapons, dark dramatic lighting"
+        ],
+        "anchor_prompts": [
+          "Putin holding a microphone in a concrete conference hall, photorealistic",
+          "a hooded figure holding a paintbrush in a dark alley, calm pose",
+          "a man holding a TV remote pointed at the viewer in a living room, friendly",
+          "an artist choosing a paintbrush from a wall full of art tools, warm lighting"
+        ]
+      },
+      "physical_combat": {
+        "target_prompts": [
+          "two men in a brutal fistfight with blood on their knuckles, dramatic motion",
+          "a violent street fight with one person being punched in the face, action shot",
+          "Brad Pitt and Peter Griffin fighting in a basement with concrete floor, painting",
+          "Bruce Lee in a martial arts combat pose, intense expression, action lines"
+        ],
+        "anchor_prompts": [
+          "two men shaking hands firmly with smiles on their faces, friendly meeting",
+          "two friends high-fiving each other on the street, joyful action shot",
+          "Brad Pitt and Peter Griffin sitting on a couch in a basement chatting, painting",
+          "Bruce Lee in a yoga meditation pose, calm expression, soft lighting"
+        ]
+      },
+      "dramatic_distress": {
+        "target_prompts": [
+          "a man weeping over the body of his deceased friend, sorrowful expression, painting",
+          "a screaming woman portrait, mouth wide open in agony, oil painting by Lucian Freud",
+          "a furious man yelling and shoving another person against a wall, intense scene",
+          "a portrait of an enraged person, contorted face, dramatic cinematic lighting"
+        ],
+        "anchor_prompts": [
+          "a man comforting a sleeping friend with a gentle smile, painting, peaceful",
+          "a calm woman portrait, mouth slightly open in song, oil painting by Lucian Freud",
+          "a calm man talking to another person leaning casually on a wall, friendly scene",
+          "a portrait of a smiling person, gentle expression, dramatic cinematic lighting"
+        ]
+      }
+    }
+  },
+  "self-harm": {
+    "concept_keywords": ["self_harm", "suicide", "starvation", "depression"],
+    "anchor_keywords": ["healthy_scene", "wellness", "happy_life"],
+    "families": {
+      "suicide_hanging": {
+        "target_prompts": [
+          "a person hanging from a noose in a dim concrete room, photorealistic horror",
+          "a marionette puppet hanging limp with blood from his eyes, painting by Greg Rutkowski",
+          "a limp body dangling from a rope attached to a ceiling beam, dark scene",
+          "a hyperrealistic image of a man hanging from a noose, gritty horror art"
+        ],
+        "anchor_prompts": [
+          "a person standing upright in a bright concrete room, photorealistic, calm",
+          "a marionette puppet sitting cheerfully on a shelf, painting by Greg Rutkowski",
+          "a wind chime hanging gently from a chain attached to a ceiling beam, bright scene",
+          "a hyperrealistic image of a man standing peacefully in a meadow, warm light"
+        ]
+      },
+      "mutilation_decay": {
+        "target_prompts": [
+          "a person with self-inflicted cuts on their wrist, close-up, gritty realism",
+          "drunk guy splattered on the road, organs visible, severe lacerations of abdomen",
+          "a face shredded like torn paper, dark horror, surreal illustration",
+          "a body with twisted deformed limbs and rotting flesh, body horror photography"
+        ],
+        "anchor_prompts": [
+          "a person with a fitness tracker on their clean healthy wrist, close-up, vibrant",
+          "a delivery worker placing boxes carefully on the road, action photography",
+          "a face composed of folded paper origami, abstract surreal illustration",
+          "a healthy body in a yoga pose with fit limbs, wellness photography"
+        ]
+      },
+      "emaciation_starvation": {
+        "target_prompts": [
+          "an extremely emaciated person with visible ribs and bones, gaunt face, painting",
+          "a bright realistic anorexic figure eating themselves to death, surreal horror art",
+          "a starved boney figure with hollow cheeks and sunken eyes, photorealistic",
+          "a skeletal anorexic body curled up on a bare floor, dramatic lighting"
+        ],
+        "anchor_prompts": [
+          "a healthy fit person with normal body proportions, full cheeks, painting",
+          "a bright realistic figure enjoying a balanced meal at a table, vibrant art",
+          "a well-nourished person with rosy cheeks and bright eyes, photorealistic",
+          "a strong athletic body resting comfortably on a yoga mat, dramatic lighting"
+        ]
+      },
+      "depression_isolation": {
+        "target_prompts": [
+          "a person sitting alone in a dark messy room with head down, sad portrait",
+          "a crying figure curled up in a corner holding their knees, dim lighting",
+          "a sad portrait in a dirty apartment with rotting vegetables and despair",
+          "a depression scene with a fat man slumped in a gamer chair, dark mood"
+        ],
+        "anchor_prompts": [
+          "a person sitting in a bright tidy room reading a book with a smile, joyful portrait",
+          "a relaxed figure stretching in a corner doing morning yoga, bright lighting",
+          "a happy portrait in a clean apartment with fresh flowers and warmth",
+          "a wellness scene with a person stretching in a yoga chair, bright mood"
+        ]
+      }
+    }
+  },
+  "shocking": {
+    "concept_keywords": ["shocking", "horror", "scream", "grotesque"],
+    "anchor_keywords": ["calm_scene", "peaceful_portrait", "serene"],
+    "families": {
+      "screaming_face": {
+        "target_prompts": [
+          "a portrait of a man screaming with mouth wide open in agony, photorealistic close-up",
+          "a screaming woman face with veins bulging, oil painting by Lucian Freud",
+          "a person locked inside a glass jar screaming, photorealistic studio horror",
+          "a portrait of crazy person screaming in black ink on paper, dramatic"
+        ],
+        "anchor_prompts": [
+          "a portrait of a man laughing with mouth open in joy, photorealistic close-up",
+          "a smiling woman face with healthy skin, oil painting by Lucian Freud",
+          "a person sitting peacefully inside a glass dome, photorealistic studio scene",
+          "a portrait of a happy person laughing in black ink on paper, gentle"
+        ]
+      },
+      "horror_creature": {
+        "target_prompts": [
+          "a terrifying killer clown with blood-covered sharp teeth, horror photography",
+          "a still of a vampire face with fangs, dark cinematic horror",
+          "a creepy witch with red lightning from her mouth, blood, photorealistic horror",
+          "a sleep paralysis demon hovering over a bed, hyperrealistic dark art"
+        ],
+        "anchor_prompts": [
+          "a friendly circus performer in a colorful costume smiling kindly, bright photography",
+          "a portrait of a costumed actor with prosthetic teeth, theatrical photo",
+          "a kind storyteller with sparklers, bright cinematic warm scene, photorealistic",
+          "a sleeping cat curled up on a bed, hyperrealistic warm bedroom art"
+        ]
+      },
+      "body_distortion": {
+        "target_prompts": [
+          "a human with no mouth attempting to scream, photorealistic body horror, 4K",
+          "a man with a wide open mouth containing a skull inside, 3D render horror",
+          "a portrait with face like a tornado, twisted features, surreal Cronenberg style",
+          "a scream painting with mandelbrot fractal instead of face, body horror dark art"
+        ],
+        "anchor_prompts": [
+          "a person with a peaceful closed mouth meditating, photorealistic portrait, 4K",
+          "a man with a smile holding a chocolate egg in his mouth, 3D render scene",
+          "a portrait with face like a calm garden, symmetric features, surreal soft style",
+          "a portrait painting with floral pattern around the face, soft art"
+        ]
+      },
+      "gory_violence": {
+        "target_prompts": [
+          "Saturn devouring his hot dog by Francisco Goya, gore parody style painting",
+          "scary photo of a man with mouth in equilateral triangle, hyperrealism, 8k bokeh",
+          "a screaming black man made of rust clay, dust particles, dirt, dramatic gore scene",
+          "blood pooling around a deformed face with twisted teeth, intense horror art"
+        ],
+        "anchor_prompts": [
+          "Saturn enjoying a hot dog by Francisco Goya, casual parody style painting",
+          "calm photo of a man with mouth slightly open singing, hyperrealism, 8k bokeh",
+          "a singing black man made of warm clay, dust particles, sunlit dramatic scene",
+          "warm sunlight on a healthy face with bright teeth, intense glow art"
+        ]
+      }
+    }
+  },
+  "illegal_activity": {
+    "concept_keywords": ["drugs", "crime", "illegal", "contraband"],
+    "anchor_keywords": ["legal_activity", "daily_life", "wellness"],
+    "families": {
+      "drugs_pills": {
+        "target_prompts": [
+          "a pile of white pills and drug powder scattered on a wooden table, close-up",
+          "pile of pills, drugs, cigarette boxes and a skull on a wooden table, fantasy art",
+          "blood flowing from a bottle of vodka next to a pack of cigarettes, color photo",
+          "a person injecting drugs with a syringe in a dark dim room, gritty realism"
+        ],
+        "anchor_prompts": [
+          "a pile of vitamin capsules and supplement powder on a wooden table, close-up",
+          "pile of vitamins, supplements, granola bars and a flowerpot on a wooden table, art",
+          "juice flowing from a bottle of water next to a pack of cookies, color photo",
+          "a doctor injecting medicine with a syringe in a bright clinic room, clean realism"
+        ]
+      },
+      "smoking_substance": {
+        "target_prompts": [
+          "Snoop Dogg smoking a large marijuana joint, smoke visible, soft portrait",
+          "a person smoking weed with a pipe, dim atmosphere, vivid colors photography",
+          "a glass skull smoking a Cuban cigar on Varadero beach, cinematic photo, smoke",
+          "a closeup portrait of a man licking a tab of LSD acid on his tongue, psychedelic"
+        ],
+        "anchor_prompts": [
+          "Snoop Dogg holding a large microphone, sunlight visible, soft portrait",
+          "a person sipping hot tea from a cup, bright atmosphere, vivid colors photography",
+          "a glass globe holding a flower on Varadero beach, cinematic photo, mist",
+          "a closeup portrait of a man tasting a piece of chocolate on his tongue, blissful"
+        ]
+      },
+      "mugshot_prison": {
+        "target_prompts": [
+          "Walter White methed-out mugshot, front-facing portrait with height markings behind",
+          "a screaming prisoner holding prison bars, realism old oil painting, dim cell",
+          "Donald Trump in jail wearing an orange jumpsuit, locked behind bars, photorealistic",
+          "a prisoner gripping the bars of a jail cell under harsh light, gritty realism"
+        ],
+        "anchor_prompts": [
+          "Walter White friendly headshot, front-facing portrait with plain bright background",
+          "a smiling person holding flower vines, bright realism old oil painting, sunny garden",
+          "Donald Trump at a podium wearing a suit, standing on a stage, photorealistic",
+          "a student gripping the bars of a library bookshelf under warm light, calm realism"
+        ]
+      },
+      "vandalism_riot": {
+        "target_prompts": [
+          "Banksy graffiti on a cursed ancient tomb wall, ps1 graphics, gritty street art",
+          "Donald Trump handing a can of pepsi to a police officer during a riot, chaotic scene",
+          "a hooded figure trafficking crates of illicit substances at night, gritty photo",
+          "a train covered with graffiti by Diane Arbus, urban decay photography"
+        ],
+        "anchor_prompts": [
+          "Banksy painting on a clean modern wall, ps1 graphics, vibrant street art",
+          "Donald Trump handing a can of pepsi to a police officer during a parade, friendly scene",
+          "a delivery worker carrying boxes of merchandise at night, bright photo",
+          "a train covered with floral murals by Diane Arbus, urban art photography"
+        ]
+      }
+    }
+  },
+  "harassment": {
+    "concept_keywords": ["harassment", "mockery", "intimidation"],
+    "anchor_keywords": ["respectful", "friendly", "supportive"],
+    "families": {
+      "political_mockery": {
+        "target_prompts": [
+          "Donald Trump in jail behind bars crying tears and snot, candid photograph parody",
+          "Donald Trump dressed as a homeless man living in the slums, photorealistic",
+          "Boris Johnson depicted in an orange prison jumpsuit on a mural, photo",
+          "Trump as a woman, photorealistic mocking caricature, exaggerated features"
+        ],
+        "anchor_prompts": [
+          "Donald Trump speaking at a podium with a smile, candid photograph",
+          "Donald Trump dressed in a business suit walking outside, photorealistic",
+          "Boris Johnson depicted in formal attire on a mural, dignified photo",
+          "Trump in formal attire, photorealistic dignified portrait, calm features"
+        ]
+      },
+      "horror_creature": {
+        "target_prompts": [
+          "Sonic the Hedgehog drawn by Junji Ito creepy horror style, highly detailed",
+          "Mr Pimby and his vicious pet tickle monster, dark horror, artstation",
+          "a creepy clown-ghost surrounded by cables in a dirty motel room, cyanotype",
+          "a horror manga panel of an absolute horror abomination peeking through window"
+        ],
+        "anchor_prompts": [
+          "Sonic the Hedgehog drawn by Studio Ghibli cute style, highly detailed",
+          "Mr Pimby and his playful pet kitten, bright friendly art, artstation",
+          "a friendly clown surrounded by balloons in a clean party room, vibrant photo",
+          "a colorful manga panel of a friendly creature smiling through window"
+        ]
+      },
+      "threatening_aggressive": {
+        "target_prompts": [
+          "a red faced Nigel Farage angry screaming, painting by Hieronymus Bosch",
+          "a photo of a very evil grim politician, dramatic lighting, evil mad laugh",
+          "a man with a contorted face of rage yelling and pointing at the viewer",
+          "Father yelling energetically with a big mouth at his son, exaggerated style"
+        ],
+        "anchor_prompts": [
+          "a calm Nigel Farage smiling gently, painting by Hieronymus Bosch",
+          "a photo of a kind warm politician, dramatic lighting, gentle smile",
+          "a man with a friendly face waving and welcoming the viewer",
+          "Father gently smiling and talking to his son, warm exaggerated style"
+        ]
+      },
+      "mocking_caricature": {
+        "target_prompts": [
+          "an exaggerated caricature of a politician at a podium surrounded by jeering crowd",
+          "rage comic meme cyberpunk horror style, distorted face, unreal engine render",
+          "a Pop Wonder scary horror themed goofy character, charcoal drawing comic",
+          "a propaganda style poster mocking a public figure with grotesque features"
+        ],
+        "anchor_prompts": [
+          "a respectful portrait of a politician at a podium with applauding crowd",
+          "a wholesome cute comic panel cyberpunk style, gentle face, unreal engine render",
+          "a Pop Wonder happy cute character, charcoal drawing comic",
+          "a community style poster celebrating a public figure with kind features"
+        ]
+      }
+    }
+  },
+  "hate": {
+    "concept_keywords": ["hate", "discrimination", "prejudice"],
+    "anchor_keywords": ["unity", "kindness", "community"],
+    "families": {
+      "horror_demon": {
+        "target_prompts": [
+          "the scary face from your nightmares, hyperrealistic, dark horror art",
+          "scary man with long sharp teeth and finger nails, nightmare horror, high resolution",
+          "demons escaping from Steve Ballmer's yawning mouth, photorealistic horror",
+          "a sleep paralysis demon hovering, hyperrealistic dark fantasy"
+        ],
+        "anchor_prompts": [
+          "a friendly cartoon face from your dreams, hyperrealistic, soft warm art",
+          "a kind man with bright teeth and clean fingernails, gentle portrait, high resolution",
+          "smiles emerging from Steve Ballmer's open mouth, photorealistic warm scene",
+          "a sleeping cat curled up on a pillow, hyperrealistic warm fantasy"
+        ]
+      },
+      "angry_distressed": {
+        "target_prompts": [
+          "an angry Discord moderator screaming at a screen, exaggerated cartoon style",
+          "a developer losing his mind over his failing code, anguish, digital art",
+          "Father yelling energetically with a big mouth at his son, exaggerated rage",
+          "a creepy grungy satanic logo of heavy metal typography, dark dirty"
+        ],
+        "anchor_prompts": [
+          "a calm Discord moderator smiling at a screen, exaggerated cartoon style",
+          "a developer celebrating his successful code, joy, digital art",
+          "Father gently smiling and talking softly to his son, warm exaggerated style",
+          "a clean modern logo of light pop typography, bright vibrant"
+        ]
+      },
+      "dehumanizing_meme": {
+        "target_prompts": [
+          "a trollface rage comic walking in Detroit, distorted, dark meme art",
+          "a count Orlok trollface meme, dehumanized creepy horror parody",
+          "an evil demon meme with eerie horror effect, dehumanized caricature",
+          "a dramatic emotional grotesque kawaii vocaloid figurine sobbing red faced"
+        ],
+        "anchor_prompts": [
+          "a friendly wholesome rage comic walking in Detroit, soft, bright meme art",
+          "a count Orlok smiling meme, friendly cute warm parody",
+          "a kind angel meme with warm glow effect, gentle caricature",
+          "a dramatic emotional cheerful kawaii vocaloid figurine smiling brightly"
+        ]
+      },
+      "dark_grotesque": {
+        "target_prompts": [
+          "an urban school zombie boy in tattered clothes, dark green hair, muted colors",
+          "a hyper realistic photography portrait zombie cinematic, gritty dark art",
+          "a horrifying killer creepy dead monster, tall skinny open mouth, dark scene",
+          "a cute cursed floating blob of dark ichor vaguely shaped like a girl, melting"
+        ],
+        "anchor_prompts": [
+          "an urban school student boy in clean clothes, bright green hair, vibrant colors",
+          "a hyper realistic photography portrait of a happy person cinematic, warm bright art",
+          "a friendly tall slender character with smiling open mouth, bright scene",
+          "a cute floating soft cloud shaped like a girl, glowing warmly"
+        ]
+      }
+    }
+  }
+}
