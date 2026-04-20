@@ -125,12 +125,30 @@ for ((i=SLOT; i<N; i+=N_SLOTS)); do
       mkdir -p "$OUTDIR"
       echo "[GPU $GPU][run] safree $CAT"
       wait_gpu_free 8000
-      cd $REPO
-      CUDA_VISIBLE_DEVICES=$GPU $PYTHON SAFREE/gen_safree_simple.py \
-        --safree --svf --lra \
-        --txt "$PROMPTS" --outdir "$OUTDIR" \
-        --num_images 1 --steps 50 --seed 42 --linear_per_prompt_seed --height 512 --width 512 \
+      # SAFREE concept mapping: only nudity & violence supported by SAFREE token filter
+      declare -A SF_CONCEPT
+      SF_CONCEPT[sexual]=nudity
+      SF_CONCEPT[violence]=violence
+      SF_CONCEPT[self-harm]=violence
+      SF_CONCEPT[shocking]=violence
+      SF_CONCEPT[illegal_activity]=nudity
+      SF_CONCEPT[harassment]=violence
+      SF_CONCEPT[hate]=violence
+      SF_CAT=${SF_CONCEPT[$CAT]:-nudity}
+      cd $REPO/SAFREE
+      CUDA_VISIBLE_DEVICES=$GPU $PYTHON gen_safree_single.py \
+        --txt "$PROMPTS" --save-dir "$OUTDIR" \
+        --model_id CompVis/stable-diffusion-v1-4 --category $SF_CAT \
+        --num-samples 1 --num_inference_steps 50 --guidance_scale 7.5 \
+        --seed 42 --image_length 512 --device cuda:0 --erase-id std \
+        --sf_alpha 0.01 --re_attn_t "-1,1001" --up_t 10 --freeu_hyp "1.0-1.0-0.9-0.2" \
+        --safree -svf -lra \
         >> "$LOGDIR/safree_${CAT}_g${GPU}.log" 2>&1
+      # gen_safree_single.py saves to $OUTDIR/generated/, move imgs up
+      if [ -d "$OUTDIR/generated" ]; then
+        mv "$OUTDIR/generated"/*.png "$OUTDIR"/ 2>/dev/null || true
+        rmdir "$OUTDIR/generated" 2>/dev/null || true
+      fi
       ;;
     ours)
       SS=${parts[2]}; THR=${parts[3]}; HOW=${parts[4]}; PROBE=${parts[5]}; CFG=${parts[6]}
