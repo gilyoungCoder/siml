@@ -69,8 +69,8 @@ def main():
             with torch.no_grad():
                 tgt_in = clip_proc(images=tgt_imgs, return_tensors='pt').pixel_values.to(DEVICE).to(torch.float16)
                 anc_in = clip_proc(images=anc_imgs, return_tensors='pt').pixel_values.to(DEVICE).to(torch.float16)
-                tgt_feat = clip_mod.get_image_features(tgt_in).cpu()
-                anc_feat = clip_mod.get_image_features(anc_in).cpu()
+                vo = clip_mod.vision_model(pixel_values=tgt_in); tgt_feat = clip_mod.visual_projection(vo.pooler_output).cpu()
+                vo = clip_mod.vision_model(pixel_values=anc_in); anc_feat = clip_mod.visual_projection(vo.pooler_output).cpu()
             
             target_clip_features[fname] = tgt_feat
             anchor_clip_features[fname] = anc_feat
