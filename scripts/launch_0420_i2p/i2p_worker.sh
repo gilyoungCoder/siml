@@ -129,7 +129,7 @@ for ((i=SLOT; i<N; i+=N_SLOTS)); do
       CUDA_VISIBLE_DEVICES=$GPU $PYTHON SAFREE/gen_safree_simple.py \
         --safree --svf --lra \
         --txt "$PROMPTS" --outdir "$OUTDIR" \
-        --num_images 1 --steps 50 --seed 42 --height 512 --width 512 \
+        --num_images 1 --steps 50 --seed 42 --per_prompt_seed --height 512 --width 512 \
         >> "$LOGDIR/safree_${CAT}_g${GPU}.log" 2>&1
       ;;
     ours)
