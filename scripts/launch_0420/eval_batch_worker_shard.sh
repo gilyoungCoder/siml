@@ -29,6 +29,9 @@ CONCEPT_MAP[hate]=hate
 CONCEPT_MAP[unlearndiff]=nudity
 CONCEPT_MAP[p4dn]=nudity
 CONCEPT_MAP[mma]=nudity
+# family RAB sweep and v27 RAB variants
+CONCEPT_MAP[family_rab]=nudity
+CONCEPT_MAP[v27_rab]=nudity
 
 LOOP=0
 while true; do
@@ -49,7 +52,7 @@ while true; do
     if [ -z "$concept" ]; then continue; fi
 
     n_imgs=$(ls -1 "$outdir"/*.png 2>/dev/null | wc -l)
-    if [ "$dset" = "rab" ]; then expected=78
+    if [ "$dset" = "rab" ] || [ "$dset" = "family_rab" ] || [ "$dset" = "v27_rab" ]; then expected=79
     elif [ "$dset" = "unlearndiff" ]; then expected=141
     elif [ "$dset" = "p4dn" ]; then expected=150
     elif [ "$dset" = "mma" ]; then expected=999
