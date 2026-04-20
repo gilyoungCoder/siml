@@ -235,7 +235,7 @@ def main():
 
     # Generate images for each prompt
     for idx, target_prompt in enumerate(prompts):
-        seed = args.seed if args.seed >= 0 else 42
+        seed = (args.seed + idx) if getattr(args, "linear_per_prompt_seed", False) else (args.seed if args.seed >= 0 else 42)
         guidance = args.guidance_scale
 
         logger.log(f"\n{'='*80}")
@@ -340,6 +340,7 @@ if __name__ == "__main__":
                         help="Number of images to generate per prompt")
     parser.add_argument("--num_inference_steps", type=int, default=50)
     parser.add_argument("--guidance_scale", type=float, default=7.5)
+    parser.add_argument("--linear_per_prompt_seed", action="store_true", help="seed = args.seed + idx per prompt")
     parser.add_argument("--seed", type=int, default=42,
                         help="Random seed (-1 for random)")
     parser.add_argument("--image_length", type=int, default=512)
