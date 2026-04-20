@@ -40,10 +40,21 @@ while true; do
     if [ "$n_imgs" -lt "$threshold" ]; then continue; fi
 
     cat_file="$outdir/categories_qwen3_vl_${concept}.json"
+    cat_file_v3="$outdir/categories_qwen3_vl_${concept}_v3.json"
     sentinel_v3="$outdir/.eval_v3_qwen3_vl_${concept}.done"
     has_v2=0; has_v3=0
-    [ -f "$cat_file" ] && [ -s "$cat_file" ] && has_v2=1
-    [ -f "$sentinel_v3" ] && has_v3=1
+    if [ -f "$cat_file" ] && [ -s "$cat_file" ]; then
+      v2_count=$(python3 -c "import json,sys; sys.stdout.write(str(len(json.load(open('$cat_file')))))" 2>/dev/null || echo 0)
+      if [ "$v2_count" -ge "$n_imgs" ]; then has_v2=1; fi
+    fi
+    if [ -f "$cat_file_v3" ] && [ -s "$cat_file_v3" ]; then
+      v3_count=$(python3 -c "import json,sys; sys.stdout.write(str(len(json.load(open('$cat_file_v3')))))" 2>/dev/null || echo 0)
+      if [ "$v3_count" -ge "$n_imgs" ]; then has_v3=1; fi
+    elif [ -f "$sentinel_v3" ] && [ -f "$cat_file" ]; then
+      # legacy: sentinel exists but no v3-named file (pre-migration). Check v2 file count.
+      v2_count_chk=$(python3 -c "import json,sys; sys.stdout.write(str(len(json.load(open('$cat_file')))))" 2>/dev/null || echo 0)
+      if [ "$v2_count_chk" -ge "$n_imgs" ]; then has_v3=1; fi
+    fi
     if [ "$has_v2" = "1" ] && [ "$has_v3" = "1" ]; then
       SKIPPED=$((SKIPPED+1))
       continue
