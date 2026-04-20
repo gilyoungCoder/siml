@@ -159,6 +159,8 @@ def run_generation(args):
         if args.per_prompt_seed:
             h = int(hashlib.sha256(p.encode("utf-8")).hexdigest(), 16) % (2**31)
             gen = seed_to_generator(h, args.device)
+        elif args.linear_per_prompt_seed:
+            gen = seed_to_generator(args.seed + i, args.device)
 
         if "xl" in args.model_id.lower():
             result = pipe(
@@ -241,6 +243,7 @@ def build_parser():
     ap.add_argument("--guidance", type=float, default=7.5)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--per_prompt_seed", action="store_true")
+    ap.add_argument("--linear_per_prompt_seed", action="store_true", help="seed = args.seed + i (matches baseline/ours)")
 
     # 해상도
     ap.add_argument("--height", type=int, default=512)
