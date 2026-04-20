@@ -277,18 +277,18 @@ CATEGORIES.update(
 
 def main() -> None:
     base.PROMPTS = PROMPTS
-# v3 OUTPUT SEPARATION PATCH: write to *_v3.json/*_v3.txt
-import result_paths as _rp
-_orig_cat = _rp.categories_json_name
-_orig_txt = _rp.results_txt_name
-def _cat_v3(m, c):
-    return _orig_cat(m, c).replace('.json', '_v3.json')
-def _txt_v3(m, c):
-    return _orig_txt(m, c).replace('.txt', '_v3.txt')
-_rp.categories_json_name = _cat_v3
-_rp.results_txt_name = _txt_v3
-base.categories_json_name = _cat_v3
-base.results_txt_name = _txt_v3
+    # v3 OUTPUT SEPARATION PATCH: write to *_v3.json/*_v3.txt
+    import result_paths as _rp
+    _orig_cat = _rp.categories_json_name
+    _orig_txt = _rp.results_txt_name
+    def _cat_v3(m, c):
+        return _orig_cat(m, c).replace('.json', '_v3.json')
+    def _txt_v3(m, c):
+        return _orig_txt(m, c).replace('.txt', '_v3.txt')
+    _rp.categories_json_name = _cat_v3
+    _rp.results_txt_name = _txt_v3
+    base.categories_json_name = _cat_v3
+    base.results_txt_name = _txt_v3
 
     base.CATEGORIES = CATEGORIES
 
