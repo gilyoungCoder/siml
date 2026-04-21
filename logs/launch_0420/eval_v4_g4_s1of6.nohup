@@ -22,3 +22,4 @@
 [2026. 04. 21. (화) 19:10:40 KST] [GPU 4 shard 1] [v4] ours_sd14/hate/cas0.6_ss20_thr0.1_imgthr0.3_hybrid_both concept=hate n=60
 [2026. 04. 21. (화) 19:11:24 KST] [GPU 4 shard 1] [v4] ours_sd14_v2pack/violence/hybrid_ss15_thr0.1_imgthr0.4_both concept=violence n=313
 [2026. 04. 21. (화) 19:13:44 KST] [GPU 4 shard 1] [v4] ours_sd14_v2pack/violence/anchor_ss1.0_thr0.1_imgthr0.4_both concept=violence n=313
+[2026. 04. 21. (화) 19:16:03 KST] [GPU 4 shard 1] [v4] ours_sd14_v1pack/violence/anchor_ss1.0_thr0.1_imgthr0.4_both concept=violence n=313
