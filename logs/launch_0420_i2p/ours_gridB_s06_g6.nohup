@@ -7,3 +7,4 @@
 [2026. 04. 22. (수) 00:09:56 KST] [g6 gridB] [run] shocking hybrid ss=22 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/shocking/hybrid_ss22_thr0.1_imgthr0.4_both
 [2026. 04. 22. (수) 00:24:46 KST] [g6 gridB] [run] shocking anchor_inpaint ss=1.5 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/shocking/anchor_inpaint_ss1.5_thr0.1_imgthr0.4_both
 [2026. 04. 22. (수) 00:35:59 KST] [g6 gridB] [run] illegal_activity hybrid ss=12 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/illegal_activity/hybrid_ss12_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 00:44:39 KST] [g6 gridB] [run] illegal_activity hybrid ss=18 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/illegal_activity/hybrid_ss18_thr0.1_imgthr0.5_both
