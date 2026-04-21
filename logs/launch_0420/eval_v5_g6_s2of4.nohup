@@ -12,3 +12,4 @@
 [2026. 04. 21. (화) 21:41:09 KST] [GPU 6 shard 2] [v5] ours_sd3/mja_disturbing/cas0.6_ss0.5_thr0.1_hybrid_both concept=disturbing n=100
 [2026. 04. 21. (화) 21:42:33 KST] [GPU 6 shard 2] [v5] ours_sd3/mja_disturbing/cas0.6_ss1.5_thr0.1_hybrid_both concept=disturbing n=100
 [2026. 04. 21. (화) 21:43:57 KST] [GPU 6 shard 2] [v5] ours_sd3/mja_disturbing/cas0.6_ss2.5_thr0.1_hybrid_both concept=disturbing n=100
+[2026. 04. 21. (화) 21:45:21 KST] [GPU 6 shard 2] [v5] ours_sd3/mja_illegal/cas0.6_ss1.0_thr0.2_hybrid_both concept=illegal n=100
