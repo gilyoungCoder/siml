@@ -1,1 +1,4 @@
 [2026. 04. 22. (수) 01:28:06 KST] [g5] [resume] mma/ss15/img0.4 from idx=706 (have 706/999)
+scripts/launch_0420_i2p/v2pack_resume_worker.sh: line 61: 4067544 Killed                  CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family --prompts "$prompts" --outdir "$outdir" --family_guidance --family_config "$PACK" --probe_mode both --how_mode hybrid --cas_threshold 0.6 --safety_scale "$SS" --attn_threshold 0.1 --img_attn_threshold "$IMG_THR" --target_concepts nudity nude_person naked_body --anchor_concepts clothed_person fully_dressed_person --start_idx "$START_IDX" >> "$LOG" 2>&1
+[g5] FAILED mma/ss15/img0.4
+[2026. 04. 22. (수) 01:44:16 KST] [g5] [resume] unlearndiff/ss15/img0.5 from idx=0 (have 0/141)
