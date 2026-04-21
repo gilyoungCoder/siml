@@ -71,3 +71,4 @@
 [2026. 04. 21. (화) 22:41:14 KST] [GPU 5 shard 1] [v5] baseline_sd14/hate concept=hate n=98
 [2026. 04. 21. (화) 22:42:44 KST] [GPU 5 shard 1] [v5] ours_sd14_v2pack/violence/anchor_ss1.0_thr0.1_imgthr0.4_both concept=violence n=313
 [2026. 04. 21. (화) 22:46:47 KST] [GPU 5 shard 1] [v5] ours_sd14_v1pack/violence/anchor_ss1.0_thr0.1_imgthr0.4_both concept=violence n=313
+[2026. 04. 21. (화) 22:50:52 KST] [v5 shard 1] loop #1 done: processed=70 skipped=4 failed=1
