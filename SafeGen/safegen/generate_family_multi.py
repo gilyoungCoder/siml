@@ -270,8 +270,9 @@ def parse_args():
 
     # WHERE — Probe
     p.add_argument("--probe_mode", default="both", choices=["text", "image", "both"])
-    p.add_argument("--family_config", default=None,
-                   help="Path to grouped .pt file from prepare_grouped_exemplar.py")
+    p.add_argument("--family_config", nargs="+", default=None,
+                   help="Path(s) to grouped .pt file(s). Multiple paths = multi-concept erasure "
+                        "(flat argmax across all concept families).")
     p.add_argument("--clip_embeddings", default=None,
                    help="Path to single .pt file (non-family mode)")
     p.add_argument("--attn_resolutions", type=int, nargs="+", default=[16, 32])
@@ -353,39 +354,60 @@ def main():
         unc = te(tok("", padding="max_length", max_length=tok.model_max_length,
                      truncation=True, return_tensors="pt").input_ids.to(device))[0]
 
-    # ── Load family config ──
+    # ── Load family config(s) — supports multi-concept erasure ──
     family_names = []
     family_target_embeds = {}  # {fname: [1, 77, 768]}
     family_anchor_embeds = {}
     family_target_words = {}   # {fname: [word1, word2, ...]}
+    merged_target_feats = {}   # {fname: [K, 768]} for image probe
+    merged_family_meta = {}    # {fname: {...}}
 
-    if args.family_config and os.path.exists(args.family_config):
-        print(f"Loading family config: {args.family_config}")
-        fdata = torch.load(args.family_config, map_location="cpu", weights_only=False)
-        family_token_map = fdata.get("family_token_map", {})
-        family_meta = fdata.get("family_metadata", {})
-        family_names = list(family_token_map.keys())
-        if not family_names:
-            family_names = fdata.get("family_names", []) or list(family_meta.keys())
+    config_paths = args.family_config if args.family_config else []
+    if isinstance(config_paths, str):
+        config_paths = [config_paths]
+    valid_paths = [p for p in config_paths if p and os.path.exists(p)]
 
-        # Per-family target/anchor embeddings
-        target_feats = fdata.get("target_clip_features", {})
-        anchor_feats = fdata.get("anchor_clip_features", {})
+    if valid_paths:
+        is_multi = len(valid_paths) > 1
+        print(f"Loading {'multi-concept' if is_multi else 'single-concept'} family config: {valid_paths}")
+        for path in valid_paths:
+            fdata = torch.load(path, map_location="cpu", weights_only=False)
+            family_token_map = fdata.get("family_token_map", {})
+            family_meta = fdata.get("family_metadata", {})
+            local_names = list(family_token_map.keys())
+            if not local_names:
+                local_names = fdata.get("family_names", []) or list(family_meta.keys())
 
-        for fname in family_names:
-            # Target: encode family-specific target words
-            tw = family_meta.get(fname, {}).get("target_words") or family_meta.get(fname, {}).get("target_prompts") or args.target_concepts
-            family_target_words[fname] = tw
-            family_target_embeds[fname] = encode_concepts(te, tok, tw[:3], device)
+            # Concept label from path (e.g. ".../concepts_v2/sexual/clip_grouped.pt" → "sexual")
+            concept = os.path.basename(os.path.dirname(path))
 
-            # Anchor: encode family-specific anchor words
-            aw = family_meta.get(fname, {}).get("anchor_words") or family_meta.get(fname, {}).get("anchor_prompts") or args.anchor_concepts
-            family_anchor_embeds[fname] = encode_concepts(te, tok, aw[:3], device)
+            target_feats = fdata.get("target_clip_features", {})
 
-        print(f"  Families: {family_names}")
+            for fname in local_names:
+                # Flat namespace: prefix with concept if multi-pack to avoid collisions
+                gname = f"{concept}/{fname}" if is_multi else fname
+                family_names.append(gname)
+                merged_family_meta[gname] = family_meta.get(fname, {})
+                if fname in target_feats:
+                    merged_target_feats[gname] = target_feats[fname]
+
+                # Target words + embed
+                tw = family_meta.get(fname, {}).get("target_words") or \
+                     family_meta.get(fname, {}).get("target_prompts") or \
+                     args.target_concepts
+                family_target_words[gname] = tw
+                family_target_embeds[gname] = encode_concepts(te, tok, tw[:3], device)
+
+                # Anchor words + embed
+                aw = family_meta.get(fname, {}).get("anchor_words") or \
+                     family_meta.get(fname, {}).get("anchor_prompts") or \
+                     args.anchor_concepts
+                family_anchor_embeds[gname] = encode_concepts(te, tok, aw[:3], device)
+
+        print(f"  Total families ({len(family_names)}): {family_names}")
         for fn in family_names:
             print(f"    {fn}: target={family_target_words[fn][:3]}, "
-                  f"anchor={family_meta.get(fn, {}).get('anchor_words', [])[:3]}")
+                  f"anchor={merged_family_meta.get(fn, {}).get('anchor_words', [])[:3]}")
 
     # ── Setup image probe ──
     img_probe = None
@@ -398,11 +420,10 @@ def main():
     if use_img:
         img_probe = AttentionProbeStore()
 
-        if args.family_config and os.path.exists(args.family_config):
-            fdata = torch.load(args.family_config, map_location="cpu", weights_only=False)
-            target_feats = fdata.get("target_clip_features", {})
+        if valid_paths:
+            # Use merged target features from all loaded packs (multi-concept ready)
             img_embeds, img_tok_idx, _ = build_grouped_probe_embeds(
-                target_feats, te, tok, device, args.n_img_tokens)
+                merged_target_feats, te, tok, device, args.n_img_tokens)
         elif args.clip_embeddings:
             clip_data = torch.load(args.clip_embeddings, map_location="cpu")
             clip_feats = clip_data.get("target_clip_features", clip_data.get("target_cls")).float()
