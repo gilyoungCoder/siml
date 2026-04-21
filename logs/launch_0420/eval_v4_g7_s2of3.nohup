@@ -21,3 +21,4 @@
 [2026. 04. 21. (화) 18:49:44 KST] [GPU 7 shard 2] [v4] ours_sd14/violence/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_both concept=violence n=60
 [2026. 04. 21. (화) 18:50:27 KST] [GPU 7 shard 2] [v4] ours_sd14/violence/cas0.6_ss20_thr0.1_imgthr0.3_hybrid_both concept=violence n=60
 [2026. 04. 21. (화) 18:51:09 KST] [GPU 7 shard 2] [v4] ours_sd14/violence/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_txtonly concept=violence n=60
+[2026. 04. 21. (화) 18:51:52 KST] [GPU 7 shard 2] [v4] ours_sd14/self-harm/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_both concept=self_harm n=60
