@@ -13,3 +13,4 @@
 [2026. 04. 21. (화) 19:00:54 KST] [GPU 0 shard 0] [v4] safree_sd14/illegal_activity concept=illegal n=238
 [2026. 04. 21. (화) 19:02:15 KST] [GPU 0 shard 0] [v4] ours_sd14_v2pack/violence/hybrid_ss15_thr0.1_imgthr0.5_both concept=violence n=313
 [2026. 04. 21. (화) 19:03:57 KST] [GPU 0 shard 0] [v4] ours_sd14_v2pack/violence/hybrid_ss10_thr0.1_imgthr0.4_both concept=violence n=313
+[2026. 04. 21. (화) 19:05:38 KST] [v4 shard 0] loop #1 done: processed=14 skipped=24 failed=0
