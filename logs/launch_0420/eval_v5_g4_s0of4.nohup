@@ -20,3 +20,4 @@
 [2026. 04. 21. (화) 21:52:52 KST] [GPU 4 shard 0] [v5] ours_sd3/mja_illegal/cas0.6_ss2.0_thr0.2_anchor_inpaint_both concept=illegal n=100
 [2026. 04. 21. (화) 21:54:24 KST] [GPU 4 shard 0] [v5] ours_sd3/mja_illegal/cas0.6_ss2.5_thr0.1_hybrid_both concept=illegal n=100
 [2026. 04. 21. (화) 21:55:56 KST] [GPU 4 shard 0] [v5] ours_sd3/mja_illegal/cas0.6_ss2.5_thr0.2_anchor_inpaint_both concept=illegal n=100
+[2026. 04. 21. (화) 21:57:28 KST] [GPU 4 shard 0] [v5] ours_sd3/mja_illegal/cas0.6_ss3.0_thr0.2_anchor_inpaint_both concept=illegal n=100
