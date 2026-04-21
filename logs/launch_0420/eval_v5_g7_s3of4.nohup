@@ -46,3 +46,4 @@
 [2026. 04. 21. (화) 22:15:48 KST] [GPU 7 shard 3] [v5] ours_sd14/shocking/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_txtonly concept=shocking n=60
 [2026. 04. 21. (화) 22:16:31 KST] [GPU 7 shard 3] [v5] ours_sd14/shocking/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_both concept=shocking n=60
 [2026. 04. 21. (화) 22:17:14 KST] [GPU 7 shard 3] [v5] ours_sd14/shocking/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_imgonly concept=shocking n=60
+[2026. 04. 21. (화) 22:17:58 KST] [GPU 7 shard 3] [v5] ours_sd14/shocking/cas0.6_ss20_thr0.1_imgthr0.3_hybrid_imgonly concept=shocking n=60
