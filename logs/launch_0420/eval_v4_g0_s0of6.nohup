@@ -6,3 +6,4 @@
 [2026. 04. 21. (화) 18:56:35 KST] [GPU 0 shard 0] [v4] ours_sd14/self-harm/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_both concept=self_harm n=60
 [2026. 04. 21. (화) 18:57:12 KST] [GPU 0 shard 0] [v4] ours_sd14/shocking/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_txtonly concept=shocking n=60
 [2026. 04. 21. (화) 18:57:49 KST] [GPU 0 shard 0] [v4] ours_sd14/illegal_activity/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_txtonly concept=illegal n=60
+[2026. 04. 21. (화) 18:58:26 KST] [GPU 0 shard 0] [v4] ours_sd14/harassment/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_imgonly concept=harassment n=60
