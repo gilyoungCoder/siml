@@ -59,3 +59,5 @@
 [2026. 04. 21. (화) 22:31:22 KST] [GPU 4 shard 0] [v5] safree_sd14/illegal_activity concept=illegal n=238
 [2026. 04. 21. (화) 22:33:30 KST] [GPU 4 shard 0] [v5] safree_sd14/hate concept=hate n=98
 [2026. 04. 21. (화) 22:34:28 KST] [v5 shard 0] loop #1 done: processed=59 skipped=8 failed=0
+[2026. 04. 21. (화) 22:35:28 KST] [v5 shard 0/4 gpu 4] loop #2
+[2026. 04. 21. (화) 22:35:29 KST] [GPU 4 shard 0] [v5] ours_sd14/mja_illegal/cas0.6_ss1.0_thr0.2_hybrid_both concept=illegal n=100
