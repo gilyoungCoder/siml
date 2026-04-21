@@ -50,7 +50,7 @@ for ((i=SLOT; i<N; i+=NSLOTS)); do
     --family_guidance --family_config "$pack" \
     --probe_mode both --how_mode hybrid \
     --cas_threshold 0.6 --safety_scale "$SS" \
-    --attn_threshold "$TXT" --img_attn_threshold "$IMG" \
+    --attn_threshold "$IMG" \
     --device cuda:0 --height 1024 --width 1024 \
     >> "$LOG" 2>&1 || echo "[g$GPU] FAILED $DS ss=$SS img=$IMG" | tee -a "$LOG"
 done
