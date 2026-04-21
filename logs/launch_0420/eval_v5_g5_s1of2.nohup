@@ -1,2 +1,3 @@
 [2026. 04. 21. (화) 21:09:21 KST] [v5 shard 1/2 gpu 5] loop #1
 [2026. 04. 21. (화) 21:09:21 KST] [GPU 5 shard 1] [v5] baseline_sd14/mja_disturbing concept=disturbing n=400
+[2026. 04. 21. (화) 21:12:16 KST] [GPU 5 shard 1] [v5] baseline_sd14/mja_violent concept=violence n=400
