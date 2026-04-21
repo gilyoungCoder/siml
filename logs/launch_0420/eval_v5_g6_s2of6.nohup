@@ -12,3 +12,4 @@
 [2026. 04. 22. (수) 00:06:08 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_disturbing/cas0.6_ss2.5_thr0.1_anchor_inpaint_both concept=disturbing n=85
 [2026. 04. 22. (수) 00:08:11 KST] [GPU 6 shard 2] [v5] ours_sd14_grid_v1pack/self-harm/hybrid_ss10_thr0.1_imgthr0.4_both concept=self_harm n=59
 [2026. 04. 22. (수) 00:09:16 KST] [GPU 6 shard 2] [v5] ours_sd14_grid_v1pack/self-harm/hybrid_ss10_thr0.1_imgthr0.3_both concept=self_harm n=55
+[2026. 04. 22. (수) 00:10:08 KST] [GPU 6 shard 2] [v5] ours_sd14_grid_v1pack_b/shocking/anchor_inpaint_ss1.0_thr0.1_imgthr0.4_both concept=shocking n=60
