@@ -2,3 +2,4 @@
 [2026. 04. 21. (화) 18:52:53 KST] [GPU 5 shard 2] [v4] ours_sd14/self-harm/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_txtonly concept=self_harm n=60
 [2026. 04. 21. (화) 18:53:39 KST] [GPU 5 shard 2] [v4] ours_sd14/self-harm/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_imgonly concept=self_harm n=60
 [2026. 04. 21. (화) 18:54:23 KST] [GPU 5 shard 2] [v4] ours_sd14/shocking/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_txtonly concept=shocking n=60
+[2026. 04. 21. (화) 18:55:06 KST] [GPU 5 shard 2] [v4] ours_sd14/shocking/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_imgonly concept=shocking n=60
