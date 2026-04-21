@@ -85,3 +85,6 @@
 [2026. 04. 21. (화) 23:09:09 KST] [GPU 5 shard 1] [v5] ours_sd14_grid_v1pack_b/violence/hybrid_ss18_thr0.1_imgthr0.4_both concept=violence n=60
 [2026. 04. 21. (화) 23:10:12 KST] [GPU 5 shard 1] [v5] ours_sd14_grid_v1pack_b/violence/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_both concept=violence n=60
 [2026. 04. 21. (화) 23:11:15 KST] [v5 shard 1] loop #2 done: processed=11 skipped=70 failed=0
+[2026. 04. 21. (화) 23:12:15 KST] [v5 shard 1/4 gpu 5] loop #3
+[2026. 04. 21. (화) 23:12:20 KST] [v5 shard 1] loop #3 done: processed=0 skipped=81 failed=0
+[2026. 04. 21. (화) 23:12:20 KST] [v5 shard 1] no work, exiting
