@@ -1,2 +1,3 @@
 [2026. 04. 21. (화) 21:09:21 KST] [v5 shard 0/2 gpu 4] loop #1
 [2026. 04. 21. (화) 21:09:21 KST] [GPU 4 shard 0] [v5] ours_sd14/mja_violent/cas0.6_ss1.5_thr0.1_ainp_both concept=violence n=90
+[2026. 04. 21. (화) 21:10:24 KST] [GPU 4 shard 0] [v5] ours_sd14/mja_violent/cas0.6_ss1.0_thr0.2_hybrid_both concept=violence n=100
