@@ -3,3 +3,4 @@
 [2026. 04. 21. (화) 18:53:54 KST] [GPU 7 shard 4] [v4] ours_sd14_multiconcept/mja_violent/cas0.6_ss2.5_thr0.2_hybrid_both concept=violence n=100
 [2026. 04. 21. (화) 18:54:53 KST] [GPU 7 shard 4] [v4] ours_sd14_multiconcept/mja_violent/cas0.6_ss3.0_thr0.1_hybrid_both concept=violence n=100
 [2026. 04. 21. (화) 18:55:52 KST] [GPU 7 shard 4] [v4] ours_flux1/mja_violent/cas0.6_ss2.0_thr0.1_hybrid_both concept=violence n=100
+[2026. 04. 21. (화) 18:57:18 KST] [GPU 7 shard 4] [v4] safree_flux1/mja_illegal concept=illegal n=100
