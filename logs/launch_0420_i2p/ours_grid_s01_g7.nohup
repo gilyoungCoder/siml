@@ -3,3 +3,4 @@
 [2026. 04. 21. (화) 23:06:57 KST] [g7] [run] violence hybrid ss=20 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack/violence/hybrid_ss20_thr0.1_imgthr0.4_both
 [2026. 04. 21. (화) 23:36:08 KST] [g7] [run] self-harm hybrid ss=10 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack/self-harm/hybrid_ss10_thr0.1_imgthr0.4_both
 [2026. 04. 22. (수) 00:08:17 KST] [g7] [run] self-harm hybrid ss=15 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack/self-harm/hybrid_ss15_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 00:43:11 KST] [g7] [run] self-harm hybrid ss=25 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack/self-harm/hybrid_ss25_thr0.1_imgthr0.4_both
