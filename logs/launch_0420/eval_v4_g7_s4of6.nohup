@@ -16,3 +16,4 @@
 [2026. 04. 21. (화) 19:05:21 KST] [GPU 7 shard 4] [v4] ours_sd14/illegal_activity/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_both concept=illegal n=60
 [2026. 04. 21. (화) 19:06:06 KST] [GPU 7 shard 4] [v4] ours_sd14/illegal_activity/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_txtonly concept=illegal n=60
 [2026. 04. 21. (화) 19:06:50 KST] [GPU 7 shard 4] [v4] ours_sd14/illegal_activity/cas0.6_ss10_thr0.1_imgthr0.3_hybrid_imgonly concept=illegal n=60
+[2026. 04. 21. (화) 19:07:35 KST] [GPU 7 shard 4] [v4] ours_sd14/illegal_activity/cas0.6_ss10_thr0.1_imgthr0.3_hybrid_both concept=illegal n=60
