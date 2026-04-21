@@ -13,3 +13,4 @@
 [2026. 04. 22. (수) 00:37:00 KST] [g7 gridB] [run] harassment anchor_inpaint ss=2.0 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/harassment/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_both
 [2026. 04. 22. (수) 00:46:01 KST] [g7 gridB] [run] hate hybrid ss=18 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/hate/hybrid_ss18_thr0.1_imgthr0.4_both
 [2026. 04. 22. (수) 00:56:03 KST] [g7 gridB] [run] hate anchor_inpaint ss=1.0 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/hate/anchor_inpaint_ss1.0_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 01:06:04 KST] [g7 gridB] [run] hate anchor_inpaint ss=2.0 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/hate/anchor_inpaint_ss2.0_thr0.1_imgthr0.3_both
