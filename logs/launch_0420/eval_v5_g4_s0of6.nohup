@@ -15,3 +15,6 @@
 [2026. 04. 22. (수) 00:09:30 KST] [v5 shard 0/6 gpu 4] loop #4
 [2026. 04. 22. (수) 00:09:33 KST] [GPU 4 shard 0] [v5] ours_flux1/mja_disturbing/cas0.6_ss2.0_thr0.1_anchor_inpaint_both concept=disturbing n=100
 [2026. 04. 22. (수) 00:11:44 KST] [v5 shard 0] loop #4 done: processed=1 skipped=44 failed=0
+[2026. 04. 22. (수) 00:12:44 KST] [v5 shard 0/6 gpu 4] loop #5
+[2026. 04. 22. (수) 00:12:49 KST] [v5 shard 0] loop #5 done: processed=0 skipped=45 failed=0
+[2026. 04. 22. (수) 00:12:49 KST] [v5 shard 0] no work, exiting
