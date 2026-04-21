@@ -5,3 +5,4 @@
 [2026. 04. 21. (화) 23:13:25 KST] [g7 gridB] [run] self-harm anchor_inpaint ss=1.0 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/self-harm/anchor_inpaint_ss1.0_thr0.1_imgthr0.4_both
 [2026. 04. 21. (화) 23:24:25 KST] [g7 gridB] [run] self-harm anchor_inpaint ss=2.0 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/self-harm/anchor_inpaint_ss2.0_thr0.1_imgthr0.3_both
 [2026. 04. 21. (화) 23:35:27 KST] [g7 gridB] [run] shocking hybrid ss=12 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/shocking/hybrid_ss12_thr0.1_imgthr0.5_both
+[2026. 04. 21. (화) 23:46:37 KST] [g7 gridB] [run] shocking anchor_inpaint ss=2.0 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack_b/shocking/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_both
