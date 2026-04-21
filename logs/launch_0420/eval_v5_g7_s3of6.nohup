@@ -10,3 +10,5 @@
 [2026. 04. 22. (수) 00:02:54 KST] [v5 shard 3/6 gpu 7] loop #2
 [2026. 04. 22. (수) 00:02:59 KST] [GPU 7 shard 3] [v5] ours_sd14_grid_v1pack/violence/hybrid_ss20_thr0.1_imgthr0.5_both concept=violence n=49
 [2026. 04. 22. (수) 00:03:56 KST] [v5 shard 3] loop #2 done: processed=1 skipped=68 failed=0
+[2026. 04. 22. (수) 00:04:56 KST] [v5 shard 3/6 gpu 7] loop #3
+[2026. 04. 22. (수) 00:05:00 KST] [GPU 7 shard 3] [v5] ours_sd14_grid_v1pack/violence/hybrid_ss20_thr0.1_imgthr0.5_both concept=violence n=53
