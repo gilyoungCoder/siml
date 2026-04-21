@@ -17,3 +17,6 @@
 [2026. 04. 21. (화) 19:06:38 KST] [v4 shard 0/6 gpu 0] loop #2
 [2026. 04. 21. (화) 19:06:41 KST] [GPU 0 shard 0] [v4] ours_flux1/mja_violent/cas0.6_ss3.0_thr0.1_hybrid_both concept=violence n=96
 [2026. 04. 21. (화) 19:07:43 KST] [v4 shard 0] loop #2 done: processed=1 skipped=37 failed=0
+[2026. 04. 21. (화) 19:08:43 KST] [v4 shard 0/6 gpu 0] loop #3
+[2026. 04. 21. (화) 19:08:47 KST] [v4 shard 0] loop #3 done: processed=0 skipped=38 failed=0
+[2026. 04. 21. (화) 19:08:47 KST] [v4 shard 0] no work, exiting
