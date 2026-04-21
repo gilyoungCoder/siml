@@ -38,3 +38,4 @@
 [2026. 04. 21. (화) 22:10:05 KST] [GPU 7 shard 3] [v5] ours_sd14/violence/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_txtonly concept=violence n=60
 [2026. 04. 21. (화) 22:10:48 KST] [GPU 7 shard 3] [v5] ours_sd14/violence/cas0.6_ss10_thr0.1_imgthr0.3_hybrid_txtonly concept=violence n=60
 [2026. 04. 21. (화) 22:11:31 KST] [GPU 7 shard 3] [v5] ours_sd14/violence/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_imgonly concept=violence n=60
+[2026. 04. 21. (화) 22:12:13 KST] [GPU 7 shard 3] [v5] ours_sd14/violence/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_imgonly concept=violence n=60
