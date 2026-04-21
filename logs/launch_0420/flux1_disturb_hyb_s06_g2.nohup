@@ -1,0 +1,5 @@
+[2026. 04. 22. (수) 01:14:55 KST] [g2] [run] ss=10 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_disturbing/hybrid_ss10_thr0.1_imgthr0.5_both
+[g2] FAILED ss=10 imgthr=0.5
+[2026. 04. 22. (수) 01:14:57 KST] [g2] [run] ss=20 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.3_both
+[g2] FAILED ss=20 imgthr=0.3
+[2026. 04. 22. (수) 01:14:59 KST] [g2 s2] done
