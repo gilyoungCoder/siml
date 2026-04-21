@@ -8,3 +8,5 @@
 [2026. 04. 22. (수) 00:02:55 KST] [GPU 6 shard 2] [v5] ours_sd14_grid_v1pack_b/self-harm/hybrid_ss18_thr0.1_imgthr0.5_both concept=self_harm n=60
 [2026. 04. 22. (수) 00:04:01 KST] [GPU 6 shard 2] [v5] ours_sd14_grid_v1pack_b/shocking/hybrid_ss18_thr0.1_imgthr0.5_both concept=shocking n=60
 [2026. 04. 22. (수) 00:05:05 KST] [v5 shard 2] loop #1 done: processed=8 skipped=56 failed=0
+[2026. 04. 22. (수) 00:06:05 KST] [v5 shard 2/6 gpu 6] loop #2
+[2026. 04. 22. (수) 00:06:08 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_disturbing/cas0.6_ss2.5_thr0.1_anchor_inpaint_both concept=disturbing n=85
