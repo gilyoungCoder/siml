@@ -30,3 +30,4 @@
 [2026. 04. 21. (화) 22:03:23 KST] [GPU 6 shard 2] [v5] ours_sd14_multiconcept/mja_violent/cas0.6_ss3.0_thr0.2_anchor_inpaint_both concept=violence n=100
 [2026. 04. 21. (화) 22:04:24 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_disturbing/cas0.6_ss1.5_thr0.1_anchor_inpaint_both concept=disturbing n=100
 [2026. 04. 21. (화) 22:05:53 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_disturbing/cas0.6_ss1.5_thr0.1_hybrid_both concept=disturbing n=100
+[2026. 04. 21. (화) 22:07:18 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_illegal/cas0.6_ss3.0_thr0.1_anchor_inpaint_both concept=illegal n=100
