@@ -3,3 +3,4 @@
 [2026. 04. 21. (화) 23:55:24 KST] [GPU 7 shard 3] [v5] ours_sd14_grid_v1pack_b/violence/hybrid_ss22_thr0.1_imgthr0.4_both concept=violence n=60
 [2026. 04. 21. (화) 23:56:30 KST] [GPU 7 shard 3] [v5] ours_sd14_grid_v1pack_b/violence/anchor_inpaint_ss1.5_thr0.1_imgthr0.4_both concept=violence n=60
 [2026. 04. 21. (화) 23:57:35 KST] [GPU 7 shard 3] [v5] ours_sd14_grid_v1pack_b/violence/anchor_inpaint_ss2.0_thr0.1_imgthr0.3_both concept=violence n=60
+[2026. 04. 21. (화) 23:58:40 KST] [GPU 7 shard 3] [v5] ours_sd14_grid_v1pack_b/self-harm/hybrid_ss22_thr0.1_imgthr0.4_both concept=self_harm n=60
