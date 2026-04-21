@@ -59,3 +59,4 @@
 [2026. 04. 21. (화) 22:27:06 KST] [GPU 6 shard 2] [v5] ours_sd14/hate/cas0.6_ss20_thr0.1_imgthr0.3_hybrid_imgonly concept=hate n=60
 [2026. 04. 21. (화) 22:27:50 KST] [GPU 6 shard 2] [v5] ours_sd14/hate/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_imgonly concept=hate n=60
 [2026. 04. 21. (화) 22:28:33 KST] [GPU 6 shard 2] [v5] safree_sd14/shocking concept=shocking n=60
+[2026. 04. 21. (화) 22:29:17 KST] [GPU 6 shard 2] [v5] baseline_sd14/shocking concept=shocking n=477
