@@ -1,0 +1,19 @@
+[2026. 04. 22. (수) 02:12:20 KST] [g5] [run] mja_sexual ss=10 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_sexual/hybrid_ss10_thr0.1_imgthr0.4_both
+[g5] FAILED mja_sexual ss=10 img=0.4
+[2026. 04. 22. (수) 02:12:22 KST] [g5] [run] mja_sexual ss=15 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_sexual/hybrid_ss15_thr0.1_imgthr0.4_both
+[g5] FAILED mja_sexual ss=15 img=0.4
+[2026. 04. 22. (수) 02:12:23 KST] [g5] [run] mja_sexual ss=20 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_sexual/hybrid_ss20_thr0.1_imgthr0.4_both
+[g5] FAILED mja_sexual ss=20 img=0.4
+[2026. 04. 22. (수) 02:12:25 KST] [g5] [run] mja_violent ss=10 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_violent/hybrid_ss10_thr0.1_imgthr0.4_both
+[g5] FAILED mja_violent ss=10 img=0.4
+[2026. 04. 22. (수) 02:12:27 KST] [g5] [run] mja_violent ss=15 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_violent/hybrid_ss15_thr0.1_imgthr0.4_both
+[g5] FAILED mja_violent ss=15 img=0.4
+[2026. 04. 22. (수) 02:12:28 KST] [g5] [run] mja_violent ss=20 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_violent/hybrid_ss20_thr0.1_imgthr0.4_both
+[g5] FAILED mja_violent ss=20 img=0.4
+[2026. 04. 22. (수) 02:12:30 KST] [g5] [run] mja_illegal ss=10 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_illegal/hybrid_ss10_thr0.1_imgthr0.4_both
+[g5] FAILED mja_illegal ss=10 img=0.4
+[2026. 04. 22. (수) 02:12:32 KST] [g5] [run] mja_illegal ss=15 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_illegal/hybrid_ss15_thr0.1_imgthr0.4_both
+[g5] FAILED mja_illegal ss=15 img=0.4
+[2026. 04. 22. (수) 02:12:34 KST] [g5] [run] mja_illegal ss=20 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_illegal/hybrid_ss20_thr0.1_imgthr0.4_both
+[g5] FAILED mja_illegal ss=20 img=0.4
+[2026. 04. 22. (수) 02:12:38 KST] [g5 s1] done
