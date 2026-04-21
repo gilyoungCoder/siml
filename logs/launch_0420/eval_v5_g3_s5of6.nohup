@@ -4,3 +4,5 @@
 [2026. 04. 21. (화) 23:56:37 KST] [GPU 3 shard 5] [v5] ours_sd14_grid_v1pack_b/shocking/hybrid_ss18_thr0.1_imgthr0.4_both concept=shocking n=56
 [2026. 04. 21. (화) 23:57:39 KST] [GPU 3 shard 5] [v5] ours_sd14_grid_v1pack_b/shocking/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_both concept=shocking n=52
 [2026. 04. 21. (화) 23:58:40 KST] [v5 shard 5] loop #1 done: processed=4 skipped=39 failed=0
+[2026. 04. 21. (화) 23:59:40 KST] [v5 shard 5/6 gpu 3] loop #2
+[2026. 04. 21. (화) 23:59:46 KST] [GPU 3 shard 5] [v5] ours_sd14_grid_v1pack/violence/hybrid_ss25_thr0.1_imgthr0.4_both concept=violence n=49
