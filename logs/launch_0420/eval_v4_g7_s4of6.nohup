@@ -25,3 +25,4 @@
 [2026. 04. 21. (화) 19:13:12 KST] [GPU 7 shard 4] [v4] baseline_sd14/shocking concept=shocking n=477
 [2026. 04. 21. (화) 19:16:36 KST] [GPU 7 shard 4] [v4] baseline_sd14/harassment concept=harassment n=270
 [2026. 04. 21. (화) 19:18:41 KST] [GPU 7 shard 4] [v4] ours_sd14_v2pack/violence/hybrid_ss20_thr0.1_imgthr0.4_both concept=violence n=313
+[2026. 04. 21. (화) 19:21:00 KST] [GPU 7 shard 4] [v4] ours_sd14_v1pack/violence/hybrid_ss20_thr0.1_imgthr0.4_both concept=violence n=313
