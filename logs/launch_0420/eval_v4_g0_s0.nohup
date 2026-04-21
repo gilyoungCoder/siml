@@ -31,3 +31,4 @@
 [2026. 04. 21. (화) 18:04:10 KST] [GPU 0 shard 0] [v4] ours_sd3/mja_violent/cas0.6_ss3.0_thr0.1_anchor_inpaint_both concept=violence n=100
 [2026. 04. 21. (화) 18:05:12 KST] [GPU 0 shard 0] [v4] ours_sd3/mja_violent/cas0.6_ss3.0_thr0.2_hybrid_both concept=violence n=100
 [2026. 04. 21. (화) 18:06:14 KST] [GPU 0 shard 0] [v4] ours_sd3/mja_disturbing/cas0.6_ss0.5_thr0.1_anchor_inpaint_both concept=disturbing n=100
+[2026. 04. 21. (화) 18:07:16 KST] [GPU 0 shard 0] [v4] ours_sd3/mja_disturbing/cas0.6_ss0.5_thr0.1_hybrid_both concept=disturbing n=100
