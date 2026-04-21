@@ -106,3 +106,4 @@
 [2026. 04. 21. (화) 23:47:43 KST] [v5 shard 2] loop #8 done: processed=3 skipped=80 failed=0
 [2026. 04. 21. (화) 23:48:43 KST] [v5 shard 2/4 gpu 6] loop #9
 [2026. 04. 21. (화) 23:48:46 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_disturbing/cas0.6_ss2.0_thr0.1_anchor_inpaint_both concept=disturbing n=95
+[2026. 04. 21. (화) 23:50:59 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_disturbing/cas0.6_ss2.5_thr0.1_anchor_inpaint_both concept=disturbing n=80
