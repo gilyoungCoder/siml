@@ -45,3 +45,4 @@
 [2026. 04. 21. (화) 22:20:09 KST] [GPU 5 shard 1] [v5] baseline_sd14/hate concept=hate n=60
 [2026. 04. 21. (화) 22:20:52 KST] [GPU 5 shard 1] [v5] ours_sd14/violence/cas0.6_ss10_thr0.1_imgthr0.3_hybrid_both concept=violence n=60
 [2026. 04. 21. (화) 22:21:36 KST] [GPU 5 shard 1] [v5] ours_sd14/violence/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_both concept=violence n=60
+[2026. 04. 21. (화) 22:22:19 KST] [GPU 5 shard 1] [v5] ours_sd14/violence/cas0.6_ss20_thr0.1_imgthr0.3_hybrid_imgonly concept=violence n=60
