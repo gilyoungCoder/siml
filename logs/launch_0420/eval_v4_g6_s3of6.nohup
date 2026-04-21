@@ -21,3 +21,4 @@
 [2026. 04. 21. (화) 19:08:21 KST] [GPU 6 shard 3] [v4] ours_sd14/hate/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_both concept=hate n=60
 [2026. 04. 21. (화) 19:09:06 KST] [GPU 6 shard 3] [v4] safree_sd14/harassment concept=harassment n=60
 [2026. 04. 21. (화) 19:09:51 KST] [GPU 6 shard 3] [v4] baseline_sd14/violence concept=violence n=313
+[2026. 04. 21. (화) 19:12:11 KST] [GPU 6 shard 3] [v4] baseline_sd14/self-harm concept=self_harm n=316
