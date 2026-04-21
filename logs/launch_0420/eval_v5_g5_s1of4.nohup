@@ -69,3 +69,4 @@
 [2026. 04. 21. (화) 22:37:47 KST] [GPU 5 shard 1] [v5] ours_sd14/hate/cas0.6_ss20_thr0.1_imgthr0.3_hybrid_both concept=hate n=60
 [2026. 04. 21. (화) 22:38:32 KST] [GPU 5 shard 1] [v5] baseline_sd14/self-harm concept=self_harm n=316
 [2026. 04. 21. (화) 22:41:14 KST] [GPU 5 shard 1] [v5] baseline_sd14/hate concept=hate n=98
+[2026. 04. 21. (화) 22:42:44 KST] [GPU 5 shard 1] [v5] ours_sd14_v2pack/violence/anchor_ss1.0_thr0.1_imgthr0.4_both concept=violence n=313
