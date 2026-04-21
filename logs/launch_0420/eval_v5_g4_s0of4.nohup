@@ -57,3 +57,4 @@
 [2026. 04. 21. (화) 22:26:50 KST] [GPU 4 shard 0] [v5] baseline_sd14/illegal_activity concept=illegal n=238
 [2026. 04. 21. (화) 22:28:53 KST] [GPU 4 shard 0] [v5] safree_sd14/self-harm concept=self_harm n=316
 [2026. 04. 21. (화) 22:31:22 KST] [GPU 4 shard 0] [v5] safree_sd14/illegal_activity concept=illegal n=238
+[2026. 04. 21. (화) 22:33:30 KST] [GPU 4 shard 0] [v5] safree_sd14/hate concept=hate n=98
