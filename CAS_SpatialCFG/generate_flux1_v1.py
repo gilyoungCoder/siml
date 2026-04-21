@@ -313,7 +313,9 @@ def parse_args():
     p.add_argument("--probe_block_idx", type=int, default=-1,
                    help="Which transformer block to hook (negative = from end).")
     p.add_argument("--attn_threshold", type=float, default=0.1,
-                   help="Floor value for normalised spatial mask.")
+                   help="Floor value for normalised spatial mask (text probe).")
+    p.add_argument("--img_attn_threshold", type=float, default=None,
+                   help="Floor for image probe (defaults to attn_threshold if unset).")
     p.add_argument("--clip_embeddings", default=None,
                    help="Path to CLIP exemplar embeddings .pt (for image probe).")
     p.add_argument("--n_img_tokens", type=int, default=4,
@@ -331,6 +333,8 @@ def parse_args():
 # ── Main ──
 def main():
     args = parse_args()
+    if args.img_attn_threshold is None:
+        args.img_attn_threshold = args.attn_threshold
     set_seed(args.seed)
     gpu_id = int(args.device.split(":")[-1])
     device = torch.device(args.device)
@@ -790,13 +794,13 @@ def main():
                             if "image" in probe.captures:
                                 m = compute_flux_spatial_mask(
                                     feat_p, target_feat=probe.captures["image"],
-                                    threshold=args.attn_threshold, mode="contrast")
+                                    threshold=args.img_attn_threshold, mode="contrast")
                                 masks_2d.append(m)
                             elif clip_img_tgt_vec is not None:
                                 tv = clip_img_tgt_vec.to(feat_p.device, feat_p.dtype)
                                 m = compute_flux_spatial_mask(
                                     feat_p, target_vec=tv,
-                                    threshold=args.attn_threshold, mode="text")
+                                    threshold=args.img_attn_threshold, mode="text")
                                 masks_2d.append(m)
 
                         if masks_2d:
@@ -881,14 +885,14 @@ def main():
                                             m_img = compute_flux_spatial_mask(
                                                 feat_p,
                                                 target_feat=fam_probe_captures[fname],
-                                                threshold=args.attn_threshold, mode="contrast")
+                                                threshold=args.img_attn_threshold, mode="contrast")
                                             fm_list.append(m_img)
                                         elif fname in clip_img_tgt_vec_by_family:
                                             tv = clip_img_tgt_vec_by_family[fname].to(
                                                 feat_p.device, feat_p.dtype)
                                             m_img = compute_flux_spatial_mask(
                                                 feat_p, target_vec=tv,
-                                                threshold=args.attn_threshold, mode="text")
+                                                threshold=args.img_attn_threshold, mode="text")
                                             fm_list.append(m_img)
 
                                 if fm_list:
