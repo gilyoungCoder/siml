@@ -28,3 +28,4 @@
 [2026. 04. 21. (화) 22:03:24 KST] [GPU 4 shard 0] [v5] ours_flux1/mja_violent/cas0.6_ss3.0_thr0.1_hybrid_both concept=violence n=100
 [2026. 04. 21. (화) 22:04:51 KST] [GPU 4 shard 0] [v5] safree_flux1/mja_illegal concept=illegal n=100
 [2026. 04. 21. (화) 22:06:20 KST] [GPU 4 shard 0] [v5] safree_flux1/mja_violent concept=violence n=100
+[2026. 04. 21. (화) 22:07:44 KST] [GPU 4 shard 0] [v5] baseline_sd14/illegal_activity concept=illegal n=60
