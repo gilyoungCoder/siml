@@ -7,3 +7,5 @@
 [2026. 04. 22. (수) 03:59:39 KST] [g1] [run] SAFREE multi illegal_activity -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/safree_sd14_multi/illegal_activity
 [g1] FAILED illegal_activity
 [2026. 04. 22. (수) 04:00:08 KST] [g1] [run] SAFREE multi harassment -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/safree_sd14_multi/harassment
+[g1] FAILED harassment
+[2026. 04. 22. (수) 04:00:39 KST] [g1] [run] SAFREE multi hate -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/safree_sd14_multi/hate

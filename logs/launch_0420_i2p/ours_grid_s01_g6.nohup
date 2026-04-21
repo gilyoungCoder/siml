@@ -10,3 +10,5 @@
 [2026. 04. 22. (수) 02:50:42 KST] [g6] [run] illegal_activity hybrid ss=15 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack/illegal_activity/hybrid_ss15_thr0.1_imgthr0.4_both
 [2026. 04. 22. (수) 03:16:03 KST] [g6] [run] illegal_activity hybrid ss=20 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack/illegal_activity/hybrid_ss20_thr0.1_imgthr0.5_both
 [2026. 04. 22. (수) 03:33:50 KST] [g6] [run] harassment hybrid ss=10 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack/harassment/hybrid_ss10_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 04:00:19 KST] [g6] [skip] harassment hybrid ss=20 imgthr=0.3 (60 imgs)
+[2026. 04. 22. (수) 04:00:19 KST] [g6] [run] hate hybrid ss=10 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_grid_v1pack/hate/hybrid_ss10_thr0.1_imgthr0.3_both
