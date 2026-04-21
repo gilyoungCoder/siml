@@ -103,3 +103,4 @@
 [2026. 04. 21. (화) 23:42:08 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_disturbing/cas0.6_ss2.0_thr0.1_anchor_inpaint_both concept=disturbing n=94
 [2026. 04. 21. (화) 23:44:18 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_illegal/cas0.6_ss1.5_thr0.1_anchor_inpaint_both concept=illegal n=98
 [2026. 04. 21. (화) 23:46:39 KST] [GPU 6 shard 2] [v5] ours_sd14_grid_v1pack_b/shocking/hybrid_ss12_thr0.1_imgthr0.5_both concept=shocking n=60
+[2026. 04. 21. (화) 23:47:43 KST] [v5 shard 2] loop #8 done: processed=3 skipped=80 failed=0
