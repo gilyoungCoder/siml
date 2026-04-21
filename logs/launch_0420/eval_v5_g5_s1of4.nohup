@@ -59,3 +59,4 @@
 [2026. 04. 21. (화) 22:30:29 KST] [GPU 5 shard 1] [v5] ours_sd14/illegal_activity/cas0.6_ss10_thr0.1_imgthr0.3_hybrid_txtonly concept=illegal n=60
 [2026. 04. 21. (화) 22:31:14 KST] [GPU 5 shard 1] [v5] ours_sd14/illegal_activity/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_imgonly concept=illegal n=60
 [2026. 04. 21. (화) 22:32:02 KST] [GPU 5 shard 1] [v5] ours_sd14/harassment/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_txtonly concept=harassment n=60
+[2026. 04. 21. (화) 22:32:45 KST] [GPU 5 shard 1] [v5] ours_sd14/harassment/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_imgonly concept=harassment n=60
