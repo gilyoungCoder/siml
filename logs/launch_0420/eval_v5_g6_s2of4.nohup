@@ -55,3 +55,4 @@
 [2026. 04. 21. (화) 22:24:12 KST] [GPU 6 shard 2] [v5] ours_sd14/harassment/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_both concept=harassment n=60
 [2026. 04. 21. (화) 22:24:56 KST] [GPU 6 shard 2] [v5] ours_sd14/harassment/cas0.6_ss10_thr0.1_imgthr0.3_hybrid_txtonly concept=harassment n=60
 [2026. 04. 21. (화) 22:25:39 KST] [GPU 6 shard 2] [v5] ours_sd14/harassment/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_imgonly concept=harassment n=60
+[2026. 04. 21. (화) 22:26:22 KST] [GPU 6 shard 2] [v5] ours_sd14/hate/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_txtonly concept=hate n=60
