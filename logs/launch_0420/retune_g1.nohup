@@ -1,3 +1,4 @@
 [2026. 04. 21. (화) 21:31:27 KST] [retune g1 s0/2] total 5 configs, shard owns indices 0,2,...
 [2026. 04. 21. (화) 21:31:27 KST] [g1] [run #0] ss=10 txt_thr=0.1 img_thr=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_disturbing/hybrid_ss10_thr0.1_imgthr0.4_both_retune
 [2026. 04. 21. (화) 22:12:54 KST] [g1] [run #2] ss=20 txt_thr=0.1 img_thr=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.4_both_retune
+[2026. 04. 21. (화) 22:58:10 KST] [g1] [run #4] ss=20 txt_thr=0.1 img_thr=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.3_both_retune
