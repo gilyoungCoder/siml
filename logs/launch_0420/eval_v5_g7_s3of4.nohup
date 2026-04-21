@@ -68,3 +68,7 @@
 [2026. 04. 21. (화) 22:40:59 KST] [GPU 7 shard 3] [v5] ours_sd14/mja_illegal/cas0.6_ss1.0_thr0.1_hybrid_both concept=illegal n=100
 [2026. 04. 21. (화) 22:42:39 KST] [GPU 7 shard 3] [v5] ours_sd14/mja_illegal/cas0.6_ss2.0_thr0.1_hybrid_both concept=illegal n=100
 [2026. 04. 21. (화) 22:44:19 KST] [GPU 7 shard 3] [v5] ours_sd14/mja_illegal/cas0.6_ss3.0_thr0.1_hybrid_both concept=illegal n=100
+[2026. 04. 21. (화) 22:46:03 KST] [v5 shard 3] loop #2 done: processed=5 skipped=62 failed=0
+[2026. 04. 21. (화) 22:47:03 KST] [v5 shard 3/4 gpu 7] loop #3
+[2026. 04. 21. (화) 22:47:08 KST] [v5 shard 3] loop #3 done: processed=0 skipped=67 failed=0
+[2026. 04. 21. (화) 22:47:08 KST] [v5 shard 3] no work, exiting
