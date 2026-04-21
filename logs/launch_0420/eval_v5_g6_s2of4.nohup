@@ -75,3 +75,4 @@
 [2026. 04. 21. (화) 23:04:57 KST] [GPU 6 shard 2] [v5] ours_sd14/mja_illegal/cas0.6_ss2.5_thr0.1_hybrid_both concept=illegal n=100
 [2026. 04. 21. (화) 23:06:43 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_disturbing/cas0.6_ss2.0_thr0.1_anchor_inpaint_both concept=disturbing n=86
 [2026. 04. 21. (화) 23:08:46 KST] [GPU 6 shard 2] [v5] ours_flux1/mja_illegal/cas0.6_ss1.5_thr0.1_anchor_inpaint_both concept=illegal n=90
+[2026. 04. 21. (화) 23:10:56 KST] [GPU 6 shard 2] [v5] ours_sd14_grid_v1pack_b/violence/hybrid_ss12_thr0.1_imgthr0.5_both concept=violence n=60
