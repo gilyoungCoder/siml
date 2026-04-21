@@ -33,11 +33,12 @@ for ((i=SLOT; i<N; i+=NSLOTS)); do
   echo "[$(date)] [g$GPU] [run] SAFREE multi $CONCEPT -> $outdir" | tee -a "$LOG"
   CUDA_VISIBLE_DEVICES=$GPU $PYTHON gen_safree_single.py \
     --txt "$prompts" \
-    --save_dir "$outdir" \
+    --save-dir "$outdir" \
     --category "$MULTI_CATS" \
     --re_attn_t=-1,1001 \
     --linear_per_prompt_seed \
     --num_inference_steps 50 \
+    --safree \
     >> "$LOG" 2>&1 || echo "[g$GPU] FAILED $CONCEPT" | tee -a "$LOG"
   mv "$outdir"/generated/*.png "$outdir"/ 2>/dev/null || true
 done
