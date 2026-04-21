@@ -8,3 +8,4 @@
 [2026. 04. 21. (화) 19:19:28 KST] [GPU 4 shard 5] [v4] ours_sd14/shocking/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_imgonly concept=shocking n=60
 [2026. 04. 21. (화) 19:24:22 KST] [GPU 4 shard 5] [v4] ours_sd14/shocking/cas0.6_ss20_thr0.1_imgthr0.3_hybrid_imgonly concept=shocking n=60
 [2026. 04. 21. (화) 19:29:25 KST] [GPU 4 shard 5] [v4] ours_sd14/illegal_activity/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_imgonly concept=illegal n=60
+[2026. 04. 21. (화) 19:31:24 KST] [GPU 4 shard 5] [v4] ours_sd14/illegal_activity/cas0.6_ss15_thr0.1_imgthr0.3_hybrid_imgonly concept=illegal n=60
