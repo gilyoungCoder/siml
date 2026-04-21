@@ -2,3 +2,4 @@
 [2026. 04. 21. (화) 23:54:26 KST] [GPU 3 shard 5] [v5] ours_sd14_grid_v1pack_b/self-harm/hybrid_ss18_thr0.1_imgthr0.4_both concept=self_harm n=60
 [2026. 04. 21. (화) 23:55:30 KST] [GPU 3 shard 5] [v5] ours_sd14_grid_v1pack_b/self-harm/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_both concept=self_harm n=60
 [2026. 04. 21. (화) 23:56:37 KST] [GPU 3 shard 5] [v5] ours_sd14_grid_v1pack_b/shocking/hybrid_ss18_thr0.1_imgthr0.4_both concept=shocking n=56
+[2026. 04. 21. (화) 23:57:39 KST] [GPU 3 shard 5] [v5] ours_sd14_grid_v1pack_b/shocking/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_both concept=shocking n=52
