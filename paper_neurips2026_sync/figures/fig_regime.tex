@@ -119,7 +119,7 @@
     \node[fill=imgAccent!15,draw=imgAccent!30,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
   }
 }
-\foreach \r/\c in {0/2, 1/1, 1/2, 2/0, 2/2, 3/1, 3/2}{
+\foreach \r/\c in {1/2, 2/1, 2/2, 3/2}{
   \pgfmathsetmacro{\tx}{\Rx - 0.5 + 0.32*\c}
   \pgfmathsetmacro{\ty}{\yImg + 0.4 - 0.25*\r}
   \node[fill=imgAccent!80,draw=imgAccent,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
@@ -149,16 +149,6 @@
      (union) at (0, -2.85)
      {$M \;=\; \min\bigl(1,\; M_{\mathrm{text}} + M_{\mathrm{img}}\bigr)$\\[2pt]
       {\scriptsize\itshape either probe fires $\ \Rightarrow\ $ the safety mask fires}};
-
-% ============== tagline ==============
-\node[align=center,font=\scriptsize\itshape,text=black!72,anchor=north]
-     at (0, -3.75)
-     {Keyword-only baselines (SAFREE, SLD, \dots) \textbf{fail on implicit prompts};\\
-      the image probe catches what the text probe misses $\Rightarrow$ \emph{ambiguous adversarial cases are still detected}.};
-
-% ============== deployment knob footnote ==============
-\node[anchor=north,font=\tiny\itshape,text=black!55]
-     at (0, -4.7) {\texttt{probe} $\in\{\text{text, image, both}\}$ is a per-deployment knob};
 
 \end{tikzpicture}
 \end{document}
