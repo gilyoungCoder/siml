@@ -65,19 +65,21 @@
 \def\yText{1.55}
 \def\yImg{0.10}
 
-% --- L : Text probe → strong (one column red) ---
+% --- L : Text probe → strong (spatially LOCALIZED cluster, not a stripe) ---
 \node[probeLabel] at (\Lx - 3.1, \yText) {\bfseries Text probe};
+% base cells (all faint green)
 \foreach \r in {0,1,2,3}{
   \foreach \c in {0,1,2,3}{
     \pgfmathsetmacro{\tx}{\Lx - 0.5 + 0.32*\c}
     \pgfmathsetmacro{\ty}{\yText + 0.4 - 0.25*\r}
-    \pgfmathtruncatemacro{\hit}{(\c==1)?1:0}
-    \ifnum\hit=1
-      \node[fill=hitRed!75,draw=hitRed,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
-    \else
-      \node[fill=txtAccent!15,draw=txtAccent!30,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
-    \fi
+    \node[fill=txtAccent!15,draw=txtAccent!30,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
   }
+}
+% compact 2x2 cluster of red cells — represents keyword attention localized at one region
+\foreach \r/\c in {1/1,1/2,2/1,2/2}{
+  \pgfmathsetmacro{\tx}{\Lx - 0.5 + 0.32*\c}
+  \pgfmathsetmacro{\ty}{\yText + 0.4 - 0.25*\r}
+  \node[fill=hitRed!75,draw=hitRed,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
 }
 \node[verdictOK] at (\Lx + 1.3, \yText) {\checkmark\ fires};
 
