@@ -71,7 +71,7 @@ Table~\ref{table:ablation} compares family-grouped and single-exemplar variants.
 \subsection{Cross-Backbone Validation}
 \label{subsec:cross_backbone}
 
-A direct consequence of the parameterization-invariance argument in \S\ref{subsec:when} is that \ours{} should transfer to non-$\epsilon$-prediction backbones with no algorithmic change. We test this on SD~3 (MMDiT, velocity parameterization) and FLUX.1-dev (DiT, flow matching with embedded guidance). Only the Where probe is re-implemented per-backbone---cross-attention for SD~v1.4 UNet, joint-attention sub-matrix for SD~3 MMDiT, and a DiT-compatible spatial probe for FLUX. The CAS gate (Eq.~\ref{eq:cas}) and both How updates (Eqs.~\ref{eq:anchor_inpaint}--\ref{eq:hybrid}) are reused \emph{verbatim}.
+A direct consequence of the parameterization-invariance argument in \S\ref{subsec:when} is that \ours{} should transfer to non-$\epsilon$-prediction backbones with no algorithmic change. We test this on SD~3 (MMDiT, velocity parameterization) and FLUX.1-dev (DiT, flow matching with embedded guidance); Table~\ref{table:cross_backbone} reports MJA SR per concept on all three backbones. Only the Where probe is re-implemented per-backbone---cross-attention for SD~v1.4 UNet, joint-attention sub-matrix for SD~3 MMDiT, and a DiT-compatible spatial probe for FLUX. The CAS gate (Eq.~\ref{eq:cas}) and both How updates (Eqs.~\ref{eq:anchor_inpaint}--\ref{eq:hybrid}) are reused \emph{verbatim}.
 
 \input{table/cross_backbone}
 
