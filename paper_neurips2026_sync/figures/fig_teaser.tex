@@ -1,0 +1,149 @@
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,arrows.meta,shapes.geometric,decorations.pathmorphing,backgrounds,fit}
+
+% ----- colors -----
+\definecolor{chipred}{RGB}{200,40,40}
+\definecolor{chipgreen}{RGB}{40,150,80}
+\definecolor{ribbongray}{RGB}{45,45,45}
+\definecolor{divgray}{RGB}{200,200,200}
+\definecolor{emphred}{RGB}{220,40,40}
+\definecolor{captionbg}{RGB}{245,245,245}
+
+\begin{document}
+\begin{tikzpicture}[
+    font=\sffamily,
+    chip/.style={rounded corners=2pt, inner sep=2pt, font=\sffamily\bfseries\scriptsize, text=white},
+    panelheader/.style={font=\sffamily\bfseries\small, align=center},
+    ribbon/.style={fill=ribbongray, text=white, font=\ttfamily\tiny, inner sep=2pt},
+    rowlabel/.style={font=\sffamily\scriptsize, align=center, rotate=90, anchor=center}
+]
+
+% =========================================================
+% Geometry: three panels side by side, each 5cm wide, 5cm tall (raster region)
+% Total strip width = 15cm + dividers; total aspect ~3:1 for the strip body.
+% =========================================================
+\def\pw{5.0}   % panel width (cm)
+\def\ph{5.0}   % panel raster height (cm)
+\def\gap{0.35} % gap between panels (cm)
+
+% ---------- LEFT PANEL (a) Baseline SD1.4 ----------
+% Crop the LEFTMOST ~1/3 of the 3612x1067 composite (keep leftmost 1204 px)
+% Using trim=left bottom right top in bp (image units via clip).
+% The source composite is 3612 wide; we want leftmost ~1204. Trim right = 3612-1204 = 2408 px.
+% We use relative trim via viewport-like: trim in cm based on natural size isn't ideal;
+% instead we use \clip inside a node via a workaround: put image inside TikZ scope with clip.
+
+\begin{scope}[shift={(0,0)}]
+  \node[anchor=south west, inner sep=0] (leftraster) at (0,0) {%
+    \begin{tikzpicture}
+      \clip (0,0) rectangle (\pw,\ph);
+      % source composite is 3612x1067 with 3 subpanels; scale so full image width = 3*\pw,
+      % then only the leftmost third (= \pw wide) remains within the clip.
+      \pgfmathsetmacro{\fullw}{3*\pw}
+      \node[anchor=south west, inner sep=0] at (0, 0) {%
+        \includegraphics[width=\fullw cm]{/mnt/c/Users/yhgil/paper_figures_src/mask_naked_beach_noguide_panel.png}%
+      };
+    \end{tikzpicture}%
+  };
+  % thin black border
+  \draw[line width=1pt, black] (0,0) rectangle (\pw,\ph);
+  % UNSAFE chip top-left
+  \node[chip, fill=chipred, anchor=north west] at ($(0,\ph)+(0.12,-0.12)$) {UNSAFE};
+  % bottom ribbon
+  \node[ribbon, anchor=south west, minimum width=\pw cm-4pt, minimum height=0.55cm, align=left]
+      at ($(0,0)+(0.08,0.08)$) {prompt: a naked body at the beach};
+  % panel header above raster
+  \node[panelheader, anchor=south] at (\pw/2, \ph+0.15) {(a) Baseline SD1.4};
+\end{scope}
+
+% ---------- MIDDLE PANEL (b) EBSG (Ours) ----------
+\pgfmathsetmacro{\xb}{\pw+\gap}
+\begin{scope}[shift={(\xb,0)}]
+  \node[anchor=south west, inner sep=0] at (0,0) {%
+    \begin{tikzpicture}
+      \clip (0,0) rectangle (\pw,\ph);
+      \node[anchor=south west, inner sep=0] at (0,0) {%
+        \includegraphics[width=\pw cm, height=\ph cm]{/mnt/c/Users/yhgil/paper_figures_src/mask_v4_overlay_00.png}%
+      };
+    \end{tikzpicture}%
+  };
+  \draw[line width=1pt, black] (0,0) rectangle (\pw,\ph);
+  % SAFE chip
+  \node[chip, fill=chipgreen, anchor=north west] at ($(0,\ph)+(0.12,-0.12)$) {SAFE};
+  % bottom ribbon
+  \node[ribbon, anchor=south west, minimum width=\pw cm-4pt, minimum height=0.55cm, align=left]
+      at ($(0,0)+(0.08,0.08)$) {prompt: a naked body at the beach};
+  % panel header
+  \node[panelheader, anchor=south] at (\pw/2, \ph+0.15) {(b) EBSG (Ours)};
+\end{scope}
+
+% thin gray divider between (a) and (b)
+\draw[divgray, line width=0.6pt] (\pw+\gap/2, 0) -- (\pw+\gap/2, \ph);
+
+% ---------- RIGHT PANEL (c) Dual-probe localization ----------
+\pgfmathsetmacro{\xc}{2*\pw+2*\gap}
+\begin{scope}[shift={(\xc,0)}]
+  \node[anchor=south west, inner sep=0] (craster) at (0,0) {%
+    \begin{tikzpicture}
+      \clip (0,0) rectangle (\pw,\ph);
+      \node[anchor=south west, inner sep=0] at (0,0) {%
+        \includegraphics[width=\pw cm, height=\ph cm]{/mnt/c/Users/yhgil/paper_figures_src/gradcam_v4_v13_00.png}%
+      };
+    \end{tikzpicture}%
+  };
+  \draw[line width=1pt, black] (0,0) rectangle (\pw,\ph);
+
+  % Row labels (three rows). The source image has 3 visible rows (text probe, image probe, fused).
+  % Heights: top row center ~5/6*ph, mid ~3/6*ph, bottom ~1/6*ph (approx, if 3 equal rows: 5/6, 3/6, 1/6).
+  \pgfmathsetmacro{\rowtop}{\ph*5/6}
+  \pgfmathsetmacro{\rowmid}{\ph*3/6}
+  \pgfmathsetmacro{\rowbot}{\ph*1/6}
+  % Left of panel: place small labels just inside the left edge
+  \node[font=\sffamily\tiny, anchor=west, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
+      at (0.05, \rowtop) {text probe $M_{\text{text}}$};
+  \node[font=\sffamily\tiny, anchor=west, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
+      at (0.05, \rowmid) {image probe $M_{\text{img}}$};
+  \node[font=\sffamily\tiny, anchor=west, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
+      at (0.05, \rowbot) {fused mask $M=\min(1, M_t+M_i)$};
+
+  % Red dashed rectangle around bottom row
+  \draw[emphred, line width=1.2pt, dashed, dash pattern=on 3pt off 2pt]
+      (0.03, 0.03) rectangle (\pw-0.03, \ph/3 - 0.03);
+
+  % panel header
+  \node[panelheader, anchor=south] at (\pw/2, \ph+0.15) {(c) Dual-probe localization};
+\end{scope}
+
+% thin gray divider between (b) and (c)
+\draw[divgray, line width=0.6pt] (2*\pw+\gap+\gap/2, 0) -- (2*\pw+\gap+\gap/2, \ph);
+
+% ---------- Curved arrow between (b) and (c) ----------
+% from top-right of (b) curving up and right to top-left of (c)
+\coordinate (bright) at (2*\pw+\gap, \ph*0.85);
+\coordinate (ctopc)  at (2*\pw+2*\gap+0.25, \ph-0.15);
+\draw[-{Stealth[length=5pt]}, line width=0.8pt, black]
+   (bright) .. controls ($(bright)+(0.15,0.55)$) and ($(ctopc)+(-0.15,0.55)$) .. (ctopc);
+\node[font=\sffamily\tiny, fill=white, fill opacity=0.95, text opacity=1, inner sep=1pt, align=center]
+   at ($(bright)!0.5!(ctopc) + (0,0.45)$)
+   {redirect via mode\\$\in\{\text{anchor},\text{hybrid}\}$};
+
+% ---------- TOP TITLE ----------
+\node[font=\sffamily\bfseries\large, anchor=south]
+    at (1.5*\pw + \gap, \ph + 0.85)
+    {Example-Based Spatial Guidance: localize, gate, redirect --- no training.};
+
+% ---------- BOTTOM CAPTION BAR ----------
+\pgfmathsetmacro{\stripw}{3*\pw + 2*\gap}
+\node[draw=divgray, line width=0.4pt, fill=captionbg, inner sep=4pt,
+      minimum width=\stripw cm, minimum height=0.75cm, anchor=north,
+      text width=\stripw cm-12pt, align=center,
+      font=\sffamily\footnotesize]
+    at (\stripw/2, -0.15)
+    {EBSG localizes the unsafe region via fused text+image probes, gates via CAS, and redirects toward a clothed anchor --- yielding a safe image without training.};
+
+\end{tikzpicture}
+\end{document}
