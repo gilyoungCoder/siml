@@ -205,7 +205,7 @@ Family grouping gives meaningful gains on semantically \emph{diverse} concepts (
 \subsection{Dual-Concept Erasure: Full Per-Class Breakdown}
 \label{app:dual_pairs}
 
-Table~\ref{table:dual_all} extends the main-paper Table~\ref{table:dual} (Nudity~$+$~Shocking) to all four evaluated pairs. Each block follows the same side-by-side layout: left sub-table shows Qwen3-VL class breakdown for \emph{Nudity}, right for the second concept. Rows are methods; the last row per block is the \emph{single-concept reference} SR obtained when that concept is erased alone. Empty cells (TBD) are pending the dual-concept run of that baseline or per-class logging.
+Table~\ref{table:dual_all} extends the main-paper Table~\ref{table:dual} (Nudity~$+$~Shocking) to all four evaluated pairs. Each block follows the same side-by-side layout: left sub-table shows Qwen3-VL class breakdown for \emph{Nudity}, right for the second concept. Rows are methods; the last row per block is the \emph{single-concept reference} SR obtained when that concept is erased alone. \ours{} is reported as two complementary How modes (\S\ref{subsec:how}): anchor inpainting and hybrid guidance. Cells shown as \texttt{--} indicate measurements that have not yet been collected (anchor-mode dual-concept runs and per-class logging for non-Ours baselines are pending).
 
 \begin{table*}[h]
     \centering
@@ -224,31 +224,35 @@ Table~\ref{table:dual_all} extends the main-paper Table~\ref{table:dual} (Nudity
                     & SR$\uparrow$ & Safe & Partial & Full$\downarrow$ & NotRel \\
     \midrule
     \multicolumn{11}{l}{\emph{Erase: Nudity $+$ Shocking}} \\
-    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & TBD  & TBD & TBD & TBD & TBD \\
-    SAFREE                               & .755 & .548 & .207 & .202 & .043 & TBD  & TBD & TBD & TBD & TBD \\
-    \ours{} (single exemplar)            & TBD  & TBD  & TBD  & TBD  & TBD  & TBD  & TBD & TBD & TBD & TBD \\
-    \rowcolor{blue!8}\textbf{\ours{} (family)} & \textbf{.837} & TBD & TBD & TBD & TBD & \textbf{.975} & TBD & TBD & TBD & TBD \\
+    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & --   & --  & --  & --  & --  \\
+    SAFREE                               & .755 & .548 & .207 & .202 & .043 & --   & --  & --  & --  & --  \\
+    \ours{} (single exemplar)            & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \ours{} (anchor, family)             & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \rowcolor{blue!8}\textbf{\ours{} (hybrid, family)} & \textbf{.837} & -- & -- & -- & -- & \textbf{.975} & -- & -- & -- & -- \\
     \textit{Single-concept ref.}         & \textit{.931} & -- & -- & -- & -- & \textit{.973} & -- & -- & -- & -- \\
     \midrule
     \multicolumn{11}{l}{\emph{Erase: Nudity $+$ Violence}} \\
-    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & TBD  & TBD & TBD & TBD & TBD \\
-    SAFREE                               & .755 & .548 & .207 & .202 & .043 & TBD  & TBD & TBD & TBD & TBD \\
-    \ours{} (single exemplar)            & TBD  & TBD  & TBD  & TBD  & TBD  & TBD  & TBD & TBD & TBD & TBD \\
-    \rowcolor{blue!8}\textbf{\ours{} (family)} & \textbf{.879} & TBD & TBD & TBD & TBD & TBD & TBD & TBD & TBD & TBD \\
+    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & --   & --  & --  & --  & --  \\
+    SAFREE                               & .755 & .548 & .207 & .202 & .043 & --   & --  & --  & --  & --  \\
+    \ours{} (single exemplar)            & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \ours{} (anchor, family)             & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \rowcolor{blue!8}\textbf{\ours{} (hybrid, family)} & \textbf{.879} & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
     \textit{Single-concept ref.}         & \textit{.931} & -- & -- & -- & -- & \textit{.971} & -- & -- & -- & -- \\
     \midrule
     \multicolumn{11}{l}{\emph{Erase: Nudity $+$ Harassment}} \\
-    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & TBD  & TBD & TBD & TBD & TBD \\
-    SAFREE                               & .755 & .548 & .207 & .202 & .043 & TBD  & TBD & TBD & TBD & TBD \\
-    \ours{} (single exemplar)            & TBD  & TBD  & TBD  & TBD  & TBD  & TBD  & TBD & TBD & TBD & TBD \\
-    \rowcolor{blue!8}\textbf{\ours{} (family)} & \textbf{.809} & TBD & TBD & TBD & TBD & \textbf{.797} & TBD & TBD & TBD & TBD \\
+    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & --   & --  & --  & --  & --  \\
+    SAFREE                               & .755 & .548 & .207 & .202 & .043 & --   & --  & --  & --  & --  \\
+    \ours{} (single exemplar)            & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \ours{} (anchor, family)             & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \rowcolor{blue!8}\textbf{\ours{} (hybrid, family)} & \textbf{.809} & -- & -- & -- & -- & \textbf{.797} & -- & -- & -- & -- \\
     \textit{Single-concept ref.}         & \textit{.931} & -- & -- & -- & -- & \textit{.833} & -- & -- & -- & -- \\
     \midrule
     \multicolumn{11}{l}{\emph{Erase: Nudity $+$ Hate}} \\
-    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & TBD  & TBD & TBD & TBD & TBD \\
-    SAFREE                               & .755 & .548 & .207 & .202 & .043 & TBD  & TBD & TBD & TBD & TBD \\
-    \ours{} (single exemplar)            & TBD  & TBD  & TBD  & TBD  & TBD  & TBD  & TBD & TBD & TBD & TBD \\
-    \rowcolor{blue!8}\textbf{\ours{} (family)} & \textbf{.671} & TBD & TBD & TBD & TBD & \textbf{.814} & TBD & TBD & TBD & TBD \\
+    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & --   & --  & --  & --  & --  \\
+    SAFREE                               & .755 & .548 & .207 & .202 & .043 & --   & --  & --  & --  & --  \\
+    \ours{} (single exemplar)            & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \ours{} (anchor, family)             & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \rowcolor{blue!8}\textbf{\ours{} (hybrid, family)} & \textbf{.671} & -- & -- & -- & -- & \textbf{.814} & -- & -- & -- & -- \\
     \textit{Single-concept ref.}         & \textit{.931} & -- & -- & -- & -- & \textit{.848} & -- & -- & -- & -- \\
     \bottomrule
     \end{tabular}}

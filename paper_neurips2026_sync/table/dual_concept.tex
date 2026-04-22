@@ -2,7 +2,7 @@
     \centering
     \renewcommand{\arraystretch}{1.15}
     \setlength{\tabcolsep}{0.35em}
-    \caption{Simultaneous dual-concept erasure on SD~v1.4: \emph{Nudity~$+$~Shocking} erased in one inference pass. Following the SAFREE-style side-by-side layout, we report the Qwen3-VL class breakdown \emph{per target concept} (left: Nudity, right: Shocking): Safe, Partial, Full~$\downarrow$, NotRel, and SR~$=$~(Safe~$+$~Partial)$/$Total~$\uparrow$. Single-concept reference shows the SR obtained when each concept is erased alone---ideally dual SR~$\approx$~single SR (no interference). Other pairs: see Appendix~\ref{app:dual_pairs}.}
+    \caption{Simultaneous dual-concept erasure on SD~v1.4: \emph{Nudity~$+$~Shocking} erased in one inference pass. Following the SAFREE-style side-by-side layout, we report the Qwen3-VL class breakdown \emph{per target concept} (left: Nudity, right: Shocking): Safe, Partial, Full~$\downarrow$, NotRel, and SR~$=$~(Safe~$+$~Partial)$/$Total~$\uparrow$. \ours{} is reported as two complementary How modes (\S\ref{subsec:how}): anchor inpainting and hybrid guidance. Single-concept reference shows the SR obtained when each concept is erased alone---ideally dual SR~$\approx$~single SR (no interference). Cells shown as \texttt{--} indicate measurements that have not yet been collected. Other pairs: see Appendix~\ref{app:dual_pairs}.}
     \label{table:dual}
     \vspace{2pt}
     \small
@@ -14,12 +14,13 @@
     \textbf{Method} & \textbf{SR}$\uparrow$ & Safe & Partial & Full$\downarrow$ & NotRel
                     & \textbf{SR}$\uparrow$ & Safe & Partial & Full$\downarrow$ & NotRel \\
     \midrule
-    SD v1.4 baseline                   & .228 & .082 & .146 & .768 & .004 & TBD  & TBD & TBD  & TBD  & TBD  \\
-    SAFREE~\citep{yoon2024safree}      & .755 & .548 & .207 & .202 & .043 & TBD  & TBD & TBD  & TBD  & TBD  \\
-    \ours{} (single exemplar)          & TBD  & TBD  & TBD  & TBD  & TBD  & TBD  & TBD & TBD  & TBD  & TBD  \\
+    SD v1.4 baseline                   & .228 & .082 & .146 & .768 & .004 & -- & -- & -- & -- & -- \\
+    SAFREE~\citep{yoon2024safree}      & .755 & .548 & .207 & .202 & .043 & -- & -- & -- & -- & -- \\
+    \ours{} (single exemplar)          & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+    \ours{} (anchor, family)           & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
     \rowcolor{blue!8}
-    \textbf{\ours{} (family, default)} & \textbf{.837} & TBD & TBD & TBD & TBD
-                                       & \textbf{.975} & TBD & TBD & TBD & TBD \\
+    \textbf{\ours{} (hybrid, family)}  & \textbf{.837} & -- & -- & -- & --
+                                       & \textbf{.975} & -- & -- & -- & -- \\
     \midrule
     \textit{Single-concept ref.}\,(erased alone) & \textit{.931} & -- & -- & -- & -- & \textit{.973} & -- & -- & -- & -- \\
     \bottomrule
