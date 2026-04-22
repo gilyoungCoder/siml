@@ -489,6 +489,17 @@ SAFREE+ASCG  & .249 & .101 & .155 \\
 \end{tabular}
 \end{table}
 
+\section{Cross-Backbone Validation (Full Results)}
+\label{app:cross_backbone_full}
+
+The main body (\S\ref{subsec:cross_backbone}) summarizes the cross-backbone validation; this appendix reports the full per-concept numbers and discusses the architectural take-away. Only the Where probe is re-implemented per backbone---cross-attention for SD~v1.4 UNet, joint-attention sub-matrix for SD~3 MMDiT, a DiT-compatible spatial probe for FLUX---while the CAS gate (Eq.~\ref{eq:cas}) and both How updates (Eqs.~\ref{eq:anchor_inpaint}--\ref{eq:hybrid}) are reused verbatim. Table~\ref{table:cross_backbone} reports MJA SR per concept on all three backbones.
+
+\input{table/cross_backbone}
+
+\paragraph{What transfers.} On FLUX.1-dev the two-mode trade-off we observe on SD~v1.4 replicates: hybrid dominates on concepts with a visually crisp paired anchor (sexual, disturbing), while anchor inpainting dominates on concepts with ambiguous anchors (violent, illegal). This is strong evidence that the trade-off is a property of the \emph{concept pack and CFG geometry}, not of the $\epsilon$-prediction UNet. On SD~3 (MMDiT) we report only the anchor row in this revision: the CAS threshold $\tau{=}0.6$ was calibrated for $\epsilon$-prediction and lies above SD~3's velocity-parameterization CAS range ($0.03$--$0.51$), so hybrid guidance is effectively never triggered under that threshold. A per-backbone $\tau$ retune is in progress (we expect $\tau{\in}[0.2,0.4]$ for SD~3) and the corresponding cells will be filled when stable; we intentionally do \emph{not} report contaminated SD~3 hybrid numbers.
+
+\paragraph{What this validates.} The take-away is architectural rather than numerical: CAS is a cosine of \emph{direction differences}, and both How modes are \emph{linear} in the prediction, so the When and How components are identical up to a per-backbone scale; only Where requires per-backbone re-implementation. Cross-backbone transfer of concept-level trends---image-dominant concepts benefit from the image probe across all three backbones; hybrid-vs-anchor winners align between SD~v1.4 and FLUX---therefore confirms that \ours{} is a \emph{framework}, not an SD~v1.4-specific recipe.
+
 \section{Computational Cost}
 \label{app:compute}
 
