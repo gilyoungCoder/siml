@@ -1,0 +1,9 @@
+[2026. 04. 22. (수) 15:50:45 KST] [v5 shard 0/6 gpu 0] loop #1
+[2026. 04. 22. (수) 15:50:46 KST] [GPU 0 shard 0] [v5] ours_sd14/mja_violent/hybrid_ss10_thr0.1_imgthr0.3_both concept=violence n=100
+[2026. 04. 22. (수) 15:52:02 KST] [GPU 0 shard 0] [v5] ours_sd14/mja_violent/hybrid_ss10_thr0.1_imgthr0.4_both concept=violence n=100
+[2026. 04. 22. (수) 15:53:15 KST] [GPU 0 shard 0] [v5] ours_sd14/mja_violent/hybrid_ss20_thr0.1_imgthr0.3_both concept=violence n=100
+[2026. 04. 22. (수) 15:54:24 KST] [GPU 0 shard 0] [v5] ours_sd14/mja_violent/hybrid_ss15_thr0.1_imgthr0.5_both concept=violence n=100
+[2026. 04. 22. (수) 15:55:34 KST] [GPU 0 shard 0] [v5] ours_sd14/mja_disturbing/hybrid_ss10_thr0.1_imgthr0.5_both_retune concept=disturbing n=100
+[2026. 04. 22. (수) 15:56:39 KST] [GPU 0 shard 0] [v5] ours_sd14/mja_disturbing/hybrid_ss10_thr0.1_imgthr0.2_both_retune concept=disturbing n=100
+[2026. 04. 22. (수) 15:57:44 KST] [GPU 0 shard 0] [v5] ours_sd14/mja_disturbing/hybrid_ss15_thr0.1_imgthr0.2_both_retune concept=disturbing n=100
+[2026. 04. 22. (수) 15:58:50 KST] [GPU 0 shard 0] [v5] ours_sd14/mja_illegal/hybrid_ss10_thr0.1_imgthr0.3_both concept=illegal n=100

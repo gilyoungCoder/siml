@@ -1,1 +1,4 @@
 [2026. 04. 22. (수) 02:40:40 KST] [g4] [run] mja_sexual ss=10 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_sexual/hybrid_ss10_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 10:11:52 KST] [g4] [run] mja_sexual ss=15 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_sexual/hybrid_ss15_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 17:40:41 KST] [g4] [run] mja_sexual ss=20 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_sexual/hybrid_ss20_thr0.1_imgthr0.3_both
+[2026. 04. 23. (목) 01:09:55 KST] [g4] [run] mja_violent ss=10 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_violent/hybrid_ss10_thr0.1_imgthr0.3_both

@@ -4,3 +4,7 @@
 [2026. 04. 22. (수) 02:42:12 KST] [g0] [run] ss=15 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_disturbing/hybrid_ss15_thr0.1_imgthr0.3_both
 [2026. 04. 22. (수) 03:12:15 KST] [g0] [run] ss=15 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_disturbing/hybrid_ss15_thr0.1_imgthr0.4_both
 [2026. 04. 22. (수) 03:42:41 KST] [g0] [run] ss=15 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_disturbing/hybrid_ss15_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 04:13:14 KST] [g0] [run] ss=20 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 04:42:50 KST] [g0] [run] ss=20 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 05:13:04 KST] [g0] [run] ss=20 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 05:42:54 KST] [g0 s0] done

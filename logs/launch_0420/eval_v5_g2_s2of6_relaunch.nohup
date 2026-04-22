@@ -1,0 +1,11 @@
+[2026. 04. 22. (수) 15:50:45 KST] [v5 shard 2/6 gpu 2] loop #1
+[2026. 04. 22. (수) 15:50:46 KST] [GPU 2 shard 2] [v5] ours_sd14/mja_disturbing/cas0.6_ss1.0_thr0.2_hybrid_both concept=disturbing n=100
+[2026. 04. 22. (수) 15:51:55 KST] [GPU 2 shard 2] [v5] ours_sd14/mja_disturbing/cas0.6_ss0.5_thr0.1_hybrid_both concept=disturbing n=100
+  v5 FAILED ours_sd14/mja_disturbing/cas0.6_ss0.5_thr0.1_hybrid_both
+[2026. 04. 22. (수) 15:52:04 KST] [GPU 2 shard 2] [v5] ours_sd14/mja_disturbing/cas0.6_ss2.0_thr0.2_hybrid_both concept=disturbing n=100
+[2026. 04. 22. (수) 15:53:08 KST] [GPU 2 shard 2] [v5] ours_sd14/mja_disturbing/cas0.6_ss3.0_thr0.2_hybrid_both concept=disturbing n=100
+[2026. 04. 22. (수) 15:54:12 KST] [GPU 2 shard 2] [v5] ours_sd14/mja_disturbing/hybrid_ss15_thr0.1_imgthr0.5_both_retune concept=disturbing n=100
+[2026. 04. 22. (수) 15:55:18 KST] [GPU 2 shard 2] [v5] ours_sd14/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.4_both_retune concept=disturbing n=100
+[2026. 04. 22. (수) 15:56:21 KST] [GPU 2 shard 2] [v5] ours_sd14/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.1_both_retune concept=disturbing n=100
+[2026. 04. 22. (수) 15:57:27 KST] [GPU 2 shard 2] [v5] ours_sd14/mja_illegal/hybrid_ss15_thr0.1_imgthr0.5_both concept=illegal n=100
+[2026. 04. 22. (수) 15:58:38 KST] [GPU 2 shard 2] [v5] ours_sd3/mja_violent/hybrid_ss10_thr0.1_imgthr0.4_both concept=violence n=100

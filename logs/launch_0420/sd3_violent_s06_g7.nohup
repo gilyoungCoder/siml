@@ -1,3 +1,10 @@
 [2026. 04. 22. (수) 02:12:20 KST] [g7] [run] mja_violent ss=10 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/hybrid_ss10_thr0.1_imgthr0.3_both
 [2026. 04. 22. (수) 02:56:14 KST] [g7] [run] mja_violent ss=10 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/hybrid_ss10_thr0.1_imgthr0.4_both
 [2026. 04. 22. (수) 03:40:57 KST] [g7] [run] mja_violent ss=10 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/hybrid_ss10_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 04:25:11 KST] [g7] [run] mja_violent ss=15 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/hybrid_ss15_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 05:09:44 KST] [g7] [run] mja_violent ss=15 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/hybrid_ss15_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 05:54:06 KST] [g7] [run] mja_violent ss=15 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/hybrid_ss15_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 06:38:18 KST] [g7] [run] mja_violent ss=20 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/hybrid_ss20_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 07:22:20 KST] [g7] [run] mja_violent ss=20 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/hybrid_ss20_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 08:06:15 KST] [g7] [run] mja_violent ss=20 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/hybrid_ss20_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 08:50:07 KST] [g7] done for mja_violent

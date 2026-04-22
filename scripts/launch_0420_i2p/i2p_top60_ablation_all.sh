@@ -87,7 +87,7 @@ for ((i=SLOT; i<N; i+=NSLOTS)); do
   CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
     --prompts "$prompts" --outdir "$OUTDIR" \
     --family_guidance --family_config "$pack" \
-    --probe_mode "$PROBE" --how_mode hybrid \
+    --probe_mode $(case "$PROBE" in txtonly) echo text;; imgonly) echo image;; *) echo both;; esac) --how_mode hybrid \
     --cas_threshold 0.6 --safety_scale "$SS" \
     --attn_threshold "$TXT" --img_attn_threshold "$IMG" \
     --target_concepts $tgt --anchor_concepts $anc \

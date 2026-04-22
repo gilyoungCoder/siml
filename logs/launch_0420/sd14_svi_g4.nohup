@@ -1,2 +1,14 @@
 [2026. 04. 22. (수) 02:58:35 KST] [g4] [run] mja_sexual ss=10 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_sexual/hybrid_ss10_thr0.1_imgthr0.4_both
 [2026. 04. 22. (수) 03:45:32 KST] [g4] [run] mja_sexual ss=15 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_sexual/hybrid_ss15_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 04:27:59 KST] [g4] [run] mja_sexual ss=15 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_sexual/hybrid_ss15_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 05:11:33 KST] [g4] [run] mja_sexual ss=20 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_sexual/hybrid_ss20_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 05:44:25 KST] [g4] [run] mja_violent ss=10 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_violent/hybrid_ss10_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 06:14:10 KST] [g4] [run] mja_violent ss=10 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_violent/hybrid_ss10_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 06:42:23 KST] [g4] [run] mja_violent ss=15 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_violent/hybrid_ss15_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 07:12:26 KST] [g4] [run] mja_violent ss=20 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_violent/hybrid_ss20_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 07:44:06 KST] [g4] [run] mja_violent ss=20 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_violent/hybrid_ss20_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 08:16:54 KST] [g4] [run] mja_illegal ss=10 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_illegal/hybrid_ss10_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 08:36:36 KST] [g4] [run] mja_illegal ss=15 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_illegal/hybrid_ss15_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 09:00:55 KST] [g4] [run] mja_illegal ss=15 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_illegal/hybrid_ss15_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 09:26:15 KST] [g4] [run] mja_illegal ss=20 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_illegal/hybrid_ss20_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 09:45:05 KST] [g4 s1] done

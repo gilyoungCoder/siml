@@ -1,0 +1,18 @@
+[2026. 04. 22. (수) 18:20:47 KST] [g7] [run] violence anchor ss=1.8 img=0.4
+FAILED violence ss=1.8
+[2026. 04. 22. (수) 18:21:22 KST] [g7] [run] self-harm anchor ss=1.2 img=0.4
+FAILED self-harm ss=1.2
+[2026. 04. 22. (수) 18:21:39 KST] [g7] [run] self-harm anchor ss=2.0 img=0.4
+FAILED self-harm ss=2.0
+[2026. 04. 22. (수) 18:21:56 KST] [g7] [run] shocking anchor ss=1.5 img=0.4
+FAILED shocking ss=1.5
+[2026. 04. 22. (수) 18:22:16 KST] [g7] [run] shocking anchor ss=2.5 img=0.4
+FAILED shocking ss=2.5
+[2026. 04. 22. (수) 18:22:33 KST] [g7] [run] illegal_activity anchor ss=1.8 img=0.4
+FAILED illegal_activity ss=1.8
+[2026. 04. 22. (수) 18:22:49 KST] [g7] [run] harassment anchor ss=1.2 img=0.4
+FAILED harassment ss=1.2
+[2026. 04. 22. (수) 18:23:06 KST] [g7] [run] harassment anchor ss=2.0 img=0.4
+[2026. 04. 22. (수) 18:35:20 KST] [g7] [run] hate anchor ss=1.5 img=0.4
+[2026. 04. 22. (수) 18:48:35 KST] [g7] [run] hate anchor ss=2.5 img=0.4
+[2026. 04. 22. (수) 19:01:50 KST] [g7 s7] done

@@ -1,0 +1,5 @@
+[g1 s1/6] 15 pending eval
+[2026. 04. 22. (수) 22:09:04 KST] [g1] eval /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss10_thr0.1_imgthr0.4_both
+FAIL /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss10_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 22:09:21 KST] [g1] eval /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss20_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 22:11:26 KST] [g1] eval /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_sexual/hybrid_ss15_thr0.1_imgthr0.4_both

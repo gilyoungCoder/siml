@@ -1,0 +1,16 @@
+[2026. 04. 22. (수) 15:54:56 KST] [g0] eval ours_sd14_multi/violence/hybrid_ss10_thr0.1_imgthr0.3_both n=60
+[2026. 04. 22. (수) 15:56:14 KST] [g0] eval ours_sd14_multi/violence/hybrid_ss15_thr0.1_imgthr0.3_both n=60
+[2026. 04. 22. (수) 15:57:31 KST] [g0] eval ours_sd14_multi/violence/hybrid_ss15_thr0.1_imgthr0.4_both n=60
+[2026. 04. 22. (수) 15:58:44 KST] [g0] eval ours_sd14_multi/violence/hybrid_ss20_thr0.1_imgthr0.3_both n=60
+[2026. 04. 22. (수) 15:59:55 KST] [g0] eval ours_sd14_multi/violence/hybrid_ss20_thr0.1_imgthr0.4_both n=60
+[2026. 04. 22. (수) 16:01:15 KST] [g0] eval ours_sd14_multi/self-harm/hybrid_ss10_thr0.1_imgthr0.3_both n=60
+[2026. 04. 22. (수) 16:02:24 KST] [g0] eval ours_sd14_multi/self-harm/hybrid_ss15_thr0.1_imgthr0.3_both n=60
+[2026. 04. 22. (수) 16:03:34 KST] [g0] eval ours_sd14_multi/self-harm/hybrid_ss15_thr0.1_imgthr0.4_both n=60
+[2026. 04. 22. (수) 16:04:42 KST] [g0] eval ours_sd14_multi/self-harm/hybrid_ss20_thr0.1_imgthr0.3_both n=60
+[2026. 04. 22. (수) 16:05:51 KST] [g0] eval ours_sd14_multi/self-harm/hybrid_ss20_thr0.1_imgthr0.4_both n=60
+[2026. 04. 22. (수) 16:07:00 KST] [g0] eval ours_sd14_multi/shocking/hybrid_ss10_thr0.1_imgthr0.3_both n=60
+[2026. 04. 22. (수) 16:08:06 KST] [g0] eval safree_sd14_multi/violence/violence n=60
+[2026. 04. 22. (수) 16:09:24 KST] [g0] eval safree_sd14_multi/self-harm/self-harm n=60
+[2026. 04. 22. (수) 16:10:37 KST] [g0] eval safree_sd14_multi/shocking/shocking n=60
+[2026. 04. 22. (수) 16:11:47 KST] [g0] eval safree_sd14_multi/harassment/harassment n=60
+[2026. 04. 22. (수) 16:13:00 KST] [g0] urgent multi eval done

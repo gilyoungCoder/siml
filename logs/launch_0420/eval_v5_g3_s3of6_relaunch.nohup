@@ -1,0 +1,7 @@
+[2026. 04. 22. (수) 15:50:45 KST] [v5 shard 3/6 gpu 3] loop #1
+[2026. 04. 22. (수) 15:50:45 KST] [GPU 3 shard 3] [v5] baseline_sd14/mja_disturbing concept=disturbing n=400
+[2026. 04. 22. (수) 15:54:04 KST] [GPU 3 shard 3] [v5] baseline_sd3/mja_disturbing concept=disturbing n=100
+[2026. 04. 22. (수) 15:55:36 KST] [GPU 3 shard 3] [v5] baseline_flux1/mja_disturbing concept=disturbing n=100
+[2026. 04. 22. (수) 15:57:06 KST] [GPU 3 shard 3] [v5] ours_sd14/mja_violent/hybrid_ss10_thr0.1_imgthr0.5_both concept=violence n=100
+[2026. 04. 22. (수) 15:58:16 KST] [GPU 3 shard 3] [v5] ours_sd14/mja_violent/hybrid_ss15_thr0.1_imgthr0.4_both concept=violence n=100
+[2026. 04. 22. (수) 15:59:26 KST] [GPU 3 shard 3] [v5] ours_sd14/mja_violent/hybrid_ss20_thr0.1_imgthr0.5_both concept=violence n=100

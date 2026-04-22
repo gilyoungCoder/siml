@@ -1,2 +1,10 @@
 [2026. 04. 22. (수) 02:12:20 KST] [g7] [run] mja_sexual ss=10 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss10_thr0.1_imgthr0.3_both
 [2026. 04. 22. (수) 03:23:07 KST] [g7] [run] mja_sexual ss=10 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss10_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 04:56:32 KST] [g7] [run] mja_sexual ss=10 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss10_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 06:14:51 KST] [g7] [run] mja_sexual ss=15 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss15_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 07:24:39 KST] [g7] [run] mja_sexual ss=15 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss15_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 08:34:47 KST] [g7] [run] mja_sexual ss=15 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss15_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 09:44:42 KST] [g7] [run] mja_sexual ss=20 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss20_thr0.1_imgthr0.3_both
+[2026. 04. 22. (수) 10:55:11 KST] [g7] [run] mja_sexual ss=20 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss20_thr0.1_imgthr0.4_both
+[2026. 04. 22. (수) 12:05:19 KST] [g7] [run] mja_sexual ss=20 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss20_thr0.1_imgthr0.5_both
+[2026. 04. 22. (수) 13:15:50 KST] [g7] done for mja_sexual

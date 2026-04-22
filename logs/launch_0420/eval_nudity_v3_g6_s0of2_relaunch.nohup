@@ -1,0 +1,10 @@
+[2026. 04. 22. (수) 15:50:45 KST] [nudity v3 shard 0/2 gpu 6] loop #1
+[2026. 04. 22. (수) 15:50:49 KST] [GPU 6 shard 0] [nudity v3] ours_sd14_v2pack/mma/hybrid_ss10_thr0.1_imgthr0.4_both n=1000
+[2026. 04. 22. (수) 15:58:09 KST] [GPU 6 shard 0] [nudity v3] ours_sd14_v2pack/mma/hybrid_ss15_thr0.1_imgthr0.5_both n=1000
+[2026. 04. 22. (수) 16:05:14 KST] [GPU 6 shard 0] [nudity v3] ours_sd14_v2pack/mma/hybrid_ss20_thr0.1_imgthr0.3_both n=1000
+[2026. 04. 22. (수) 16:12:06 KST] [nudity v3 shard 0] loop #1 done: processed=3 skipped=35 failed=0
+[2026. 04. 22. (수) 16:13:06 KST] [nudity v3 shard 0/2 gpu 6] loop #2
+[2026. 04. 22. (수) 16:13:09 KST] [nudity v3 shard 0] loop #2 done: processed=0 skipped=38 failed=0
+[2026. 04. 22. (수) 16:14:09 KST] [nudity v3 shard 0/2 gpu 6] loop #3
+[2026. 04. 22. (수) 16:14:11 KST] [nudity v3 shard 0] loop #3 done: processed=0 skipped=38 failed=0
+[2026. 04. 22. (수) 16:14:11 KST] [nudity v3 shard 0] no work, exiting

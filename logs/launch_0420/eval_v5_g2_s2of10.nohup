@@ -1,0 +1,15 @@
+[2026. 04. 22. (수) 16:00:00 KST] [v5 shard 2/10 gpu 2] loop #1
+[2026. 04. 22. (수) 16:00:04 KST] [GPU 2 shard 2] [v5] ours_sd3/mja_violent/hybrid_ss20_thr0.1_imgthr0.4_both concept=violence n=100
+[2026. 04. 22. (수) 16:01:40 KST] [GPU 2 shard 2] [v5] ours_sd3/mja_disturbing/cas0.6_ss2.0_thr0.1_anchor_inpaint_both concept=disturbing n=100
+[2026. 04. 22. (수) 16:03:10 KST] [GPU 2 shard 2] [v5] ours_sd3/mja_disturbing/cas0.6_ss3.0_thr0.1_anchor_inpaint_both concept=disturbing n=100
+[2026. 04. 22. (수) 16:04:40 KST] [GPU 2 shard 2] [v5] ours_sd3/mja_illegal/hybrid_ss20_thr0.1_imgthr0.4_both concept=illegal n=100
+[2026. 04. 22. (수) 16:06:14 KST] [GPU 2 shard 2] [v5] safree_sd3/mja_disturbing concept=disturbing n=100
+[2026. 04. 22. (수) 16:07:45 KST] [GPU 2 shard 2] [v5] ours_flux1/mja_disturbing/cas0.6_ss1.5_thr0.1_anchor_inpaint_both concept=disturbing n=100
+[2026. 04. 22. (수) 16:09:16 KST] [GPU 2 shard 2] [v5] ours_flux1/mja_illegal/cas0.6_ss3.0_thr0.1_hybrid_both concept=illegal n=100
+[2026. 04. 22. (수) 16:10:52 KST] [GPU 2 shard 2] [v5] safree_sd14_multi/hate concept=hate n=60
+[2026. 04. 22. (수) 16:11:42 KST] [v5 shard 2] loop #1 done: processed=8 skipped=48 failed=0
+[2026. 04. 22. (수) 16:12:42 KST] [v5 shard 2/10 gpu 2] loop #2
+[2026. 04. 22. (수) 16:12:46 KST] [v5 shard 2] loop #2 done: processed=0 skipped=56 failed=0
+[2026. 04. 22. (수) 16:13:46 KST] [v5 shard 2/10 gpu 2] loop #3
+[2026. 04. 22. (수) 16:13:53 KST] [v5 shard 2] loop #3 done: processed=0 skipped=56 failed=0
+[2026. 04. 22. (수) 16:13:53 KST] [v5 shard 2] no work, exiting

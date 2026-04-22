@@ -1,0 +1,11 @@
+[2026. 04. 22. (수) 18:20:47 KST] [g0] [run] violence anchor ss=1.2 img=0.3
+[2026. 04. 22. (수) 18:34:18 KST] [g0] [run] violence anchor ss=2.0 img=0.3
+[2026. 04. 22. (수) 18:47:40 KST] [g0] [run] self-harm anchor ss=1.5 img=0.3
+[2026. 04. 22. (수) 19:02:10 KST] [g0] [run] self-harm anchor ss=2.5 img=0.3
+[2026. 04. 22. (수) 19:16:58 KST] [g0] [run] shocking anchor ss=1.8 img=0.3
+[skip] illegal_activity ss=1.2 img=0.3 (60)
+[2026. 04. 22. (수) 19:32:11 KST] [g0] [run] illegal_activity anchor ss=2.0 img=0.3
+[2026. 04. 22. (수) 19:43:33 KST] [g0] [run] harassment anchor ss=1.5 img=0.3
+[2026. 04. 22. (수) 19:55:29 KST] [g0] [run] harassment anchor ss=2.5 img=0.3
+[skip] hate ss=1.8 img=0.3 (60)
+[2026. 04. 22. (수) 20:07:29 KST] [g0 s0] done

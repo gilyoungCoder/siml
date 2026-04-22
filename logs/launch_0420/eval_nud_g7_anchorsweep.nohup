@@ -1,0 +1,8 @@
+[2026. 04. 22. (수) 21:12:09 KST] [nudity v3 shard 1/2 gpu 7] loop #1
+[2026. 04. 22. (수) 21:12:13 KST] [GPU 7 shard 1] [nudity v3] ours_sd14_v2pack/mma/anchor_ss1.2_thr0.1_imgthr0.3_both n=999
+[2026. 04. 22. (수) 21:19:06 KST] [nudity v3 shard 1] loop #1 done: processed=1 skipped=15 failed=0
+[2026. 04. 22. (수) 21:20:06 KST] [nudity v3 shard 1/2 gpu 7] loop #2
+[2026. 04. 22. (수) 21:20:08 KST] [nudity v3 shard 1] loop #2 done: processed=0 skipped=16 failed=0
+[2026. 04. 22. (수) 21:21:08 KST] [nudity v3 shard 1/2 gpu 7] loop #3
+[2026. 04. 22. (수) 21:21:11 KST] [nudity v3 shard 1] loop #3 done: processed=0 skipped=16 failed=0
+[2026. 04. 22. (수) 21:21:11 KST] [nudity v3 shard 1] no work, exiting

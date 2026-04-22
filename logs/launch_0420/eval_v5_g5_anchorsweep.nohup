@@ -1,0 +1,26 @@
+[2026. 04. 22. (수) 21:12:09 KST] [v5 shard 5/6 gpu 5] loop #1
+[2026. 04. 22. (수) 21:12:11 KST] [GPU 5 shard 5] [v5] ours_sd14/mja_violent/anchor_ss1.5_thr0.1_imgthr0.3_both concept=violence n=100
+[2026. 04. 22. (수) 21:13:28 KST] [GPU 5 shard 5] [v5] ours_sd14/mja_violent/anchor_ss1.8_thr0.1_imgthr0.5_both concept=violence n=100
+[2026. 04. 22. (수) 21:14:40 KST] [GPU 5 shard 5] [v5] ours_sd14/mja_disturbing/anchor_ss1.8_thr0.1_imgthr0.3_both concept=disturbing n=100
+[2026. 04. 22. (수) 21:15:49 KST] [GPU 5 shard 5] [v5] ours_sd14/mja_disturbing/anchor_ss2.0_thr0.1_imgthr0.5_both concept=disturbing n=100
+[2026. 04. 22. (수) 21:16:57 KST] [GPU 5 shard 5] [v5] ours_sd14/mja_disturbing/anchor_ss2.5_thr0.1_imgthr0.3_both concept=disturbing n=100
+[2026. 04. 22. (수) 21:18:07 KST] [GPU 5 shard 5] [v5] ours_sd14_multi/illegal_activity/hybrid_ss15_thr0.1_imgthr0.3_both concept=illegal n=60
+[2026. 04. 22. (수) 21:18:59 KST] [GPU 5 shard 5] [v5] ours_sd14_multi/illegal_activity/hybrid_ss15_thr0.1_imgthr0.4_both concept=illegal n=60
+[2026. 04. 22. (수) 21:19:51 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/violence/anchor_ss1.2_thr0.1_imgthr0.3_both concept=violence n=60
+[2026. 04. 22. (수) 21:20:42 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/self-harm/anchor_ss1.8_thr0.1_imgthr0.5_both concept=self_harm n=60
+[2026. 04. 22. (수) 21:21:31 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/self-harm/anchor_ss1.5_thr0.1_imgthr0.3_both concept=self_harm n=60
+[2026. 04. 22. (수) 21:22:18 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/shocking/anchor_ss1.5_thr0.1_imgthr0.3_both concept=shocking n=60
+[2026. 04. 22. (수) 21:23:06 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/shocking/anchor_ss2.0_thr0.1_imgthr0.3_both concept=shocking n=60
+[2026. 04. 22. (수) 21:23:54 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/illegal_activity/anchor_ss2.5_thr0.1_imgthr0.4_both concept=illegal n=60
+[2026. 04. 22. (수) 21:24:48 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/illegal_activity/anchor_ss2.5_thr0.1_imgthr0.3_both concept=illegal n=60
+[2026. 04. 22. (수) 21:25:42 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/harassment/anchor_ss2.5_thr0.1_imgthr0.5_both concept=harassment n=60
+[2026. 04. 22. (수) 21:26:30 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/hate/anchor_ss1.5_thr0.1_imgthr0.4_both concept=hate n=60
+[2026. 04. 22. (수) 21:27:16 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/hate/anchor_ss1.8_thr0.1_imgthr0.5_both concept=hate n=60
+[2026. 04. 22. (수) 21:28:03 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/hate/anchor_ss2.0_thr0.1_imgthr0.4_both concept=hate n=60
+[2026. 04. 22. (수) 21:28:50 KST] [GPU 5 shard 5] [v5] ours_sd14_anchor_sweep/hate/anchor_ss2.0_thr0.1_imgthr0.3_both concept=hate n=60
+[2026. 04. 22. (수) 21:29:37 KST] [v5 shard 5] loop #1 done: processed=19 skipped=69 failed=0
+[2026. 04. 22. (수) 21:30:37 KST] [v5 shard 5/6 gpu 5] loop #2
+[2026. 04. 22. (수) 21:30:46 KST] [v5 shard 5] loop #2 done: processed=0 skipped=88 failed=0
+[2026. 04. 22. (수) 21:31:46 KST] [v5 shard 5/6 gpu 5] loop #3
+[2026. 04. 22. (수) 21:31:56 KST] [v5 shard 5] loop #3 done: processed=0 skipped=88 failed=0
+[2026. 04. 22. (수) 21:31:56 KST] [v5 shard 5] no work, exiting

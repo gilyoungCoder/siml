@@ -1,0 +1,54 @@
+[2026. 04. 22. (수) 15:54:56 KST] [g5 s0/1] total=120 jobs
+[2026. 04. 22. (수) 15:54:56 KST] [g5] [skip] both harassment ss=10 img=0.3 (60)
+[2026. 04. 22. (수) 15:54:56 KST] [g5] [skip] both harassment ss=10 img=0.4 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=10 img=0.5 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=15 img=0.3 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=15 img=0.4 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=15 img=0.5 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=20 img=0.3 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=20 img=0.4 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=20 img=0.5 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=25 img=0.3 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=25 img=0.4 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both harassment ss=25 img=0.5 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=10 img=0.3 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=10 img=0.4 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=10 img=0.5 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=15 img=0.3 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=15 img=0.4 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=15 img=0.5 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=20 img=0.3 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=20 img=0.4 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=20 img=0.5 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=25 img=0.3 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=25 img=0.4 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [skip] both hate ss=25 img=0.5 (60)
+[2026. 04. 22. (수) 15:54:57 KST] [g5] [run] txtonly violence ss=15 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/violence/hybrid_ss15_thr0.1_txtonly
+[g5] FAILED txtonly violence ss=15
+[2026. 04. 22. (수) 15:55:15 KST] [g5] [run] txtonly violence ss=15 txt=0.2 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/violence/hybrid_ss15_thr0.2_txtonly
+[g5] FAILED txtonly violence ss=15
+[2026. 04. 22. (수) 15:55:30 KST] [g5] [run] txtonly violence ss=15 txt=0.3 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/violence/hybrid_ss15_thr0.3_txtonly
+[g5] FAILED txtonly violence ss=15
+[2026. 04. 22. (수) 15:55:47 KST] [g5] [run] txtonly violence ss=15 txt=0.4 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/violence/hybrid_ss15_thr0.4_txtonly
+[g5] FAILED txtonly violence ss=15
+[2026. 04. 22. (수) 15:56:00 KST] [g5] [run] txtonly violence ss=20 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/violence/hybrid_ss20_thr0.1_txtonly
+[g5] FAILED txtonly violence ss=20
+[2026. 04. 22. (수) 15:56:19 KST] [g5] [run] txtonly violence ss=20 txt=0.2 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/violence/hybrid_ss20_thr0.2_txtonly
+[g5] FAILED txtonly violence ss=20
+[2026. 04. 22. (수) 15:56:35 KST] [g5] [run] txtonly violence ss=20 txt=0.3 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/violence/hybrid_ss20_thr0.3_txtonly
+[g5] FAILED txtonly violence ss=20
+[2026. 04. 22. (수) 15:56:51 KST] [g5] [run] txtonly violence ss=20 txt=0.4 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/violence/hybrid_ss20_thr0.4_txtonly
+[g5] FAILED txtonly violence ss=20
+[2026. 04. 22. (수) 15:57:09 KST] [g5] [run] txtonly self-harm ss=15 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/self-harm/hybrid_ss15_thr0.1_txtonly
+[g5] FAILED txtonly self-harm ss=15
+[2026. 04. 22. (수) 15:57:26 KST] [g5] [run] txtonly self-harm ss=15 txt=0.2 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/self-harm/hybrid_ss15_thr0.2_txtonly
+[g5] FAILED txtonly self-harm ss=15
+[2026. 04. 22. (수) 15:57:39 KST] [g5] [run] txtonly self-harm ss=15 txt=0.3 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/self-harm/hybrid_ss15_thr0.3_txtonly
+[g5] FAILED txtonly self-harm ss=15
+[2026. 04. 22. (수) 15:57:51 KST] [g5] [run] txtonly self-harm ss=15 txt=0.4 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/self-harm/hybrid_ss15_thr0.4_txtonly
+[g5] FAILED txtonly self-harm ss=15
+[2026. 04. 22. (수) 15:58:03 KST] [g5] [run] txtonly self-harm ss=20 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/self-harm/hybrid_ss20_thr0.1_txtonly
+[g5] FAILED txtonly self-harm ss=20
+[2026. 04. 22. (수) 15:58:15 KST] [g5] [run] txtonly self-harm ss=20 txt=0.2 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/self-harm/hybrid_ss20_thr0.2_txtonly
+[g5] FAILED txtonly self-harm ss=20
+[2026. 04. 22. (수) 15:58:29 KST] [g5] [run] txtonly self-harm ss=20 txt=0.3 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/self-harm/hybrid_ss20_thr0.3_txtonly

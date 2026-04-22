@@ -1,0 +1,32 @@
+[2026. 04. 22. (수) 21:12:09 KST] [v5 shard 3/6 gpu 3] loop #1
+[2026. 04. 22. (수) 21:12:11 KST] [GPU 3 shard 3] [v5] ours_sd14/mja_violent/anchor_ss2.0_thr0.1_imgthr0.4_both concept=violence n=100
+[2026. 04. 22. (수) 21:13:26 KST] [GPU 3 shard 3] [v5] ours_sd14/mja_violent/anchor_ss2.5_thr0.1_imgthr0.5_both concept=violence n=100
+[2026. 04. 22. (수) 21:14:40 KST] [GPU 3 shard 3] [v5] ours_sd14/mja_disturbing/anchor_ss1.2_thr0.1_imgthr0.4_both concept=disturbing n=100
+[2026. 04. 22. (수) 21:15:48 KST] [GPU 3 shard 3] [v5] ours_sd14/mja_illegal/anchor_ss2.5_thr0.1_imgthr0.5_both concept=illegal n=100
+[2026. 04. 22. (수) 21:17:03 KST] [GPU 3 shard 3] [v5] ours_sd14/mja_illegal/anchor_ss1.2_thr0.1_imgthr0.5_both concept=illegal n=100
+[2026. 04. 22. (수) 21:18:17 KST] [GPU 3 shard 3] [v5] ours_sd14_multi/shocking/hybrid_ss15_thr0.1_imgthr0.4_both concept=shocking n=60
+[2026. 04. 22. (수) 21:19:03 KST] [GPU 3 shard 3] [v5] ours_sd14_ablation_txtonly/violence/hybrid_ss20_thr0.1_txtonly concept=violence n=60
+[2026. 04. 22. (수) 21:19:53 KST] [GPU 3 shard 3] [v5] ours_sd14_ablation_txtonly/violence/hybrid_ss15_thr0.4_txtonly concept=violence n=60
+[2026. 04. 22. (수) 21:20:43 KST] [GPU 3 shard 3] [v5] ours_sd14_ablation_txtonly/self-harm/hybrid_ss15_thr0.1_txtonly concept=self_harm n=60
+[2026. 04. 22. (수) 21:21:32 KST] [GPU 3 shard 3] [v5] ours_sd14_ablation_txtonly/self-harm/hybrid_ss20_thr0.3_txtonly concept=self_harm n=60
+[2026. 04. 22. (수) 21:22:19 KST] [GPU 3 shard 3] [v5] ours_sd14_ablation_txtonly/self-harm/hybrid_ss15_thr0.2_txtonly concept=self_harm n=60
+[2026. 04. 22. (수) 21:23:07 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/violence/anchor_ss2.5_thr0.1_imgthr0.4_both concept=violence n=60
+[2026. 04. 22. (수) 21:23:57 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/violence/anchor_ss1.5_thr0.1_imgthr0.5_both concept=violence n=60
+[2026. 04. 22. (수) 21:24:48 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/violence/anchor_ss2.0_thr0.1_imgthr0.5_both concept=violence n=60
+[2026. 04. 22. (수) 21:25:39 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/self-harm/anchor_ss1.5_thr0.1_imgthr0.4_both concept=self_harm n=60
+[2026. 04. 22. (수) 21:26:28 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/self-harm/anchor_ss2.5_thr0.1_imgthr0.5_both concept=self_harm n=60
+[2026. 04. 22. (수) 21:27:17 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/shocking/anchor_ss1.5_thr0.1_imgthr0.4_both concept=shocking n=60
+[2026. 04. 22. (수) 21:28:04 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/shocking/anchor_ss1.2_thr0.1_imgthr0.5_both concept=shocking n=60
+[2026. 04. 22. (수) 21:28:50 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/shocking/anchor_ss2.0_thr0.1_imgthr0.4_both concept=shocking n=60
+[2026. 04. 22. (수) 21:29:37 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/illegal_activity/anchor_ss1.2_thr0.1_imgthr0.3_both concept=illegal n=60
+[2026. 04. 22. (수) 21:30:30 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/illegal_activity/anchor_ss1.5_thr0.1_imgthr0.5_both concept=illegal n=60
+[2026. 04. 22. (수) 21:31:20 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/harassment/anchor_ss2.0_thr0.1_imgthr0.4_both concept=harassment n=60
+[2026. 04. 22. (수) 21:32:07 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/harassment/anchor_ss1.2_thr0.1_imgthr0.5_both concept=harassment n=60
+[2026. 04. 22. (수) 21:32:54 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/harassment/anchor_ss1.5_thr0.1_imgthr0.3_both concept=harassment n=60
+[2026. 04. 22. (수) 21:33:41 KST] [GPU 3 shard 3] [v5] ours_sd14_anchor_sweep/hate/anchor_ss1.2_thr0.1_imgthr0.5_both concept=hate n=60
+[2026. 04. 22. (수) 21:34:26 KST] [v5 shard 3] loop #1 done: processed=25 skipped=102 failed=0
+[2026. 04. 22. (수) 21:35:26 KST] [v5 shard 3/6 gpu 3] loop #2
+[2026. 04. 22. (수) 21:35:35 KST] [v5 shard 3] loop #2 done: processed=0 skipped=127 failed=0
+[2026. 04. 22. (수) 21:36:35 KST] [v5 shard 3/6 gpu 3] loop #3
+[2026. 04. 22. (수) 21:36:44 KST] [v5 shard 3] loop #3 done: processed=0 skipped=127 failed=0
+[2026. 04. 22. (수) 21:36:44 KST] [v5 shard 3] no work, exiting
