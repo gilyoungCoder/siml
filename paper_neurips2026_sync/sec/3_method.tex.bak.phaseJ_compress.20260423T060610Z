@@ -1,0 +1,134 @@
+\section{Method}
+\label{sec:method}
+
+Given a pre-trained text-to-image diffusion model and a set of target concepts to erase (\eg, nudity, violence), \ours{} intervenes at inference time through three stages: \textbf{When} to activate safety guidance, \textbf{Where} to localize the intervention spatially, and \textbf{How} to steer the denoising trajectory toward safe content. Every stage is expressed in a single \emph{family-indexed} notation ($F$ families $\times$ $K$ paired exemplars) and driven by a lightweight, user-editable \emph{concept pack}, so that adding or combining concepts never requires re-training. The \textbf{Where} stage uses two complementary probes---a cross-attention \emph{text probe} and a CLIP \emph{image probe}---that jointly cover two erasing regimes: \emph{explicit} concepts whose adversarial prompts still carry identifiable keywords (nudity, sexual), and \emph{implicit} concepts where metaphorical language evades keyword matching but recognizable visual patterns remain (violence, illegal, shocking, self-harm). The \textbf{How} stage exposes \emph{two complementary modes}---anchor inpainting and hybrid guidance---both first-class in this paper, spanning a compute$\times$anchor-cleanliness trade-off rather than competing for a single slot. Figure~\ref{fig:overview} illustrates the full pipeline.
+
+\subsection{Preliminaries and Concept Packs}
+\label{subsec:prelim}
+
+\paragraph{Classifier-free guidance.} In CFG~\citep{ho2022classifier}, the noise prediction at step $t$ is
+\begin{equation}
+    \hat{\epsilon}_t = \epsilon_\varnothing + s \cdot (\epsilon_\theta(z_t, c) - \epsilon_\varnothing),
+\end{equation}
+where $\epsilon_\varnothing = \epsilon_\theta(z_t, \varnothing)$ is the unconditional prediction, $\epsilon_\theta(z_t, c)$ is conditioned on prompt $c$, and $s$ is the guidance scale. We call $d_c(t) = \epsilon_\theta(z_t, c) - \epsilon_\varnothing$ the \emph{concept direction} at step $t$. Because $d_c(t)$ is a \emph{difference} of predictions, the same construction applies to $\epsilon$-prediction (SD1.4 UNet), velocity-prediction (SD3 MMDiT), and flow-matching (FLUX DiT) backbones up to a parameterization-dependent scale. We exploit this invariance in the cross-backbone validation of \S\ref{subsec:cross_backbone}.
+
+\paragraph{Family-grouped concept pack.}
+Unsafe concepts are rarely monolithic: \emph{nudity} spans \textit{naked body}, \textit{sexual act}, \textit{exposed body parts}, and \textit{suggestive pose}; \emph{violence} spans \textit{blood/gore}, \textit{weapon attack}, \textit{brutal action}, and \textit{dismemberment}; \emph{hate} covers racial, religious, gender-based and political axes. Pooling all exemplars into one averaged vector collapses this diversity and yields a weak, generic direction that under-fits adversarial prompts.
+We therefore adopt \emph{family-grouped exemplars} as the first-class representation of \ours{}. For every concept we define $F$ semantically disjoint \emph{families} (default $F{=}4$), and for each family $f\in\{1,\dots,F\}$ we pair $K$ target exemplars with $K$ anchor exemplars (default $K{=}4$). A concept pack therefore materializes to
+\begin{equation}
+    \mathcal{P} = \big\{(c^{\text{tgt}}_{f,k},\, c^{\text{anc}}_{f,k}, I^{\text{tgt}}_{f,k}, I^{\text{anc}}_{f,k})\big\}_{f=1,\dots,F;\ k=1,\dots,K} \cup \{\mathcal{W}_f\}_{f=1,\dots,F},
+    \label{eq:pack}
+\end{equation}
+where $\mathcal{W}_f$ are family-level target keywords (\eg, ``naked'', ``exposed'' for \emph{naked body}). All text- and image-side quantities used below are indexed by family $f$; the family index is preserved through CAS (\S\ref{subsec:when}), the probes (\S\ref{subsec:where}), and both How modes (\S\ref{subsec:how}), and is only reduced at the final masked adjustment.
+
+\paragraph{Family-level embeddings and directions.}
+Given $\mathcal{P}$, we precompute \emph{once} per family $f$:
+(i) family-mean CLIP image embeddings
+$\bar{e}^{\text{tgt}}_f = \tfrac{1}{K}\sum_k \mathrm{CLIP}(I^{\text{tgt}}_{f,k})$
+and their anchor counterparts
+$\bar{e}^{\text{anc}}_f = \tfrac{1}{K}\sum_k \mathrm{CLIP}(I^{\text{anc}}_{f,k})$;
+and (ii) family-level target and anchor text directions
+\begin{equation}
+    d^{\text{tgt}}_f(t) = \tfrac{1}{K}\textstyle\sum_{k=1}^{K} \big[\epsilon_\theta(z_t, c^{\text{tgt}}_{f,k}) - \epsilon_\varnothing\big],
+    \qquad
+    d^{\text{anc}}_f(t) = \tfrac{1}{K}\textstyle\sum_{k=1}^{K} \big[\epsilon_\theta(z_t, c^{\text{anc}}_{f,k}) - \epsilon_\varnothing\big].
+    \label{eq:fam_dirs}
+\end{equation}
+\textbf{Why within-family pooling works.} The $K$ target exemplars inside one family are deliberately drawn from the \emph{same} sub-category but with different backgrounds, poses, lighting, and subject identity. Because CLIP's image encoder is approximately linear at the semantic level, averaging these $K$ embeddings \emph{cancels nuisance variation} (background, pose, identity) while \emph{reinforcing the shared unsafe semantic} that the family is defined by. The resulting $\bar{e}^{\text{tgt}}_f$ is therefore a sharp, concept-specific direction rather than a generic ``photo of a person'' direction. Pooling across all $F\cdot K$ exemplars at once would instead average over sub-categories whose visual signatures genuinely differ---a naked torso, a posed couple, a close-up of skin, and a clothed suggestive pose are not the same image---and would muddy the direction; family-level pooling preserves $F$ clean, semantically distinct directions that together \emph{span} the concept (\S\ref{subsec:where}, Table~\ref{table:ablation}). We use $\bar{e}_f \equiv \bar{e}^{\text{tgt}}_f$ throughout when no ambiguity arises. No gradients or parameter updates are needed; adding a new concept amounts to adding one directory with $F{\cdot}K$ prompts and $F{\cdot}K$ images.
+
+\subsection{When: Concept Alignment Score (CAS)}
+\label{subsec:when}
+
+Not every denoising step needs safety intervention. Early steps establish global composition while later steps refine details; unsafe content may emerge only at specific timesteps. Applying guidance indiscriminately wastes compute and risks degrading benign content.
+
+We gate intervention by a family-aware \textbf{Concept Alignment Score (CAS)}:
+\begin{equation}
+    \text{CAS}(t) \;=\; \max_{f=1,\dots,F} \cos\!\big(d_\text{prompt}(t),\; d^{\text{tgt}}_f(t)\big),
+    \qquad d_\text{prompt}(t) = \epsilon_\theta(z_t, c) - \epsilon_\varnothing,
+    \label{eq:cas}
+\end{equation}
+so that the denoising direction is compared against \emph{every} family independently and the highest match wins. Safety guidance fires only when $\text{CAS}(t) > \tau$ (typically $\tau{\in}[0.4, 0.6]$). Benign prompts---whose directions do not align with any family---proceed without intervention, sharply reducing false positives. The argmax family index $f^\star(t)=\arg\max_f \cos(d_\text{prompt}(t), d^{\text{tgt}}_f(t))$ tells us \emph{which} sub-category is active at step $t$; we expose this as a diagnostic signal but do not route guidance through it (all $F$ families continue to contribute through the probes and How stages).
+
+\paragraph{Sticky CAS.} Once $\text{CAS}(t_0) > \tau$ at any step $t_0$, we latch activation for all $t > t_0$. This prevents flicker between active/inactive states, which empirically produces inconsistent renderings.
+
+\paragraph{Parameterization invariance.} CAS is a cosine of two difference vectors of the form $\text{pred}(z_t, c) - \text{pred}(z_t, \varnothing)$. The choice of prediction target (noise $\epsilon$, velocity $v$, or flow-matching vector field) affects $d_\text{prompt}$ and $d^{\text{tgt}}_f$ by the same parameterization-dependent scaling, so their cosine is unchanged. The same holds for the mask-gated updates in \S\ref{subsec:how}: both modes are linear in the prediction, so they transfer to MMDiT and DiT backbones without algorithmic change, up to a per-backbone retune of $\tau$ (\S\ref{subsec:cross_backbone}).
+
+\subsection{Where: Dual-Probe Spatial Localization}
+\label{subsec:where}
+
+When CAS triggers intervention, the next question is \emph{where} in the spatial domain the unsafe concept is forming. \ours{} combines complementary \emph{text} and \emph{image} probes; each probe is computed \emph{per family $f$} and the family axis is then reduced by a union.
+
+\paragraph{Text probe.} Cross-attention maps in the U-Net bind each spatial location to specific text tokens. Using the family keyword set $\mathcal{W}_f$, we extract $A_w\in\mathbb{R}^{H\times W}$ for $w\in\mathcal{W}_f$ and form
+\begin{equation}
+    M^f_\text{text}(i,j) = \sigma\!\Big(\alpha \cdot \big(\textstyle\max_{w\in\mathcal{W}_f} A_w(i,j) - \theta_\text{text}\big)\Big),
+    \label{eq:text_probe}
+\end{equation}
+with sigmoid sharpness $\alpha$ and attention threshold $\theta_\text{text}$.
+
+\paragraph{Image probe.} Text probes fail when adversarial prompts avoid explicit keywords. A CLIP image probe bypasses the prompt: at each step we extract intermediate U-Net features $f(i,j)$ and score them against the family-mean embeddings $\{\bar{e}_f\}$,
+\begin{equation}
+    M^f_\text{img}(i,j) = \sigma\!\Big(\alpha \cdot \big(\cos(f(i,j), \bar{e}_f) - \theta_\text{img}\big)\Big).
+    \label{eq:img_probe}
+\end{equation}
+This flags visually concept-relevant regions regardless of how the prompt is phrased. Because $\bar{e}_f$ is a within-family pooled direction (Eq.~\ref{eq:fam_dirs}) in which background, pose, and identity variation have cancelled, the probe responds to the \emph{sub-category} the family encodes---not to humans in general---which is why the image probe is concept-specific rather than a generic presence-of-subject detector.
+
+\paragraph{Probe fusion.}
+We first union over families (a location is flagged if it matches \emph{any} sub-category) and then union across modalities:
+\begin{equation}
+    M_\text{text} = \max_{f=1,\dots,F} M^f_\text{text},\qquad M_\text{img} = \max_{f=1,\dots,F} M^f_\text{img},\qquad
+    M = \min\!\big(1,\, M_\text{text} + M_\text{img}\big).
+    \label{eq:fusion}
+\end{equation}
+Union fusion ensures that regions detected by \emph{either} probe---or any family---are suppressed. Text-only and image-only modes are retained for ablation.
+
+\paragraph{Explicit vs.\ implicit erasing: two regimes, one fusion.}
+The two probes cover two regimes of concept erasing that are largely mutually exclusive on the concept axis. \emph{Explicit erasing} applies to concepts whose adversarial prompts still carry identifiable keywords---``naked'', ``bare'', ``exposed'' for nudity, ``sultry temptress'' for RAB-style attacks---because the concept is lexical; the \textbf{text probe} dominates here. \emph{Implicit erasing} applies to concepts where metaphorical or indirect language evades keyword matching (``showing raw strength'' for MJA-Violent, ``a dark exchange in an alley'' for MJA-Illegal) but the underlying generation still produces visually recognizable patterns---punches, blood, weapons, drug paraphernalia; the \textbf{image probe} dominates here. Their union is best-or-tied on every concept in our evaluation because the non-dominant probe contributes negligibly when its partner already fires. Concretely, on the MJA per-concept probe ablation (Appendix Table~\ref{table:probe_concept}): the text$\to$image scores flip from $65{\to}56$ on sexual (text-dominant) to $33{\to}45$ on violent, $79{\to}81$ on disturbing, and $65{\to}78$ on illegal (image-dominant); the \emph{both}-probe column is $74, 59, 88, 77$ respectively---never worse than the stronger single probe. The dual probe is thus not a ``better-on-average'' heuristic but a structural solution: one mechanism covers both the lexical and the perceptual failure modes of adversarial prompts.
+
+\subsection{How: Spatially Masked Safe Guidance (Two Complementary Modes)}
+\label{subsec:how}
+
+Given the spatial mask $M$ and the per-family directions $\{d^{\text{tgt}}_f(t), d^{\text{anc}}_f(t)\}_{f=1}^{F}$, we modify $\hat{\epsilon}_t$ \emph{only} inside $M$. \ours{} supports two first-class modes of masked guidance, both linear in the family-averaged directions and both operating behind the same CAS gate and the same mask:
+\begin{align}
+    \textbf{Anchor inpainting:}\quad
+    &\hat{\epsilon}_\text{safe}
+    = \hat{\epsilon}_t - s_\text{a} \cdot M \cdot \Big(\tfrac{1}{F}\textstyle\sum_{f=1}^{F} d^{\text{tgt}}_f(t)\Big),
+    \label{eq:anchor_inpaint}\\[2pt]
+    \textbf{Hybrid guidance:}\quad
+    &\hat{\epsilon}_\text{safe}
+    = \hat{\epsilon}_t + s_\text{h} \cdot M \cdot \Big(\tfrac{1}{F}\textstyle\sum_{f=1}^{F} \big[d^{\text{anc}}_f(t) - d^{\text{tgt}}_f(t)\big]\Big).
+    \label{eq:hybrid}
+\end{align}
+Eq.~\ref{eq:anchor_inpaint} \emph{subtracts} the family-averaged target direction inside the mask---locally removing the unsafe concept direction without committing to a specific safe replacement. Eq.~\ref{eq:hybrid} additionally pushes toward the family-paired anchor direction, turning the update into a local target$\to$anchor redirection (\eg, \textit{exposed parts}$\to$\textit{clothed counterpart}, \textit{weapon attack}$\to$\textit{calm interaction}). Both act only inside $M$, so the rest of the image is untouched; both preserve the family decomposition by reducing $f$ only at the final mean.
+
+\paragraph{Complementarity: compute $\times$ anchor-cleanliness.}
+The two modes occupy different points on a single trade-off surface that we find to be concept- and deployment-dependent, and we deliberately report both on every table.
+\emph{Anchor inpainting} is the lighter intervention: a single guidance scale $s_\text{a}\in[0.5,3.0]$, no additional anchor forward pass required at inference (the anchor is not used), and subtract-only semantics that are robust when the paired anchor concept is \emph{ambiguous}---``peaceful scene'' as the anchor for violence, or ``legal activity'' as the anchor for illegal, are themselves poorly-defined distributions whose average direction is noisy. Under these conditions, anchor inpainting's refusal to commit to an anchor is a feature, not a cost.
+\emph{Hybrid guidance} couples the subtraction with a concrete positive target. This delivers stronger correction when the paired anchor is \emph{crisp}---``naked body $\to$ clothed body'', ``exposed parts $\to$ covered'' are visually unambiguous---at the cost of (i) an extra family-averaged anchor forward pass $d^{\text{anc}}_f(t)$ per step, (ii) a roughly $10{\times}$ larger guidance scale $s_\text{h}\in[10,20]$ because the two directions $d^{\text{anc}}_f - d^{\text{tgt}}_f$ partially cancel by construction, and (iii) greater sensitivity to mask quality since over-shooting the anchor visibly changes content rather than merely removing it.
+
+We therefore treat the mode as a \emph{deployment choice} driven by how crisp the paired anchor concept is for the target concept, not as an ablation to be resolved in favor of one option. Both modes live behind the same concept pack: switching requires no re-authoring of exemplars, no re-training, and no probe re-tuning---only the scale and the choice of Eq.~\ref{eq:anchor_inpaint} vs.\ Eq.~\ref{eq:hybrid}. In the main results table (\S\ref{subsec:main_results}) we present \emph{Ours (anchor, family)} and \emph{Ours (hybrid, family)} as two rows so that the reader can read off the trade-off directly, and we replicate this two-row pattern across multi-concept, ablation, and cross-backbone tables.
+
+\subsection{Training-Free and User-Editable}
+\label{subsec:training_free}
+
+The central practical advantage of \ours{} is that \emph{every concept-specific artifact lives in the exemplar pack}. We separate this claim into three distinct properties that a reviewer can audit independently:
+
+\textbf{(1) Training-free.} All quantities used by CAS (Eq.~\ref{eq:cas}), the probes (Eq.~\ref{eq:text_probe}--\ref{eq:img_probe}), and both How modes (Eq.~\ref{eq:anchor_inpaint}--\ref{eq:hybrid}) are either precomputed once from exemplars or computed on-the-fly from the frozen UNet and a frozen CLIP. There is no gradient step anywhere in the deployment path, no per-concept fine-tuning, and no auxiliary classifier to train. By contrast, ESD/SDD/RECE/SDErasure require $\sim$20--30\,min of per-concept fine-tuning (Appendix~\ref{app:compute}) and carry catastrophic-forgetting risk on benign prompts.
+
+\textbf{(2) User-editable safety policy.} Because the only concept-specific object is a directory of $F{\cdot}K$ prompts, $F{\cdot}K$ images, and $F$ keyword lists, the safety policy is itself a user artifact that can be \emph{composed} and \emph{adjusted} per deployment. Harder adversarial distributions are addressed by \emph{few-shot pack adaptation}: to defend against MJA-style metaphorical prompts~\citep{zhang2026reason2attack}, one drops a handful of MJA-style exemplars into the target family and re-precomputes $\bar{e}_f$ and $d^{\text{tgt}}_f$ in seconds---no gradient step, no model surgery. Scope changes---narrowing ``remove weapons but not historical war imagery'', or widening ``add a region-specific content policy''---are edits to keyword lists and exemplar directories, not code or model changes. The safety layer is thus \emph{editable}, not a fixed artifact baked into weights.
+
+\textbf{(3) Mode and probe as the only deployment knobs.} Beyond the pack, the deployer exposes only two categorical choices per concept---the probe (text/image/both) and the How mode (anchor/hybrid)---plus their scale. In practice, text probes alone suffice for explicit concepts, image probes alone for concepts with distinctive visual signatures, and the union covers both (\S\ref{subsec:where}); the mode choice follows anchor-cleanliness (\S\ref{subsec:how}). Section~\ref{subsec:ablation} and Appendix~\ref{app:hyperparams} validate these claims empirically, including the per-concept mode comparison.
+
+\paragraph{Per-concept configuration is a coherent story, not a grid search.}
+Our per-concept choices of \{probe, mode, $\tau$, scale\} follow a consistent pattern that we summarize here and detail in Appendix~\ref{app:hyperparams}. \emph{Probe} tracks concept-prompt alignment: lexically identifiable concepts (nudity) favor text-weighted probes, metaphor- or indirectly-described concepts (violence, illegal, shocking) favor image-weighted probes, and the union wins when the two contribute non-redundantly. \emph{Mode} tracks paired-anchor cleanliness: crisp visual pairs (naked$\to$clothed) favor hybrid, ambiguous pairs (violence$\to$peaceful) favor anchor inpainting. \emph{CAS $\tau$} tracks family-alignment signal magnitude: internally coherent concepts such as nudity produce high-magnitude alignment so $\tau{=}0.6$ filters benign prompts reliably; semantically dispersed concepts (violence, harassment, hate) produce lower-magnitude signals so $\tau{=}0.4$ avoids missed triggers. \emph{Scale} follows mode: hybrid's two-direction difference $d^{\text{anc}}_f - d^{\text{tgt}}_f$ partially cancels and therefore requires roughly $10{\times}$ the magnitude of anchor's single-direction subtraction. These are structural properties of the concept pack, not hand-tuned per prompt; we therefore report one configuration per (concept, mode) throughout.
+
+\subsection{Multi-Concept Erasure}
+\label{subsec:multi}
+
+\ours{} supports simultaneous multi-concept erasure by construction. Given $C$ target concept packs, each with its own CAS threshold $\tau_c$, spatial mask $M_c$ (Eq.~\ref{eq:fusion}), mode choice $m_c\in\{\text{anchor},\text{hybrid}\}$ and guidance term $g_c^{m_c}(z_t)$ (the mask-free summand inside Eq.~\ref{eq:anchor_inpaint} or Eq.~\ref{eq:hybrid} for concept $c$):
+\begin{equation}
+    \hat{\epsilon}_\text{safe} = \hat{\epsilon}_t + \sum_{c=1}^{C} \mathbb{1}\!\left[\text{CAS}_c(t) > \tau_c\right] \cdot s_c \cdot M_c \cdot g_c^{m_c}(z_t).
+    \label{eq:multi}
+\end{equation}
+Each concept contributes $F$ family-level directions and $F$ family-level masks that are independently localized, so concepts only interact where their masks \emph{and} family directions overlap---a much smaller region than with a single pooled direction per concept. Each concept additionally retains its pack-selected mode $m_c$: a deployment erasing nudity and violence simultaneously may run hybrid for nudity (crisp anchor) and anchor inpainting for violence (ambiguous anchor) within the same denoising pass, because both modes are linear in the prediction and live behind the same CAS/mask interface. Adding a new concept means adding one exemplar pack and picking $m_c$; no retraining, no model surgery.
+
+\paragraph{Intersection-only suppression (preliminary).} When two concept masks overlap (\eg, nudity and hate in a human-subject region), naively summing their guidance can collapse the content in the shared region. A simple mitigation is to apply guidance only on the \emph{intersection} $\bigcap_c M_c$ for overlapping concepts, leaving concept-specific regions to their own packs. We treat this as a lightweight safeguard and report preliminary numbers; a more principled treatment of multi-concept interference is left for future work.

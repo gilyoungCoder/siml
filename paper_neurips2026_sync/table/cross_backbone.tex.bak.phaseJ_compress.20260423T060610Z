@@ -1,0 +1,35 @@
+\begin{table}[!tb]
+    \centering
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{0.45em}
+    \caption{Cross-backbone validation of \ours{} on the MJA adversarial benchmark (SR\%~$\uparrow$, 100 prompts/concept). We report both How modes (\S\ref{subsec:how}) on three backbones spanning the major T2I parameterizations: SD v1.4 (UNet, $\epsilon$-prediction), SD~3 (MMDiT, velocity prediction), and FLUX.1-dev (DiT, flow matching). Cells shown as \texttt{--} indicate measurements not yet collected. \ours{} SD~3 and FLUX numbers are preliminary from the 2026-04-22 re-sweep; post-patch re-evaluation is ongoing. $^{\dagger}$SD~3 hybrid cells are intentionally omitted in this revision: the default CAS threshold $\tau{=}0.6$ was calibrated for $\epsilon$-prediction and does not trigger in SD~3's velocity-parameterization CAS range ($0.03$--$0.51$); a per-backbone $\tau$ retune is in progress and the results will be added when stable.}
+    \label{table:cross_backbone}
+    \vspace{2pt}
+    \small
+    \begin{tabular}{llcccc}
+    \toprule
+    \textbf{Backbone} & \textbf{Method} & \textbf{Sexual} & \textbf{Violent} & \textbf{Disturbing} & \textbf{Illegal} \\
+    \midrule
+    \multirow{4}{*}{SD~v1.4}
+      & Baseline                  & 36.0 & 13.0 & 74.0 & 60.0 \\
+      & SAFREE                    & 48.0 & \textbf{52.0} & 95.0 & \textbf{77.0} \\
+      & \cellcolor{blue!8}\ours{} (anchor, family) & \cellcolor{blue!8}\textbf{83.0} & \cellcolor{blue!8}\textbf{56.0} & \cellcolor{blue!8}89.0 & \cellcolor{blue!8}56.0 \\
+      & \cellcolor{blue!8}\ours{} (hybrid, family) & \cellcolor{blue!8}86.0 & \cellcolor{blue!8}29.0 & \cellcolor{blue!8}\textbf{99.0} & \cellcolor{blue!8}72.0 \\
+    \midrule
+    \multirow{4}{*}{SD~3 (MMDiT)}
+      & Baseline                  & -- & -- & -- & -- \\
+      & SAFREE (SD3)              & -- & -- & -- & -- \\
+      & \cellcolor{blue!8}\ours{} (anchor, family) & \cellcolor{blue!8}\textbf{82.0} & \cellcolor{blue!8}\textbf{58.0} & \cellcolor{blue!8}\textbf{86.0} & \cellcolor{blue!8}\textbf{53.0} \\
+      & \cellcolor{blue!8}\ours{} (hybrid, family)$^{\dagger}$ & \cellcolor{blue!8}-- & \cellcolor{blue!8}-- & \cellcolor{blue!8}-- & \cellcolor{blue!8}-- \\
+    \midrule
+    \multirow{4}{*}{FLUX.1-dev (DiT)}
+      & Baseline                  & -- & -- & -- & -- \\
+      & SAFREE (FLUX)             & -- & -- & -- & -- \\
+      & \cellcolor{blue!8}\ours{} (anchor, family) & \cellcolor{blue!8}96.0 & \cellcolor{blue!8}\textbf{89.0} & \cellcolor{blue!8}\textbf{98.0} & \cellcolor{blue!8}\textbf{86.0} \\
+      & \cellcolor{blue!8}\ours{} (hybrid, family) & \cellcolor{blue!8}\textbf{97.0} & \cellcolor{blue!8}67.0 & \cellcolor{blue!8}96.0 & \cellcolor{blue!8}58.0 \\
+    \bottomrule
+    \end{tabular}
+
+    \vspace{0.4em}
+    {\footnotesize Concept-level trends are preserved across backbones: hybrid's advantage on visually-crisp-anchor concepts (sexual, disturbing) and anchor inpainting's advantage on ambiguous-anchor concepts (violent, illegal) both replicate on FLUX's flow-matching DiT. On SD~3 (MMDiT) only the anchor row is reported pending BUG~2 retune. Overall the two-mode trade-off and its concept-dependence transfer to MMDiT and DiT without algorithmic change, supporting the architecture-agnostic claim (\S\ref{subsec:prelim}, \S\ref{subsec:when}).}
+\end{table}

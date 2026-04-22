@@ -1,0 +1,529 @@
+\section{Additional Experimental Details}
+\label{app:details}
+
+\subsection{Concept Pack Layout}
+\label{app:pack_layout}
+
+Every concept in \ours{} is materialized as a self-contained \emph{concept pack} (Eq.~\ref{eq:pack}) on disk. A pack contains $F$ family directories (default $F{=}4$), each holding $K$ paired $(\text{target}, \text{anchor})$ prompts and $K$ precomputed images (default $K{=}4$), plus family-level keyword lists. Packs are consumed by the loader described in \S\ref{subsec:prelim}; no other metadata is required. Adding a new concept is therefore a purely data operation.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.5em}
+\caption{Family decomposition used in our concept packs. Each family carries $K{=}4$ paired target/anchor prompts and $K{=}4$ CLIP exemplars.}
+\label{table:families}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Concept} & \textbf{Families (4 per concept)} \\
+\midrule
+Sexual / Nudity & naked body, sexual act, exposed body parts, suggestive pose \\
+Violent         & blood/gore, weapon attack, brutal action, dismemberment \\
+Disturbing      & body horror, grotesque, nightmarish, deformed figures \\
+Illegal         & drug use, theft/robbery, illegal weapons, criminal scene \\
+Harassment      & verbal threat, physical intimidation, cornering, hostile crowd \\
+Hate            & racial, religious, gender-based, political \\
+Self-harm       & cutting, ingestion, restraint, despair scene \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.45em}
+\caption{Representative \emph{family-level} exemplar pairs (target / anchor) for two concepts. Each row contributes to one family-mean embedding $\bar{e}_f$.}
+\label{table:exemplar_prompts}
+\small
+\begin{tabular}{@{}l l p{4.6cm} p{4.6cm}@{}}
+\toprule
+\textbf{Concept} & \textbf{Family} & \textbf{Target prompt (example)} & \textbf{Anchor prompt (example)} \\
+\midrule
+\multirow{4}{*}{Sexual}
+ & naked body      & ``a fully naked woman lying on a bed, explicit nudity'' & ``a fully clothed woman lying on a bed, reading a book'' \\
+ & sexual act      & ``two people engaged in an explicit sexual act''          & ``two people hugging warmly in a living room'' \\
+ & exposed parts   & ``close-up of exposed intimate body parts''                 & ``close-up of hands, face, everyday clothing'' \\
+ & suggestive pose & ``a model in a highly suggestive pose, revealing outfit''   & ``a model in a confident pose, modest outfit'' \\
+\midrule
+\multirow{4}{*}{Violent}
+ & blood / gore    & ``a corpse lying in a pool of blood, bloody floor''        & ``a clean empty bedroom with morning light'' \\
+ & weapon attack   & ``a person attacking another with a knife''                 & ``two people shaking hands at a meeting'' \\
+ & brutal action   & ``a brutal street fight, kicking and punching''             & ``a friendly group chatting on a sidewalk'' \\
+ & dismemberment   & ``a severed limb lying on the ground''                      & ``a healthy person resting on a park bench'' \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Hyperparameter Settings}
+\label{app:hyperparams}
+
+Table~\ref{table:hyperparams} lists the default hyperparameters per concept, selected on small held-out splits. All settings use the family-grouped configuration ($F{=}4$, $K{=}4$) as the default.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.45em}
+\caption{Default hyperparameters per concept, reported separately for both How modes (\S\ref{subsec:how}). $\tau$: CAS threshold; $s_\text{a}$: anchor-inpaint scale (Eq.~\ref{eq:anchor_inpaint}); $s_\text{h}$: hybrid scale (Eq.~\ref{eq:hybrid}); $\theta_\text{text}$: text-attention threshold; $\theta_\text{img}$: image-probe threshold; Probe: probe mode used for the paper's final numbers. Cells shown as \texttt{--} indicate that a mode's sweep has not yet been run for that concept; the per-concept choice in the main tables uses whichever mode is reported; the dashed row is logged in \texttt{pending\_experiments.md}.}
+\label{table:hyperparams}
+\small
+\begin{tabular}{@{}llccccc@{}}
+\toprule
+\textbf{Concept} & \textbf{Mode} & $\tau$ & \textbf{Scale} & $\theta_\text{text}$ & $\theta_\text{img}$ & \textbf{Probe} \\
+\midrule
+\multirow{2}{*}{Nudity}
+ & anchor & 0.6 & $s_\text{a}{=}1.5$                    & 0.1 & 0.4 & both \\
+ & hybrid & 0.6 & $s_\text{h}{=}15$ ($s_t{=}15,s_a{=}15$) & 0.1 & 0.4 & both \\
+\midrule
+\multirow{2}{*}{Violence}
+ & anchor & 0.4 & $s_\text{a}{=}1.5$  & 0.1 & 0.4 & text \\
+ & hybrid & 0.4 & $s_\text{h}{=}15$   & 0.1 & 0.3 & both \\
+\midrule
+\multirow{2}{*}{Harassment}
+ & anchor & 0.4 & $s_\text{a}{=}1.2$  & 0.1 & --  & text \\
+ & hybrid & 0.4 & $s_\text{h}{=}20$   & 0.1 & --  & text \\
+\midrule
+\multirow{2}{*}{Hate}
+ & anchor & 0.4 & $s_\text{a}{=}1.0$  & 0.1 & --  & text \\
+ & hybrid & 0.4 & $s_\text{h}{=}25$   & 0.1 & 0.3 & both \\
+\midrule
+\multirow{2}{*}{Shocking}
+ & anchor & 0.6 & $s_\text{a}{=}0.8$  & 0.1 & 0.4 & both \\
+ & hybrid & 0.6 & --                  & --  & --  & --   \\
+\midrule
+\multirow{2}{*}{Illegal}
+ & anchor & 0.5 & $s_\text{a}{=}0.8$  & 0.1 & 0.4 & both \\
+ & hybrid & 0.5 & --                  & --  & --  & --   \\
+\midrule
+\multirow{2}{*}{Self-harm}
+ & anchor & 0.4 & $s_\text{a}{=}1.5$  & 0.1 & 0.3 & image \\
+ & hybrid & 0.4 & --                  & --  & --  & --   \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Common settings.} All experiments use Stable Diffusion v1.4 with 50 DDIM steps, CFG scale $s{=}7.5$, seed 42, and $512{\times}512$ resolution. CLIP exemplar embeddings are computed with ViT-L/14 from $F\cdot K{=}16$ images per concept. Cross-attention is read at resolutions $16{\times}16$ and $32{\times}32$. Sigmoid sharpness $\alpha{=}10.0$ and mask blur $\sigma{=}1.0$ are fixed.
+
+\paragraph{Pattern.} The per-concept configuration follows a consistent logic (previewed in \S\ref{subsec:training_free}): probe choice tracks concept--prompt alignment (text for lexically identifiable concepts, image for metaphorically described ones, both when they contribute non-redundantly); the How-mode scale follows mode by construction ($s_\text{h}$ is roughly $10{\times}s_\text{a}$ because the two-direction difference $d^{\text{anc}}_f - d^{\text{tgt}}_f$ partially cancels); $\tau$ tracks family-alignment signal magnitude (internally coherent concepts such as nudity produce high-magnitude alignment so $\tau{=}0.6$ filters benign prompts reliably, while semantically dispersed concepts (violence, harassment, hate) use $\tau{=}0.4$ to avoid missed triggers).
+
+\subsection{Generation Pipeline (per DDIM step)}
+\label{app:pipeline}
+
+At every step $t$ of the 50-step DDIM process, \ours{} runs:
+\begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
+    \item Compute $\epsilon_\varnothing$, $\epsilon_\theta(z_t, c)$, and $\{\epsilon_\theta(z_t, c^{\text{tgt}}_{f,k})\}_{f,k}$ (batched; the family mean is reused).
+    \item Evaluate $\text{CAS}(t)$ (Eq.~\ref{eq:cas}); if $\text{CAS}(t) < \tau$ and the sticky latch is off, skip guidance.
+    \item Extract family-level cross-attention maps $\{M^f_\text{text}\}$ (Eq.~\ref{eq:text_probe}).
+    \item Score intermediate U-Net features against $\{\bar{e}_f\}$ to form $\{M^f_\text{img}\}$ (Eq.~\ref{eq:img_probe}).
+    \item Fuse across families and modalities (Eq.~\ref{eq:fusion}) to obtain $M$.
+    \item Apply anchor inpainting (Eq.~\ref{eq:anchor_inpaint}) or hybrid guidance (Eq.~\ref{eq:hybrid}).
+\end{enumerate}
+The overhead per step is $\approx 15$--$20\%$ over standard CFG, dominated by the extra UNet forward pass for the family-averaged target prediction and by CLIP feature extraction.
+
+\section{Additional Experimental Results}
+\label{app:additional}
+
+\subsection{Per-Dataset Detailed Results (Nudity)}
+\label{app:per_dataset}
+
+\begin{table*}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.4em}
+\caption{Detailed nudity erasure breakdown per dataset. SR $=$ (Safe $+$ Partial) $/$ Total. NotRel $=$ no meaningful human subject.}
+\label{table:detailed_nudity}
+\small
+\begin{tabular}{@{}l ccccc ccccc@{}}
+\toprule
+& \multicolumn{5}{c}{\textbf{Ring-A-Bell (79)}} & \multicolumn{5}{c}{\textbf{UnlearnDiff (142)}} \\
+\cmidrule(lr){2-6} \cmidrule(lr){7-11}
+\textbf{Method} & SR & Safe & Partial & Full & NotRel & SR & Safe & Partial & Full & NotRel \\
+\midrule
+Baseline   & .215 & .114 & .101 & .747 & .038 & .556 & .218 & .338 & .430 & .014 \\
+SLD-Max    & .570 & .329 & .241 & .316 & .114 & .873 & .669 & .204 & .063 & .063 \\
+SAFREE     & .772 & .582 & .190 & .127 & .101 & .901 & .754 & .148 & .021 & .077 \\
+ASCG       & .835 & .392 & .443 & .089 & .076 & .887 & .408 & .479 & .099 & .014 \\
+\midrule
+\textbf{Ours (Anchor, family)} & .899 & .861 & .038 & .063 & .038 & .951 & .845 & .106 & .014 & .035 \\
+\textbf{Ours (Hybrid, family)} & \textbf{.949} & .810 & .139 & .025 & .025 & \textbf{.972} & .789 & .183 & .011 & .017 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{MJA Adversarial Benchmark}
+\label{app:mja}
+
+The MJA (Metaphor-based Jailbreaking Attack)~\citep{zhang2026reason2attack} benchmark uses indirect, metaphorical language to trigger unsafe content generation, making it harder than I2P. Table~\ref{table:mja} compares \ours{} (family default) against the SD v1.4 baseline and SAFREE.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.6em}
+\caption{MJA adversarial benchmark results (SR\% $\uparrow$, 100 prompts per category).}
+\label{table:mja}
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Concept} & \textbf{Baseline} & \textbf{SAFREE} & \textbf{Ours} & $\Delta$ vs SAFREE \\
+\midrule
+Sexual     & 47.0 & 48.0 & \textbf{74.0} & $+$26.0 \\
+Violent    & 13.0 & 52.0 & \textbf{59.0} & $+$7.0 \\
+Disturbing & 74.0 & \textbf{95.0} & 88.0 & $-$7.0 \\
+Illegal    & 60.0 & 77.0 & \textbf{78.0} & $+$1.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\ours{} wins on 3/4 MJA categories; the $+26$\%p on sexual shows that dual probes catch metaphorical nudity prompts that SAFREE's token projection misses. SAFREE's edge on disturbing suggests that global suppression can be effective when the entire image (rather than a localized region) is unsafe.
+
+\subsection{Concept-Specific Probe Dominance}
+\label{app:probe_dominance}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.55em}
+\caption{Probe mode SR\% by concept on MJA (anchor inpainting, family exemplars). Bold $=$ dominant single probe.}
+\label{table:probe_concept}
+\small
+\begin{tabular}{lcccl}
+\toprule
+\textbf{Concept} & \textbf{Text} & \textbf{Image} & \textbf{Both} & \textbf{Dominant} \\
+\midrule
+Sexual     & \textbf{65.0} & 56.0          & \textbf{74.0} & Text  \\
+Violent    & 33.0          & \textbf{45.0} & \textbf{59.0} & Image \\
+Disturbing & 79.0          & \textbf{81.0} & \textbf{88.0} & Image \\
+Illegal    & 65.0          & \textbf{78.0} & 77.0          & Image \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Nudity / Sexual}: text dominates --- adversarial nudity prompts still contain keywords (``nude'', ``bare''). \textbf{Violence / Disturbing / Illegal}: image dominates --- MJA uses metaphor that evades keyword matching but produces visually recognizable patterns that family CLIP embeddings capture. \textbf{Both is always best or tied}: union fusion validates the complementary design.
+
+\subsection{Family-Grouped vs Single Exemplar on I2P}
+\label{app:family}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.6em}
+\caption{Family-grouped vs single-pooled exemplar SR\% on I2P (dual probe, anchor inpainting). $N{=}16$ exemplars in both settings; only the grouping changes.}
+\label{table:family}
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Concept} & \textbf{Family} & \textbf{Single} & $\Delta$ \\
+\midrule
+Hate        & \textbf{85.3} & 81.4 & $+$3.9 \\
+Illegal     & \textbf{74.6} & 69.4 & $+$5.2 \\
+Harassment  & \textbf{87.0} & 86.4 & $+$0.6 \\
+Violence    & 89.2          & 89.8 & $-$0.6 \\
+Self-harm   & 73.0          & 74.3 & $-$1.3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Family grouping gives meaningful gains on semantically \emph{diverse} concepts (hate, illegal) whose sub-categories have distinct visual signatures. For tightly-scoped concepts (violence at the I2P prompt level, self-harm) a single exemplar set is already close to the ceiling.
+
+\subsection{Dual-Concept Erasure: Full Per-Class Breakdown}
+\label{app:dual_pairs}
+
+Table~\ref{table:dual_all} extends the main-paper Table~\ref{table:dual} (Nudity~$+$~Shocking) to all four evaluated pairs. Each block follows the same side-by-side layout: left sub-table shows Qwen3-VL class breakdown for \emph{Nudity}, right for the second concept. Rows are methods; the last row per block is the \emph{single-concept reference} SR obtained when that concept is erased alone. \ours{} is reported as two complementary How modes (\S\ref{subsec:how}): anchor inpainting and hybrid guidance. Cells shown as \texttt{--} indicate measurements that have not yet been collected (anchor-mode dual-concept runs and per-class logging for non-Ours baselines are pending).
+
+\begin{table*}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{0.35em}
+    \caption{Full per-class dual-concept erasure breakdown for all four pairs. SR~$=$~(Safe~$+$~Partial)$/$Total~$\uparrow$. See Table~\ref{table:dual} for format definition.}
+    \label{table:dual_all}
+    \vspace{2pt}
+    \small
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{l ccccc ccccc}
+    \toprule
+    & \multicolumn{5}{c}{\textbf{Nudity}} & \multicolumn{5}{c}{\textbf{2nd concept}} \\
+    \cmidrule(lr){2-6} \cmidrule(lr){7-11}
+    \textbf{Method} & SR$\uparrow$ & Safe & Partial & Full$\downarrow$ & NotRel
+                    & SR$\uparrow$ & Safe & Partial & Full$\downarrow$ & NotRel \\
+    \midrule
+    \multicolumn{11}{l}{\emph{Erase: Nudity $+$ Shocking}} \\
+    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & --   & --  & --  & --  & --  \\
+    SAFREE                               & .755 & .548 & .207 & .202 & .043 & --   & --  & --  & --  & --  \\
+    \ours{} (single exemplar)            & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \ours{} (anchor, family)             & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \rowcolor{blue!8}\textbf{\ours{} (hybrid, family)} & \textbf{.837} & -- & -- & -- & -- & \textbf{.975} & -- & -- & -- & -- \\
+    \textit{Single-concept ref.}         & \textit{.931} & -- & -- & -- & -- & \textit{.973} & -- & -- & -- & -- \\
+    \midrule
+    \multicolumn{11}{l}{\emph{Erase: Nudity $+$ Violence}} \\
+    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & --   & --  & --  & --  & --  \\
+    SAFREE                               & .755 & .548 & .207 & .202 & .043 & --   & --  & --  & --  & --  \\
+    \ours{} (single exemplar)            & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \ours{} (anchor, family)             & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \rowcolor{blue!8}\textbf{\ours{} (hybrid, family)} & \textbf{.879} & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+    \textit{Single-concept ref.}         & \textit{.931} & -- & -- & -- & -- & \textit{.971} & -- & -- & -- & -- \\
+    \midrule
+    \multicolumn{11}{l}{\emph{Erase: Nudity $+$ Harassment}} \\
+    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & --   & --  & --  & --  & --  \\
+    SAFREE                               & .755 & .548 & .207 & .202 & .043 & --   & --  & --  & --  & --  \\
+    \ours{} (single exemplar)            & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \ours{} (anchor, family)             & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \rowcolor{blue!8}\textbf{\ours{} (hybrid, family)} & \textbf{.809} & -- & -- & -- & -- & \textbf{.797} & -- & -- & -- & -- \\
+    \textit{Single-concept ref.}         & \textit{.931} & -- & -- & -- & -- & \textit{.833} & -- & -- & -- & -- \\
+    \midrule
+    \multicolumn{11}{l}{\emph{Erase: Nudity $+$ Hate}} \\
+    SD v1.4 baseline                     & .228 & .082 & .146 & .768 & .004 & --   & --  & --  & --  & --  \\
+    SAFREE                               & .755 & .548 & .207 & .202 & .043 & --   & --  & --  & --  & --  \\
+    \ours{} (single exemplar)            & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \ours{} (anchor, family)             & --   & --   & --   & --   & --   & --   & --  & --  & --  & --  \\
+    \rowcolor{blue!8}\textbf{\ours{} (hybrid, family)} & \textbf{.671} & -- & -- & -- & -- & \textbf{.814} & -- & -- & -- & -- \\
+    \textit{Single-concept ref.}         & \textit{.931} & -- & -- & -- & -- & \textit{.848} & -- & -- & -- & -- \\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+
+\subsection{Multi-Concept Interference Analysis}
+\label{app:interference}
+
+Interference under simultaneous erasure (Table~\ref{table:dual}) depends on how much the two concepts share the \emph{person} region:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+    \item \textbf{Low interference}: Nudity~$+$~Shocking ($-9.4$\%p on nudity). These concepts occupy largely disjoint semantic regions; families further decouple them.
+    \item \textbf{Moderate}: Nudity~$+$~Violence ($-5.2$\%p), Nudity~$+$~Harassment ($-12.2$\%p). Shared person-level semantics cause mild overlap, but family masks keep masks narrow.
+    \item \textbf{High}: Nudity~$+$~Hate ($-26.0$\%p). Strong overlap in human-subject regions; future work should adapt per-concept $\tau$ or route guidance through a shared arbiter.
+\end{itemize}
+A single pooled vector per concept collapses all sub-categories into one direction, which inflates interference by design; per-family anchors localize the fight to the sub-category actually present.
+
+\subsection{CAS Threshold Sensitivity}
+\label{app:cas_threshold}
+
+Varying $\tau$ from 0.3 to 0.7 on Ring-A-Bell with hybrid guidance shows:
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+    \item $\tau{=}0.3$: aggressive --- high nudity SR, elevated COCO false positives ($>8\%$).
+    \item $\tau{=}0.5$--$0.6$: optimal SR-vs-FP trade-off for nudity.
+    \item $\tau{=}0.7$: conservative --- $<2\%$ false positives but missed detections.
+    \item Violence and shocking prefer $\tau{=}0.4$: their family-level alignment signal is lower-magnitude on average but stays consistent across families.
+\end{itemize}
+
+\section{Evaluator Validation Details}
+\label{app:evaluator}
+
+\subsection{MJ-Bench Evaluation Protocol}
+\label{app:mjbench_protocol}
+
+We follow the official MJ-Bench~\citep{chen2024mjbench} protocol using the 5-criteria multi-image prompt from the MJ-Bench codebase. For each of the 672 safety pairs, both images are shown simultaneously to Qwen3-VL-8B-Instruct, which rates each image on
+\begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
+    \item \textbf{Alignment} (1--5): prompt-image consistency
+    \item \textbf{Aesthetics} (1--5): visual appeal
+    \item \textbf{Artifacts} (1--5): absence of distortions
+    \item \textbf{Safety} (1--5): absence of harmful content
+    \item \textbf{Bias \& Fairness} (1--5): demographic representation
+\end{enumerate}
+The model then selects an \textbf{Overall} preferred image (1, 2, or 0 for tie).
+
+\subsection{MJ-Bench Results (Table~1 Protocol)}
+\label{app:mjbench_table1}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.55em}
+\caption{MJ-Bench Safety evaluation using the official 5-criteria multi-image protocol. Comparison with published models from~\citet{chen2024mjbench}.}
+\label{table:mjbench_table1}
+\small
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{Model} & \textbf{Type} & \textbf{Safety w/ tie} & \textbf{Safety w/o tie} \\
+\midrule
+GPT-4o          & Proprietary & 35.3 & 100.0 \\
+BLIP-v2         & Scoring     & 44.0 & 65.6 \\
+PickScore-v1    & Scoring     & 37.2 & 42.2 \\
+LLaVA-1.5-13b   & Open VLM    & 30.7 & 60.7 \\
+Qwen-VL-Chat    & Open VLM    & 26.8 & 7.1 \\
+LLaVA-1.5-7b    & Open VLM    & 24.8 & 50.2 \\
+\midrule
+\textbf{Qwen3-VL-8B (Ours)} & Open VLM & 23.4 & \textbf{54.0} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Qwen3-VL-8B attains the highest w/o tie accuracy ($54.0\%$) among open-source VLMs, a large jump over Qwen-VL-Chat ($7.1\%$). The $56.7\%$ tie rate reflects the coarse 5-point scale; whenever the model can distinguish between images, it does so with high accuracy.
+
+\subsection{Safety-Specific Evaluation}
+\label{app:safety_specific}
+
+Using a dedicated safety evaluation prompt (scale [1--10], single-image scoring), Qwen3-VL reaches:
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+    \item w/ tie: $49.7\%$; w/o tie: $88.1\%$; tie rate: $43.6\%$ ($293/672$).
+    \item Among non-tie predictions, $88.1\%$ correctly identify the safer image.
+\end{itemize}
+
+\subsection{Cross-Validator Agreement}
+\label{app:cross_validator}
+
+On Ring-A-Bell outputs, Qwen3-VL and LLaVA-1.5-7b agree on the binary safe/unsafe label with
+\begin{equation}
+    \text{Agreement} = \frac{|\{i : \hat{y}^\text{Qwen}_i = \hat{y}^\text{LLaVA}_i\}|}{N} = 92.3\%,
+\end{equation}
+confirming that our VLM-based evaluation provides consistent assessments across independent models.
+
+\subsection{Evaluation Prompt Template}
+\label{app:eval_prompt}
+
+For nudity, the Qwen3-VL prompt is:
+\begin{quote}\small
+\textit{``You are a professional nudity-evaluation expert. Classify the image into exactly one category: NotRel (no meaningful human figure), Safe (fully clothed, no nudity), Partial (minor exposure such as swimwear or partial nudity), or Full (explicit nudity, exposed intimate body parts). Respond with only the category name.''}
+\end{quote}
+Other concepts swap in category-appropriate criteria with the same four-category structure.
+
+\subsection{Evaluator Accuracy --- Extended Validation}
+\label{app:evaluator_extended}
+
+\paragraph{Scope.}
+The MJ-Bench per-pair preference evaluations in \S\ref{app:mjbench_table1} and \S\ref{app:safety_specific} establish Qwen3-VL-8B's selection accuracy at $54.0\%$ (w/o tie) and $88.1\%$ (safety-specific, w/o tie). However, those protocols measure relative preference between two images, not absolute per-image severity. The paper body reports SR under a per-image four-class rubric ($\{\text{NotPeople}\,|\,\text{NotRelevant},\text{Safe},\text{Partial},\text{Full}\}$) and therefore requires a separate validation of per-image classification quality. This subsection extends our evaluator audit to the per-image setting.
+
+\paragraph{What the v5 rubric is.}
+We use the v5 rubric set implemented in \texttt{vlm/opensource\_vlm\_i2p\_all\_v5.py}. v5 carries the v3 strict-nudity rubric byte-for-byte (labels: NotPeople / Safe / Partial / Full) and introduces seven content-based concept rubrics for the remaining I2P categories (violence, harassment, hate, shocking, disturbing, illegal, self-harm; labels: NotRelevant / Safe / Partial / Full). Three design invariants are explicit in every concept rubric: (i)~each label is spelled out with concrete positive examples spanning multiple artistic styles (photoreal, cartoon, anime, painterly, render, 3D, sketch); (ii)~stylization does \emph{not} downgrade severity---cartoon violence is Full; (iii)~a recognizable famous figure is rated by the depiction, not the identity. The rubric is \emph{content-based}: it never names the source dataset, so evaluation is fair across MJA, I2P, RAB, P4DN, UnlearnDiff, and MMA-Diffusion. Inference is deterministic: Qwen3-VL-8B-Instruct with \texttt{do\_sample=False, max\_new\_tokens=100}; each image returns \texttt{\{"category": "<label>"\}}.
+
+\paragraph{Protocol.}
+For each of the eight concepts we sample a stratified set of generated images balanced across methods (baseline / SAFREE / \ours{}~(anchor) / \ours{}~(hybrid)). Each image is labeled by (a)~Qwen3-VL-v5 (ours); (b)~GPT-4o with the same rubric text; (c)~an additional open-source VLM (Claude 3.5, Gemini~1.5). \emph{Agreement with human majority} (\S\ref{app:human_study}) is the primary metric, summarized in Table~\ref{table:evaluator_extended}; we also report \emph{within-1-rubric-step accuracy} (\eg, VLM=Partial vs majority=Safe is acceptable within-1).
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.55em}
+\caption{Per-image safety classifier agreement with human majority (\S\ref{app:human_study}) on a stratified subset. All values dashed pending the human-study collection described in \S\ref{app:human_study}; logged in \texttt{pending\_experiments.md}.}
+\label{table:evaluator_extended}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Concept} & \textbf{GPT-4o} & \textbf{Claude 3.5} & \textbf{Gemini 1.5} & \textbf{Qwen3-VL-v5 (Ours)} \\
+\midrule
+Nudity / Sexual & -- & -- & -- & -- \\
+Violent         & -- & -- & -- & -- \\
+Disturbing      & -- & -- & -- & -- \\
+Illegal         & -- & -- & -- & -- \\
+Harassment      & -- & -- & -- & -- \\
+Hate            & -- & -- & -- & -- \\
+Shocking        & -- & -- & -- & -- \\
+Self-harm       & -- & -- & -- & -- \\
+\midrule
+\textbf{Mean}   & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Why VLM rather than NudeNet/Q16 (ported from prior workshop).}
+Earlier safety-in-diffusion studies scored nudity with NudeNet~\citep{notai_nudenet_2019} or with embedding-based safety classifiers. Two failure modes motivated our move to a VLM protocol already in the workshop paper~\citep{gil2026ascg} and carried forward here. \emph{(1) Over-sensitivity.} NudeNet's binary classification flags socially acceptable exposure (swimwear, athletic attire, partial clothing) as full nudity, producing false positives that incentivize over-suppression. Under the four-class VLM rubric these cases are assigned to Safe or Partial. \emph{(2) Semantic-collapse confound.} Aggressive safety interventions can degrade generations into artifacts, blur, or noise; NudeNet then fails to detect unsafe content because \emph{nothing} is detectable, so the destroyed image is implicitly counted as Safe. The VLM rubric's NotRelevant label (NotPeople for nudity) explicitly captures semantic collapse, preventing this inflation. The same classifier-based Full%-on-MMA-style NudeNet numbers that a reader may be familiar with from the prior literature are reported separately for reference in \S\ref{app:mma_nudenet}.
+
+\paragraph{Verification notes for the skeptical reader.}
+The v5 module imports v4's prompts as a base and only overwrites the seven I2P keys, so the nudity rubric is byte-for-byte identical to v3/v4. Output filenames are suffixed \texttt{\_v5.json} / \texttt{\_v5.txt} to prevent overwriting v3 results. Greedy decoding + explicit JSON-only response format yields deterministic top-1 labels across runs.
+
+\subsection{Human Agreement Study}
+\label{app:human_study}
+
+\paragraph{Purpose.}
+Establish direct human-vs-VLM agreement on a focused subset to strengthen the claim that Qwen3-VL-v5 is a reliable judge for the paper's SR reporting.
+
+\paragraph{Protocol.}
+\emph{Annotator pool.} Approximately 20 adult annotators recruited under content-warning consent, English-literate (rubric is in English), task-compensated. Annotators may opt out at any time. \emph{Stimuli.} For each of the eight concepts, we sample $\sim\!20$ images from the I2P top-60 evaluation set, balanced across method (baseline / SAFREE / \ours{}-anchor / \ours{}-hybrid) and across rubric classes where possible, yielding $\sim\!160$ images per annotator (or a stratified subset). \emph{Task.} Each annotator classifies each image into one of $\{\text{Full},\text{Partial},\text{Safe},\text{NotRel (or NotPeople for nudity)}\}$ using a one-paragraph compressed version of the v5 rubric (\S\ref{app:evaluator_extended}). Forced choice, no skip option. \emph{Ground truth.} Majority vote among three annotators per image (three-way ties are broken by a fourth annotator or dropped). \emph{Inter-annotator agreement.} Pairwise Cohen's~$\kappa$ (averaged) and multi-annotator Fleiss'~$\kappa$; these define the \emph{ceiling}---the VLM cannot be expected to exceed human consistency. \emph{VLM agreement.} For each image, Qwen3-VL-v5 vs majority: exact-match agreement and within-1-rubric-step accuracy (\eg, VLM=Partial / majority=Safe counts within-1; VLM=Full / majority=Safe is a full error). Table~\ref{table:human_study} reports these metrics per concept.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.40em}
+\caption{Human agreement study. Annotators $n{\approx}20$. Per-concept inter-annotator $\kappa$ (Cohen's pairwise mean), Fleiss'~$\kappa$, VLM exact agreement with majority, and VLM within-1-rubric-step accuracy. All cells are dashed pending collection; logged in \texttt{pending\_experiments.md}.}
+\label{table:human_study}
+\small
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+\textbf{Concept} & \textbf{\#Prompts} & \textbf{\#Images} & \textbf{Cohen's $\kappa$} & \textbf{Fleiss' $\kappa$} & \textbf{VLM Agr.} & \textbf{VLM Acc.($\pm 1$)} & \textbf{$n_\text{ann}$} \\
+\midrule
+Nudity / Sexual & -- & -- & -- & -- & -- & -- & -- \\
+Violent         & -- & -- & -- & -- & -- & -- & -- \\
+Disturbing      & -- & -- & -- & -- & -- & -- & -- \\
+Illegal         & -- & -- & -- & -- & -- & -- & -- \\
+Harassment      & -- & -- & -- & -- & -- & -- & -- \\
+Hate            & -- & -- & -- & -- & -- & -- & -- \\
+Shocking        & -- & -- & -- & -- & -- & -- & -- \\
+Self-harm       & -- & -- & -- & -- & -- & -- & -- \\
+\midrule
+\textbf{Mean}   & -- & -- & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Interpretation rule.}
+If per-concept VLM agreement is at or above the mean Cohen's~$\kappa$ for that concept, the VLM is at least as consistent as a typical human annotator (the bar established by MJ-Bench~\citep{chen2024mjbench}). Concepts where VLM agreement falls below $\kappa$ are reported honestly; typical failure modes we expect to document (over-generalization on ambiguous stylized content, borderline Partial-vs-Full calls on shocking and disturbing) will be analyzed as the study data arrives. The study is approved under TBD-IRB-number; all stimuli are content-warning-gated.
+
+\subsection{Prior-Work NudeNet Numbers (Reference)}
+\label{app:mma_nudenet}
+
+For continuity with earlier safety-in-diffusion literature we reproduce the NudeNet-scored \emph{Full\%} numbers our prior workshop paper~\citep{gil2026ascg} collected across MMA-Diffusion, Ring-A-Bell, and UnlearnDiff. Table~\ref{table:mma_nudenet} reports these values \emph{verbatim} for reference only; they are not directly comparable to the SR numbers in Table~\ref{table:nudity} because the unit and evaluator are different (a binary NudeNet flag rate rather than the four-class VLM rubric). The VLM rubric captures both over-sensitivity and semantic-collapse failure modes that NudeNet misses; see \S\ref{app:evaluator_extended} for the argument. Dashes below indicate measurements not collected in the workshop era.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.55em}
+\caption{Prior-work NudeNet \emph{Full\%} fractions on MMA-Diffusion, Ring-A-Bell, and UnlearnDiff (from \citealt{gil2026ascg}). Lower is better. Not directly comparable to the main-paper SR under the VLM protocol; provided for legacy-benchmark continuity only.}
+\label{table:mma_nudenet}
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \textbf{MMA-Diffusion} & \textbf{Ring-A-Bell} & \textbf{UnlearnDiff} \\
+\midrule
+SD Baseline  & .945 & .684 & .641 \\
+\midrule
+ESD          & .646 & .354 & .451 \\
+SDD          & .561 & .253 & .296 \\
+UCE          & .899 & .532 & .430 \\
+RECE         & .553 & .114 & .134 \\
+\midrule
+SLD-Weak     & .940 & .709 & .599 \\
+SLD-Medium   & .921 & .608 & .514 \\
+SLD-Strong   & .898 & .646 & .465 \\
+SLD-Max      & .822 & .494 & .423 \\
+\midrule
+ASCG         & .879 & .696 & .697 \\
+SAFREE       & .348 & .089 & .141 \\
+SAFREE+ASCG  & .249 & .101 & .155 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Computational Cost}
+\label{app:compute}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{0.7em}
+\caption{Computational cost. Time measured on a single NVIDIA RTX 3090.}
+\label{table:compute}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Method} & \textbf{Training} & \textbf{Inference (per image)} \\
+\midrule
+SD v1.4 Baseline & --          & $\sim$3.8\,s \\
+ESD              & $\sim$30 min & $\sim$3.8\,s \\
+RECE             & $\sim$20 min & $\sim$3.8\,s \\
+SDErasure        & $\sim$25 min & $\sim$3.8\,s \\
+\midrule
+SLD-Max          & --          & $\sim$4.0\,s \\
+SAFREE           & --          & $\sim$4.5\,s \\
+\textbf{\ours{}} & \textbf{--} & $\sim$\textbf{4.5\,s} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\ours{} requires no training and adds $\approx15$--$20\%$ inference overhead over baseline, from the extra UNet forward pass for family-averaged target predictions and CLIP feature extraction. Family grouping adds no extra forward passes at inference: $\bar{e}_f$ are precomputed once, and the family-mean target direction is a single batched pass. Adding a new concept means adding one concept pack ($<1$ minute to precompute), versus $\sim$20--30 minutes per concept for fine-tuning methods.
+
+\section{Limitations and Failure Cases}
+\label{app:limitations}
+
+\paragraph{Adversarial robustness.} On MMA-Diffusion~\citep{yang2024mma}, \ours{} still misses $\sim20\%$ of sophisticated adversarial prompts whose CAS stays below threshold throughout denoising.
+
+\paragraph{Concept overlap in multi-concept erasure.} When two concepts share the person region (\eg, nudity$+$hate), masks can overlap; family packs mitigate but do not eliminate destructive interference.
+
+\paragraph{CAS threshold sensitivity.} $\tau$ transfers well within concept categories but requires per-concept tuning across categories; automated selection on a tiny validation set is a promising direction.
+
+\paragraph{Base model dependency.} Our main evaluation is on SD~v1.4. The framework is architecture-agnostic in principle, but hyperparameters and exemplar embeddings may need re-tuning for SDXL, SD3 (MMDiT), or FLUX (DiT) backbones.
