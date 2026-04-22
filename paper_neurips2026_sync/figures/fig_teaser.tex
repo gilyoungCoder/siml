@@ -1,149 +1,66 @@
 \documentclass[tikz,border=6pt]{standalone}
+\usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{xcolor}
-\usepackage{tikz}
-\usetikzlibrary{positioning,calc,arrows.meta,shapes.geometric,decorations.pathmorphing,backgrounds,fit}
+\usetikzlibrary{positioning,calc,arrows.meta,backgrounds,fit}
 
-% ----- colors -----
-\definecolor{chipred}{RGB}{200,40,40}
-\definecolor{chipgreen}{RGB}{40,150,80}
-\definecolor{ribbongray}{RGB}{45,45,45}
-\definecolor{divgray}{RGB}{200,200,200}
-\definecolor{emphred}{RGB}{220,40,40}
-\definecolor{captionbg}{RGB}{245,245,245}
+\definecolor{hitRed}{HTML}{DC2626}
+\definecolor{okGreen}{HTML}{10B981}
+\definecolor{labelBlue}{HTML}{2563EB}
+\definecolor{labelOrange}{HTML}{EA580C}
 
 \begin{document}
 \begin{tikzpicture}[
-    font=\sffamily,
-    chip/.style={rounded corners=2pt, inner sep=2pt, font=\sffamily\bfseries\scriptsize, text=white},
-    panelheader/.style={font=\sffamily\bfseries\small, align=center},
-    ribbon/.style={fill=ribbongray, text=white, font=\ttfamily\tiny, inner sep=2pt},
-    rowlabel/.style={font=\sffamily\scriptsize, align=center, rotate=90, anchor=center}
+  font=\footnotesize,
+  >={Stealth[length=2mm]},
+  thin,
+  chip/.style={rounded corners=2pt,inner sep=2pt,font=\scriptsize\bfseries},
 ]
 
-% =========================================================
-% Geometry: three panels side by side, each 5cm wide, 5cm tall (raster region)
-% Total strip width = 15cm + dividers; total aspect ~3:1 for the strip body.
-% =========================================================
-\def\pw{5.0}   % panel width (cm)
-\def\ph{5.0}   % panel raster height (cm)
-\def\gap{0.35} % gap between panels (cm)
+% ============== TITLE ==============
+\node[anchor=south,font=\normalsize\bfseries,text=black] at (0, 6.95)
+  {Dual-probe localization};
+\node[anchor=south,font=\scriptsize\itshape,text=black!70] at (0, 6.55)
+  {Each probe marks unsafe regions directly on the generated image; their union is the safety mask $M$.};
 
-% ---------- LEFT PANEL (a) Baseline SD1.4 ----------
-% Crop the LEFTMOST ~1/3 of the 3612x1067 composite (keep leftmost 1204 px)
-% Using trim=left bottom right top in bp (image units via clip).
-% The source composite is 3612 wide; we want leftmost ~1204. Trim right = 3612-1204 = 2408 px.
-% We use relative trim via viewport-like: trim in cm based on natural size isn't ideal;
-% instead we use \clip inside a node via a workaround: put image inside TikZ scope with clip.
+% ============== ROW 1 : beach example ==============
+\node[anchor=north,inner sep=0] (row1)
+  at (0, 6.4) {\includegraphics[width=13.6cm]{_raster_src/gradcam_v4_v13_00.png}};
 
-\begin{scope}[shift={(0,0)}]
-  \node[anchor=south west, inner sep=0] (leftraster) at (0,0) {%
-    \begin{tikzpicture}
-      \clip (0,0) rectangle (\pw,\ph);
-      % source composite is 3612x1067 with 3 subpanels; scale so full image width = 3*\pw,
-      % then only the leftmost third (= \pw wide) remains within the clip.
-      \pgfmathsetmacro{\fullw}{3*\pw}
-      \node[anchor=south west, inner sep=0] at (0, 0) {%
-        \includegraphics[width=\fullw cm]{/mnt/c/Users/yhgil/paper_figures_src/mask_naked_beach_noguide_panel.png}%
-      };
-    \end{tikzpicture}%
-  };
-  % thin black border
-  \draw[line width=1pt, black] (0,0) rectangle (\pw,\ph);
-  % UNSAFE chip top-left
-  \node[chip, fill=chipred, anchor=north west] at ($(0,\ph)+(0.12,-0.12)$) {UNSAFE};
-  % bottom ribbon
-  \node[ribbon, anchor=south west, minimum width=\pw cm-4pt, minimum height=0.55cm, align=left]
-      at ($(0,0)+(0.08,0.08)$) {prompt: a naked body at the beach};
-  % panel header above raster
-  \node[panelheader, anchor=south] at (\pw/2, \ph+0.15) {(a) Baseline SD1.4};
-\end{scope}
+% small "example 1" tag at left margin
+\node[chip,fill=black!5,draw=black!30,anchor=east]
+  at ($(row1.west)+(-0.15, 0)$) {Ex.\ 1};
 
-% ---------- MIDDLE PANEL (b) EBSG (Ours) ----------
-\pgfmathsetmacro{\xb}{\pw+\gap}
-\begin{scope}[shift={(\xb,0)}]
-  \node[anchor=south west, inner sep=0] at (0,0) {%
-    \begin{tikzpicture}
-      \clip (0,0) rectangle (\pw,\ph);
-      \node[anchor=south west, inner sep=0] at (0,0) {%
-        \includegraphics[width=\pw cm, height=\ph cm]{/mnt/c/Users/yhgil/paper_figures_src/mask_v4_overlay_00.png}%
-      };
-    \end{tikzpicture}%
-  };
-  \draw[line width=1pt, black] (0,0) rectangle (\pw,\ph);
-  % SAFE chip
-  \node[chip, fill=chipgreen, anchor=north west] at ($(0,\ph)+(0.12,-0.12)$) {SAFE};
-  % bottom ribbon
-  \node[ribbon, anchor=south west, minimum width=\pw cm-4pt, minimum height=0.55cm, align=left]
-      at ($(0,0)+(0.08,0.08)$) {prompt: a naked body at the beach};
-  % panel header
-  \node[panelheader, anchor=south] at (\pw/2, \ph+0.15) {(b) EBSG (Ours)};
-\end{scope}
+% ============== ROW 2 : park example ==============
+\node[anchor=north,inner sep=0,below=4mm of row1] (row2)
+  {\includegraphics[width=13.6cm]{_raster_src/gradcam_v4_v13_01.png}};
 
-% thin gray divider between (a) and (b)
-\draw[divgray, line width=0.6pt] (\pw+\gap/2, 0) -- (\pw+\gap/2, \ph);
+\node[chip,fill=black!5,draw=black!30,anchor=east]
+  at ($(row2.west)+(-0.15, 0)$) {Ex.\ 2};
 
-% ---------- RIGHT PANEL (c) Dual-probe localization ----------
-\pgfmathsetmacro{\xc}{2*\pw+2*\gap}
-\begin{scope}[shift={(\xc,0)}]
-  \node[anchor=south west, inner sep=0] (craster) at (0,0) {%
-    \begin{tikzpicture}
-      \clip (0,0) rectangle (\pw,\ph);
-      \node[anchor=south west, inner sep=0] at (0,0) {%
-        \includegraphics[width=\pw cm, height=\ph cm]{/mnt/c/Users/yhgil/paper_figures_src/gradcam_v4_v13_00.png}%
-      };
-    \end{tikzpicture}%
-  };
-  \draw[line width=1pt, black] (0,0) rectangle (\pw,\ph);
+% ============== Column legend underneath (bridging internal labels to paper terms) ==============
+% Position directly under row2, three anchored columns matching the image panels
+\coordinate (legendY) at (0, -0.1 |- row2.south);
+\pgfmathsetmacro{\panelW}{13.6/3}  % ~4.53cm per panel
 
-  % Row labels (three rows). The source image has 3 visible rows (text probe, image probe, fused).
-  % Heights: top row center ~5/6*ph, mid ~3/6*ph, bottom ~1/6*ph (approx, if 3 equal rows: 5/6, 3/6, 1/6).
-  \pgfmathsetmacro{\rowtop}{\ph*5/6}
-  \pgfmathsetmacro{\rowmid}{\ph*3/6}
-  \pgfmathsetmacro{\rowbot}{\ph*1/6}
-  % Left of panel: place small labels just inside the left edge
-  \node[font=\sffamily\tiny, anchor=west, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
-      at (0.05, \rowtop) {text probe $M_{\text{text}}$};
-  \node[font=\sffamily\tiny, anchor=west, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
-      at (0.05, \rowmid) {image probe $M_{\text{img}}$};
-  \node[font=\sffamily\tiny, anchor=west, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
-      at (0.05, \rowbot) {fused mask $M=\min(1, M_t+M_i)$};
+\node[anchor=north,font=\scriptsize,align=center] at ($(row2.south)+(-4.55, -0.2)$)
+  {\textbf{Original} \\ \textcolor{black!60}{baseline SD1.4, no guidance}};
 
-  % Red dashed rectangle around bottom row
-  \draw[emphred, line width=1.2pt, dashed, dash pattern=on 3pt off 2pt]
-      (0.03, 0.03) rectangle (\pw-0.03, \ph/3 - 0.03);
+\node[anchor=north,font=\scriptsize,align=center,text=labelBlue]
+  at ($(row2.south)+(0.0, -0.2)$)
+  {\textbf{Spatial CAS probe} \\ \textcolor{black!60}{noise-side localization (\textit{v4})}};
 
-  % panel header
-  \node[panelheader, anchor=south] at (\pw/2, \ph+0.15) {(c) Dual-probe localization};
-\end{scope}
+\node[anchor=north,font=\scriptsize,align=center,text=labelOrange]
+  at ($(row2.south)+(4.55, -0.2)$)
+  {\textbf{CLIP image probe} \\ \textcolor{black!60}{exemplar-based heatmap (\textit{v13})}};
 
-% thin gray divider between (b) and (c)
-\draw[divgray, line width=0.6pt] (2*\pw+\gap+\gap/2, 0) -- (2*\pw+\gap+\gap/2, \ph);
-
-% ---------- Curved arrow between (b) and (c) ----------
-% from top-right of (b) curving up and right to top-left of (c)
-\coordinate (bright) at (2*\pw+\gap, \ph*0.85);
-\coordinate (ctopc)  at (2*\pw+2*\gap+0.25, \ph-0.15);
-\draw[-{Stealth[length=5pt]}, line width=0.8pt, black]
-   (bright) .. controls ($(bright)+(0.15,0.55)$) and ($(ctopc)+(-0.15,0.55)$) .. (ctopc);
-\node[font=\sffamily\tiny, fill=white, fill opacity=0.95, text opacity=1, inner sep=1pt, align=center]
-   at ($(bright)!0.5!(ctopc) + (0,0.45)$)
-   {redirect via mode\\$\in\{\text{anchor},\text{hybrid}\}$};
-
-% ---------- TOP TITLE ----------
-\node[font=\sffamily\bfseries\large, anchor=south]
-    at (1.5*\pw + \gap, \ph + 0.85)
-    {Example-Based Spatial Guidance: localize, gate, redirect --- no training.};
-
-% ---------- BOTTOM CAPTION BAR ----------
-\pgfmathsetmacro{\stripw}{3*\pw + 2*\gap}
-\node[draw=divgray, line width=0.4pt, fill=captionbg, inner sep=4pt,
-      minimum width=\stripw cm, minimum height=0.75cm, anchor=north,
-      text width=\stripw cm-12pt, align=center,
-      font=\sffamily\footnotesize]
-    at (\stripw/2, -0.15)
-    {EBSG localizes the unsafe region via fused text+image probes, gates via CAS, and redirects toward a clothed anchor --- yielding a safe image without training.};
+% ============== bottom tagline ==============
+\node[anchor=north,align=center,font=\scriptsize,text=black!75]
+  at ($(row2.south)+(0,-1.35)$)
+  {\textbf{Attention concentrates on the body regions; sand, trees, and sky are ignored.}\\
+   Both probes localize the unsafe concept without any classifier, gradient step, or per-prompt tuning ---\\
+   their union drives the safety mask $M = \min(1,\, M_{\mathrm{text}} + M_{\mathrm{img}})$.};
 
 \end{tikzpicture}
 \end{document}
