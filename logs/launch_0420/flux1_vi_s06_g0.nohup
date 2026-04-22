@@ -2,3 +2,6 @@
 Terminated
 FAILED mja_violent ss=15 img=0.3
 [2026. 04. 23. (목) 03:36:01 KST] [g0] [run] mja_illegal ss=20 img=0.4
+Terminated
+FAILED mja_illegal ss=20 img=0.4
+[2026. 04. 23. (목) 03:39:07 KST] [g0 s0] done
