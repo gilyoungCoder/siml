@@ -1,0 +1,21 @@
+\begin{table}[!tb]
+    \centering
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{0.6em}
+    \caption{Ablation on probe mode with family exemplars (anchor inpainting, $s_\text{a}{=}1.2$, $\theta_\text{text}{=}0.1$). SR (\%) on SD~v1.4, strict Qwen3-VL eval. The probe ablation is reported under anchor inpainting for clean attribution (the probes and the How mode are orthogonal components); the explicit-vs-implicit dominance pattern that the last column exposes applies symmetrically when \ours{} is run in hybrid mode---probe choice tracks concept-prompt alignment (\S\ref{subsec:where}), which is a pack property and independent of the downstream How update (\S\ref{subsec:how}).}
+    \label{table:probe}
+    \vspace{2pt}
+    \small
+    \begin{tabular}{lcccc}
+    \toprule
+    \textbf{Probe} & \textbf{RAB} & \textbf{P4DN} & \textbf{UDiff} & \textbf{MJA-Sex} \\
+    \midrule
+    Text only  & 86.1 & 94.0 & 92.3 & 85.0 \\
+    Image only & 84.8 & 90.7 & 91.5 & \textbf{86.0} \\
+    \rowcolor{blue!8} \textbf{Both (Ours)} & \textbf{87.3} & \textbf{94.7} & \textbf{92.3} & 84.0 \\
+    \bottomrule
+    \end{tabular}
+
+    \vspace{0.4em}
+    {\footnotesize \textit{Both} achieves best or competitive SR on every dataset. Text dominates for nudity (explicit keywords); image catches adversarial prompts that avoid unsafe vocabulary (MJA-Sexual: image 86.0 $>$ text 85.0).}
+\end{table}

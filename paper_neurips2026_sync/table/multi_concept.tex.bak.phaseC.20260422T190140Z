@@ -1,0 +1,20 @@
+\begin{table}[!tb]
+    \centering
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{0.55em}
+    \caption{Other-concept erasure on MJA (adversarial, 100 prompts/concept), SD~v1.4. SR $\uparrow$. SAFREE reproduced with official code. $\Delta$: gain of \ours{} (family exemplars, $F{=}4$, $K{=}4$) over SAFREE.}
+    \label{table:multi}
+    \vspace{2pt}
+    \small
+    \begin{tabular}{lcccc}
+    \toprule
+    \textbf{Method} & \textbf{Sexual} & \textbf{Violent} & \textbf{Disturbing} & \textbf{Illegal} \\
+    \midrule
+    Baseline (SD v1.4) & 36.0 & 13.0 & 74.0 & 60.0 \\
+    SAFREE             & 48.0 & \textbf{52.0} & 95.0 & \textbf{77.0} \\
+    \rowcolor{blue!8} \textbf{Ours (\ours{})} & \textbf{86.0} & 29.0 & \textbf{99.0} & 72.0 \\
+    \midrule
+    $\Delta$ vs SAFREE & \color{green!50!black}{+38.0} & \color{red!70!black}{$-$23.0} & \color{green!50!black}{+4.0} & \color{red!70!black}{$-$5.0} \\
+    \bottomrule
+    \end{tabular}
+\end{table}

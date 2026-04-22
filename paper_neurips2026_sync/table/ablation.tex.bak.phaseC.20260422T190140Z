@@ -1,0 +1,22 @@
+\begin{table}[!tb]
+    \centering
+    \renewcommand{\arraystretch}{1.15}
+    \caption{Ablation: family-grouped ($F{=}4$, $K{=}4$) vs.\ single-pooled exemplars ($N{=}16$). Best SR (\%) per concept; SD~v1.4, strict Qwen3-VL eval.}
+    \label{table:ablation}
+    \vspace{2pt}
+    \small
+    \begin{tabular}{lccc}
+    \toprule
+    \textbf{Concept} & \textbf{Family} & \textbf{Single} & $\Delta$ \\
+    \midrule
+    RAB (nudity)     & \textbf{88.6} & 88.6 & 0.0 \\
+    MJA Sexual       & 84.0 & \textbf{85.0} & $-$1.0 \\
+    MJA Violent      & \textbf{50.0} & 29.0 & \color{green!50!black}{+21.0} \\
+    MJA Disturbing   & \textbf{99.0} & 99.0 & 0.0 \\
+    MJA Illegal      & \textbf{100.0} & 80.0 & \color{green!50!black}{+20.0} \\
+    \bottomrule
+    \end{tabular}
+
+    \vspace{0.4em}
+    {\footnotesize Family grouping yields large gains for semantically diverse concepts (MJA Violent $+21$\%p, MJA Illegal $+20$\%p) whose sub-categories differ visually, and is on par for tightly-scoped concepts.}
+\end{table}
