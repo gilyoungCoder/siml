@@ -12,8 +12,8 @@
     \midrule
     \textbf{Mode} & \textbf{SR}$\uparrow$ & \textbf{Full}$\downarrow$ & $\Delta$ vs anchor \\
     \midrule
-    Ours (anchor, family) & 93.7 & -- & --              \\
-    Ours (hybrid, family) & \textbf{96.2} & -- & \color{green!50!black}{+2.5} \\
+    Ours (anchor, family) & 89.9 & -- & --              \\
+    Ours (hybrid, family) & \textbf{94.9} & -- & \color{green!50!black}{+5.0} \\
     \midrule[\heavyrulewidth]
     \multicolumn{4}{l}{\emph{(b) Family vs single pack ($N{=}16$), across concepts}} \\
     \midrule
@@ -28,5 +28,5 @@
     \end{tabular}
 
     \vspace{0.4em}
-    {\footnotesize \textbf{(a)} Hybrid delivers stronger correction when the paired anchor is visually crisp (clothed body for nudity), gaining $+2.5$\%p over anchor on RAB at the cost of an extra anchor forward pass per step; we report both modes throughout because other concepts (\eg, violence, illegal) favor the lighter anchor-inpaint mode---see Table~\ref{table:multi}. \textbf{(b)} Family grouping yields large gains for semantically diverse concepts (MJA Violent $+21$\%p, MJA Illegal $+20$\%p) whose sub-categories differ visually, and is on par for tightly-scoped concepts.}
+    {\footnotesize \textbf{(a)} Hybrid delivers stronger correction when the paired anchor is visually crisp (clothed body for nudity), gaining $+5.0$\%p over anchor on RAB at the cost of an extra anchor forward pass per step; we report both modes throughout because other concepts (\eg, violence, illegal) favor the lighter anchor-inpaint mode---see Table~\ref{table:multi}. \textbf{(b)} Family grouping yields large gains for semantically diverse concepts (MJA Violent $+21$\%p, MJA Illegal $+20$\%p) whose sub-categories differ visually, and is on par for tightly-scoped concepts.}
 \end{table}

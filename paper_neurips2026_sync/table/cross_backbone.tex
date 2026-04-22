@@ -2,7 +2,7 @@
     \centering
     \renewcommand{\arraystretch}{1.15}
     \setlength{\tabcolsep}{0.45em}
-    \caption{Cross-backbone validation of \ours{} on the MJA adversarial benchmark (SR\%~$\uparrow$, 100 prompts/concept). We report both How modes (\S\ref{subsec:how}) on three backbones spanning the major T2I parameterizations: SD v1.4 (UNet, $\epsilon$-prediction), SD~3 (MMDiT, velocity prediction), and FLUX.1-dev (DiT, flow matching). Cells shown as \texttt{--} indicate measurements not yet collected. $^{\dagger}$SD~3 hybrid cells are intentionally omitted in this revision: the default CAS threshold $\tau{=}0.6$ was calibrated for $\epsilon$-prediction and does not trigger in SD~3's velocity-parameterization CAS range ($0.03$--$0.51$); a per-backbone $\tau$ retune is in progress and the results will be added when stable.}
+    \caption{Cross-backbone validation of \ours{} on the MJA adversarial benchmark (SR\%~$\uparrow$, 100 prompts/concept). We report both How modes (\S\ref{subsec:how}) on three backbones spanning the major T2I parameterizations: SD v1.4 (UNet, $\epsilon$-prediction), SD~3 (MMDiT, velocity prediction), and FLUX.1-dev (DiT, flow matching). Cells shown as \texttt{--} indicate measurements not yet collected. \ours{} SD~3 and FLUX numbers are preliminary from the 2026-04-22 re-sweep; post-patch re-evaluation is ongoing. $^{\dagger}$SD~3 hybrid cells are intentionally omitted in this revision: the default CAS threshold $\tau{=}0.6$ was calibrated for $\epsilon$-prediction and does not trigger in SD~3's velocity-parameterization CAS range ($0.03$--$0.51$); a per-backbone $\tau$ retune is in progress and the results will be added when stable.}
     \label{table:cross_backbone}
     \vspace{2pt}
     \small
