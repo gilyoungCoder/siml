@@ -185,9 +185,9 @@
 \node[anchor=north,font=\scriptsize] at (\Ccx, -2.65)
   {$M^f_{\mathrm{img}} \propto \sigma\!\big(\cos(f,\bar e_f)\big)$};
 
-% max_f funnel — WIDER (0.9cm) and pushed RIGHT so no overlap with probe boxes
-\pgfmathsetmacro{\funL}{\Cx + 1.55}   % left edge of funnel trapezoid
-\pgfmathsetmacro{\funR}{\Cx + 2.45}   % right edge
+% max_f funnel — pushed FURTHER RIGHT (closer to column right edge) + 1.0cm wide
+\pgfmathsetmacro{\funL}{\Cx + 1.80}   % left edge of funnel trapezoid
+\pgfmathsetmacro{\funR}{\Cx + 2.75}   % right edge (column C ends at Cx+2.8)
 \coordinate (funTopL) at (\funL, 1.4);
 \coordinate (funTopR) at (\funR, 0.6);
 \coordinate (funBotL) at (\funL, -2.4);
@@ -250,8 +250,8 @@
 \draw[arrw] (Dfork) |- (anchorBox.west);
 \draw[arrw] (Dfork) |- (hybBox.west);
 
-% merge arrow
-\coordinate (mergeNode) at (\Dx + \colW/2 - 0.35, 0.1);
+% merge point pushed RIGHT so safeEps+safeImg clear the Hybrid equation box
+\coordinate (mergeNode) at (\Dx + \colW/2 + 0.25, 0.1);
 \draw[arrw] (anchorBox.east) -- ++(0.15,0) |- (mergeNode);
 \draw[arrw] (hybBox.east)    -- ++(0.15,0) |- (mergeNode);
 
@@ -265,9 +265,9 @@
      (safeImg) at ($(safeEps.south)+(0,-0.35)$) {safe\\image};
 \draw[bigarrow] (safeEps.south) -- (safeImg.north);
 
-% feedback to B loop
+% feedback to B loop — update x to match new mergeNode position
 \draw[bigarrow,draw=howPurple!70!black,dashed]
-  (safeEps.north) -- ++(0,0.5) -| (\Dx + \colW/2 - 0.35, 5.75)
+  (safeEps.north) -- ++(0,0.5) -| (\Dx + \colW/2 + 0.25, 5.75)
   -- (\Bx - \colW/2 + 0.5, 5.75)
   -- (\Bx - \colW/2 + 0.5, 2.0) -- (zt.west);
 \node[font=\scriptsize,text=howPurple!70!black,anchor=south]
