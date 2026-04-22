@@ -62,48 +62,26 @@ Table~\ref{table:hyperparams} lists the default hyperparameters per concept, sel
 \begin{table}[h]
 \centering
 \renewcommand{\arraystretch}{1.15}
-\setlength{\tabcolsep}{0.45em}
-\caption{Default hyperparameters per concept, reported separately for both How modes (\S\ref{subsec:how}). $\tau$: CAS threshold; $s_\text{a}$: anchor-inpaint scale (Eq.~\ref{eq:anchor_inpaint}); $s_\text{h}$: hybrid scale (Eq.~\ref{eq:hybrid}); $\theta_\text{text}$: text-attention threshold; $\theta_\text{img}$: image-probe threshold; Probe: probe mode used for the paper's final numbers. Cells shown as \texttt{--} indicate that a mode's sweep has not yet been run for that concept; the per-concept choice in the main tables uses whichever mode is reported; the dashed row is logged in \texttt{pending\_experiments.md}.}
+\setlength{\tabcolsep}{0.55em}
+\caption{Default hyperparameters per concept. $\tau$: CAS threshold; $\theta_\text{text}$: text-attention threshold; $\theta_\text{img}$: image-probe threshold; Probe: probe mode used for final numbers in Table~\ref{table:main}.}
 \label{table:hyperparams}
 \small
-\begin{tabular}{@{}llccccc@{}}
+\begin{tabular}{@{}lcccccc@{}}
 \toprule
-\textbf{Concept} & \textbf{Mode} & $\tau$ & \textbf{Scale} & $\theta_\text{text}$ & $\theta_\text{img}$ & \textbf{Probe} \\
+\textbf{Concept} & $\tau$ & \textbf{HOW} & \textbf{Scale} & $\theta_\text{text}$ & $\theta_\text{img}$ & \textbf{Probe} \\
 \midrule
-\multirow{2}{*}{Nudity}
- & anchor & 0.6 & $s_\text{a}{=}1.5$                    & 0.1 & 0.4 & both \\
- & hybrid & 0.6 & $s_\text{h}{=}15$ ($s_t{=}15,s_a{=}15$) & 0.1 & 0.4 & both \\
-\midrule
-\multirow{2}{*}{Violence}
- & anchor & 0.4 & $s_\text{a}{=}1.5$  & 0.1 & 0.4 & text \\
- & hybrid & 0.4 & $s_\text{h}{=}15$   & 0.1 & 0.3 & both \\
-\midrule
-\multirow{2}{*}{Harassment}
- & anchor & 0.4 & $s_\text{a}{=}1.2$  & 0.1 & --  & text \\
- & hybrid & 0.4 & $s_\text{h}{=}20$   & 0.1 & --  & text \\
-\midrule
-\multirow{2}{*}{Hate}
- & anchor & 0.4 & $s_\text{a}{=}1.0$  & 0.1 & --  & text \\
- & hybrid & 0.4 & $s_\text{h}{=}25$   & 0.1 & 0.3 & both \\
-\midrule
-\multirow{2}{*}{Shocking}
- & anchor & 0.6 & $s_\text{a}{=}0.8$  & 0.1 & 0.4 & both \\
- & hybrid & 0.6 & --                  & --  & --  & --   \\
-\midrule
-\multirow{2}{*}{Illegal}
- & anchor & 0.5 & $s_\text{a}{=}0.8$  & 0.1 & 0.4 & both \\
- & hybrid & 0.5 & --                  & --  & --  & --   \\
-\midrule
-\multirow{2}{*}{Self-harm}
- & anchor & 0.4 & $s_\text{a}{=}1.5$  & 0.1 & 0.3 & image \\
- & hybrid & 0.4 & --                  & --  & --  & --   \\
+Nudity     & 0.6 & hybrid          & $s_t{=}15,\,s_a{=}15$ & 0.1 & 0.4 & both \\
+Violence   & 0.4 & anchor inpaint  & $s_\text{safe}{=}1.5$ & 0.1 & 0.4 & text \\
+Harassment & 0.4 & anchor inpaint  & $s_\text{safe}{=}1.2$ & 0.1 & --  & text \\
+Hate       & 0.4 & anchor inpaint  & $s_\text{safe}{=}1.0$ & 0.1 & --  & text \\
+Shocking   & 0.6 & anchor inpaint  & $s_\text{safe}{=}0.8$ & 0.1 & 0.4 & both \\
+Illegal    & 0.5 & anchor inpaint  & $s_\text{safe}{=}0.8$ & 0.1 & 0.4 & both \\
+Self-harm  & 0.4 & anchor inpaint  & $s_\text{safe}{=}0.8$ & 0.1 & 0.4 & both \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \paragraph{Common settings.} All experiments use Stable Diffusion v1.4 with 50 DDIM steps, CFG scale $s{=}7.5$, seed 42, and $512{\times}512$ resolution. CLIP exemplar embeddings are computed with ViT-L/14 from $F\cdot K{=}16$ images per concept. Cross-attention is read at resolutions $16{\times}16$ and $32{\times}32$. Sigmoid sharpness $\alpha{=}10.0$ and mask blur $\sigma{=}1.0$ are fixed.
-
-\paragraph{Pattern.} The per-concept configuration follows a consistent logic (previewed in \S\ref{subsec:training_free}): probe choice tracks concept--prompt alignment (text for lexically identifiable concepts, image for metaphorically described ones, both when they contribute non-redundantly); the How-mode scale follows mode by construction ($s_\text{h}$ is roughly $10{\times}s_\text{a}$ because the two-direction difference $d^{\text{anc}}_f - d^{\text{tgt}}_f$ partially cancels); $\tau$ tracks family-alignment signal magnitude (internally coherent concepts such as nudity produce high-magnitude alignment so $\tau{=}0.6$ filters benign prompts reliably, while semantically dispersed concepts (violence, harassment, hate) use $\tau{=}0.4$ to avoid missed triggers).
 
 \subsection{Generation Pipeline (per DDIM step)}
 \label{app:pipeline}
@@ -373,121 +351,6 @@ For nudity, the Qwen3-VL prompt is:
 \textit{``You are a professional nudity-evaluation expert. Classify the image into exactly one category: NotRel (no meaningful human figure), Safe (fully clothed, no nudity), Partial (minor exposure such as swimwear or partial nudity), or Full (explicit nudity, exposed intimate body parts). Respond with only the category name.''}
 \end{quote}
 Other concepts swap in category-appropriate criteria with the same four-category structure.
-
-\subsection{Evaluator Accuracy --- Extended Validation}
-\label{app:evaluator_extended}
-
-\paragraph{Scope.}
-The MJ-Bench per-pair preference evaluations in \S\ref{app:mjbench_table1} and \S\ref{app:safety_specific} establish Qwen3-VL-8B's selection accuracy at $54.0\%$ (w/o tie) and $88.1\%$ (safety-specific, w/o tie). However, those protocols measure relative preference between two images, not absolute per-image severity. The paper body reports SR under a per-image four-class rubric ($\{\text{NotPeople}\,|\,\text{NotRelevant},\text{Safe},\text{Partial},\text{Full}\}$) and therefore requires a separate validation of per-image classification quality. This subsection extends our evaluator audit to the per-image setting.
-
-\paragraph{What the v5 rubric is.}
-We use the v5 rubric set implemented in \texttt{vlm/opensource\_vlm\_i2p\_all\_v5.py}. v5 carries the v3 strict-nudity rubric byte-for-byte (labels: NotPeople / Safe / Partial / Full) and introduces seven content-based concept rubrics for the remaining I2P categories (violence, harassment, hate, shocking, disturbing, illegal, self-harm; labels: NotRelevant / Safe / Partial / Full). Three design invariants are explicit in every concept rubric: (i)~each label is spelled out with concrete positive examples spanning multiple artistic styles (photoreal, cartoon, anime, painterly, render, 3D, sketch); (ii)~stylization does \emph{not} downgrade severity---cartoon violence is Full; (iii)~a recognizable famous figure is rated by the depiction, not the identity. The rubric is \emph{content-based}: it never names the source dataset, so evaluation is fair across MJA, I2P, RAB, P4DN, UnlearnDiff, and MMA-Diffusion. Inference is deterministic: Qwen3-VL-8B-Instruct with \texttt{do\_sample=False, max\_new\_tokens=100}; each image returns \texttt{\{"category": "<label>"\}}.
-
-\paragraph{Protocol.}
-For each of the eight concepts we sample a stratified set of generated images balanced across methods (baseline / SAFREE / \ours{}~(anchor) / \ours{}~(hybrid)). Each image is labeled by (a)~Qwen3-VL-v5 (ours); (b)~GPT-4o with the same rubric text; (c)~an additional open-source VLM (Claude 3.5, Gemini~1.5). \emph{Agreement with human majority} (\S\ref{app:human_study}) is the primary metric; we also report \emph{within-1-rubric-step accuracy} (\eg, VLM=Partial vs majority=Safe is acceptable within-1).
-
-\begin{table}[h]
-\centering
-\renewcommand{\arraystretch}{1.15}
-\setlength{\tabcolsep}{0.55em}
-\caption{Per-image safety classifier agreement with human majority (\S\ref{app:human_study}) on a stratified subset. All values dashed pending the human-study collection described in \S\ref{app:human_study}; logged in \texttt{pending\_experiments.md}.}
-\label{table:evaluator_extended}
-\small
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-\textbf{Concept} & \textbf{GPT-4o} & \textbf{Claude 3.5} & \textbf{Gemini 1.5} & \textbf{Qwen3-VL-v5 (Ours)} \\
-\midrule
-Nudity / Sexual & -- & -- & -- & -- \\
-Violent         & -- & -- & -- & -- \\
-Disturbing      & -- & -- & -- & -- \\
-Illegal         & -- & -- & -- & -- \\
-Harassment      & -- & -- & -- & -- \\
-Hate            & -- & -- & -- & -- \\
-Shocking        & -- & -- & -- & -- \\
-Self-harm       & -- & -- & -- & -- \\
-\midrule
-\textbf{Mean}   & -- & -- & -- & -- \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\paragraph{Why VLM rather than NudeNet/Q16 (ported from prior workshop).}
-Earlier safety-in-diffusion studies scored nudity with NudeNet~\citep{notai_nudenet_2019} or with embedding-based safety classifiers. Two failure modes motivated our move to a VLM protocol already in the workshop paper~\citep{gil2026ascg} and carried forward here. \emph{(1) Over-sensitivity.} NudeNet's binary classification flags socially acceptable exposure (swimwear, athletic attire, partial clothing) as full nudity, producing false positives that incentivize over-suppression. Under the four-class VLM rubric these cases are assigned to Safe or Partial. \emph{(2) Semantic-collapse confound.} Aggressive safety interventions can degrade generations into artifacts, blur, or noise; NudeNet then fails to detect unsafe content because \emph{nothing} is detectable, so the destroyed image is implicitly counted as Safe. The VLM rubric's NotRelevant label (NotPeople for nudity) explicitly captures semantic collapse, preventing this inflation. The same classifier-based Full%-on-MMA-style NudeNet numbers that a reader may be familiar with from the prior literature are reported separately for reference in \S\ref{app:mma_nudenet}.
-
-\paragraph{Verification notes for the skeptical reader.}
-The v5 module imports v4's prompts as a base and only overwrites the seven I2P keys, so the nudity rubric is byte-for-byte identical to v3/v4. Output filenames are suffixed \texttt{\_v5.json} / \texttt{\_v5.txt} to prevent overwriting v3 results. Greedy decoding + explicit JSON-only response format yields deterministic top-1 labels across runs.
-
-\subsection{Human Agreement Study}
-\label{app:human_study}
-
-\paragraph{Purpose.}
-Establish direct human-vs-VLM agreement on a focused subset to strengthen the claim that Qwen3-VL-v5 is a reliable judge for the paper's SR reporting.
-
-\paragraph{Protocol.}
-\emph{Annotator pool.} Approximately 20 adult annotators recruited under content-warning consent, English-literate (rubric is in English), task-compensated. Annotators may opt out at any time. \emph{Stimuli.} For each of the eight concepts, we sample $\sim\!20$ images from the I2P top-60 evaluation set, balanced across method (baseline / SAFREE / \ours{}-anchor / \ours{}-hybrid) and across rubric classes where possible, yielding $\sim\!160$ images per annotator (or a stratified subset). \emph{Task.} Each annotator classifies each image into one of $\{\text{Full},\text{Partial},\text{Safe},\text{NotRel (or NotPeople for nudity)}\}$ using a one-paragraph compressed version of the v5 rubric (\S\ref{app:evaluator_extended}). Forced choice, no skip option. \emph{Ground truth.} Majority vote among three annotators per image (three-way ties are broken by a fourth annotator or dropped). \emph{Inter-annotator agreement.} Pairwise Cohen's~$\kappa$ (averaged) and multi-annotator Fleiss'~$\kappa$; these define the \emph{ceiling}---the VLM cannot be expected to exceed human consistency. \emph{VLM agreement.} For each image, Qwen3-VL-v5 vs majority: exact-match agreement and within-1-rubric-step accuracy (\eg, VLM=Partial / majority=Safe counts within-1; VLM=Full / majority=Safe is a full error).
-
-\begin{table}[h]
-\centering
-\renewcommand{\arraystretch}{1.15}
-\setlength{\tabcolsep}{0.40em}
-\caption{Human agreement study. Annotators $n{\approx}20$. Per-concept inter-annotator $\kappa$ (Cohen's pairwise mean), Fleiss'~$\kappa$, VLM exact agreement with majority, and VLM within-1-rubric-step accuracy. All cells are dashed pending collection; logged in \texttt{pending\_experiments.md}.}
-\label{table:human_study}
-\small
-\begin{tabular}{@{}lccccccc@{}}
-\toprule
-\textbf{Concept} & \textbf{\#Prompts} & \textbf{\#Images} & \textbf{Cohen's $\kappa$} & \textbf{Fleiss' $\kappa$} & \textbf{VLM Agr.} & \textbf{VLM Acc.($\pm 1$)} & \textbf{$n_\text{ann}$} \\
-\midrule
-Nudity / Sexual & -- & -- & -- & -- & -- & -- & -- \\
-Violent         & -- & -- & -- & -- & -- & -- & -- \\
-Disturbing      & -- & -- & -- & -- & -- & -- & -- \\
-Illegal         & -- & -- & -- & -- & -- & -- & -- \\
-Harassment      & -- & -- & -- & -- & -- & -- & -- \\
-Hate            & -- & -- & -- & -- & -- & -- & -- \\
-Shocking        & -- & -- & -- & -- & -- & -- & -- \\
-Self-harm       & -- & -- & -- & -- & -- & -- & -- \\
-\midrule
-\textbf{Mean}   & -- & -- & -- & -- & -- & -- & -- \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\paragraph{Interpretation rule.}
-If per-concept VLM agreement is at or above the mean Cohen's~$\kappa$ for that concept, the VLM is at least as consistent as a typical human annotator (the bar established by MJ-Bench~\citep{chen2024mjbench}). Concepts where VLM agreement falls below $\kappa$ are reported honestly; typical failure modes we expect to document (over-generalization on ambiguous stylized content, borderline Partial-vs-Full calls on shocking and disturbing) will be analyzed as the study data arrives. The study is approved under TBD-IRB-number; all stimuli are content-warning-gated.
-
-\subsection{Prior-Work NudeNet Numbers (Reference)}
-\label{app:mma_nudenet}
-
-For continuity with earlier safety-in-diffusion literature we reproduce the NudeNet-scored \emph{Full\%} numbers our prior workshop paper~\citep{gil2026ascg} collected across MMA-Diffusion, Ring-A-Bell, and UnlearnDiff. These are reported \emph{verbatim} for reference only; they are not directly comparable to the SR numbers in Table~\ref{table:main} because the unit and evaluator are different (a binary NudeNet flag rate rather than the four-class VLM rubric). The VLM rubric captures both over-sensitivity and semantic-collapse failure modes that NudeNet misses; see \S\ref{app:evaluator_extended} for the argument. Dashes below indicate measurements not collected in the workshop era.
-
-\begin{table}[h]
-\centering
-\renewcommand{\arraystretch}{1.15}
-\setlength{\tabcolsep}{0.55em}
-\caption{Prior-work NudeNet \emph{Full\%} fractions on MMA-Diffusion, Ring-A-Bell, and UnlearnDiff (from \citealt{gil2026ascg}). Lower is better. Not directly comparable to the main-paper SR under the VLM protocol; provided for legacy-benchmark continuity only.}
-\label{table:mma_nudenet}
-\small
-\begin{tabular}{lccc}
-\toprule
-\textbf{Method} & \textbf{MMA-Diffusion} & \textbf{Ring-A-Bell} & \textbf{UnlearnDiff} \\
-\midrule
-SD Baseline  & .945 & .684 & .641 \\
-\midrule
-ESD          & .646 & .354 & .451 \\
-SDD          & .561 & .253 & .296 \\
-UCE          & .899 & .532 & .430 \\
-RECE         & .553 & .114 & .134 \\
-\midrule
-SLD-Weak     & .940 & .709 & .599 \\
-SLD-Medium   & .921 & .608 & .514 \\
-SLD-Strong   & .898 & .646 & .465 \\
-SLD-Max      & .822 & .494 & .423 \\
-\midrule
-ASCG         & .879 & .696 & .697 \\
-SAFREE       & .348 & .089 & .141 \\
-SAFREE+ASCG  & .249 & .101 & .155 \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \section{Computational Cost}
 \label{app:compute}
