@@ -7,60 +7,30 @@
 
 \definecolor{hitRed}{HTML}{DC2626}
 \definecolor{okGreen}{HTML}{10B981}
-\definecolor{labelBlue}{HTML}{2563EB}
-\definecolor{labelOrange}{HTML}{EA580C}
 
 \begin{document}
 \begin{tikzpicture}[
   font=\footnotesize,
   >={Stealth[length=2mm]},
   thin,
-  chip/.style={rounded corners=2pt,inner sep=2pt,font=\scriptsize\bfseries},
 ]
 
 % ============== TITLE ==============
-\node[anchor=south,font=\normalsize\bfseries,text=black] at (0, 6.95)
-  {Dual-probe localization};
-\node[anchor=south,font=\scriptsize\itshape,text=black!70] at (0, 6.55)
-  {Each probe marks unsafe regions directly on the generated image; their union is the safety mask $M$.};
+\node[anchor=south,font=\normalsize\bfseries,text=black] at (0, 0.25)
+  {Generated samples: baseline vs.\ ours};
 
-% ============== ROW 1 : beach example ==============
-\node[anchor=north,inner sep=0] (row1)
-  at (0, 6.4) {\includegraphics[width=13.6cm]{_raster_src/gradcam_v4_v13_00.png}};
+% ============== MAIN IMAGE (2x2 grid, already includes per-column headers + prompts) ==============
+\node[anchor=north,inner sep=0] (samples)
+  at (0, -0.05) {\includegraphics[width=11.5cm]{_raster_src/baseline_vs_ours.png}};
 
-% small "example 1" tag at left margin
-\node[chip,fill=black!5,draw=black!30,anchor=east]
-  at ($(row1.west)+(-0.15, 0)$) {Ex.\ 1};
-
-% ============== ROW 2 : park example ==============
-\node[anchor=north,inner sep=0,below=4mm of row1] (row2)
-  {\includegraphics[width=13.6cm]{_raster_src/gradcam_v4_v13_01.png}};
-
-\node[chip,fill=black!5,draw=black!30,anchor=east]
-  at ($(row2.west)+(-0.15, 0)$) {Ex.\ 2};
-
-% ============== Column legend underneath (bridging internal labels to paper terms) ==============
-% Position directly under row2, three anchored columns matching the image panels
-\coordinate (legendY) at (0, -0.1 |- row2.south);
-\pgfmathsetmacro{\panelW}{13.6/3}  % ~4.53cm per panel
-
-\node[anchor=north,font=\scriptsize,align=center] at ($(row2.south)+(-4.55, -0.2)$)
-  {\textbf{Original} \\ \textcolor{black!60}{baseline SD1.4, no guidance}};
-
-\node[anchor=north,font=\scriptsize,align=center,text=labelBlue]
-  at ($(row2.south)+(0.0, -0.2)$)
-  {\textbf{Spatial CAS probe} \\ \textcolor{black!60}{noise-side localization (\textit{v4})}};
-
-\node[anchor=north,font=\scriptsize,align=center,text=labelOrange]
-  at ($(row2.south)+(4.55, -0.2)$)
-  {\textbf{CLIP image probe} \\ \textcolor{black!60}{exemplar-based heatmap (\textit{v13})}};
-
-% ============== bottom tagline ==============
-\node[anchor=north,align=center,font=\scriptsize,text=black!75]
-  at ($(row2.south)+(0,-1.35)$)
-  {\textbf{Attention concentrates on the body regions; sand, trees, and sky are ignored.}\\
-   Both probes localize the unsafe concept without any classifier, gradient step, or per-prompt tuning ---\\
-   their union drives the safety mask $M = \min(1,\, M_{\mathrm{text}} + M_{\mathrm{img}})$.};
+% ============== BOTTOM CAPTION ==============
+\node[anchor=north,align=center,font=\scriptsize,text=black!75,text width=13.8cm]
+  at ($(samples.south)+(0,-0.25)$)
+  {\textbf{Ring-A-Bell adversarial prompts.}
+   \textit{Left (red):} SD~v1.4 baseline generates unsafe content.
+   \textit{Right (green):} Our dual-probe method erases the unsafe regions
+   while preserving scene composition via spatially masked anchor inpainting ---\\
+   no training, no fine-tuning, no per-prompt tuning.};
 
 \end{tikzpicture}
 \end{document}
