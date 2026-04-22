@@ -1,0 +1,25 @@
+\begin{table}[!tb]
+    \centering
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{0.55em}
+    \caption{Other-concept erasure on MJA (adversarial, 100 prompts/concept), SD~v1.4. SR $\uparrow$. SAFREE reproduced with official code. $\Delta$: gain of \ours{}'s best mode over SAFREE. \ours{} uses family exemplars ($F{=}4$, $K{=}4$) and is reported as two complementary rows---anchor inpainting and hybrid guidance (\S\ref{subsec:how}).}
+    \label{table:multi}
+    \vspace{2pt}
+    \small
+    \begin{tabular}{lcccc}
+    \toprule
+    \textbf{Method} & \textbf{Sexual} & \textbf{Violent} & \textbf{Disturbing} & \textbf{Illegal} \\
+    \midrule
+    Baseline (SD v1.4) & 36.0 & 13.0 & 74.0 & 60.0 \\
+    SAFREE             & 48.0 & \textbf{52.0} & 95.0 & \textbf{77.0} \\
+    \midrule
+    \rowcolor{blue!8} \textbf{Ours (anchor, family)} & \textbf{83.0} & \textbf{56.0} & 89.0 & 56.0 \\
+    \rowcolor{blue!8} \textbf{Ours (hybrid, family)} & 86.0          & 29.0          & \textbf{99.0} & 72.0 \\
+    \midrule
+    $\Delta$ best vs SAFREE & \color{green!50!black}{+38.0} & \color{green!50!black}{+4.0} & \color{green!50!black}{+4.0} & \color{red!70!black}{$-$5.0} \\
+    \bottomrule
+    \end{tabular}
+
+    \vspace{0.4em}
+    {\footnotesize The two modes trade off by concept: hybrid wins on MJA-Sexual and MJA-Disturbing where the paired anchor is visually crisp (clothed body, calm scene); anchor inpainting wins on MJA-Violent where ``peaceful scene'' as the anchor is ambiguous and hybrid's chase-the-anchor objective becomes unstable. Reporting both rows lets the deployer pick per-concept rather than globally.}
+\end{table}
