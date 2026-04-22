@@ -24,3 +24,4 @@
 [2026. 04. 23. (목) 00:04:27 KST] [g0] [run] multi harassment ss=20 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_multi/harassment/hybrid_ss20_thr0.1_imgthr0.3_both
 [2026. 04. 23. (목) 00:46:00 KST] [g0] [run] multi harassment ss=20 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_multi/harassment/hybrid_ss20_thr0.1_imgthr0.4_both
 [2026. 04. 23. (목) 01:27:39 KST] [g0] [run] multi hate ss=10 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_multi/hate/hybrid_ss10_thr0.1_imgthr0.3_both
+[2026. 04. 23. (목) 02:07:25 KST] [g0] [run] multi hate ss=15 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_multi/hate/hybrid_ss15_thr0.1_imgthr0.3_both
