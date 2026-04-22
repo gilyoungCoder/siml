@@ -65,7 +65,7 @@
 \node[font=\scriptsize\itshape,anchor=north,text=packAccent!80!black] at (\Ax,4.15)
      {user-editable, training-free};
 
-\node[font=\scriptsize,anchor=north] at (\Ax, 3.7) {$K=4$ exemplars};
+\node[font=\scriptsize,anchor=north] at (\Ax, 3.7) {$K$ exemplars per family};
 
 \def\gridX{\Ax - 1.25}
 \def\gridY{3.25}
@@ -136,34 +136,39 @@
 % --- TOP sub-row: Text probe ---
 \node[colBG,fill=txtBG,minimum width=\colWin cm,minimum height=3.1cm,anchor=north]
      (txtBox) at (\Ccx, 2.75) {};
-\node[anchor=north,font=\scriptsize\bfseries,text=txtAccent] at (\Ccx,2.63) {Text probe};
+% header pushed down slightly for breathing room from box top edge
+\node[anchor=north,font=\scriptsize\bfseries,text=txtAccent] at (\Ccx,2.55) {Text probe};
 
-\def\tmX{\Ccx - 1.55}
-\def\tmY{2.15}
+% matrix centered within box, red cells form a 2x2 COMPACT CLUSTER
+% (represents spatially LOCALIZED keyword attention — not a uniform token stripe)
+\def\tmX{\Ccx - 0.55}
+\def\tmY{2.00}
 \foreach \r in {0,1,2,3} {
   \foreach \c in {0,1,2,3} {
     \pgfmathsetmacro{\tx}{\tmX + 0.30*\c}
     \pgfmathsetmacro{\ty}{\tmY - 0.26*\r}
-    \pgfmathtruncatemacro{\isRed}{(\c==2)?1:0}
-    \ifnum\isRed=1
-      \node[draw=casRed!60,fill=casRed!55,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
-    \else
-      \pgfmathsetmacro{\opa}{0.15 + 0.15*mod(\r+\c,3)}
-      \node[draw=txtAccent!40,fill=txtAccent!30,fill opacity=\opa,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
-    \fi
+    \pgfmathsetmacro{\opa}{0.15 + 0.15*mod(\r+\c,3)}
+    \node[draw=txtAccent!40,fill=txtAccent!30,fill opacity=\opa,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
   }
 }
-% shorter formula: keep only the key "what is this probe" — max of keyword attention
+\foreach \r/\c in {1/1,1/2,2/1,2/2} {
+  \pgfmathsetmacro{\tx}{\tmX + 0.30*\c}
+  \pgfmathsetmacro{\ty}{\tmY - 0.26*\r}
+  \node[draw=casRed!60,fill=casRed!55,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
+}
+% formula: max over keyword attentions
 \node[anchor=north,font=\scriptsize] at (\Ccx, 0.55)
   {$M^f_{\mathrm{text}} \propto \sigma\!\big(\textstyle\max_{w\in\mathcal{W}_f}\! A_w\big)$};
 
 % --- BOTTOM sub-row: Image probe ---
 \node[colBG,fill=imgBG,minimum width=\colWin cm,minimum height=3.1cm,anchor=north]
      (imgBox) at (\Ccx, -0.55) {};
-\node[anchor=north,font=\scriptsize\bfseries,text=imgAccent] at (\Ccx,-0.67) {Image probe};
+% header pushed down slightly
+\node[anchor=north,font=\scriptsize\bfseries,text=imgAccent] at (\Ccx,-0.75) {Image probe};
 
-\def\imX{\Ccx - 1.55}
-\def\imY{-1.15}
+% matrix centered within box
+\def\imX{\Ccx - 0.55}
+\def\imY{-1.30}
 \foreach \r in {0,1,2,3} {
   \foreach \c in {0,1,2,3} {
     \pgfmathsetmacro{\tx}{\imX + 0.30*\c}
@@ -171,6 +176,7 @@
     \node[draw=imgAccent!40,fill=imgAccent!15,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
   }
 }
+% scattered activations — spatially distributed (more spread than text's compact cluster)
 \foreach \r/\c in {0/1,0/3,1/0,2/2,2/3,3/1} {
   \pgfmathsetmacro{\tx}{\imX + 0.30*\c}
   \pgfmathsetmacro{\ty}{\imY - 0.26*\r}
