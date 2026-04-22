@@ -148,3 +148,13 @@ CAS_SpatialCFG/meeting_pack/
 *.lot
 *.lof
 %OUTDIR%/
+
+# ============================================
+# Paper figures: whitelist for Overleaf sync
+# (overrides the global *.png / *.pdf blocks above)
+# ============================================
+!paper_neurips2026_sync/figures/
+!paper_neurips2026_sync/figures/**/*.pdf
+!paper_neurips2026_sync/figures/**/*.png
+!paper_neurips2026_sync/figures/**/*.tex
+!paper_neurips2026_sync/figures/**/*.py
