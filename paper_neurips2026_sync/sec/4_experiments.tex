@@ -22,7 +22,7 @@ We validate our VLM evaluator through MJ-Bench~\citep{chen2024mjbench} benchmark
 \subsection{Main Results: Nudity Erasure}
 \label{subsec:main_results}
 
-Table~\ref{table:main} presents the comprehensive comparison on nudity erasure across four adversarial prompt datasets and COCO image quality metrics.
+Table~\ref{table:nudity} presents the comprehensive comparison on nudity erasure across four adversarial prompt datasets and COCO image quality metrics.
 
 \input{table/main}
 
@@ -85,7 +85,7 @@ The take-away is architectural rather than numerical: CAS is a cosine of \emph{d
 \subsection{Image Quality Preservation}
 \label{subsec:quality}
 
-Table~\ref{table:main} (right columns) reports FID on COCO. \ours{} achieves FID 6.78, substantially lower than SLD-Max (18.46) and RECE (10.33), confirming that CAS gating effectively prevents quality degradation on benign prompts. We additionally measure VQAScore~\citep{lin2024evaluating} prompt faithfulness: across all datasets, the average VQA drop is $<$0.05 (e.g., Ring-A-Bell: 0.550 $\to$ 0.529, MJA illegal: 0.475 $\to$ 0.474), demonstrating that \ours{} preserves the semantic content of benign regions while selectively suppressing unsafe ones.
+Table~\ref{table:nudity} (right columns) reports FID on COCO. \ours{} achieves FID 6.78, substantially lower than SLD-Max (18.46) and RECE (10.33), confirming that CAS gating effectively prevents quality degradation on benign prompts. We additionally measure VQAScore~\citep{lin2024evaluating} prompt faithfulness: across all datasets, the average VQA drop is $<$0.05 (e.g., Ring-A-Bell: 0.550 $\to$ 0.529, MJA illegal: 0.475 $\to$ 0.474), demonstrating that \ours{} preserves the semantic content of benign regions while selectively suppressing unsafe ones.
 
 % ===========================================================================
 \subsection{Evaluator Validation}
