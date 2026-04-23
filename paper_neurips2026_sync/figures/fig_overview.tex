@@ -108,8 +108,8 @@
 
 % ============== COLUMN B : DENOISING LOOP ==============
 \node[colBG,dashed,line width=0.5pt,fill=white,
-      minimum width=\colW cm,minimum height=8.4cm,anchor=center]
-     (colB) at (\Bx,-0.6) {};
+      minimum width=\colW cm,minimum height=9.6cm,anchor=center]
+     (colB) at (\Bx,-0.95) {};
 \node[stageTitle,anchor=north] at (\Bx,3.25) {B.~Denoising loop};
 
 \node[draw,rounded corners=2pt,fill=white,minimum width=1.0cm,minimum height=0.7cm]
@@ -149,8 +149,8 @@
   -- (\Bx - \colW/2 - 0.1, 2.0) -- (zt.west);
 
 % ============== COLUMN C : DUAL PROBE ==============
-\node[colBG,fill=white,minimum width=\colW cm,minimum height=8.4cm,anchor=center]
-     (colC) at (\Cx,-0.6) {};
+\node[colBG,fill=white,minimum width=\colW cm,minimum height=9.6cm,anchor=center]
+     (colC) at (\Cx,-0.95) {};
 \node[stageTitle,anchor=north] at (\Cx,3.25) {C.~Where: dual probe};
 
 % The probe boxes are now NARROWER (colWin=4.0) — shifted LEFT within the column
@@ -223,26 +223,27 @@
 \node[font=\scriptsize,align=center] at ($(funTopL)!0.5!(funBotR)$)
      {\shortstack{$\max$\\[-1pt]\scriptsize mod}};
 
-% fusion box — shows the pixel-wise winner-take-all partition step.
-% M^f is the within-family modality max; {M̃_f} is the disjoint partition.
+% fusion box — centered in column C (width fits inside \colW=5.6 with
+% margin). More vertical gap under imgBox.south and between the two
+% formula lines to avoid cramping.
 \node[draw,rounded corners=2pt,fill=black!4,line width=0.4pt,
-      minimum width=5.0cm,minimum height=0.95cm,anchor=center,font=\scriptsize]
-     (fuse) at (\Ccx, -4.25)
-     {\shortstack{$M^f = \max(M^f_{\mathrm{text}},\,M^f_{\mathrm{img}})$\\[1pt]
-      $\widetilde{M}_f = M^f \cdot \mathbb{1}\!\big[f=\arg\max_{f'} M^{f'}\big]$}};
+      minimum width=4.8cm,minimum height=1.25cm,anchor=center,font=\scriptsize,
+      align=center,inner sep=4pt]
+     (fuse) at (\Cx, -4.70)
+     {$M^f \,=\, \max\!\bigl(M^f_{\mathrm{text}},\; M^f_{\mathrm{img}}\bigr)$\\[3pt]
+      $\widetilde{M}_f \,=\, M^f \cdot \mathbf{1}\!\left[\,f = \arg\max_{f'} M^{f'}\,\right]$};
 
 % connect text/img matrix centers to funnel left edge, then funnel right → fuse
 \draw[arrw] (\Ccx + 0.8, 1.65) -- (funTopL);
 \draw[arrw] (\Ccx + 0.8, -1.65) -- (funBotL);
-% funnel right-mid steps RIGHT first (breathing room past funnel edge),
-% then drops down past imgBox's east side, then goes LEFT into fuse.east.
-% HEAD is restored — per-user: the masking-merge arrow should visibly
-% terminate at the fusion box.
-\draw[arrw] ($(funTopR)!0.5!(funBotR)$) -- ++(0.35,0) |- (fuse.east);
+% funnel right-mid drops DOWN along the east side of imgBox (still inside
+% column C, past imgBox's east wall), then LEFT into fuse.east.
+% Head preserved — arrow visibly terminates at the fusion box.
+\draw[arrw] ($(funTopR)!0.5!(funBotR)$) |- (fuse.east);
 
 % ============== COLUMN D : HOW (two modes) ==============
-\node[colBG,fill=white,minimum width=\colW cm,minimum height=8.4cm,anchor=center]
-     (colD) at (\Dx,-0.6) {};
+\node[colBG,fill=white,minimum width=\colW cm,minimum height=9.6cm,anchor=center]
+     (colD) at (\Dx,-0.95) {};
 \node[stageTitle,anchor=north,text=howPurple] at (\Dx,3.25) {D.~How: two modes};
 
 % Anchor-inpaint branch (TOP) — LERP substitution using WINNING family
@@ -267,7 +268,7 @@
 % wall (in the C-D gap), so the line does NOT run through the interior
 % of D. Only the short fork horizontals cross into D to reach the box
 % west edges — where the arrow heads live.
-\coordinate (Denter) at (\Dx - \colW/2 - 0.1, -4.25);
+\coordinate (Denter) at (\Dx - \colW/2 - 0.1, -4.70);
 \coordinate (Dfork)  at (\Dx - \colW/2 - 0.1, 0.6);
 \draw[arrw]    (fuse.east) -- (Denter);   % single arrow from fuse through gap
 \draw[busline] (Denter) -- (Dfork);        % vertical bus outside D, no head
