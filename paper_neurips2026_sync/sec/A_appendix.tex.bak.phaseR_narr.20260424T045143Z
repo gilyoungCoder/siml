@@ -141,6 +141,7 @@ The overhead per step is $\approx 15$--$20\%$ over standard CFG, dominated by th
 Baseline   & .215 & .114 & .101 & .747 & .038 & .556 & .218 & .338 & .430 & .014 \\
 SLD-Max    & .570 & .329 & .241 & .316 & .114 & .873 & .669 & .204 & .063 & .063 \\
 SAFREE     & .772 & .582 & .190 & .127 & .101 & .901 & .754 & .148 & .021 & .077 \\
+ASCG       & .835 & .392 & .443 & .089 & .076 & .887 & .408 & .479 & .099 & .014 \\
 \midrule
 \textbf{Ours (Anchor, family)} & .899 & .861 & .038 & .063 & .038 & .951 & .845 & .106 & .014 & .035 \\
 \textbf{Ours (Hybrid, family)} & \textbf{.949} & .810 & .139 & .025 & .025 & \textbf{.972} & .789 & .183 & .011 & .017 \\
@@ -489,7 +490,9 @@ SLD-Medium   & .921 & .608 & .514 \\
 SLD-Strong   & .898 & .646 & .465 \\
 SLD-Max      & .822 & .494 & .423 \\
 \midrule
+ASCG         & .879 & .696 & .697 \\
 SAFREE       & .348 & .089 & .141 \\
+SAFREE+ASCG  & .249 & .101 & .155 \\
 \bottomrule
 \end{tabular}
 \end{table}

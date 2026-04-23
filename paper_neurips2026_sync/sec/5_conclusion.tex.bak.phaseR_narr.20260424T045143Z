@@ -1,0 +1,3 @@
+\section{Conclusion}
+
+We presented \ours{}, a training-free concept-erasure framework driven by a user-editable exemplar pack and structured as three decoupled stages: \emph{when} (CAS gate), \emph{where} (family-indexed dual-probe winner-take-all), and \emph{how} (anchor inpainting or hybrid guidance). \ours{} outperforms all training-free baselines on four adversarial nudity benchmarks and four MJA categories while preserving COCO image quality, and transfers to SD~3 and FLUX without design changes. Limitations and broader impact are discussed in Appendices~\ref{app:limitations} and~\ref{app:broader_impact}.
