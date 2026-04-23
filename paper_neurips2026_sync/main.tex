@@ -36,12 +36,18 @@
 \setlength{\floatsep}{8pt plus 2.0pt minus 2.0pt}
 \setlength{\intextsep}{10pt plus 2.0pt minus 2.0pt}
 
-% Relax float-placement parameters so the NeurIPS \@notice bottom float
-% (conference submission banner) does not reserve ~30\% of page 1.
-\renewcommand{\bottomfraction}{0.08}
-\renewcommand{\textfraction}{0.05}
-\renewcommand{\floatpagefraction}{0.7}
-\setcounter{bottomnumber}{1}
+% Override NeurIPS \@notice: the default uses a bottom float that reserves
+% ~30\% of page 1 via \bottomfraction, pushing \section{Introduction} to page 2.
+% We replace it with a plain \vfill + centered line so the notice still
+% appears at the bottom of page 1 but does not reserve float space.
+\makeatletter
+\renewcommand{\@notice}{%
+  \par\vspace*{\fill}%
+  \noindent\hrule\@width\textwidth\@height\z@%
+  \vspace{4pt}%
+  {\footnotesize\noindent\@noticestring\par}%
+}
+\makeatother
 
 % Custom commands
 \usepackage{xspace}
