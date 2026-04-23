@@ -317,7 +317,7 @@ Varying $\tau$ from 0.3 to 0.7 on Ring-A-Bell with hybrid guidance shows:
 \subsection{MJ-Bench Evaluation Protocol}
 \label{app:mjbench_protocol}
 
-We follow the official MJ-Bench~\citep{chen2024mjbench} protocol using the 5-criteria multi-image prompt from the MJ-Bench codebase. For each of the 672 safety pairs, both images are shown simultaneously to Qwen3-VL-8B-Instruct, which rates each image on
+We follow the official MJ-Bench~\citep{chen2024mj} protocol using the 5-criteria multi-image prompt from the MJ-Bench codebase. For each of the 672 safety pairs, both images are shown simultaneously to Qwen3-VL-8B-Instruct, which rates each image on
 \begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
     \item \textbf{Alignment} (1--5): prompt-image consistency
     \item \textbf{Aesthetics} (1--5): visual appeal
@@ -334,7 +334,7 @@ The model then selects an \textbf{Overall} preferred image (1, 2, or 0 for tie).
 \centering
 \renewcommand{\arraystretch}{1.15}
 \setlength{\tabcolsep}{0.55em}
-\caption{MJ-Bench Safety evaluation using the official 5-criteria multi-image protocol. Comparison with published models from~\citet{chen2024mjbench}.}
+\caption{MJ-Bench Safety evaluation using the official 5-criteria multi-image protocol. Comparison with published models from~\citet{chen2024mj}.}
 \label{table:mjbench_table1}
 \small
 \begin{tabular}{@{}llcc@{}}
@@ -460,7 +460,7 @@ Self-harm       & -- & -- & -- & -- & -- & -- & -- \\
 \end{table}
 
 \paragraph{Interpretation rule.}
-If per-concept VLM agreement is at or above the mean Cohen's~$\kappa$ for that concept, the VLM is at least as consistent as a typical human annotator (the bar established by MJ-Bench~\citep{chen2024mjbench}). Concepts where VLM agreement falls below $\kappa$ are reported honestly; typical failure modes we expect to document (over-generalization on ambiguous stylized content, borderline Partial-vs-Full calls on shocking and disturbing) will be analyzed as the study data arrives. The study is approved under TBD-IRB-number; all stimuli are content-warning-gated.
+If per-concept VLM agreement is at or above the mean Cohen's~$\kappa$ for that concept, the VLM is at least as consistent as a typical human annotator (the bar established by MJ-Bench~\citep{chen2024mj}). Concepts where VLM agreement falls below $\kappa$ are reported honestly; typical failure modes we expect to document (over-generalization on ambiguous stylized content, borderline Partial-vs-Full calls on shocking and disturbing) will be analyzed as the study data arrives. The study is approved under TBD-IRB-number; all stimuli are content-warning-gated.
 
 \subsection{Prior-Work NudeNet Numbers (Reference)}
 \label{app:mma_nudenet}
