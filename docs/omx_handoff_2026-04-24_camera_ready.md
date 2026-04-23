@@ -195,4 +195,20 @@ So future agents should reconstruct intent primarily from:
 ## 10. Practical commands for the next agent
 ### Read this handoff
 ```bash
-ssh siml-09 cd /mnt/home3/yhgil99/unlearning
+ssh siml-09 'cd /mnt/home3/yhgil99/unlearning && sed -n "1,240p" docs/omx_handoff_2026-04-24_camera_ready.md'
+```
+
+### Quick section scan
+```bash
+ssh siml-09 'cd /mnt/home3/yhgil99/unlearning && grep -n "^##" docs/omx_handoff_2026-04-24_camera_ready.md'
+```
+
+### Re-open main paper entrypoint
+```bash
+ssh siml-09 'cd /mnt/home3/yhgil99/unlearning/paper_neurips2026_sync && nl -ba main.tex | sed -n "1,220p"'
+```
+
+### Re-open template authority
+```bash
+ssh siml-09 'cd /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/Formatting_Instructions_For_NeurIPS_2026 && nl -ba neurips_2026.tex | sed -n "1,260p"'
+```
