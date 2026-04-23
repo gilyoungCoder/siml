@@ -209,18 +209,23 @@
 \node[anchor=north,font=\scriptsize] at (\Ccx, -2.65)
   {$M^f_{\mathrm{img}} \propto \sigma\!\big(\cos(f,\bar e_f)\big)$};
 
-% max_f funnel — pushed FURTHER RIGHT (closer to column right edge) + 1.0cm wide
-\pgfmathsetmacro{\funL}{\Cx + 1.80}   % left edge of funnel trapezoid
-\pgfmathsetmacro{\funR}{\Cx + 2.75}   % right edge (column C ends at Cx+2.8)
-\coordinate (funTopL) at (\funL, 1.4);
-\coordinate (funTopR) at (\funR, 0.6);
-\coordinate (funBotL) at (\funL, -2.4);
-\coordinate (funBotR) at (\funR, -1.6);
+% max-mod funnel — LEFT edge y-coords pinned to the probe box east y-coords
+% (txtBox center y=1.20, imgBox center y=-2.10) so the incoming arrows are
+% perfectly HORIZONTAL: they exit each probe box at its east edge and land
+% straight on the funnel's left edge. Right edge kept narrower → funnel-
+% narrows-rightward visual preserved.
+\pgfmathsetmacro{\funL}{\Cx + 1.80}
+\pgfmathsetmacro{\funR}{\Cx + 2.75}
+\pgfmathsetmacro{\funCx}{(\funL + \funR)/2}
+\coordinate (funTopL) at (\funL,  1.20);   % matches txtBox.east.y
+\coordinate (funTopR) at (\funR,  0.55);
+\coordinate (funBotL) at (\funL, -2.10);   % matches imgBox.east.y
+\coordinate (funBotR) at (\funR, -1.45);
 \draw[draw=black!50,fill=black!6,line width=0.4pt]
   (funTopL) -- (funTopR) -- (funBotR) -- (funBotL) -- cycle;
-% Funnel now represents MODALITY union (max of text/img) WITHIN a family,
-% followed by WINNER-TAKE-ALL across families. Label shows both steps.
-\node[font=\scriptsize,align=center] at ($(funTopL)!0.5!(funBotR)$)
+% "max mod" placed at the vertical MIDPOINT of the trapezoid (average of
+% all four corner ys) so it sits visually centered top-to-bottom.
+\node[font=\scriptsize,align=center] at (\funCx, -0.45)
      {\shortstack{$\max$\\[-1pt]\scriptsize mod}};
 
 % fusion box — centered in column C. Uses direct notation (M tilde for
@@ -233,9 +238,9 @@
      {$M^f \,=\, \max\!\bigl(M^f_{\mathrm{text}},\; M^f_{\mathrm{img}}\bigr)$\\[3pt]
       $\widetilde{M} \,=\, \max_f M^f,\quad \mathsf{w} \,=\, \arg\max_f M^f$};
 
-% connect text/img matrix centers to funnel left edge, then funnel right → fuse
-\draw[arrw] (\Ccx + 0.8, 1.65) -- (funTopL);
-\draw[arrw] (\Ccx + 0.8, -1.65) -- (funBotL);
+% connect text/img probe BOX EAST EDGES horizontally to funnel left corners
+\draw[arrw] (txtBox.east) -- (funTopL);
+\draw[arrw] (imgBox.east) -- (funBotL);
 % funnel right-mid drops DOWN along the east side of imgBox (still inside
 % column C, past imgBox's east wall), then LEFT into fuse.east.
 % Head preserved — arrow visibly terminates at the fusion box.
