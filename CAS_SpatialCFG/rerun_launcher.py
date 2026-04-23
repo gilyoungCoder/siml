@@ -42,7 +42,6 @@ FLUX1_CONCEPTS = [
 CONFIGS = {
     'sd14': [
         {'how_mode': 'hybrid',         'ss': 22.0, 'txt': 0.15, 'img': 0.10, 'cas': 0.6},
-        {'how_mode': 'hybrid',         'ss': 20.0, 'txt': 0.20, 'img': 0.15, 'cas': 0.6},
         {'how_mode': 'anchor_inpaint', 'ss': 2.0,  'txt': 0.10, 'img': 0.40, 'cas': 0.6},
     ],
     'sd3': [
