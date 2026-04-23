@@ -14,15 +14,12 @@
   thin,
 ]
 
-% ============== TITLE ==============
-\node[anchor=south,font=\normalsize\bfseries,text=black] at (0, 0.20)
-  {Probe mask localizes unsafe regions while sparing safe background};
-
-% ============== MAIN IMAGE : 3x3 probe grid ==============
+% Probe-mask validity: 3x3 grid
 % columns = {Generated image, Probe attention (top-20\% of activations), Overlay on original}
 % rows    = 3 test prompts covering explicit (nudity), implicit (scenic), adversarial
-\node[anchor=north,inner sep=0] (cam)
-  at (0, 0.0) {\includegraphics[width=13.5cm]{_raster_src/cam_grid.png}};
+% No in-figure title — description belongs in the LaTeX caption.
+\node[anchor=center,inner sep=0]
+  at (0, 0) {\includegraphics[width=13.5cm]{_raster_src/cam_grid.png}};
 
 \end{tikzpicture}
 \end{document}
