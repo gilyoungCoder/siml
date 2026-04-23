@@ -58,11 +58,10 @@
 \bibliographystyle{plainnat}
 \bibliography{references}
 
-\newpage
-\input{checklist.tex}
-
-\newpage
 \appendix
 \input{sec/A_appendix}
+
+\newpage
+\input{checklist.tex}
 
 \end{document}
