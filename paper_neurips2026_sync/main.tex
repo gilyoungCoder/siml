@@ -36,6 +36,13 @@
 \setlength{\floatsep}{8pt plus 2.0pt minus 2.0pt}
 \setlength{\intextsep}{10pt plus 2.0pt minus 2.0pt}
 
+% Relax float-placement parameters so the NeurIPS \@notice bottom float
+% (conference submission banner) does not reserve ~30\% of page 1.
+\renewcommand{\bottomfraction}{0.08}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.7}
+\setcounter{bottomnumber}{1}
+
 % Custom commands
 \usepackage{xspace}
 \newcommand{\ours}{EBSG\xspace}
