@@ -2,7 +2,7 @@
 \usepackage{tikz}
 \usepackage{amsmath,amssymb}
 \usepackage{xcolor}
-\usetikzlibrary{arrows.meta,positioning,shapes.geometric,backgrounds,fit,calc,decorations.pathmorphing,shadows}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,backgrounds,fit,calc,decorations.pathmorphing,decorations.pathreplacing,shadows}
 
 % ---- palette ----
 \definecolor{packBG}{HTML}{DBEAFE}
@@ -24,10 +24,11 @@
 \begin{document}
 \begin{tikzpicture}[
     font=\footnotesize,
-    >={Stealth[length=2.2mm,width=1.8mm]},
+    >={Stealth[length=2.6mm,width=2.2mm]},
     thin,
-    arrw/.style={->, line width=0.8pt, draw=greyLine},
-    bigarrow/.style={->, line width=1.4pt, draw=greyLine},
+    arrw/.style={->, line width=1.1pt, draw=greyLine},
+    bigarrow/.style={->, line width=1.7pt, draw=greyLine},
+    busline/.style={line width=1.1pt, draw=greyLine},
     thumb/.style={draw=packAccent!70,line width=0.4pt,fill=white,minimum width=5.5mm,minimum height=4mm,inner sep=0pt},
     chip/.style={draw=packAccent,line width=0.5pt,fill=white,rounded corners=1pt,inner sep=2.5pt,font=\scriptsize},
     stageTitle/.style={font=\small\bfseries},
@@ -37,8 +38,9 @@
 % ============== LAYOUT CONSTANTS ==============
 \def\colW{5.6}     % column width
 \def\colWin{4.0}   % inner box width  (reduced so max_f funnel has room)
-\def\colDin{5.2}   % WIDER inner box width for D column (so Hybrid equation fits)
-\def\gap{0.8}      % gap between columns
+\def\colDin{5.0}   % inner box width for D column (tighter than col so boxes
+                   %  visually "float" with side margin; Hybrid equation fits)
+\def\gap{1.25}     % WIDER gap between columns for breathing room
 
 \pgfmathsetmacro{\Ax}{0}
 \pgfmathsetmacro{\Bx}{\Ax + \colW + \gap}
@@ -66,12 +68,17 @@
 \node[font=\scriptsize\itshape,anchor=north,text=packAccent!80!black] at (\Ax,4.15)
      {user-editable, training-free};
 
-\node[font=\scriptsize,anchor=north] at (\Ax, 3.7) {$K$ exemplars per family};
+% header: emphasize the two axes of the pack — F concepts/families × K exemplars
+\node[font=\scriptsize,anchor=north] at (\Ax, 3.7)
+     {$F$ families $\times$ $K$ exemplars per family};
 
 \def\gridX{\Ax - 1.25}
 \def\gridY{3.25}
 \foreach \r/\lab in {0/shocking,1/illegal,2/violence,3/nudity} {
-  \node[anchor=east,font=\scriptsize] at (\gridX - 0.1, \gridY - 0.42 - 0.55*\r) {\lab};
+  % row label = "family name" with a leading f_i chip so the per-concept
+  % family structure is visually unambiguous
+  \node[anchor=east,font=\scriptsize] at (\gridX - 0.1, \gridY - 0.42 - 0.55*\r)
+       {$f_{\the\numexpr\r+1}$: \lab};
   \foreach \c in {0,1,2,3} {
     \pgfmathsetmacro{\tx}{\gridX + 0.05 + 0.6*\c}
     \pgfmathsetmacro{\ty}{\gridY - 0.15 - 0.55*\r}
@@ -80,6 +87,13 @@
 }
 \draw[packAccent!60,line width=0.4pt,rounded corners=1pt]
   (\gridX, \gridY - 2.35) rectangle (\gridX + 2.5, \gridY - 0.15);
+
+% RIGHT brace spanning all rows → visually marks the per-concept family axis
+\draw[decorate,decoration={brace,amplitude=4pt},
+      line width=0.5pt,draw=packAccent!70]
+  (\gridX + 2.58, \gridY - 0.15) -- (\gridX + 2.58, \gridY - 2.35);
+\node[font=\scriptsize\itshape,text=packAccent!85!black,anchor=west]
+  at (\gridX + 2.72, \gridY - 1.25) {$F$ families};
 
 \node[chip,minimum width=4.2cm,anchor=center] (dtgt) at (\Ax, -0.2)
    {$\bar d^{\,tgt}_f$ \ (per-family target)};
@@ -221,41 +235,43 @@
      (colD) at (\Dx,-0.6) {};
 \node[stageTitle,anchor=north,text=howPurple] at (\Dx,3.25) {D.~How: two modes};
 
-% Anchor-inpaint branch (TOP) — box widened (\colDin) so equation fits cleanly
-\node[colBG,fill=anchorBG,minimum width=\colDin cm,minimum height=2.5cm,anchor=north]
-     (anchorBox) at (\Dx, 2.65) {};
-\node[anchor=north,font=\scriptsize\bfseries,text=packAccent] at (\Dx,2.53)
+% Anchor-inpaint branch (TOP) — shorter + narrower so boxes "float" in column
+\node[colBG,fill=anchorBG,minimum width=\colDin cm,minimum height=2.0cm,anchor=north]
+     (anchorBox) at (\Dx, 2.35) {};
+\node[anchor=north,font=\scriptsize\bfseries,text=packAccent] at (\Dx,2.23)
      {Anchor inpaint};
-\node[anchor=center,font=\scriptsize] at (\Dx, 1.4)
+\node[anchor=center,font=\scriptsize] at (\Dx, 1.50)
      {$\hat{\epsilon}_{\mathrm{safe}} = \hat{\epsilon}_t - s_a M \cdot \tfrac{1}{F}\!\textstyle\sum\limits_f d^{\,tgt}_f$};
 
-% Hybrid branch (BOTTOM) — box widened (\colDin) so equation fits cleanly
-\node[colBG,fill=hybridBG,minimum width=\colDin cm,minimum height=2.5cm,anchor=north]
-     (hybBox) at (\Dx, -0.4) {};
-\node[anchor=north,font=\scriptsize\bfseries,text=howPurple] at (\Dx,-0.52)
+% Hybrid branch (BOTTOM) — shorter + narrower to match
+\node[colBG,fill=hybridBG,minimum width=\colDin cm,minimum height=2.0cm,anchor=north]
+     (hybBox) at (\Dx, -0.45) {};
+\node[anchor=north,font=\scriptsize\bfseries,text=howPurple] at (\Dx,-0.57)
      {Hybrid};
-\node[anchor=center,font=\scriptsize] at (\Dx, -1.65)
+\node[anchor=center,font=\scriptsize] at (\Dx, -1.30)
      {$\hat{\epsilon}_{\mathrm{safe}} = \hat{\epsilon}_t + s_h M \cdot \tfrac{1}{F}\!\textstyle\sum\limits_f (d^{\,anc}_f - d^{\,tgt}_f)$};
 
-% incoming arrow from C, forks into anchor/hybrid
-% The bus line (C-exit -> Denter -> Dfork) is a plain line (no head);
-% heads live only at the TRUE destinations (anchorBox.west, hybBox.west).
-\coordinate (Denter) at (\Dx - \colW/2 + 0.15, -4.25);
-\coordinate (Dfork)  at (\Dx - \colW/2 + 0.15, 0.6);
-\draw[line width=0.8pt,draw=greyLine] (\Cx + \colW/2, -4.25) -- (Denter) -- (Dfork);
+% incoming arrow from C -> D : the horizontal segment carries a visible
+% HEAD that lands INSIDE the D column (at Denter, past the column wall),
+% so the reader clearly sees the flow entering D. The vertical bus from
+% Denter up to Dfork is a plain line (no second head).
+\coordinate (Denter) at (\Dx - \colW/2 + 0.55, -4.25);
+\coordinate (Dfork)  at (\Dx - \colW/2 + 0.55, 0.6);
+\draw[arrw]    (\Cx + \colW/2, -4.25) -- (Denter);   % head lands inside D
+\draw[busline] (Denter) -- (Dfork);                   % vertical bus, no head
 \draw[arrw] (Dfork) |- (anchorBox.west);
 \draw[arrw] (Dfork) |- (hybBox.west);
 
 % merge point — invisible coordinate where anchor/hybrid outputs converge
 % into the feedback path. The two merge segments are plain lines (no heads)
-% so the arrowheads don't pile up at an invisible point.
-\coordinate (mergeNode) at (\Dx + \colW/2 + 0.05, 0.1);
-\draw[line width=0.8pt,draw=greyLine] (anchorBox.east) -- ++(0.15,0) |- (mergeNode);
-\draw[line width=0.8pt,draw=greyLine] (hybBox.east)    -- ++(0.15,0) |- (mergeNode);
+% so arrowheads do not pile up at an invisible point.
+\coordinate (mergeNode) at (\Dx + \colW/2 - 0.35, 0.1);
+\draw[busline] (anchorBox.east) -- ++(0.15,0) |- (mergeNode);
+\draw[busline] (hybBox.east)    -- ++(0.15,0) |- (mergeNode);
 
 % feedback to B loop — originates at mergeNode, loops over the top back to z_t
 \draw[bigarrow,draw=howPurple!70!black,dashed]
-  (mergeNode) -- ++(0,0.5) -| (\Dx + \colW/2 + 0.05, 5.75)
+  (mergeNode) -- ++(0,0.5) -| (\Dx + \colW/2 - 0.35, 5.75)
   -- (\Bx - \colW/2 + 0.5, 5.75)
   -- (\Bx - \colW/2 + 0.5, 2.0) -- (zt.west);
 \node[font=\scriptsize,text=howPurple!70!black,anchor=south]
