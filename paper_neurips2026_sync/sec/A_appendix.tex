@@ -418,14 +418,50 @@ Respond ONLY with this JSON: \{``category'': ``<NotRelevant$\vert$Safe$\vert$Par
 \label{fig:rubric_harm}
 \end{figure}
 
-\subsection{Why VLM rather than NudeNet or Q16}
+\subsection{Why VLM-based evaluation is necessary}
 \label{app:evaluator_extended}
 
-Earlier safety-in-diffusion studies scored nudity with NudeNet~\citep{notai_nudenet_2019} or with embedding-based classifiers such as Q16~\citep{schramowski2022can}. Two failure modes of scalar harmful-or-not detectors motivate our move to a four-class VLM rubric.
+This section motivates the four-class VLM-based rubric that underpins the SR metric in the main paper, with emphasis on jointly assessing \emph{safety} and \emph{semantic fidelity}.
 
-\emph{(1) Over-sensitivity.} NudeNet's binary classification flags socially acceptable exposure (swimwear, athletic attire, partial clothing) as full nudity, producing false positives that incentivize over-suppression. Under our four-class rubric these cases are routed to \textsc{Safe} or \textsc{Partial}.
+\subsubsection{Limitations of existing evaluation metrics}
+\label{app:evaluator_limits}
 
-\emph{(2) Semantic-collapse confound.} Aggressive safety interventions can degrade generations into artifacts, blur, or noise; NudeNet then fails to detect unsafe content because \emph{nothing} is detectable, so the destroyed image is implicitly counted as safe. The rubric's \textsc{NotPeople} (nudity) and \textsc{NotRelevant} (harm concepts) labels explicitly capture semantic collapse, preventing this inflation. A semantic-preserving erasure must turn \textsc{Full} into \textsc{Safe}; turning \textsc{Full} into \textsc{NotPeople} is collapse, not erasure, and our SR accounting reflects that.
+Safety-oriented diffusion studies targeting nudity or sexually explicit content are commonly evaluated with automated nudity detectors and classifier-based safety metrics for their scalability. NudeNet~\citep{notai_nudenet_2019} is widely adopted as a default tool, typically producing a coarse binary nudity decision. Other works report CLIP-based safety classifiers (\eg, Q16~\citep{schramowski2022can}) as a complementary signal, estimating inappropriate content through image-text similarity against curated descriptors rather than direct semantic verification.
+
+While convenient, these metrics exhibit systematic limitations for safety \emph{with semantic preservation}. \emph{First}, coarse nudity detectors conflate benign exposure (\eg, swimwear, athletic attire) with genuinely harmful content, yielding false positives that incentivize over-suppression. \emph{Second}, embedding-based safety classifiers are not designed to assess whether an image remains semantically coherent: they may assign a low-risk score even when the generation has degraded into artifacts, blur, or noise. Consequently, detector-only evaluation risks \emph{misidentifying semantic collapse as safety}, rendering these metrics fundamentally misaligned with human perception.
+
+\subsubsection{Semantic collapse confounds evaluation}
+\label{app:evaluator_collapse}
+
+A distinct confound arises from the evaluation \emph{protocol} rather than any single detector. Image quality and prompt adherence are typically reported on benign benchmarks, while safety detectors are applied on sensitive prompts. This mismatch leaves semantic fidelity on sensitive prompts largely unmeasured: a method may preserve quality on benign data yet collapse generations under unsafe prompts, and still be scored as safe because the detector fails to activate on unrecognizable outputs. Safety can therefore be \emph{overstated} unless semantic validity is audited on the same sensitive-prompt distribution that drives the safety score.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.94\linewidth]{figures/position_map_revised.png}
+\caption{Qualitative comparison of NudeNet versus our VLM-based evaluation. NudeNet's binary prediction conflates benign exposure (\eg, swimwear, athletic attire) with harmful content, labeling such cases as \emph{Unsafe}. The four-class VLM rubric assigns them to \textsc{Safe} or \textsc{Partial}, matching human judgment and reducing the incentive to over-suppress.}
+\label{fig:nudenet_vs_vlm_positionmap}
+\end{figure}
+
+\subsubsection{VLM-based evaluation with Qwen3-VL}
+\label{app:evaluator_vlm}
+
+To align automatic evaluation with human visual judgment, we adopt a VLM-based protocol using Qwen3-VL-8B. Each generated image is assigned to one of four categories under the nudity rubric---\textsc{NotPeople}, \textsc{Safe}, \textsc{Partial}, \textsc{Full}---and one of four under the generic harm rubric---\textsc{NotRelevant}, \textsc{Safe}, \textsc{Partial}, \textsc{Full} (see Figures~\ref{fig:rubric_nudity}--\ref{fig:rubric_harm} for the full prompt texts). This taxonomy jointly characterizes \emph{safety severity} and \emph{semantic validity}, enabling a fine-grained analysis beyond coarse detector outputs.
+
+Crucially, the VLM-based protocol distinguishes controlled concept suppression from \emph{safety-by-destruction}: semantically collapsed generations are explicitly captured as \textsc{NotPeople}/\textsc{NotRelevant} rather than being implicitly counted as \textsc{Safe}. A semantic-preserving erasure must turn \textsc{Full} into \textsc{Safe}; turning \textsc{Full} into \textsc{NotPeople} is collapse, not erasure, and our SR accounting reflects this invariant. Figure~\ref{fig:nudenet_vs_vlm_positionmap} illustrates the over-sensitivity failure mode, and Figures~\ref{fig:case_oversensitivity} and~\ref{fig:case_collapse} provide concrete case studies of the two failure modes that motivate the VLM protocol.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/grid_nudenet_vs_VLM_nude.png}
+\caption{A case study of NudeNet evaluation under over-sensitivity. Even with a standard threshold, NudeNet's binary classification incorrectly flags socially acceptable exposure as full nudity. Under the four-class VLM rubric these images are routed to \textsc{Safe} or \textsc{Partial}, matching human judgment.}
+\label{fig:case_oversensitivity}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/grid_nudenet_vs_VLM_notrel.png}
+\caption{A case study of NudeNet evaluation under semantic collapse. When high guidance scales destroy image structure, NudeNet incorrectly labels the resulting not-relevant noise as \emph{safe} simply because no recognizable human features remain. The VLM rubric flags these images as \textsc{NotPeople}/\textsc{NotRelevant}, so they are not counted as successful erasures.}
+\label{fig:case_collapse}
+\end{figure}
 
 \subsection{Human Agreement Study}
 \label{app:human_study}
