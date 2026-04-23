@@ -23,6 +23,6 @@ for ((i=START; i<END && i<N; i++)); do
   fi
   echo "[w$WORKER] EVAL $D" | tee -a $LOGD/worker_$WORKER.log
   cd /mnt/home3/yhgil99/unlearning/vlm
-  python $EVAL "$D" illegal qwen >> $LOGD/worker_$WORKER.log 2>&1
+  /mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python $EVAL "$D" illegal qwen >> $LOGD/worker_$WORKER.log 2>&1
 done
 echo "[w$WORKER] DONE" | tee -a $LOGD/worker_$WORKER.log
