@@ -546,8 +546,3 @@ SAFREE           & --          & $\sim$4.5\,s \\
 \paragraph{CAS threshold sensitivity.} $\tau$ transfers well within concept categories but requires per-concept tuning across categories; automated selection on a tiny validation set is a promising direction.
 
 \paragraph{Base model dependency.} Our main evaluation is on SD~v1.4. The framework is architecture-agnostic in principle, but hyperparameters and exemplar embeddings may need re-tuning for SDXL, SD3 (MMDiT), or FLUX (DiT) backbones.
-
-\section{Broader Impact}
-\label{app:broader_impact}
-
-\ours{} is designed to mitigate safety concerns in generative models and contributes to responsible AI deployment. The same spatial localization techniques could in principle be repurposed to amplify harmful content if applied maliciously, and should therefore be deployed as one component of a comprehensive safety pipeline that also includes upstream prompt filtering and downstream content review. Releasing the concept packs used in our evaluation as human-readable prompt-and-image directories is intended to support auditability and responsible adaptation rather than misuse.
