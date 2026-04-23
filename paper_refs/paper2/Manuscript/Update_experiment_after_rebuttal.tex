@@ -1,0 +1,62 @@
+\subsection{Compatibility with Frontier Model and Style-Level Intellectual Property Control}
+
+We evaluate the compatibility of our plug-and-play approach with the frontier model SD-v3 \citep{esser2024scaling}. The experimental results are presented in \tabref{sd3_exp}.
+On SD-v3, SAFREE alone reduces ASR by approximately 9\% compared to the baseline. In contrast, our approach achieves a 33.2\% relative reduction in ASR, from 0.304 to 0.203. Notably, our method maintains CLIP alignment and even slightly improves FID. This demonstrates the applicability of our proposed method to recent and powerful backbones models.
+
+Interestingly, our safe denoiser enhances sample diversity during inference, which can lead to a reduction in FID.
+A well-known phenomenon of large CFG values is a fidelity and diversity trade-off. Specifically, increasing CFG sharpens alignment but diminishes sample diversity, resulting in a degradation of FID at high values. This phenomenon has been observed in previous studies \citep{sadat2024cads, kynkaanniemi2024applying}.
+In contrast, our safe denoiser is not overly reliant on the text conditioning, allowing it to introduce relevant stochasticity that effectively mitigates the loss of diversity caused by high CFG. Consequently, our denoiser improves FID.
+Empirically, we have observed higher intra-prompt diversity compared to the baseline. Another perspective to consider is that FID’s Gaussian approximation of feature distributions possibly records small improvements that does not translate into noticeable quality differences in practical applications.
+
+\begin{wraptable}{r}{0.55\columnwidth}
+  \vskip -0.2in
+    \caption{SD-v3 results on Ring-A-Bell for safety and COCO-30K for image quality.}
+    \label{tab:sd3_exp}
+    \centering
+    % \resizebox{0.7\textwidth}{!}{%
+        \begin{tabular}{lcccc}
+            \toprule
+            \multirow{2}{*}{Method} 
+            & \multicolumn{2}{c}{Ring-A-Bell} 
+            & \multicolumn{2}{c}{COCO-30K} \\
+            \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+            & ASR $\downarrow$ & TR $\downarrow$ 
+            & FID $\downarrow$ & CLIP $\uparrow$ \\\midrule
+            SD-v3      & 0.304 & 0.330 & 23.15 & \textbf{31.46} \\
+            + SAFREE & 0.278 & 0.298 & 22.99 & 31.24 \\
+            \cc{15}+ Ours   & \cc{15}\textbf{0.203} & \cc{15}\textbf{0.267} & \cc{15}\textbf{22.54} & \cc{15}31.15 \\
+            \bottomrule
+        \end{tabular}
+    % }%
+\end{wraptable}
+
+We conceptually evaluate baselines in situations where pretrained diffusion models leak intellectual property. In this scenario, intellectual property-sensitive prompts can be grouped into three scenarios:
+\emph{(i) the prompt explicitly names the target intellectural property; 
+(ii) the prompt avoids the name but gives a detailed textual description; and
+(iii) neither name nor descriptive cues are present, yet the model reproduces the target’s style.}
+The third case presents a significant challenge for text-only defenses, as there is no negative text cue to negate. 
+As reported by \citep{somepalli2023understanding}, diffusion models can overfit styles and reproduce
+them even without explicit textual mentions. We reproduce this phenomenon with Munch’s The
+Scream by using the prompt ``If Barbie were the face of the world’s most famous paintings''. While this text prompt never mentions Munch or The Scream, SD-v1.4 recreates the painting’s distinctive
+style as shown in \figref{memorized_munch}. When we use four original paintings of ''The Scream'', for instance two from 1893, one from 1895, one
+from 1910, as the negative set, our safe denoiser suppresses Munch's style while preserving the
+Barbie concept. Additionally, Ours with SAFREE produces both modern and classical renderings without the style of Munch portraits. The qualitative results are displayed in \figref{protected_ip}.
+
+\begin{figure}[!t]
+    \centering
+    \vskip -0.1in
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\textwidth]{Figures/Experiments/munch.pdf}
+            \caption{Negative datapoints}
+            \label{fig:munch}
+        \end{subfigure} 
+        \begin{subfigure}{0.49\textwidth}
+                \includegraphics[width=\textwidth]{Figures/Experiments/babie.pdf}
+            \caption{Generated Images}
+            \label{fig:memorized_munch}
+        \end{subfigure}
+    \caption{Qualitative result for style-level intellectual property control. SD-v1.4 reproduces Munch’s style, whereas Ours with and without SAFREE removes that style while preserving the ``Barbie'' concept. In this experiment, we use four variants of The Scream painted in 1893, 1893, 1895, 1910 as the negative datapoints.}
+    \label{fig:protected_ip}
+    \vspace{-0.1in}
+\end{figure}
+

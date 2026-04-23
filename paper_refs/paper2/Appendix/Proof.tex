@@ -1,0 +1,73 @@
+\section{Proof}
+\label{sec:proof}
+
+\begin{reptheorem}%
+Suppose that $\mathbb{E}_{\textup{data}}[\mathbf{x}\vert\mathbf{x}_{t}]$, $\mathbb{E}_{\textup{safe}}[\mathbf{x}\vert\mathbf{x}_{t}]$, and $\mathbb{E}_{\textup{unsafe}}[\mathbf{x}\vert\mathbf{x}_{t}]$ are the data denoiser, the safe denoiser, and the unsafe denoiser. Then,
+    \begin{align*}%
+        \mathbb{E}_{\textup{safe}}[\mathbf{x}\vert\mathbf{x}_{t}]&=\mathbb{E}_{\textup{data}}[\mathbf{x}\vert\mathbf{x}_{t}]\\
+        &\quad+\beta^{*}(\mathbf{x}_{t})\big(\mathbb{E}_{\textup{data}}[\mathbf{x}\vert\mathbf{x}_{t}]-\mathbb{E}_{\textup{unsafe}}[\mathbf{x}\vert\mathbf{x}_{t}]\big) \nonumber
+    \end{align*}
+    for a weight is defined by
+    \begin{align*}%
+        \beta^{*}(\mathbf{x}_{t}) = \frac{Z_{\textup{unsafe}}p_{\textup{unsafe},t}(\mathbf{x}_{t})}{Z_{\textup{safe}}p_{\textup{safe},t}(\mathbf{x}_{t})},
+    \end{align*}
+    where $Z_{\textup{safe}}:=\int 1_{\textup{safe}}(\mathbf{x})p_{\textup{data}}(\mathbf{x})\diff\mathbf{x}$ and $Z_{\textup{unsafe}}:=\int 1_{\textup{unsafe}}(\mathbf{x})p_{\textup{data}}(\mathbf{x})\diff\mathbf{x}$ are normalizing constants of safe and unsafe distributions, respectively.
+\end{reptheorem}
+
+\begin{proof}
+Using the relationships
+\begin{align*}
+    p_{\text{safe}}(\mathbf{x})= \frac{1}{Z_\text{safe}}1_{\text{safe}}(\mathbf{x}) p_{\text{world}}(\mathbf{x}) \text{\, and\, } p_{\text{unsafe}}(\mathbf{x})= \frac{1}{Z_\text{unsafe}}1_{\text{unsafe}}(\mathbf{x}) p_{\text{world}}(\mathbf{x}),
+\end{align*}
+we derive the safe denoiser by
+\begin{align*}
+    \mathbb{E}_{\text{safe}}[\mathbf{x}\vert\mathbf{x}_{t}]&=\int\mathbf{x}p_{\text{safe},t0}(\mathbf{x}\vert\mathbf{x}_{t})\diff\mathbf{x}\\
+    &=\frac{\int\mathbf{x}p_{\text{safe}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{\int\mathbf{x}1_{\text{safe}}(\mathbf{x})p_{\text{data}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{\int\mathbf{x}(1(\mathbf{x})-(1(\mathbf{x})-1_{\text{safe}}(\mathbf{x})))p_{\text{data}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{\int\mathbf{x}(1(\mathbf{x})-1_{\text{unsafe}}(\mathbf{x}))p_{\text{data}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{\int\mathbf{x}p_{\text{data}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}-\int\mathbf{x}1_{\text{unsafe}}(\mathbf{x})p_{\text{data}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{\int\mathbf{x}p_{\text{data}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}-Z_{\text{unsafe}}\int\mathbf{x}p_{\text{unsafe}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{p_{\text{data},t}(\mathbf{x}_{t})}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\frac{\int\mathbf{x}p_{\text{data}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{p_{\text{data},t}(\mathbf{x}_{t})}-\frac{Z_{\text{unsafe}}p_{\text{unsafe},t}(\mathbf{x}_{t})}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\frac{\int\mathbf{x}p_{\text{unsafe}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{p_{\text{unsafe},t}(\mathbf{x}_{t})}\\
+    &=\frac{p_{\text{data},t}(\mathbf{x}_{t})}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]-\frac{Z_{\text{unsafe}}p_{\text{unsafe},t}(\mathbf{x}_{t})}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\mathbb{E}_{\text{unsafe}}[\mathbf{x}\vert\mathbf{x}_{t}].
+\end{align*}
+Now, 
+\begin{align*}
+    1+\frac{Z_{\text{unsafe}}p_{\text{unsafe},t}(\mathbf{x}_{t})}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}&=\frac{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})+Z_{\text{unsafe}}p_{\text{unsafe},t}(\mathbf{x}_{t})}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{Z_{\text{safe}}\int p_{\text{safe}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}+Z_{\text{unsafe}}\int p_{\text{unsafe}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{\int (Z_{\text{safe}}p_{\text{safe}}(\mathbf{x})+Z_{\text{unsafe}}p_{\text{unsafe}}(\mathbf{x}))q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{\int (1_{\text{safe}}(\mathbf{x})p_{\text{data}}(\mathbf{x})+1_{\text{unsafe}}(\mathbf{x})p_{\text{data}}(\mathbf{x}))q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})}\\
+    &=\frac{\int p_{\text{data}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})\diff\mathbf{x}}{Z_{\text{safe}}p_{\text{safe,t}}(\mathbf{x}_{t})}=\frac{p_{\text{data},t}(\mathbf{x}_{t})}{Z_{\text{safe}}p_{\text{safe},t}(\mathbf{x}_{t})},
+\end{align*}
+which completes the proof.
+\end{proof}
+
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%

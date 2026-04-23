@@ -1,0 +1,175 @@
+\begin{table*}
+\caption{Attack Success Rate, SP: Subspace Proximity, NB: Negative Prompt Balance, $^\dagger$: from RECE}\label{tab:t2i_main}
+\small
+\centering
+\setlength{\tabcolsep}{1.mm}
+\resizebox{\textwidth}{!}{
+\begin{tabu}{lc|ccccc|cc}
+\toprule
+& &\multirow{3}{*}{I2P $\downarrow$}&\multirow{3}{*}{P4D $\downarrow$}&\multirow{3}{*}{Ring-A-Bell $\downarrow$}&\multirow{3}{*}{MMA-Diffusion $\downarrow$}&\multirow{3}{*}{UnlearnDiffAtk $\downarrow$}&\multicolumn{2}{c}{COCO-30k}\\ 
+\cmidrule(lr){8-9}
+Method&Publication&
+&&&&&FID $\downarrow$ &CLIP $\uparrow$\\
+\midrule
+SD-v1.4 &-&
+0.570&
+0.987&0.831$^\dagger$&&&14.5&31.3\\
+% SD-v2.0 &-&&0.960&&&&&\\
+SDXL &-&
+\todo{}&
+0.709&&&
+&&\\
+\midrule
+\rowfont{\color{mygray}}
+{ESD~\citep{gandikota2023erasing}} &{ICCV 23'} &
+\todo{}&\todo{}
+&0.528&0.873&0.761
+&15.9&30.7\\
+\rowfont{\color{mygray}}
+{MACE~\citep{lu2024mace}}&{CVPR 24'} &
+\todo{}&\todo{}\\
+\rowfont{\color{mygray}}
+{SDID~\citep{li2024self}}&{CVPR 24'} &0.270\\
+\rowfont{\color{mygray}}
+{Latent Guard~\citep{liu2024latent}}&{ECCV 24'} &{no}&code\\
+\midrule
+NGPT~\citep{Woolf2023} & - &
+\todo{}&\todo{}&&&
+&&\\
+SLD-Medium~\citep{schramowski2023safe} &CVPR 23' &
+\todo{}&0.592&&&
+&16.9&31.0$^\dagger$
+\\
+SLD-Max~\citep{schramowski2023safe} &CVPR 23'&
+\todo{}&0.775$^\dagger$&0.662$^\dagger$&&0.824$^\dagger$
+&18.8&\\
+UCE~\citep{gandikota2024unified}&WACV 24' &
+0.253&
+0.803$^\dagger$&0.331$^\dagger$&\todo{0.367}&0.796$^\dagger$
+&15.7&31.3$^\dagger$\\
+% T2IShield~\citep{wang2024t2ishield}&ECCV 24' &\\
+% \rowfont{\color{mygray}}SafeGen~\citep{li2024safegen}&CCS 24'&data&gen&is needed&-&-&-&-\\
+% NGPT-Lazy~\citep{ban2024understanding} &arXiv 24.06 &
+% &
+% 0.007&&&
+% &&\\
+SA~\citep{heng2023selective}&NeurIPS 23'&
+&0.789$^\dagger$&0.225$^\dagger$&&0.775$^\dagger$&&30.6$^\dagger$\\
+CA~\citep{kumari2023ablating}&ICCV 23'&&\textbf{0.606}$^\dagger$&0.254$^\dagger$&&0.655$^\dagger$&&31.2$^\dagger$\\
+RECE~\citep{gong2024reliable}&ECCV 24' &
+\textbf{0.092}&0.649$^\dagger$&\textbf{0.134}$^\dagger$&&0.655$^\dagger$&&30.9$^\dagger$\\
+% RECE~\citep{gong2024reliable}&ECCV 24' &0.190&0.649$^\dagger$&\textbf{0.134}$^\dagger$&&0.655$^\dagger$&&30.9$^\dagger$\\
+\rowfont{\color{mygray}}
+{ConceptPrune~\citep{chavhan2024conceptprune}}&{arXiv 24.05}&&&
+0.148&0.044&\textbf{0.648}
+&16.9&29.9\\
+\midrule
+\rowfont{\color{mygray}}
+SD-v1.4 Coco Subsample&-
+&&&&&&&30.9\\
+\midrule
+% \ours~(Ours): SP-$\alpha=0.005$ (denoising: 0-49)&-
+% &\todo{0.197}&\todo{}&\todo{0.076}&&&\todo{}&\todo{30.4}\\
+% \ours~(Ours): SP-$\alpha=0.0$ (denoising: 0-49)&-
+% &\todo{\textbf{0.070}}&\todo{0.193}&\todo{0.038}&&&\todo{}&\todo{25.7}\\
+% \ours~(Ours): SP-$\alpha=0.0$ + NB&-&\todo{}&\todo{}&\todo{}&&&\todo{}&\todo{}\\
+\ours~(Ours): SP-$\alpha=0.0$ (denoising: 0-4)&-&\todo{}&\todo{}&\todo{0.139}&&0.190&\todo{}&\todo{30.6}\\
+\rowfont{\color{azure(colorwheel)}}{\ours~(Ours): SP-$\alpha=0.0$ (denoising: 0-9)}&-&\todo{}&\todo{}&{\textbf{0.038}}&&0.092&\todo{}&{30.0}\\
+{\ours~(Ours): SP-$\alpha=0.0$ (denoising: 0-14)}&-&\todo{}&\todo{}&{\textbf{0.013}}&&0.056&\todo{}&\todo{{29.7}}\\
+\ours~(Ours): SP-$\alpha=0.0$-null (denoising: 0-4)&-&&&0.051&&&&30.5\\
+% {\ours~(Ours): SP-$\alpha=0.0$-null (denoising: 0-9)}&-&&&&&&&\\
+\rowfont{\color{azure(colorwheel)}}\ours~(Ours): SP-$\alpha=0.0$-ONP (denoising: 0-4)&-&&&0.101&&&&{\textbf{31.1}}\\
+% {\ours~(Ours): SP-$\alpha=0.0$-ONP (denoising: 0-9)}&-&&&0.076&&&&30.4\\
+\ours~(Ours): SP-$\alpha=0.0$-M2O (denoising: 0-4)&-&&&0.089&&&&30.6\\
+% {\ours~(Ours): SP-$\alpha=0.0$-M2O (denoising: 0-9)}&-&&&&&&&30.6\\
+\ours~(Ours): SP-$\alpha=0.01$-M2O (denoising: 0-4)&-&&&0.051&&&&30.7\\
+% {\ours~(Ours): SP-$\alpha=0.01$-M2O (denoising: 0-9)}&-&&&0.076&&&&30.7\\
+\bottomrule
+\end{tabu}
+}
+\end{table*}
+
+
+
+\begin{table*}
+\caption{Attack Effectiveness.}\label{tab:3d_main}
+\small
+\centering
+\setlength{\tabcolsep}{1.mm}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccccccc}
+\toprule
+&
+\multicolumn{7}{c}{I2P}&
+NSFW\\ 
+\cmidrule(lr){2-8} \cmidrule(lr){9-9}
+Method&
+Hate&
+Harassment&
+Violence&
+Self-harm&
+Sexual&
+Shocking&
+Illegal Activity\\ 
+\midrule
+VideoCrafter2\\
++ Toxigen\\
++ NSFW text classifier\footnote{https://huggingface.co/michellejieli/NSFW_text_classifier}\\
++ SD safety checker\footnote{https://huggingface.co/CompVis/stable-diffusion-safety-checker}\\
+% + SD-NEGP~\cite{}\\
+% + SLD-Medium~\cite{} \\
+% + SLD-Strong~\cite{} \\
+% + SLD-Max~\cite{} \\
+% + ESD~\cite{} \\
+\midrule
+T2V-turbo\\
++ Toxigen\\
++ NSFW text classifier\\
++ SD safety checker\\
+% SD-NEGP~\cite{}\\
+% SLD-Medium~\cite{} \\
+% SLD-Strong~\cite{} \\
+% SLD-Max~\cite{} \\
+% ESD~\cite{} \\
+\midrule
+\ours~(Ours)\\
+
+\bottomrule
+\end{tabular}}
+\end{table*}
+
+% \begin{table*}
+% \caption{Attack Effectiveness. IVA Bench: Inappropriate Video Action Bench}\label{tab:3d_main}
+% \small
+% \centering
+% \setlength{\tabcolsep}{1.mm}
+% \resizebox{\textwidth}{!}{
+% \begin{tabular}{lccccccccc}
+% \toprule
+% Method&
+% Shocking&
+% Illegial&
+% Violance&
+% Sexual&
+% Racism&
+% GPT-4v&
+% CLIP-Text &
+% Aesthetic\\ 
+% \midrule
+% % SD 1.5~\cite{}\\
+% % SD 2.0~\cite{}\\
+% % SD-NEGP~\cite{}\\
+% % SLD-Weak~\cite{} \\
+% % SLD-Strong~\cite{} \\
+% % SLD-Max~\cite{} \\
+% % ESD~\cite{} \\
+% VideoCrafter2\\
+% T2V-Turbo\\
+% \midrule
+% \ours~(Ours)\\
+
+% \bottomrule
+% \end{tabular}}
+% \end{table*}
+
+

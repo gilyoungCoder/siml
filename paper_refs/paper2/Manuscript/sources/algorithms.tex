@@ -1,0 +1,30 @@
+\begin{algorithm}[!tb]
+  \caption{Training-Free Safe Denoiser}
+  \label{algo:safer}
+  \begin{algorithmic}
+    \STATE {\bfseries Input:} 
+    A pre-trained diffusion model $\bm{\epsilon}_{\bm{\theta}}$; Unsafe data $\{\mathbf{x}^{(n)}\}_{n=1}^{N}$; Hyperparameters $\eta$ and $\beta_{t}$; Critical timesteps $C\subseteq[1,...,T]$; If text-conditional model, positive prompts $\mathbf{c}_{+}$ and unsafe prompts $\tilde{\mathbf{c}}_{-}$
+    % For unconditional generation, these prompt inputs are null.
+    \vspace{.1cm} 
+    
+    % \STATE {\bfseries Initialize:} Noisy input $x_T \sim \mathcal{N}(0, \sigma_{T}^{2}\textbf{I})$
+    \FOR{$t=T$ {\bfseries to} $0$} 
+    \STATE $\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]\leftarrow \frac{1}{\alpha_{t}}\big(\mathbf{x}_{t}-\sigma_{t}\bm{\epsilon}_{\bm{\theta}}(\mathbf{x}_{t},t)\big)$
+        \STATE $\mathbb{E}_{\text{unsafe}}[\mathbf{x}\vert\mathbf{x}_{t}]\leftarrow \sum_{n=1}^{N}\mathbf{x}^{(n)}\frac{q_{t}(\mathbf{x}_{t}\vert\mathbf{x}^{(n)})}{\sum_{m=1}^{N}q_{t}(\mathbf{x}_{t}\vert\mathbf{x}^{(m)})}$
+    % \STATE If text-to-image generation:
+    % \STATE \quad \quad $\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}_{+}]\leftarrow \frac{1}{\alpha_{t}}\big(\mathbf{x}_{t}-\sigma_{t}\bm{\epsilon}_{\bm{\theta}}(\mathbf{x}_{t},t,\mathbf{c}_{+})\big)$
+    % \STATE \quad \quad $\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}_{US}]\leftarrow \frac{1}{\alpha_{t}}\big(\mathbf{x}_{t}-\sigma_{t}\bm{\epsilon}_{\bm{\theta}}(\mathbf{x}_{t},t,\mathbf{c}_{US})\big)$
+    \STATE If text-to-image generation:
+    \STATE \quad\quad Compute $\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}]$ (e.g., $\mathbf{c}\in\{\tilde{\mathbf{c}}_{+}\}$ for SAFREE or $\mathbf{c}\in\{\mathbf{c}_{+},\tilde{\mathbf{c}}_{-}\}$ for SLD)%; $\mathbf{c}\in\{\mathbf{c}_{+}\}$ for CFG
+    \STATE $\beta(\mathbf{x}_{t})\leftarrow\frac{1}{N}\sum_{n=1}^{N} p_{0t}(\mathbf{x}_{t}\vert\mathbf{x})$ if $t\in C$ else 0
+    \STATE If text-to-image generation:
+    \STATE \quad \quad  $\beta(\mathbf{x}_{t})\leftarrow\beta(\mathbf{x}_{t})$ if $\beta(\mathbf{x}_{t})>\beta_{t}$ else 0
+    \STATE \quad \quad Compute $\mathbf{x}_{0\vert t}$ (e.g., \eqref{SAFREE_ours} for SAFREE or \eqref{SLD_ours} for SLD)
+    \STATE Else:
+        \STATE \quad \quad $\mathbf{x}_{0\vert t}\leftarrow\hat{\mathbb{E}}_{\text{safe}}[\mathbf{x}\vert\mathbf{x}_{t}]$ (see \eqref{uncond_safe})
+    
+    % \STATE $\mathbf{x}_{0\vert t}\leftarrow \mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]++\lambda\big((\mathbb{E}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}_{+}]-\mathbf{x}_{0\vert t}^{\text{safe}})-\mu(\mathbf{c}_{+},\mathbf{c}_{S};\gamma)(\mathbb{E}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}_{S}]-\mathbf{x}_{0\vert t}^{\text{safe}})\big)$
+    \STATE $\mathbf{x}_{t-1}=\text{Solver}(\mathbf{x}_{t},t,\mathbf{x}_{0\vert t})$
+    \ENDFOR 
+  \end{algorithmic}
+\end{algorithm}

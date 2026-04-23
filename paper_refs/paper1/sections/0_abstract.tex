@@ -1,0 +1,17 @@
+\textcolor{red}{Content warning: this paper contains content that may be inappropriate or offensive, such as violence, sexually explicit content, and negative stereotypes and actions.}
+
+\begin{abstract}
+Recent advances in diffusion models have significantly enhanced their ability to generate high-quality images and videos, but they have also increased the risk of producing unsafe content.
+Existing unlearning/editing-based methods for safe generation remove harmful concepts from models but face several challenges: (1) They cannot instantly remove harmful or undesirable concepts (e.g., artist styles) without additional training. 
+(2) Their safe generation capabilities depend on collected training data.
+(3) They alter model weights, risking degradation in quality for content unrelated to the targeted toxic concepts.
+To address these challenges, we propose \ours{}, a novel, training-free approach for safe text-to-image and video generation, that does not alter the model's weights. 
+Specifically, we detect a subspace corresponding to a set of toxic concepts in the text embedding space and steer prompt token embeddings away from this subspace, thereby filtering out harmful content while preserving intended semantics. 
+To balance the trade-off between filtering toxicity and preserving safe concepts, \ours{} incorporates a novel self-validating filtering mechanism that dynamically adjusts the denoising steps when applying the filtered embeddings. 
+Additionally, we incorporate adaptive re-attention mechanisms within the diffusion latent space to selectively diminish the influence of features related to toxic concepts at the pixel level. 
+By integrating filtering across both textual embedding and visual latent spaces, \ours{} ensures coherent safety checking, preserving the fidelity, quality, and safety of the generated outputs.
+Empirically, \ours{} achieves \textbf{state-of-the-art} performance in suppressing unsafe content in T2I generation (reducing it by \textbf{22\%} across 5 datasets) compared to other training-free methods and effectively filters targeted concepts, e.g., specific artist styles, while maintaining high-quality output. 
+It also shows competitive results against training-based methods. 
+We further extend \ours{} to various T2I backbones and T2V tasks, showcasing its flexibility and generalization. 
+As generative AI rapidly evolves, \ours{} provides a robust and adaptable safeguard for ensuring safe visual generation.
+\end{abstract}

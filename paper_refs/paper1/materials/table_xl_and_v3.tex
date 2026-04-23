@@ -1,0 +1,42 @@
+\begin{table}
+\caption{Ours with SDXL and SD-v3. 
+% We include more visualization in the Appendix.
+}\label{tab:xlv3}\vspace{-0.05in}
+\small
+\centering
+\setlength{\tabcolsep}{1.mm}
+\resizebox{0.85\textwidth}{!}{
+\begin{tabular}{ l | c c c c | c c}
+\toprule
+\textbf{Methods}& \textbf{P4D} $\downarrow$ & \textbf{Ring-a-Bell} $\downarrow$ & \textbf{MMA-Diffusion} $\downarrow$ & \textbf{UnlearnDiffAtk} $\downarrow$& \textbf{CLIP} $\uparrow$ & \textbf{TIFA} $\uparrow$ \\
+\midrule
+SDXL~\citep{podell2023sdxl} & 0.709 & 0.532 & 0.501 & 0.345 & 27.82 & \textbf{0.705}\\
+SDXL + \ours{}&\textbf{0.285}&\textbf{0.241}&\textbf{0.169}&\textbf{0.246} &\textbf{27.84} &0.697\\
+\midrule
+SD-v3~\citep{2024sdv3} &0.715 & 0.646 & 0.528 & 0.598 & \textbf{31.80} & \textbf{0.884} \\
+SD-v3 + \ours{} & \textbf{0.271} & \textbf{0.430} & \textbf{0.165} & \textbf{0.302} & 31.55 & 0.872\\
+\bottomrule
+\end{tabular}
+}
+\vspace{0.1in}
+\caption{Safe video generation on SafeSora benchmark. 
+% We provide more visualizations in the Appendix.
+}\label{tab:t2v}
+\vspace{-0.05in}\small
+\centering
+\setlength{\tabcolsep}{1.mm}
+\resizebox{0.85\textwidth}{!}{
+\begin{tabular}{ l | c c c c c}
+\toprule
+\textbf{Methods} & \textbf{Violence} $\downarrow$ & \textbf{Terrorism} $\downarrow$ & \textbf{Racism} $\downarrow$ & \textbf{Sexual} $\downarrow$ & \textbf{Animal Abuse} $\downarrow$ \\
+\midrule
+ZeroScopeT2V~\citep{2023zeroscope} & 71.68& 76.00 &73.33&51.51&	66.66 \\
+ZeroScopeT2V + \ours{} & \textbf{50.60} & \textbf{52.00} & \textbf{57.77} & \textbf{18.18} & \textbf{37.03}\\
+\midrule
+CogVideoX-5B~\citep{yang2024cogvideox} & 80.12& 76.00 &	73.33&	75.75	&92.59\\
+CogVideoX-5B + \ours{} & \textbf{59.03} & \textbf{56.00} & \textbf{64.44} & \textbf{30.30} & \textbf{48.14}\\
+\bottomrule
+\end{tabular}
+}\vspace{-0.15in}
+\end{table}
+

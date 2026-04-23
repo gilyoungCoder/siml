@@ -1,0 +1,56 @@
+% \begin{table*}
+% \caption{Ablation Study.}\label{tab:t2i_ablation}
+% \small
+% \centering
+% \setlength{\tabcolsep}{1.mm}
+% \resizebox{0.6\textwidth}{!}{
+% \begin{tabular}{ l | c c c | c c | c c} % \multicolumn{4}{c}{}
+% \toprule
+% &&&&\multicolumn{2}{c}{\textbf{Adversarial Prompts}}&\multicolumn{2}{c}{\textbf{COCO-30K}}\\ 
+% \textbf{Method}&\textbf{Token}&\textbf{Balancing}&\textbf{Latent}& \textbf{P4D} $\downarrow$ &\textbf{MMA-Diffusion} $\downarrow$ & \textbf{FID} $\downarrow$ & \textbf{CLIP} $\uparrow$\\
+% \hline
+% SD-v1-4&-&-&-&0.987& 0.957 &-&  31.3\\
+% \hline
+% \multirow{5}{*}{\begin{tabular}~\ours{}\\(Ours)\end{tabular}}
+% % &Dense&-&-&0.436&0.268&45.6& 31.4&0.38&0.813\\
+% &Null&-&-&0.430&\textbf{0.512}&37.6&30.9\\
+% &Projection&-&-&0.417&0.597&36.5& \underline{31.1}\\
+% &Projection&$\checkmark$&-&	&0.598	&\textbf{29.1}&	\textbf{31.4}\\
+% &Projection&-&$\checkmark$&0.410&0.588&42.2&30.7\\
+% &Projection&$\checkmark$&$\checkmark$&\textbf{0.384}&\underline{0.585}&\underline{36.4}&\underline{31.1}\\
+% \bottomrule
+% \end{tabular}
+% }
+% \end{table*}
+
+
+
+
+
+
+
+
+% \begin{table*}
+% \caption{Ablation Study.}\label{tab:t2i_ablation}
+% \small
+% \centering
+% \setlength{\tabcolsep}{1.mm}
+% \resizebox{\textwidth}{!}{
+% \begin{tabular}{ l | c c c | c c | c c | c c }
+% \toprule
+% \multicolumn{4}{c}{}&\multicolumn{2}{c}{Adversarial Prompts}&\multicolumn{2}{c}{COCO-30K}&\multicolumn{2}{c}{Artists}\\ 
+% Method&Token&Balancing&Latent&P4D $\downarrow$ &MMA-Diffusion $\downarrow$ &FID $\downarrow$ & CLIP $\uparrow$ & {ER. Acc.} $\downarrow$ & {Un. Acc.} $\uparrow$\\
+% \midrule
+% SD-v1-4&-&-&-&0.987& 0.957 &-&  31.3&0.875&0.888\\
+% \midrule
+% \multirow{5}{*}{\begin{tabular}~\ours{}\\(Ours)\end{tabular}}
+% % &Dense&-&-&0.436&0.268&45.6& 31.4&0.38&0.813\\
+% &Null&-&-&0.430&\textbf{0.512}&37.6&30.9&0.275&0.738\\
+% &Projection&-&-&0.417&0.597&36.5& \underline{31.1}& 0.400 & 0.775\\
+% &Projection&$\checkmark$&-&	&0.598	&\textbf{29.1}&	\textbf{31.4}\\
+% &Projection&-&$\checkmark$&0.410&0.588&42.2&30.7&\\
+% &Projection&$\checkmark$&$\checkmark$&\textbf{0.384}&\underline{0.585}&\underline{36.4}&\underline{31.1}\\
+% \bottomrule
+% \end{tabular}
+% }
+% \end{table*}

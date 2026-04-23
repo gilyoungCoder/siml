@@ -1,0 +1,29 @@
+\section{Limitations and Conclusions}
+We introduce the \textit{safe denoiser}, an in‑process, training‑free mechanism that steers diffusion model sampling toward theoretically safe distributions, thereby promoting appropriate content. Unlike purely discriminative pre‑ or post‑filters, our approach acts during inference and complements existing guardrails. In particular, this mid‑generation intervention mitigates failure modes in static text or image filters, especially under adversarial prompt engineering. Thus ours contributes to a defense‑in‑depth safety architecture suitable for real‑world applications. Regarding negative datasets, the data requirement is shared across other defenses method. The datasets used to train or calibrate pre‑ and post‑filters can be reused to provide data‑driven negative guidance at inference. A current limitation is the need to tune hyperparameters to balance fidelity and safety. Appendix~\ref{sec:limitation} discusses these trade‑offs and offers practical guidance. Privacy-sensitive generation remains an ongoing challenge, partly due to the lack of standardized quantitative metrics. We leave the development of such metrics and extensions to other modalities for future work. 
+% The \textit{safe denoiser} offers a robust and scalable mid-generation safety layer that enhances the security of deployed systems when combined with prompt and output filtering.
+\label{sec_conclusion}
+
+\section*{Acknowledgments}
+We thank our anonymous reviewers for their constructive feedback, which has helped significantly improve
+our paper. We thank the Digital Research Alliance of Canada (Compute Canada) for its computational
+resources and services. 
+%
+M. Kim was supported by the Canada CIFAR AI Safety Catalyst grant.
+%
+A. Yusuf was funded by the Canada Graduate Scholarships — Master’s program of the Natural Sciences and Engineering Research Council of Canada (NSERC).
+%  
+M. Park was supported in part by the Natural Sciences and Engineering
+Research Council of Canada (NSERC) and the Canada CIFAR AI Chairs program.
+% \section*{Impact Statements}
+
+% This paper presents a work whose goal is to build a reliable and trustworthy Generative AI. There are many potential societal consequences of our work, particularly in addressing ethical risks associated with generative models. Our research is focused on preventing the generation of NSFW content, including nudity and violence, and mitigating the risk of models memorizing and reproducing private information, such as human face, from training datasets. We believe the presented work  contributes to the responsible use of generative AI, reinforcing ethical safeguards and promoting AI systems that align with societal values and human rights.
+
+%
+
+%
+
+
+
+
+%
+

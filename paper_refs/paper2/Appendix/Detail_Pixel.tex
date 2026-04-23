@@ -1,0 +1,32 @@
+\section{Experimental Details : Class-Conditional and Unconditional Generation}
+\label{sec:pixel_detail}
+
+In this section, we use our safe denoiser in the DMs without text inputs. 
+Specifically, we employ experiments on FFHQ~\cite{karras2019style} and ImageNet~\cite{russakovsky2015imagenet} in the $256\times256$ resolution. 
+We utilize the pretrained diffusion models from FFHQ~\cite{chung2022diffusion}\footnote{https://github.com/DPS2022/diffusion-posterior-sampling} and ImageNet~\cite{dhariwal2021diffusion}\footnote{https://github.com/openai/guided-diffusion}. 
+For the experiments, we use a DDPM solver~\cite{lu2022dpm} with 100 steps.
+
+\paragraph{Unconditional Generation}
+For unconditional generation, we utilize the FFHQ dataset to evaluate whether the proposed method effectively mitigates sexual bias, using our method. 
+Although FFHQ datset does not include explicit label information, \tabref{ffhq} illustrates that the generated images exibit a noticiable bias toward female images over male ones. 
+In this experiment, we select 1K female images from CelebA-HQ~\citep{liu2015faceattributes}\footnote{https://www.kaggle.com/datasets/badasstechie/celebahq-resized-256x256} validation split to serve as unseen negative data, thereby establishing the negative dataset $\{\mathbf{x}^{(1)},...,\mathbf{x}^{(1000)}\}$. 
+Then, we employ our safe denoiser to generate 1K images.
+While both FFHQ and CelebA-HQ are designed to capture similar distribution, they are not completely aligned. This distinction provides an advantageous experimental setup, where we assess the controllability of image generation using reference images. 
+For performance evaluation, we compute FID~\cite{heusel2017gans} score using 1,000 male images from the CelebA-HQ dataset. 
+For classification performance, we train a ResNet18 model, as implemented in the PyTorch framework~\footnote{\url{https://pytorch.org/vision/stable/index.html}} using the training dataset in the CelebA-HQ. 
+In this experiment, we chose $\sigma=1.0$ and $\eta=0.05$, and employ \textit{Safe denoiser} across the entire denoising timesteps. 
+
+\paragraph{Conditional Generation}
+For conditional ImageNet~\cite{russakovsky2015imagenet} experiments at $256 \times 256$ resolution, we use a diffusion model trained on the full ImageNet-256 dataset guided by a classifier~\cite{dhariwal2021diffusion}. 
+The diffusion backbone follows a linear noise schedule and is constructed with 1,000 diffusion time-steps. We condition on class labels by scaling the classifier guidance at 5.0, creating a strong pull towards the desired class during the sampling process. 
+Each experiment generates 50 samples per class across all 1000 ImageNet classes, producing 50,000 samples that are then evaluated with a pretrained ImageNet classifier for precision, recall, and classification accuracy measurements~\cite{he2016dppresnet50}. 
+Our metrics include \textbf{(i) Precision: } the fraction of generated samples that match the designated ImageNet label when conditioned on the class, \textbf{(ii) Recall: } aims to evaluate the diversity and coverage of the targeted class distribution, and \textbf{(iii) Classification Accuracy: } the rate at which generated images are correctly identified as their conditioned label among the 999 classes (excluding the negated target class, i.e, Chihuahua). 
+The classification accuracy on the hold-out negated class is also calculated, to evaluate how well the respective method does not generate the negated target class. 
+As illustrated in \tabref{imagenet_side_by_side}, we focus on the Chihuahua class to investigate how effectively our proposed safe denoiser can repel a target class while preserving generative quality for other classes in this experiment. 
+To avoid unintended Chihuahua generation, aforementioned metrics aim to make sure that samples do not drift toward distinct Chihuahua-like features.
+For instance, when we generate an image based on a reference dataset sampled from a Chihuahua, the resulting sample may resemble a Golden Retriever, but it won’t resemble a Chihuahua.
+
+To compare our approach, we implement three variants of the conditional diffusion process: vanilla classifier-guided diffusion model without repellency mechanisms, the Sparse Repellency (SR)~\cite{kirchhof2024sparse} technique applied to the classifier-guided diffusion model, and our safe denoiser technique applied to the same diffusion process. 
+For the reference dataset, we select the validation set of Chihuahua class as the negative images.
+In this experiment, the safe denoiser technique is applied on the 200 to 800 timesteps of the diffusion process. $\eta=0.02$ was chosen as to control the strength of the repellency away from the Chihuahua target class. 
+In the SR variant of the experiment, a repellency scale of 0.01 is combined with a large radius of 300 to push generated samples out of regions resembling the negated target class.

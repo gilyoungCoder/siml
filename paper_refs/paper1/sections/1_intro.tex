@@ -1,0 +1,42 @@
+
+
+\section{Introduction}
+Recent advancements in Generative AI have significantly impacted various modalities, including text~\citep{brown2020language,dubey2024llama}, code~\citep{chen2021evaluating,liu2024exploring,zhong2024debug}, audio~\citep{kreuk2022audiogen, copet2024simple}, image~\citep{podell2023sdxl,tian2024visual}, and video generation~\citep{ho2022imagen,kondratyuk2023videopoet,yoon2024raccoon,yang2024cogvideox}. 
+Generation tools such as DALL·E 3~\citep{dalle3}, Midjourney~\citep{midjourney}, Sora~\citep{2024sora}, and KLING~\citep{kling} have seen significant growth, enabling a wide range of applications in digital art, AR/VR, and educational content creation.
+However, these tools/models also carry the risk of generating content with unsafe concepts such as bias, discrimination, sex, or violence. 
+Moreover, the definition of ``unsafe content'' varies according to societal perceptions. For example, individuals with Post-Traumatic Stress Disorder (PTSD) might find specific images (e.g., skyscrapers, deep-sea scenes) distressing. This underscores the need for an adaptable, flexible solution to enhance the safety of generative AI while considering individual sensitivities.
+
+To tackle these challenges, recent research has incorporated safety mechanisms in diffusion models. 
+Unlearning methods~\citep{zhang2023forget,huang2023receler,park2024direct, wu2024unlearning} fine-tune models to remove harmful concepts, but they lack adaptability and are less practical due to the significant training resources they require. Model editing methods~\citep{orgad2023editing,gandikota2024unified,xiong2024editing} modify model weights to enhance safety, but they often degrade output quality and make it challenging to maintain consistent model behavior.
+A promising alternative is training-free, filtering-based methods that exclude unsafe concepts from input prompts without altering the model's original capabilities.
+However, prior training-free, filtering-based methods encounter two significant challenges: (1) they may not effectively guard against implicit or indirect triggers of unsafe content, as highlighted in earlier studies~\citep{deng2023divide}, and (2) our findings indicate that prompts subjected to hard filtering can result in distribution shifts, leading to quality degradation even without modifying the model weights. Thus, there is an urgent need for an efficient and adaptable mechanism to ensure safe visual generation across diverse contexts.
+
+
+This paper presents \ours{}, a training-free, adaptive plug-and-play mechanism for any diffusion-based generative model to ensure safe generation without altering well-trained model weights.
+\ours{} employs unsafe concept filtering in both textual prompt embedding and visual latent space, thereby \textbf{enhancing the fidelity, quality, and efficiency} for safe visual content generation. Specifically, \ours{} first identifies the unsafe concept subspace, i.e., the subspace within the input text embedding space that corresponds to undesirable concepts, by concatenating the column vectors of unsafe keywords. 
+Then, to measure the proximity of each input prompt token to the unsafe/toxic subspace, we mask each token in the prompt and calculate the projected distance of the masked prompt embedding to the subspace. Given the proximity, \ours{} aims to filter out tokens that drive the prompt embedding closer to the unsafe subspace. Rather than directly removing or replacing unsafe tokens—which can compromise the coherence of the input prompt and degrade generation quality—\ours{} efficiently projects the identified unsafe tokens into a space orthogonal to the unsafe concept subspace while maintaining them on the original input embedding space.
+Such \textbf{orthogonal projection} design aims to preserve the overall integrity and the safe content within the original prompt while filtering out harmful content in the embedding space. 
+To balance the trade-off between filtering out toxicity and preserving safe concepts (examples shown in~\Cref{fig:teaser}), \ours{} incorporates a novel \textbf{self-validating filtering} scheme, which dynamically adjusts the number of denoising steps for applying filtered embeddings, enhancing the suppression of undesirable prompts only when needed.
+Additionally, since we observe that unsafe content usually emerges at the regional pixel level, \ours{} extends filtering to the pixel space using a novel \textbf{adaptive latent re-attention} mechanism within the diffusion latent space. 
+It selectively reduces the influence of features in the frequency domain tied to the detected unsafe prompt, ensuring desirable outputs without drawing attention to those contents.
+In the end, \ours{} filters out unsafe content simultaneously in both the embedding and diffusion latent spaces. 
+% \textcolor{red}{we should say something about frequency transformation or Fourier transformation since pixel space may not imply frequency transformation}
+This approach ensures flexible and adaptive safe T2I/T2V generation that efficiently handles a broad range of unsafe concepts without extra training or modifications to model weights, 
+while preserving the quality of safe outputs.
+
+Empirically, \ours{} achieves the \textbf{state-of-the-art} performance on five popular T2I benchmarks (I2P~\citep{schramowski2023safe}, P4D~\citep{chin2024prompting4debugging}, Ring-A-Bell~\citep{tsai2024ring}, MMA-Diffusion~\citep{yang2024mma}, and UnlearnDiff~\cite{zhang2023generate})
+\updated{outperforming other training-free safeguard methods with superior efficiency, lower resource use, and better inference-time adaptability.}
+We further apply \ours{} to various T2I diffusion backbones (e.g., SDXL~\citep{podell2023sdxl}, SD-v3~\citep{2024sdv3}) and T2V models (ZeroScopeT2V~\citep{2023zeroscope}, CogVideoX~\citep{yang2024cogvideox}), showcasing \ours{}'s strong generalization and flexibility by effectively managing unsafe concept outputs across different models and tasks.
+\updated{As generative AI advances, \ours{} establishes a strong baseline for safety, promoting ethical practices across applications like image and video synthesis to meet the AI community's needs.}
+
+% \tbd{, ensuring more reliable and responsible visual content creation.
+Our contributions are summarized as:
+\begin{itemize}[leftmargin=0.15in]
+    \item We propose \ours{}, a strong, adaptive, and training-free safeguard for T2I and T2V generation. This ensures more reliable and responsible visual content creation by jointly filtering out unsafe concepts in textual embeddings and visual latent spaces with conceptual proximity analysis.
+    
+    \item \ours{} achieves state-of-the-art performance among training-free methods for concept removal in visual generation while maintaining high-quality outputs for desirable concepts, and it exhibits competitive results compared to training-based methods while maintaining better visual quality.
+    
+    \item \ours{} effectively operates across various visual diffusion model architectures and applications, demonstrating strong generalization and flexibility, 
+    
+\end{itemize}
+% }

@@ -1,0 +1,57 @@
+\section{Related Work}\label{sec:related}
+%
+%
+%
+%
+%
+
+Earlier work on machine unlearning in generative modelling focused on object unlearning in classification (forgetting images from a selected class), unconditional image generation (forgetting harmful images) or concept erasing (forgetting harmful concepts). Most of the work belonging to this category required retraining the entire generative models or some part of them, rather than modifying the sampling trajectory or input prompts \cite{heng2023selective, li2024machine, adapt_then_unlearn, zhang2024forgetmenot, gandikota2023unified, lu2024mace, gong2024reliable, lu2024mace}. 
+In more recent work, training-free and text-based methods have also emerged as computationally efficient alternatives \cite{schramowski2023safe,yoon2024safree,ban2024understanding, armandpour2023reimagine}. 
+However, most of these approaches lack a theoretical ground, unlike our work. 
+
+
+%
+%
+
+%
+
+%
+
+%
+%
+
+%
+
+%
+
+%
+%
+%
+%
+
+ 
+
+
+
+
+
+%
+
+
+Despite these advances, generative models remain susceptible to adversarial prompts, malicious manipulations of learnable parameters, textual cues, or even random noise \cite{pham2023circumventing, chin2024promptingdebugging, zhang2024generate, tsai2024ringabell}. These findings highlight using a single defense such as concept erasing as a standalone solution may be insufficient to ensure safe content generation. We see this as an opportunity for our method to be combined with powerful text-based defense mechanisms to enhance their performance.  
+
+
+
+%
+
+A closely related recent work, \textit{Sparse Repellency} (SR)~\cite{kirchhof2024sparse}, is a training-free technique that modifies the denoising trajectory to avoid unsafe images. Their denoiser follows $\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]+\sum_{n=1}^{N}\text{ReLU}\left(\tfrac{r}{\Vert\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]-\mathbf{x}^{(n)}\Vert}-1\right) \times(\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]-\mathbf{x}^{(n)}).$
+%
+%
+%
+ReLU activation ensures that the diffusion trajectory is penalized when the denoiser falls within the neighborhood of radius $r$ around unsafe data, and remains unmodified otherwise. 
+Given a single unsafe image, $\text{ReLU}\left(\tfrac{r}{\Vert\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]-\mathbf{x}^{(n)}\Vert}-1\right) (\mathbb{E}_{\text{data}}[\mathbf{x}\vert \mathbf{x}_{t}]-\mathbf{x}^{(n)})$ resembles the second term, $\mathbb{E}_{\text{safe}}[\mathbf{x}\vert\mathbf{x}_{t}]$, in \eqref{E_safe} if the ReLU activation is comparable to our $\beta^*$. From this point of view, our method can be regarded as a generalization of SR.
+However, unlike our method, SR does not guarantee that the samples are from a safe distribution. 
+
+% \textit{Diffusion Soup}~\cite{biggs2024diffusion} shares a similar theoretical analysis to ours. They propose merging the weights of DMs separately trained on independent subsets of data, resulting in a sampling distribution that extends beyond the framework outlined in our \thmref{safe}. Unlike their method, we do not require additional fine-tuning, and our analysis defines the safe and unsafe denoisers and their explicit relationship between those. Recently, \textit{Dynamic Negative Guidance} (DNG)~\cite{koulischer2025dynamic} also addresses the strength of negative guidance using a similar theoretical framework. While DNG relies on sequential computation based on a Markov chain, our approach estimates denoisers for safe and unsafe in an expectation manner, which avoids sequential dependencies.
+% Additionally, DNG requires extra training for unsafe denoiser in cases where text-to-image generation is not applicable, whereas our method is entirely training-free. 
+\textit{Diffusion Soup}~\cite{biggs2024diffusion} presents a related theoretical analysis by merging DMs trained on separate data subsets, but requires fine-tuning. In contrast, our method is training-free and formally defines safe and unsafe denoisers and their relationship. \textit{Dynamic Negative Guidance} (DNG)~\cite{koulischer2025dynamic} also uses a similar framework but relies on sequential computation based on a Markov chain and requires extra training for unsafe denoisers, whereas our approach estimates safe and unsafe denoisers in an expectation manner without training overhead.

@@ -1,0 +1,31 @@
+\section{Introduction}
+\label{sec_introduction}
+
+\begin{figure*}[t]{
+    \centering
+        \begin{subfigure}{0.4\textwidth}
+            \includegraphics[width=\textwidth]{Figures/Method/algorithm.pdf}
+            \caption{Schematic overview}
+        \end{subfigure}    
+        \begin{subfigure}{0.45\textwidth}
+            \includegraphics[width=\textwidth]{Figures/Method/moons_trial_0_for_publication_v2.pdf}
+            \caption{2-dimensional trajectory}
+        \end{subfigure}
+    \caption{An overview of the safe denoiser. (a) The safe denoiser $\mathbb{E}_{\text{safe}}$ negates the direction of the unsafe denoiser $\mathbb{E}_{\text{unsafe}}$ from the data denoiser $\mathbb{E}_{\text{data}}$. 
+    (b) Trajectories from data denoiser and safe denoiser, starting from the same initial point far from the data distribution, reveal distinct paths: while the sample path from the data denoiser falls into the unsafe region, the trajectory from the safe denoiser successfully avoids it.}
+    \label{fig:schematic}
+}
+\end{figure*}
+
+Diffusion models (DMs) have become leading generative models, excelling in generation tasks like text-to-image~\cite{rombach2022high}, audio~\cite{kong2021diffwave}, video~\cite{bartal2024lumiere}, and protein design~\cite{watson2023denovo}, thanks to their flexible and controllable sampling~\cite{dhariwal2021diffusion, ho2021classifier}. However, growing concerns over unsafe content — such as not-safe-for-work(NSFW) imagery (\figref{thumbnail_1}), copyright violations, and potential misuse — highlight the need for safety. The key challenge is mitigating these risks without compromising model utility or creativity.
+
+Mainstream mitigation strategies for issues like NSFW content or unwanted concept removal rely on text-based guidance~\cite{gandikota2023erasing, ban2024understanding, yoon2024safree} or fine-tuning for unlearning~\cite{gandikota2023erasing, gandikota2023unified, gong2024reliable, kim2024race}. Text-based methods require iterative, expert-crafted negative prompts~\citep{schramowski2023safe}, which may not generalize well, while fine-tuning is resource-intensive and risks catastrophic forgetting or degraded performance on desired tasks.
+
+Other significant safety concerns involve the DMs' capacity to reproduce copyrighted content and their generation of data pertaining to individuals in \figref{thumbnail_2} who wish to be excluded. These issues are often linked to the models' remarkable ability to memorize training data \cite{carlini2023extracting}. While techniques like differentially private training \cite{dockhorn2023differentially, liu2024differentially} can formally limit memorization by adding noise during the training process, they often result in a noticeable degradation in generation quality, which can be particularly prohibitive for applications demanding high-fidelity outputs.
+
+We propose a \textit{safe denoiser} (defined in Definition~\ref{thm:def}) that modifies sampling trajectories such that the resulting samples are drawn from a safe distribution 
+(shown in \figref{schematic}). The intuion comes from our \thmref{safe}, 
+% which relates safe and unsafe denoised samples, 
+where the safe denoiser steers generation away from unsafe regions, ensuring theoretical safety. We develop a practical algorithm (\algoref{safer}) based off of our theorem, which can be used standalone or combined with negative prompting to enhance safety in text-to-image generation. 
+% Empirically, 
+Our method achieves state-of-the-art performance on concept erasing, class removal, and unconditional image generation tasks.

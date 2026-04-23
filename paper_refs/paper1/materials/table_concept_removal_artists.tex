@@ -1,0 +1,32 @@
+\begin{table*}
+\vspace{-0.2in}
+\caption{{Comparison of Artist Concept Removal tasks}: Famous (left)  and Modern artists (right).}\label{tab:t2i_art}\vspace{-0.1in}
+\small
+\centering
+\setlength{\tabcolsep}{1.mm}
+\resizebox{0.85\textwidth}{!}{
+\begin{tabu}{l|cccc|cccc}
+\toprule
+&\multicolumn{4}{c}{\textbf{Remove "Van Gogh"}}&\multicolumn{4}{c}{\textbf{Remove "Kelly McKernan"}}\\ 
+\cmidrule(lr){2-5}
+\cmidrule(lr){6-9}
+\textbf{Method}&
+\textbf{LPIPS}$_e \uparrow$ &\textbf{LPIPS}$_u \downarrow$ & \textbf{Acc}$_e \downarrow$& \textbf{Acc}$_u \uparrow$&
+\textbf{LPIPS}$_e \uparrow$ &\textbf{LPIPS}$_u \downarrow$ & \textbf{Acc}$_e \downarrow$& Acc$_u \uparrow$\\
+\midrule
+SD-v1.4&-&-&0.95&0.95&-&-&0.80&0.83\\
+% ESD-x&0.40&0.26&&&0.37&0.21\\
+\midrule
+CA&0.30&0.13&0.65&0.90&0.22&0.17&0.50&0.76\\
+RECE&0.31&0.08&0.80&0.93&0.29&0.04&0.55&0.76\\
+UCE&0.25&{0.05}&0.95&0.98&0.25&{0.03}&0.80&0.81\\
+\midrule
+SLD-Medium&0.21&0.10&0.95&0.91&0.22&0.18&0.50&0.79\\
+% SLD-Max&\todo{run}&&&&&\\
+% CA&0.30 (0.39)&0.13 (0.33)&0.65&0.90&0.22 (0.40)&0.17 (0.35)&0.50&0.76\\
+% \midrule
+\ours{} (Ours)&\textbf{0.42}&{0.31}&\textbf{0.35}&0.85&\textbf{0.40}&{0.39}&\textbf{0.40}&0.78\\
+\bottomrule
+\end{tabu}
+}\vspace{-0.1in}
+\end{table*}

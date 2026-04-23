@@ -1,0 +1,145 @@
+\documentclass{article} % For LaTeX2e
+\usepackage{iclr2025_conference,times}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{tabu}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{algorithm}
+\usepackage{footnote}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\newcommand{\bsy}{\boldsymbol}
+
+\usepackage[noend]{algorithmic}
+% \usepackage{emoji}
+\usepackage[capitalize,noabbrev,nameinlink]{cleveref}
+
+
+
+\definecolor{Red}{rgb}{0.6,0,0}
+\definecolor{Blue}{rgb}{0,0,0.8}
+\definecolor{Green}{rgb}{0,0.6,0.9}
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+\definecolor{ao(english)}{rgb}{0.0, 0.5, 0.0}
+\definecolor{azure(colorwheel)}{rgb}{0.0, 0.5, 1.0}
+\definecolor{crimson}{rgb}{0.86, 0.08, 0.24}
+\definecolor{darkcerulean}{rgb}{0.03, 0.27, 0.49}
+\definecolor{cobalt}{rgb}{0.0, 0.28, 0.67}
+\definecolor{rosegold}{rgb}{0.72, 0.43, 0.47}
+\definecolor{orange-red}{rgb}{1.0, 0.27, 0.0}
+\definecolor{mountainmeadow}{rgb}{0.19, 0.73, 0.56}
+\definecolor{malachite}{rgb}{0.04, 0.85, 0.32}
+\definecolor{darkblue}{rgb}{0.0, 0.0, 0.55}
+\definecolor{customred}{rgb}{1, 0.85, 0.85}
+\definecolor{customcitecolor}{rgb}{0.7, 0.5, 1}
+\definecolor{custompink}{rgb}{0.8, 0.3, 0.3}
+\definecolor{customgreen}{rgb}{0.3, 0.8, 0.3}
+
+\definecolor{mygray}{gray}{0.6}
+% \newcolumntype{a}{>{\columncolor{mygray}}c}
+\newcommand{\jy}[1]{\textcolor{cyan}{[jaehong: #1]}}
+\newcommand{\sy}[1]{\textcolor{red}{[shoubin: #1]}}
+\newcommand{\mbc}[1]{\textcolor{blue}{[#1 -- MB]}}
+\newcommand{\hy}[1]{\textcolor{brown}{[HY: #1]}}
+\newcommand{\vpc}[1]{\textcolor{olive}{[#1 -- VP]}}
+\newcommand{\mg}[1]{\textcolor{mygray}{#1}}
+
+\newcommand{\tbd}[1]{\textcolor{orange-red}{#1}}
+\newcommand{\updated}[1]{{#1}}
+\newcommand{\hi}[1]{\textcolor{azure(colorwheel)}{#1}}
+\newcommand{\cpink}[1]{\textcolor{custompink}{#1}}
+\newcommand{\cgreen}[1]{\textcolor{customgreen}{#1}}
+
+
+\hypersetup{
+    colorlinks = true,
+    citecolor = customcitecolor,
+    linkcolor=crimson,
+    urlcolor  = magenta,
+    anchorcolor = blue}
+
+
+\Crefname{section}{Sec.}{Secs.}
+\Crefname{table}{Tab.}{Tabs.}
+\Crefname{figure}{Fig.}{Figs.}
+\Crefname{equation}{Eq.}{Eqs.}
+\Crefname{appendix}{Sec.}{Secs.}
+
+\newcommand{\ours}{SAFREE}
+% \title{\ours: Instruction-guided Safe Video Evaluation and Generation with Multimodal Controls}
+\title{\ours: Training-Free and Adaptive Guard for Safe Text-to-Image And Video Generation 
+% via Proximity Analysis
+% 
+}
+\author{
+\quad
+Jaehong Yoon\thanks{Equal contribution.} \quad\quad
+Shoubin Yu$^*$ \quad\quad
+Vaidehi Patil \quad\quad
+Huaxiu Yao \quad\quad
+Mohit Bansal \\
+\\
+\quad\quad\quad\quad\quad\quad\quad\quad
+\quad\quad\quad\quad\quad\quad\quad\quad
+UNC Chapel Hill
+}
+
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
+\begin{document}
+
+\maketitle
+\vspace{-0.3in}
+\begin{center}
+{\texttt{\url{https://safree-safe-t2i-t2v.github.io/}}}
+\end{center}
+
+\begin{figure}[h]
+\small
+\centering
+    \includegraphics[width=0.9\linewidth]{assets/teaser_safree.pdf}
+    % \vspace{-3ex}
+    \caption{\small We present \ours{}, an adaptive, training-free method for T2I that filters out a variety of user-defined concepts. \ours{} enables the safe and faithful generation that can remove toxic concepts and create a safer version of inappropriate prompts without requiring any model updates. \ours{} is also versatile and adaptable, enabling its application to other backbones (such as Diffusion Transformer) and across different applications (like T2V) for enhanced safe generation. Fire icon: training/editing-based methods that alter model weights. Snowflake icon: training-free methods with no weights updating. We manually masked/blurred sensitive text prompts and generated results for display purposes.}
+    \label{fig:teaser}
+\end{figure}
+
+
+\input{sections/0_abstract}
+\input{sections/1_intro}
+\input{sections/2_related_work}
+\input{sections/3_method}
+\input{sections/4_exps}
+\input{sections/5_conclusion}
+
+
+\bibliography{ref}
+\bibliographystyle{iclr2025_conference}
+
+
+\input{sections/6_appendix}
+
+
+\end{document}

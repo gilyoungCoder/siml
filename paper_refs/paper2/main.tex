@@ -1,0 +1,216 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2025
+
+% The authors should use one of these tracks.
+% Before accepting by the NeurIPS conference, select one of the options below.
+% 0. "default" for submission
+ % \usepackage{neurips_2025}
+% the "default" option is equal to the "main" option, which is used for the Main Track with double-blind reviewing.
+% 1. "main" option is used for the Main Track
+%  \usepackage[main]{neurips_2025}
+% 2. "position" option is used for the Position Paper Track
+%  \usepackage[position]{neurips_2025}
+% 3. "dandb" option is used for the Datasets & Benchmarks Track
+ % \usepackage[dandb]{neurips_2025}
+% 4. "creativeai" option is used for the Creative AI Track
+%  \usepackage[creativeai]{neurips_2025}
+% 5. "sglblindworkshop" option is used for the Workshop with single-blind reviewing
+ % \usepackage[sglblindworkshop]{neurips_2025}
+% 6. "dblblindworkshop" option is used for the Workshop with double-blind reviewing
+%  \usepackage[dblblindworkshop]{neurips_2025}
+
+% After being accepted, the authors should add "final" behind the track to compile a camera-ready version.
+% 1. Main Track
+ \usepackage[main, final]{neurips_2025}
+% 2. Position Paper Track
+%  \usepackage[position, final]{neurips_2025}
+% 3. Datasets & Benchmarks Track
+ % \usepackage[dandb, final]{neurips_2025}
+% 4. Creative AI Track
+%  \usepackage[creativeai, final]{neurips_2025}
+% 5. Workshop with single-blind reviewing
+%  \usepackage[sglblindworkshop, final]{neurips_2025}
+% 6. Workshop with double-blind reviewing
+%  \usepackage[dblblindworkshop, final]{neurips_2025}
+% Note. For the workshop paper template, both \title{} and \workshoptitle{} are required, with the former indicating the paper title shown in the title and the latter indicating the workshop title displayed in the footnote.
+% For workshops (5., 6.), the authors should add the name of the workshop, "\workshoptitle" command is used to set the workshop title.
+% \workshoptitle{WORKSHOP TITLE}
+
+% "preprint" option is used for arXiv or other preprint submissions
+ % \usepackage[preprint]{neurips_2025}
+
+% to avoid loading the natbib package, add option nonatbib:
+   % \usepackage[nonatbib]{neurips_2025}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+
+\usepackage{graphicx}      % figures
+\usepackage{subcaption}    % subfigure env
+\usepackage{float}         % H option for figure
+\usepackage{wrapfig}
+\usepackage{caption}       % captions
+\usepackage{natbib} 
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{thmtools}
+\usepackage{bbm}  % for \mathbbm{1}
+
+\usepackage{algorithm}      % algorithm
+\usepackage{algorithmic}    % algorithm
+
+\usepackage{caption}
+\usepackage{multirow}
+\usepackage{colortbl}    % \cellcolor
+\newcommand{\cc}[1]{\cellcolor{gray!#1}}
+
+\newcommand{\BarStar}{%
+  \rule{0.8cm}{0.25cm}%
+  \llap{%
+    \hspace{0.4cm}%
+    \raisebox{0.02cm}{\textcolor{white}{*}}%
+  }%
+}
+
+\newcounter{dummylabelcounter}
+
+% for general theorem
+\newtheorem{theorem}{Theorem}
+
+% theorem where we want to replicate
+% \newtheorem*{reptheorem}{Theorem}
+\newtheorem*{reptheorem}{\textnormal{\textbf{Theorem \ref{thm:safe}}}}
+
+\newcommand{\diff}{\mathop{}\!\mathrm{d}} % diff 
+
+
+\usepackage{pifont}     % for \ding{55} (xmark)
+\newcommand{\cmark}{\checkmark}          % check-mark
+\newcommand{\xmark}{\ding{55}}           % x-mark
+
+% --- customized tcolorbox env. ---
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+
+\definecolor{DefinitionBackColor}{gray}{0.96}
+\definecolor{DefinitionBarColor}{gray}{0.5}
+
+\newtcolorbox{mydefinitionbox}{
+    enhanced,
+    breakable,
+    colback=DefinitionBackColor,
+    colframe=DefinitionBarColor,
+    boxrule=0pt, leftrule=3pt,
+    rightrule=0pt, toprule=0pt, bottomrule=0pt,
+    arc=0mm,
+    boxsep=0pt, top=4pt, bottom=4pt, left=8pt, right=4pt,
+    before skip=\medskipamount, after skip=\medskipamount,
+    fontupper=\normalsize,
+    fonttitle=\bfseries,
+}
+
+% Note. For the workshop paper template, both \title{} and \workshoptitle{} are required, with the former indicating the paper title shown in the title and the latter indicating the workshop title displayed in the footnote. 
+\title{Training-Free Safe Denoisers \\for Safe Use of Diffusion Models}
+
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+
+
+\author{%
+  Mingyu Kim\thanks{Equal contribution}\ $^{1}$ \ Dongjun Kim$^{*2}$ \ Amman Yusuf$^1$ \ Stefano Ermon$^2$ \ Mijung Park$^1$\\
+  $^1$CS, UBC \ \ $^2$CS, Standford\\
+  \texttt{mgyu.kim@ubc.ca}, \ \ 
+  \texttt{dongjun@stanford.edu} \\
+  \texttt{ammany01@cs.ubc.ca},  \ \
+  \texttt{ermon@cs.stanford.edu},  \ \
+  \texttt{mijungp@cs.ubc.ca} \\
+}
+
+% math expression
+\input{math_commands.tex}
+
+\begin{document}
+
+
+\maketitle
+
+
+\begin{abstract}
+  There is growing concern over the safety of powerful diffusion models, as they are often misused to produce inappropriate, not-safe-for-work content or generate copyrighted material or data of individuals who wish to be forgotten. 
+  Many existing methods tackle these issues by heavily relying on text-based negative prompts or retraining the model to eliminate certain features or samples. 
+  In this paper, we take a radically different approach, directly modifying the sampling trajectory by leveraging a negation set (e.g., unsafe images, copyrighted data, or private data) to avoid specific regions of data distribution, without needing to retrain or fine-tune the model. 
+  We formally derive the relationship between the expected denoised samples that are safe and those that are unsafe, leading to our \textit{safe} denoiser, which ensures its final samples are away from the area to be negated.
+  We achieve state-of-the-art safety in large-scale datasets such as the CoPro dataset
+  while enabling significantly more cost-effective sampling than existing methodologies.
+%  Inspired by the derivation, we develop a practical algorithm that successfully produces high-quality samples while avoiding negation areas of the data distribution in text-conditional, %class-conditional, and unconditional image generation scenarios. These results hint at the great potential of our training-free safe denoiser for using DMs more safely.
+\end{abstract}
+
+\vspace{-0.4cm}
+\textcolor{red}{Warning: This paper contains disturbing content such as violent and sexually explicit images.}
+%
+\begin{figure}[H]
+    \centering
+    \vskip -0.1in
+        \begin{subfigure}{0.9\textwidth}
+            \includegraphics[width=\textwidth]{Figures/Introduction/thumbnail_v3.pdf}
+            \vskip -0.05in
+            \caption{Nudity (Top)}
+            \label{fig:thumbnail_1}
+        \end{subfigure}    
+        \begin{subfigure}{0.7\textwidth}
+                \includegraphics[width=\textwidth]{Figures/Introduction/thumbnail_ann_v2.pdf}
+                \vskip -0.05in
+            \caption{Data Memorization}
+            \label{fig:thumbnail_2}
+        \end{subfigure}
+        \vskip -0.05in
+    \caption{Our method \textit{Safe Denoiser} against existing methods. (a) Our method, incorporated with SAFREE~\cite{yoon2024safree} and SLD~\cite{schramowski2023safe}, does not generate inappropriate images. (b) Our method mitigates the memorization issue by negating the real image, resulting in a novel image with features similar to those in the real image in hair colors or outfits.}
+    \label{fig:thumbnail}
+\end{figure}
+\input{Manuscript/Introduction}
+\input{Manuscript/Preliminary}
+\input{Manuscript/Method}
+\input{Manuscript/Related_works}
+\input{Manuscript/Experiments}
+\input{Manuscript/Update_experiment_after_rebuttal}
+\input{Manuscript/Conclusion}
+
+\bibliography{main}
+\bibliographystyle{unsrt}
+
+%%%%%%%%%%%% Checklist %%%%%%%%%%%%
+\clearpage
+\input{Manuscript/checklist}
+
+%%%%%%%%%%%% Appendix %%%%%%%%%%%%
+\newpage
+\appendix
+\setcounter{equation}{0}
+\renewcommand{\theequation}{\Alph{section}.\arabic{equation}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{\Alph{section}.\arabic{table}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
+
+\input{Appendix/Proof}
+\input{Appendix/Limitations}
+\input{Appendix/Detail_T2I}
+\input{Appendix/Detail_Pixel}
+\input{Appendix/Additional_Results}
+\end{document}

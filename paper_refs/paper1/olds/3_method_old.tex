@@ -1,0 +1,83 @@
+\begin{table*}
+\caption{Attack Success Rate, SP: Subspace Proximity, NB: Negative Prompt Balance, $^\dagger$: from RECE}\label{tab:t2i_main}
+\small
+\centering
+\setlength{\tabcolsep}{1.mm}
+\resizebox{\textwidth}{!}{
+\begin{tabu}{lc|ccccc|ccc}
+\toprule
+& &\multirow{3}{*}{I2P $\downarrow$}&\multirow{3}{*}{P4D $\downarrow$}&\multirow{3}{*}{Ring-A-Bell $\downarrow$}&\multirow{3}{*}{MMA-Diffusion $\downarrow$}&\multirow{3}{*}{UnlearnDiffAtk $\downarrow$}&\multicolumn{3}{c}{COCO-30k}\\ 
+\cmidrule(lr){8-10}
+Method&Publication&
+&&&&&FID $\downarrow$ &CLIP $\uparrow$&TIFA $\uparrow$\\
+\midrule
+SD-v1.4 &-&
+0.570&
+0.987&0.831$^\dagger$&0.957&0.697&14.5&31.3\\
+SDXL &-&
+run&
+0.709&run&run&run
+&-&-\\
+\midrule
+\rowfont{\color{mygray}}
+{ESD~\citep{gandikota2023erasing}} &{ICCV 23'} &
+\todo{}&\todo{}
+&0.528&0.873&0.761
+&15.9&30.7\\
+\rowfont{\color{mygray}}
+{MACE~\citep{lu2024mace}}&{CVPR 24'} &
+\todo{}&\todo{}\\
+\rowfont{\color{mygray}}
+{SDID~\citep{li2024self}}&{CVPR 24'} &0.270\\
+\rowfont{\color{mygray}}
+{Latent Guard~\citep{liu2024latent}}&{ECCV 24'} &{no}&code\\
+\midrule
+NGPT~\citep{Woolf2023} & - &
+&&&&
+&&30.7\\
+SLD-Medium~\citep{schramowski2023safe} &CVPR 23' &
+\todo{}&0.592&&&
+&16.9&31.0$^\dagger$
+\\
+SLD-Max~\citep{schramowski2023safe} &CVPR 23'&
+\todo{}&0.775$^\dagger$&0.662$^\dagger$&&0.824$^\dagger$
+&18.8&\\
+UCE~\citep{gandikota2024unified}&WACV 24' &
+0.253&
+0.803$^\dagger$&0.331$^\dagger$&\todo{0.367}&0.796$^\dagger$
+&15.7&31.3$^\dagger$\\
+% T2IShield~\citep{wang2024t2ishield}&ECCV 24' &\\
+% \rowfont{\color{mygray}}SafeGen~\citep{li2024safegen}&CCS 24'&data&gen&is needed&-&-&-&-\\
+SA~\citep{heng2023selective}&NeurIPS 23'&
+0.621$^*$ &0.789$^\dagger$&0.225$^\dagger$&&0.775$^\dagger$&&30.6$^\dagger$\\
+CA~\citep{kumari2023ablating}&ICCV 23'& 0.226$^*$&\textbf{0.606}$^\dagger$&0.254$^\dagger$&0.855$^*$&0.655$^\dagger$&&31.2$^\dagger$\\
+RECE~\citep{gong2024reliable}&ECCV 24' &
+\textbf{0.092}&0.649$^\dagger$&\textbf{0.134}$^\dagger$&&0.655$^\dagger$&&30.9$^\dagger$\\
+\rowfont{\color{mygray}}
+{ConceptPrune~\citep{chavhan2024conceptprune}}&{arXiv 24.05}&&&
+0.148&0.044&\textbf{0.648}
+&16.9&29.9\\
+\midrule
+\rowfont{\color{mygray}}
+SD-v1.4 Coco Subsample&-
+&&&&&&&30.9\\
+\midrule
+% \ours~(Ours): SP-$\alpha=0.0$ (denoising: 0-4)&-&\todo{}&\todo{}&\todo{0.139}&&0.190&\todo{}&\todo{30.6}\\
+% \rowfont{\color{azure(colorwheel)}}{\ours~(Ours): SP-$\alpha=0.0$ (denoising: 0-9)}&-&\todo{}&\todo{}&{\textbf{0.038}}&&0.092&\todo{}&{30.0}\\
+% {\ours~(Ours): SP-$\alpha=0.0$ (denoising: 0-14)}&-&\todo{}&\todo{}&{\textbf{0.013}}&&0.056&\todo{}&\todo{{29.7}}\\
+% \ours~(Ours): SP-$\alpha=0.0$-null (denoising: 0-4)&-&&&0.051&&&&30.5\\
+\ours~(Ours): ONP&-&\textbf{0.028}&run&0.101&run&{0.384}&&{\textbf{31.1}}\\
+\ours~(Ours): M2O, $\alpha=0.01$&-&0.035&&\textbf{0.051}&run&\todo{0.374}&&30.7\\
+\bottomrule
+\end{tabu}
+}
+\end{table*}
+
+
+% \ours~(Ours): ONP&-&0.028&run&0.101&run&{0.268}&&{\textbf{31.1}}\\
+% \ours~(Ours): SP-$\alpha=0.0$-M2O (denoising: 0-4)&-&&&0.089&&&&30.6\\
+% \ours~(Ours): M2O, $\alpha=0.01$&-&0.035&&\textbf{0.051}&run&\todo{0.261}––––&&30.7\\
+
+
+% I2P - M2O /nas-ssd2/jhyoon/safe_vidgen/P4D/results/run_0903_SDv1-4_std_artists_VanGogh_big_artist_tfg_alpha_0p01_M2O_0to4
+% I2P - ONP /nas-ssd2/jhyoon/safe_vidgen/P4D/results/run_0902_SDv1-4_std_artists_VanGogh_big_artist_tfg_alpha_0p002_ONP_0to4

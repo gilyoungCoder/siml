@@ -1,0 +1,102 @@
+\section{Experimental Details : Text-to-Image Generation}
+\label{sec:t2i_detail}
+
+As outlined in the manuscript, we conduct the Text-to-Image experiment using SD-v1.4, following the same model as the baselines for generating images from text, as referenced in \cite{schramowski2023safe, wu2024erasediff, gong2024reliable, yoon2024safree}. 
+To ensure consistency, we adopt the generation procedure described in each baseline. 
+Preliminary observing the sensitivity of nudity-related content, we employ the DDPM scheduler \cite{ho2020denoising}. %
+For a fair comparison, we maintain the same number of inference steps, specifically $50$, aligning with the official implementations of both SLD and SAFREE, which also use 50 inference steps.
+
+Regarding the \textit{Safe Denoiser}, the proposed model computes the transition kernel with an RBF kernel. 
+%
+%
+The RBF kernel function is defined as follows:
+\begin{equation}
+\label{eq_rbf_kernel}
+K(x, x') = \exp\left(-\frac{\lVert x - x'\rVert^2}{2\sigma^2}\right)
+\end{equation}
+For the bandwidth parameter $\sigma$, we set a value of 1.0 for SLD and 3.15 for SAFREE. 
+Additionally, in case of SAFREE, we apply a scaling factor $\eta=0.33$, whereas for SLD, we use $\eta=0.03$ to regulate the strength of the repellency in \eqref{uncond_safe}.
+Empirically, we introduce a heuristic in which the proposed \textit{Safe Denoiser} is applied within critical timesteps $C=[780, ...,1000]$. %
+In the early stages of diffusion, denoising process primarily establishes global structures rather than intricate details, while the later stages focus on refining fine-grained features. 
+Since our approach aims to prevent the generation of globally harmful images rather than enhancing image quality or detail, we apply the denoiser at these later timesteps. 
+
+For reference images, we provide a detailed explanation of how they are obtained. 
+To ensure safe generation against nudity prompts, we utilize a total of 515 images sourced from the I2P dataset~\cite{schramowski2023safe}. 
+These images were generated using SD-v1.4. As mentioned in the manuscript, these reference images meet the criterion, where a nude class probability exceeds 0.6, as determined by Nudenet. 
+Sample images are presented in \figref{i2p_ref_imgs_1}. 
+On the other hand, for the inappropriate probability task with the CoPro dataset, we attempt to use the total images from the I2P dataset. However, our computational resources allow us to use only 3,000 reference images.
+To select these 3,000 images, we randomly choose them out of the 4,703 images available in the I2P dataset. All images used in this task are also generated using SD-v1.4.
+Sample images are presented in \figref{i2p_ref_imgs_2}. 
+It’s important to note that all experiments conducted in this study use the same set of reference images across all baselines. This ensures a fair comparison.
+
+% Please delete the following parts for arXiv version
+Addtionally, the reference images we used in the task to generate safer images against nudity prompts are included as attachments in our supplementary materials.
+On the other hand, due to space constraints, we cannot include the attachment in the inappropriate probability task. We ensure that the reference images used in this task will be included in the public repository upon the acceptance of the paper.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.92\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs.pdf}
+    \caption{Reference images for safe generation against nudity prompts}
+    \label{fig:i2p_ref_imgs_1}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.92\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs_whole_i2p.pdf}
+    \caption{Reference images for inappropriate propability}
+    \label{fig:i2p_ref_imgs_2}
+\end{figure}
+
+Next, we briefly introduce the baseline models used in our experiments.
+The first two approaches serve as comparisons for unlearning-based safe diffusion models \cite{gandikota2023erasing, gong2024reliable}.  
+Specifically, we evaluate Erased Stable Diffusion (ESD) \cite{gandikota2023erasing} as a representative method. More recently, reliably trained safe diffusion (RECE) models have demonstrated improved performance, particularly in reducing the attack success rate \cite{gong2024reliable}. 
+In addition to these unlearning-based approaches, we also include SLD and SAFREE as training-free safe diffusion models \cite{schramowski2023safe, yoon2024safree}. While both methods employ negative prompts, their underlying mechanisms differ significantly. 
+In SLD, the set of unsafe prompts, denoted as  $c_{US}$, is designed to mitigate globally harmful image generation \cite{schramowski2023safe}.
+In contrast, SAFREE focuses on more precise negative prompts specifically tailored to nudity-related content \cite{yoon2024safree}. Beyond negative prompts, SAFREE further enhances safety by applying an orthogonal projection technique in Euclidean space to shift text embeddings away from predefined toxic regions.
+In the following, we provide an overview of the datasets used in our experiments.
+
+\subsection{Inappropriate Prompt Datasets}
+
+\textbf{I2P}  
+The I2P dataset consists of prompts related to seven unsafe concepts: hate, harassment, violence, self-harm, sexual content, shocking content, and illegal activity \cite{schramowski2023safe}. 
+It contains a total of 4,703 prompts and was introduced in earlier stages of research, with subsequent studies primarily focusing on this dataset \cite{gong2024reliable, yoon2024safree}. 
+In this work, we utilize the I2P dataset as a source of reference data points rather than for additional training.
+The dataset was obtained from \url{https://huggingface.co/datasets/AIML-TUDA/i2p}
+
+\textbf{CoPro}
+Compared to I2P \cite{schramowski2023safe}, the CoPro dataset offers a more extensive dataset comprising a total of 226,104 prompts, each associated with 723 concepts that span both safe and unsafe scenarios. This expansion enhances the dataset’s suitability for rigorous evaluation \cite{liu2024latent}. Particularly, it also offers super-concept information, following the same framework of I2P \cite{schramowski2023safe}. All text prompts are categorized into \{hate, harassment, violence, self-harm, sexual content, shocking content, and illegal activities\}. This ensures that they align with the corresponding category information in the I2P dataset.
+To efficiently evaluate models, we randomly sample 10,000 prompts, ensuring a uniform distribution across all categories. We validated that the average inappropriate probability of SD-v1.4 in the randomly sampled dataset, presented in \tabref{ip_CoPro}, closely matches the numerical information provided in \cite{liu2024safetydpo}.
+In this work, we evaluate safe image generation performance across baselines on the CoPro dataset using reference data points from the I2P dataset.
+This dataset was obtained from \url{https://github.com/rt219/LatentGuard/blob/main/dataset/CoPro_v1.0.json}
+
+\subsection{Nudity in NSFW Prompt Datasets}
+
+\textbf{Ring-A-Bell}
+The Ring-A-Bell dataset was developed through a red-teaming approach that evaluates text-to-image diffusion models using black-box methods \cite{tsai2024ringabell}. 
+The original dataset \url{Chia15/RingABell-Nudity} contains 285 prompts; however, we use a curated subset of 79 prompts, following prior baselines \cite{gong2024reliable, yoon2024safree}. 
+This selection ensures a more equitable comparison of our method. 
+The curated Ring-A-Bell dataset was obtained from either \url{https://github.com/CharlesGong12/RECE} or \url{https://github.com/jaehong31/SAFREE}.
+
+\textbf{MMA-Diffusion}
+MMA-Diffusion is another dataset generated via a red-teaming approach \cite{yang2024mma}. 
+Unlike other datasets, it consists of adversarial prompts designed to include potentially harmful contexts without explicit expressions. 
+Similar to the Ring-A-Bell dataset, we use a curated set of 1,000 prompts, consistent with prior baselines \cite{gong2024reliable, yoon2024safree}. 
+The dataset was obtained from \url{https://github.com/CharlesGong12/RECE} or \url{https://github.com/jaehong31/SAFREE}.
+
+\textbf{UnlearnDiff}
+The UnlearnDiff dataset contains various harmful text prompts that can potentially generate NSFW images \cite{zhang2024generate}. 
+Among its categories, we specifically focus on nudity-related prompts. 
+The dataset includes a total of 116 nudity-related prompts, derived from an initial set of 143 prompts, from which 27 were excluded as they contained other NSFW categories such as self-harm and shocking content. 
+This selection ensures that our numerical metrics remain unaffected by unrelated factors.
+The dataset was obtained from \url{https://github.com/CharlesGong12/RECE} or \url{https://github.com/jaehong31/SAFREE}.
+
+\subsection{Ann Graham Lotz for Data Memorization}
+
+In \figref{thumbnail_2}, we demonstrate that SD-v1.4 exhibits trainig dataset memorization, as it is capable of regenerating an indentical images using the text prompt, (\textit{'Living in the light with Ann Graham Lotz <|startoftext|> lad mans'}). In this example, our method is applied with a bandwidth $\sigma=13.15$ and scaling factor of $0.69$. 
+To construct a reference data for this case, we collected a total of 10 images from the internet. These are presented in \figref{ann_ref_imgs}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.60\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs_Ann.pdf}
+    \caption{Reference images for Ann Graham Lotz case}
+    \label{fig:ann_ref_imgs}
+\end{figure}

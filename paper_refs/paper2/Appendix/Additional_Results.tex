@@ -1,0 +1,162 @@
+\section{Additional Experimental Results}
+\label{sec:additional_result}
+
+In this section, we share extra experimental results. Both numeric and visual results are included, which are not presented in the main text. These results highlight the empirical gains in terms of safe generation and the preservation of the global context of the generated samples simultaneously. Specifically, this ensures that the samples remain faithful to their original meanings while enabling us to negate specific concepts we intended. 
+
+\subsection{Quantiative Results}
+
+\paragraph{ImageNet Case for Negating Chihuahua Class} 
+In ImageNet, we focus on negating a specific Chihuahua class during generation. We select the validation set of Chihuahua class as the negative images. We generate 50 samples per class and classify samples from 999 classes by a classifier~\citep{dhariwal2021diffusion} and report the accuracy by Top-1. Also, we measure the Top-1 accuracy of 50 samples from Chihuahua class, reporting it by Top-1* in \tabref{imagenet}. From the result, we note that our method excels generating other 999 classes, while SR cannot generate images from those 999 classes. To evaluate the overall quality, \tabref{imagenet} further report the precision (sample accuracy) and recall (sample diversity)~\citep{kynkaanniemi2019improved} over 50K samples, indicating that our method is better than SR in negating a specific class. 
+
+\begin{table}[!ht]
+    \caption{Experiments on ImageNet for the specific class (Chihuahua) negation task. Top-1 is the classification accuracy of the generated samples on 999 classes, and Top-1* indicates the accuarcy on the specific class.} 
+    \label{tab:imagenet} 
+    \centering 
+    \begin{tabular}{lccccc} 
+        \toprule 
+        Method & Prec $\uparrow$ & Rec $\uparrow$ & Top-1 $\uparrow$ & Top-1$^{*}$ $\downarrow$ \\ 
+        \midrule 
+        Baseline (B) & 0.72 & 0.63 & 0.76 & 0.68 \\ 
+        B + SR & 0.59 & 0.54 & 0.01 & 0.0 \\ 
+        \cc{15}B + Ours & \cc{15}0.62 & \cc{15}0.58 & \cc{15}0.14 & \cc{15}0.0 \\ \bottomrule 
+    \end{tabular} 
+\end{table}
+
+\paragraph{Aesthetic Scores for Long Text Prompts} 
+We identified that our method, which incorporates negative prompts, effectively reduces the risk of generating unsafe data and maintains alignment with the given text prompts. However, the text prompts in these cases span various lengths. Therefore, it is necessary to quantify whether our method excessively applies to remove unsafe contents, leading to unfavorable images in extreme cases. We sample the most complex cases from the I2P datasets and compare the generated images across baselines. 
+
+\begin{table}[!ht]
+    \caption{Aesthetic scroes for long text prompts in the I2P dataset.} 
+    \label{tab:aes} 
+    \centering 
+    \begin{tabular}{lc} 
+    \toprule 
+    Method      & LAION-aesthetic V2 $\uparrow$ \\
+    \midrule 
+    SD-v1.4          & $5.97 \pm 0.534$         \\
+    SAFREE      & $6.03 \pm 0.540$              \\
+    SAFREE+Ours & $5.94 \pm 0.529$              \\
+    \bottomrule 
+    \end{tabular}
+\end{table}
+
+
+To test how our method works when long and complex prompts are given, we use LAION-aesthetic V2 score~\footnote{https://github.com/christophschuhmann/improved-aesthetic-predictor} as a metric and use top 10\% longest prompts (475 prompts, avg. word\_count=54) selected from the I2P dataset. We choose this score as it is known to be correlated with human perception of quality of images (higher the better). As shown \tabref{aes}, our method maintains aesthetic quality comparable to baselines, even with complex prompts. We prove that the proposed method does not struggle to create appropriate images even when asked with long text prompts.  
+
+\subsection{Qualitative Results}
+We present additional qualitative results across three experimental scenarios: \textit{(1) Text-to-Image Generation for preventing nudity and inappropriate images, (2) Sexual Debiasing in unconditional generation for facial images, and (3) Class-Conditional Generation, where reference images serve as constraints not to generate.} To systematically demonstrate the effectiveness of our approach, we present the results in sequence, beginning with text-to-image generation followed by unconditional generation and concluding with conditional generation. To facilitate straightforward understanding, we include as many figures and qualitative comparisons as possible.
+
+\subsection{Text-to-Image Generation}
+\paragraph{Safe Generation against Nudity Prompts}
+We present a qualitative comparison across baselines and ours. All figures are generated using the same text prompts. We decide to exclude the case of MMA-Diffusion since prompts in this dataset generate pornographic images by baselines, which is not suitable for academic purpose. Hence, we select text prompts from Ring-A-Bell~\cite{tsai2024ringabell} and UnlearnDiff~\cite{zhang2024generate}. From \figref{ringabell} to \figref{unlearndiff}, we observe that our model effectively eliminates nudity information while preserving textual information. 
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.80\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs_ring.pdf}
+    \caption{Generated images by baselines and ours on Ring-A-Bell~\cite{tsai2024ringabell}}
+    \label{fig:ringabell}
+\end{figure*}
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.80\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs_unlearn.pdf}
+    \caption{Generated images by baselines and ours on UnlearnDiff~\cite{zhang2024generate}}
+    \label{fig:unlearndiff}
+\end{figure*}
+
+
+\paragraph{Inappropriate Probability in CoPro Dataset}
+
+In our evaluation on the CoPro dataset~\cite{liu2024latent}, we apply our method with images from the I2P dataset~\cite{schramowski2023safe}, which includes a wide range of sensitive categories: \{hate, harassment, violence, self-harm, sexual content, shocking content, and illegal activities\}. Among these, we focus on the 'Self-Harm' category.
+Self-harm content is suitable for graphical illustration, distinguishing it an appropriate and interpretable case for homogenous visual inspection in the public domain. Unlike other categories—where perceptions of appropriateness can vary widely across cultural and personal contexts—'Self-harm' is typically associated with somber or distressing imagery that is broadly and publicly recognized as unsafe.
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs_copro_selfharm.pdf}
+    \caption{Generated images by baselines and ours on CoPro~\cite{liu2024latent}. All texual prompts are labeled as 'Self-Harm'. This dataset also provides safe alternatives, and we present both.}
+    \label{fig:copro_selfharm}
+\end{figure*}
+
+As illustrated in \figref{copro_selfharm}, our Safe Denoiser effectively reduces the generation of implicit unsafe content while preserving coherence with the provided prompts. This underscores its ability to both detect and suppress sensitive content without compromising the semantic alignment of textual prompts.
+From this figure, it is evident that negative prompts do not yield significant results in mitigating the generation of sad and gloomy atmospheres, particularly for conveying feelings of collapse. Conversely, our \textit{Safe Denoiser} tends to generate images that more accurately reflect the literal meanings of the textual prompts. This tendency contributes to a reduction in the likelihood of generating content that evokes feelings of 'Self-harm'. 
+
+
+\paragraph{Alignment of Textual Prompts}
+We present uncurated generated images from the CoCo dataset. This dataset encompasses a wide range of textual prompts that cover various lengthy and diverse situations. As shown in \figref{coco30k_ours} and \tabref{t2i}, we conclude that our approach does not compromise the performance of generating normal images. Instead, it focuses on addressing the challenge of generating potentially unsafe images. 
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.70\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs_ours_coco30k.pdf}
+    \caption{Uncurated generated images by SAFREE+Ours on CoCo30K}
+    \label{fig:coco30k_ours}
+\end{figure*}
+
+\subsection{Unconditional Generation: Sexual Debiasing}
+We present uncurated generated images created by the DM trained on the FFHQ dataset~\cite{karras2019style}. This dataset lacks explicit labels indicating sexual information. However, we observe a tendency for this model to generate female images more frequently than male images, as shown in \tabref{ffhq}. On the other hand, when we utilize \textit{Safe denoiser} with female images, we mitigate the potential bias towards female images and achieves generating images uniformly distributed across sexual information. \figref{ffhq_comparision} illustrates that the generated images align with the numerical results presented in \tabref{ffhq}.
+
+\begin{figure*}[!ht]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+            \includegraphics[width=\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs_uncond.pdf}
+            \caption{Uncondtional FFHQ}
+    \end{subfigure}   
+    \begin{subfigure}{0.32\textwidth}
+            \includegraphics[width=\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs_uncond_sr.pdf}
+            \caption{Sparse Repellency}
+    \end{subfigure}   
+    \begin{subfigure}{0.32\textwidth}
+            \includegraphics[width=\textwidth]{Figures/Appendix/Implementation_detail/ref_imgs_uncond_ours_1.pdf}
+            \caption{Ours}
+    \end{subfigure}   
+    \caption{Comparison of \textit{Safe Denoiser} against existing approaches when negation on female.}
+    \label{fig:ffhq_comparision}
+\end{figure*}
+
+
+
+\subsection{Class-conditional Generation : Negation of Specific Class}
+We present uncurated images that focus on negating a specific Chihuahua class. Here are two experimental setups. First, we employ class conditional guidance on the ‘Chihuahua’ class and simultaneously use the \textit{Safe denoiser} to work with negative images sampled from the ‘Chihuahua’ class in the validation split. We observe that the SR does not follow homogeneous images that align with the superclass, ‘Dog’, but our method produces similar small dogs but not matched with ‘Chihuahua’ as shown in \figref{imagenet_comparison_dogs}.
+
+Second, we qualitatively evaluate that our method with negative images from the ‘Chihuahua’ class works when class guidance is applied to classes other than ‘Dogs’, for example, ‘Tench’ and ‘Truck’. This result is shown in \figref{imagenet_comparison_others}. We observe that the SR sometimes depicts different classes even when class guidance is applied, but our method aligns with homogeneous classes following class guidance even when the \textit{Safe denoiser} works with ‘Chihuahua’ images. This indicates that our method effectively tackles specific concepts and preserves the original performance when it is not mutually correlated. 
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.99\textwidth]{Figures/Experiments/imagenet/vs_dogs/comparison_imagenet_chihuahua_vs_dogs.pdf}
+    \caption{Generated samples when negating the Chihuahua class, primarily producing visually similar small dog breeds.}
+    \label{fig:imagenet_comparison_dogs}
+\end{figure*}
+
+\clearpage
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.99\textwidth]{Figures/Experiments/imagenet/vs_others/comparison_imagenet_chihuahua_vs_others.pdf}
+    \caption{Comparison of \textit{Safe Denoiser} against existing approaches when negation on Chihuahua. This comparison includes non-dog related ImageNet classes, which include Tench, Garbage Truck, Church, Spoonbill, and Great White Shark.}
+    \label{fig:imagenet_comparison_others}
+\end{figure*}
+
+
+Additional graphical illustrations are presented in the following figures from \figref{imagenet_vanilla_samples} to \figref{imagenet_safe_denoiser_samples}. 
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.92\textwidth]{Figures/Experiments/imagenet/vs_others/vanilla_imagenet_chihuahua_vs_others.pdf}
+    \caption{Classifier guidance diffusion model generated samples when negating on Chihuahua. This comparison includes non-dog-related ImageNet classes mentioned in~\ref{fig:imagenet_comparison_others} along with the dog-related classes in Figure~~\ref{fig:imagenet_comparison_dogs} which are Pomeranian, Yorkshire Terrier, and Shih Tzu.}
+    \label{fig:imagenet_vanilla_samples}
+\end{figure*}
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.92\textwidth]{Figures/Experiments/imagenet/vs_others/sparse_repellency_imagenet_chihuahua_vs_others.pdf}
+    \caption{\textit{Sparse Repellency} generated samples when negating on Chihuahua. The same classes are selected as ~\ref{fig:imagenet_vanilla_samples}.}
+    \label{fig:imagenet_sparse_repellency_samples}
+\end{figure*}
+
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.92\textwidth]{Figures/Experiments/imagenet/vs_others/safe_denoiser_imagenet_chihuahua_vs_others.pdf}
+    \caption{\textit{Safe Denoiser} generated samples when negating on Chihuahua. The same classes are selected as ~\ref{fig:imagenet_vanilla_samples}.}
+    \label{fig:imagenet_safe_denoiser_samples}
+\end{figure*}
+

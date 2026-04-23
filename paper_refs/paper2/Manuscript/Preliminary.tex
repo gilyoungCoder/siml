@@ -1,0 +1,67 @@
+\section{Preliminary}
+\label{preliminary}
+
+
+
+%
+%
+DMs generate samples through iterative 
+decoding starting from random noise to data. This iterative process is a reverse of the forward 
+data corruption 
+%\mj{descruction -> isn't corruption better?} 
+process, 
+% given by  
+$\mathbf{x}_{t}=\alpha_{t}\mathbf{x}+\sigma_{t}\bm{\epsilon}$, where $\mathbf{x} \sim p_{\text{data}}(\mathbf{x})$ 
+% follows the data distribution $p_{\text{data}}(\mathbf{x})$ and 
+$\bm{\epsilon} \sim \mathcal{N}(0,I)$ 
+% follows the noise prior distribution $\mathcal{N}(0,I)$, 
+which results in a perturbation kernel: $q_{t}(\mathbf{x}_{t}\vert\mathbf{x})=\mathcal{N}(\mathbf{x}_{t};\alpha_{t}\mathbf{x},\sigma_{t}^{2}I)$. The specific choice of the coefficients $\alpha_{t}$ and $\sigma_{t}$ determines a different variant of DMs: 
+% In other words, depending on these parameters, the model may be referred to as 
+popular examples include 
+Denoising Diffusion Probabilistic Models (DDPM) \cite{ho2020denoising}, Elucidating Diffusion Models (EDM) \cite{karras2022elucidating}, or Flow Matching \cite{lipman2022flow}. 
+%
+Regardless of whether the model is trained with noise-prediction~\cite{ho2020denoising}, data-prediction~\cite{karras2022elucidating}, or velocity-prediction~\cite{salimans2022progressive,lipman2022flow}, these approaches are fundamentally equivalent~\cite{kingma2021variational,kim2021soft}. This paper adopts the data-prediction framework due to its most intuitive interpretation. In data-prediction, the model approximates the \textit{denoiser} function, defined by
+$\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]:=\int \mathbf{x} \frac{p_{\text{data}}(\mathbf{x})q_{t}(\mathbf{x}_{t}\vert\mathbf{x})}{p_{\text{data},t}(\mathbf{x}_{t})}\diff\mathbf{x}\approx\frac{1}{\alpha_{t}}(\mathbf{x}_{t}-\sigma_{t}\bm{\epsilon}_{\bm{\theta}})$,
+where $p_{\text{data},t}(\mathbf{x}_{t})$ is a marginal distribution of diffusion process at $t$, and $\bm{\epsilon}_{\bm{\theta}}$ is the noise-prediction.
+
+DMs can be guided to produce samples~\cite{dhariwal2021diffusion,kim2022refining} that adhere more closely to a desired condition denoted by $\mathbf{c}$. A common approach in modern DMs is \textit{classifier-free guidance} (CFG)~\cite{ho2021classifier}. The model is trained to learn both the unconditional denoiser $\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]$ and the conitional denoiser $\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}]$. The CFG modifies the sampling trajectory by
+\begin{align*}
+%
+    \mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]+\lambda\big(\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}]-\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]\big)
+\end{align*} %\mj{what does ``positive" underneath the first term in the parenthesis mean?}
+allowing stronger alignment of the sample with the prompt $\mathbf{c}$ via the scale $\lambda$. The purpose of the additional term is to guide the trajectory in the \textit{sharpening direction} toward a desired condition $\mathbf{c}$.
+
+When there are unsafe words in the input text prompt, \textit{SAFREE}~\citep{yoon2024safree} detects unsafe words (tokens) and modifies the unsafe token embeddings. It filters out undesirable concepts with
+\begin{align}\label{eq:SAFREE}
+    \mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]+\underbrace{\lambda(\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\tilde{\mathbf{c}}_{+}]-\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}])}_{\text{SAFREE}},
+\end{align}
+where $\tilde{\mathbf{c}}_{+}$ is a modified prompt embeddings. This altered prompt embedding steers the generation process away from the predefined unsafe concepts.
+
+Another way of negating unsafe concepts is using \textit{negative guidance}~\cite{liu2022compositional}. It reverses the CFG gradient direction for an undesired prompt denoted by $\mathbf{c}_{-}$. 
+Formally, one replaces the standard CFG with
+\begin{align*}
+    \mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]+\lambda\big(\underbrace{\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}_{+}]}_{\text{positive}}-\underbrace{\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}_{-}]}_{\text{negative}}\big),
+\end{align*}
+where $\mathbf{c}_{+}$ denotes a positive condition and $\mathbf{c}_{-}$ represents a negative context that we want to avoid.
+
+On the line of negative prompting, \textit{Safe Latent Diffusion} (SLD)~\cite{schramowski2023safe} introduces a guidance by
+\begin{align}\label{eq:SLD}
+    \mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]+\underbrace{\lambda(\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}_{+}]-\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}])}_{\text{CFG}}-\underbrace{\mu(\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\tilde{\mathbf{c}}_{-}]-\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}])}_{\text{SLD}},
+\end{align}
+where $\tilde{\mathbf{c}}_{-}$ represents a predefined set of unsafe prompts suggested by SLD. Hypothetically, suppose we assume $\mu$ was set as $\lambda$. In that case, the SLD guidance simplifies to a negative guidance $\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t}]+\lambda(\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\mathbf{c}_{+}]-\mathbb{E}_{\text{data}}[\mathbf{x}\vert\mathbf{x}_{t},\tilde{\mathbf{c}}_{-}])$. A core difference between SLD and negative guidance is that $\mu$ is adaptive, i.e., $\mu=\mu(\mathbf{c}_{+}, \tilde{\mathbf{c}}_{-}; \gamma, \lambda)$, depending on $\mathbf{c}_{+}$ and $\tilde{\mathbf{c}}_{-}$. This weight is proportional to the norm of the difference between denoisiers: $\Vert \mathbb{E}_{\text{data}}[\mathbf{x} \vert \mathbf{x}_{t}, \mathbf{c}_{+}] - \mathbb{E}_{\text{data}}[\mathbf{x} \vert \mathbf{x}_{t}, \tilde{\mathbf{c}}_{-}] \Vert$. A larger norm suggests that the trajectory is likely to be safe, whereas a smaller norm implies potential unsafety.
+
+% before they are used as a condition of DMs. SAFREE defines an unsafe concept embedding space and then projects the embeddings of unsafe tokens into an orthogonal space of the unsafe embedding space. This altered prompt embedding steers the generation process away from the predefined unsafe concepts.
+
+%Instead of directly using $\mathbf{c}_{US}$ as $\mathbf{c}_{-}$, SLD introduces an adaptive weight $\mu(\mathbf{c}_{+}, \mathbf{c}_{US}; \gamma, \lambda)$ proportional to the denoiser difference norm, defined as $\Vert \mathbb{E}_{\text{data}}[\mathbf{x} \vert \mathbf{x}_{t}, \mathbf{c}_{+}] - \mathbb{E}_{\text{data}}[\mathbf{x} \vert \mathbf{x}_{t}, \mathbf{c}_{US}] \Vert$. The magnitude of this norm serves as an indicator of the proximity of the sampling trajectory to the unsafe region. Specifically, a larger norm suggests that the trajectory is likely to be safe, whereas a smaller norm indicates potential unsafety.
+
+%
+
+
+%
+
+%
+%
+%
+%
+
+

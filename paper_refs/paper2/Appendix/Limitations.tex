@@ -1,0 +1,20 @@
+\section{Limitations and Broader Impacts}
+\label{sec:limitation}
+
+\paragraph{Limitations}
+We have addressed significant safety challenges in DMs, particularly concerning the generation of NSFW content and the inadvertent reproduction of sensitive data. 
+We introduce the \textit{safe denoiser}, a novel approach that modifies the sampling trajectories of DMs to adhere to theoretically safe distributions, thereby ensuring the generation of appropriate and authorized content. 
+
+However, this approach necessitates the introduction of an additional hyperparameter, $\beta_t$, as outlined in \thmref{safe}. 
+While we demonstrate that this parameter is theoretically derived and straightforward to implement, it may not be optimal for realistic scenarios due to its assumption of access to numerous data points sampled from an unsafe distribution. 
+In practice, we present evidence in \figref{ablation_2} that this parameter influences the performance of the model.
+
+Despite the challenges, we have developed a novel training-free method that effectively guides the sampling trajectories of DMs towards safe distributions. 
+Ultimately, this work provides a robust and scalable solution for mitigating safety risks in generative AI, paving a way for their responsible and ethical applications.
+
+
+\paragraph{Broader Impacts}
+This paper presents a work whose goal is to build a reliable and trustworthy Generative AI. 
+There are many potential societal consequences of our work, particularly in addressing ethical risks associated with generative models. 
+Our research is focused on preventing the generation of NSFW content, including nudity and violence, and mitigating the risk of models memorizing and reproducing private information, such as human face, from training datasets. 
+We believe the presented work contributes to the responsible use of generative AI, reinforcing ethical safeguards and promoting AI systems that align with societal values and human rights.

@@ -1,0 +1,37 @@
+\section{Related Work}
+\subsection{T2I attacks}
+Recent works address vulnerabilities in generative models, including LLMs \citep{zou2023universal, patilcan,wei2023jailbroken, liu2024rethinking}, VLMs~\citep{zhao2024evaluating, zong2024safety,patil2024unlearning}, and T2I models~\citep{yang2024guardt2i,wang2024t2ishield,li2024safegen}. Cross-modality jailbreaks, like \citet{shayegani2023jailbreak}, pair adversarial images with prompts to disrupt VLMs without accessing the language model.
+Tools like Ring-A-Bell \citep{tsai2024ring} and automated frameworks by \citet{kim2024automatic} and \citet{li2024art} focus on model-agnostic red-teaming and adversarial prompt generation, revealing safety flaws. Methods by \citet{ma2024jailbreaking}, \citet{yang2024mma}, and \citet{mehrabi2023flirt} exploit text embeddings and multimodal inputs to bypass safeguards, using strategies like adversarial prompt optimization and in-context learning \citep{chin2024prompting4debugging, liu2024groot}. These works highlight vulnerabilities in T2I models.
+
+
+\subsection{Safe T2I generation}
+
+{\bf Training-based:} Training-based approaches~\citep{lyu2024one,pham2024robust,zhang2024steerdiff} ensure safe T2I generation by removing unsafe elements, as in \citet{li2024safegen} and \citet{gandikota2023erasing}, or using negative guidance. Adversarial training frameworks like \citet{kim2024race} neutralize harmful text embeddings, while works like \citet{das2024espresso} and \citet{park2024direct} filter harmful representations through concept removal and preference optimization. Fine-tuning methods such as \citet{lu2024mace}'s cross-attention refinement and \citet{heng2023selective}'s continual learning remove inappropriate content. Latent space manipulation, explored by \citet{liu2024latent} and \citet{li2024self}, enhances safety using self-supervised learning. While effective, they require extensive fine-tuning, degrade image quality, and lack inference-time adaptation. \ours{} is training-free, dynamically adapts to concepts, and controls filtering strength without modifying weights, offering efficient safety across T2I and T2V models.
+
+{\bf Training-free:} Training-free methods for safe T2I generation adjust model behavior without retraining. These include (1) Closed-form weight editing, like \citet{gandikota2024unified}'s model projection editing and \citet{gong2024reliable}'s target embedding methods, which remove harmful content while preserving generative capacity, and \citet{orgad2023editing}'s minimal parameter updates to diffusion models. (2) Non-weight editing, such as \citet{schramowski2023safe}'s Safe Latent Diffusion using classifier-free guidance and \citet{cai2024ethical}'s prompt refinement framework. However, these methods lack robustness and test-time adaptation. Our training-free method dynamically adjusts filtering based on prompts, and extends to other architectures and video tasks without weight edits, offering improved scalability and efficiency.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

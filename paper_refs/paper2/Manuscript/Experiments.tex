@@ -1,0 +1,243 @@
+\section{Experiments}
+\label{sec:experiments}
+
+
+We present the experimental results of our method, Safe Denoiser. Section~\ref{sec:t2i} details the outcomes of our text-to-image generation experiments, while the subsequent section explores both class-conditional and unconditional image generation.
+
+\subsection{Text-to-Image Generation}
+\label{sec:t2i}
+
+In this section, we conduct an in-depth analysis of safety issues in text-to-image models, focusing on tasks involving nudity and inappropriate content. The nudity task evaluates how well safety methods prevent harmful outputs as attack difficulty gradually increases. In contrast, the inappropriate content task examines whether these safety methods remain effective when handling multiple concepts simultaneously. 
+We use \textit{Stable Diffusion} (SD)~\cite{rombach2022high} v1.4\footnote{\url{https://huggingface.co/CompVis/stable-diffusion-v1-4}} with DDPM sampler. 
+To evaluate safety, we follow previous studies by assessing Attack Success Rate (ASR), Toxic Rate (TR), and Inappropriate Probability (IP)~\cite{schramowski2023safe, yoon2024safree}. 
+We measure ASR by the proportion of generated images that exceeds 0.6 nude class probability, measured by NudeNet\footnote{\url{https://github.com/notAI-tech/NudeNet}}. The TR is computed by the average of nude class probability, measured also by NudeNet. The IP is the classification probability score of generating inappropriate images, measured by the Q16 classifier~\citep{schramowski2022can}. For the nudity task, we select 515 unsafe images from I2P~\cite{schramowski2023safe} that exceeds 0.6 nude class probability. For the inappropriate content tasks, we randomly sample 3,000 images from I2P as the unsafe dataset. To evaluate, we use the broder dataset CoPro~\cite{liu2024latent}, which covers the same categories of I2P. Notably, all experiments uses the identical unsafe datasets across all baselines for consistency, see Appendix~\ref{sec:t2i_detail} for details. 
+
+Besides safety-related metrics, we prioritize maintaining high image quality and prompt alignment simultaneously. To this end, we calculate Fr\'echet Inception Distance (FID)~\cite{heusel2017gans} for the generation fidelity and CLIP~\cite{radford2021learning} to measure whether the samples follow human instructions. We use a PyTorch package~\cite{Seitzer2020FID} to compute the FID by comparing 10K reference images selected from the COCO-2014~\cite{lin2014microsoft} validation split and 10K generated images from the prompts identically selected from the same COCO dataset. Also, we evaluate the CLIP score~\citep{radford2021learning} using ViT-B-32\footnote{\url{https://huggingface.co/openai/clip-vit-base-patch32}}.
+
+\paragraph{Safe Generation against Nudity Prompts} 
+\tabref{t2i} summarizes our experimental findings. In these experiments, we utilize unsafe prompts proposed by Ring-A-Bell~\cite{tsai2024ringabell} (79 prompts), UnlearnDiff~\cite{zhang2024generate} (116 sexual prompts), and MMA-Diffusion~\cite{yang2024mma} (1000 prompts). These prompts are adversarially generated to fool the existing generative models. For baseline comparisons, we consider both training-based approaches, specifically \textit{ESD}~\cite{gandikota2023erasing} and \textit{RECE}~\cite{gong2024reliable}, and training-free methods such as SLD~\cite{schramowski2023safe} and SAFREE~\cite{yoon2024safree}. Initially, we observe that about $96.2\%$ of generated SD-v1.4 images are unsafe when using MMA-Diffusion prompts. Existing baselines demonstrate performance improvements over SD across datasets. 
+
+
+
+% \begin{figure*}[!t]
+%     \centering
+%     \includegraphics[width=0.99\textwidth]{Figures/Experiments/imagenet/vs_dogs/comparison_imagenet_chihuahua_vs_dogs.pdf}
+%     \caption{Generated samples when negating the Chihuahua class, primarily producing visually similar small dog breeds.}
+%     \label{fig:imagenet_comparison_dogs}
+% \end{figure*}
+
+% \begin{table*}[!t]
+%
+% \begin{minipage}[t]{.45\textwidth}
+% \caption{Performance evaluation in FFHQ. We use ResNet18~\cite{he2016deep} to classify the sex of generated samples. We compute FID by comparing 1K male subset of CelebA validation and 1K generated images.}
+%     \label{tab:ffhq}
+%     \centering
+%     \resizebox{0.95\textwidth}{!}{%
+%     \begin{tabular}{lccc}
+%         \toprule
+%         Method & Female & Male & FID $\downarrow$ \\\midrule
+%         Baseline (B)         & $64.0\%$ & $36.0\%$ & 109.07  \\
+%         B + SR   & $53.1\%$ & $46.9\%$ & 130.52   \\
+%         \cc{15}B + Ours       & \cc{15}$55.6\%$ & \cc{15}$44.4\%$ & \cc{15}96.57   \\
+%         \bottomrule
+%     \end{tabular}
+%     }%
+%     \end{minipage}%
+%     \hfill
+%     \begin{minipage}[t]{.53\textwidth}
+%     \caption{Experiments on ImageNet for the specific class (Chihuahua) negation task. Top-1 is the classification accuracy of the generated samples on 999 classes, and Top-1* indicates the accuarcy on the specific class.} \label{tab:imagenet} 
+%     \centering 
+%     \resizebox{0.99\textwidth}{!}{%
+%     \begin{tabular}{lccccc} 
+%         \toprule 
+%         Method & Prec $\uparrow$ & Rec $\uparrow$ & Top-1 $\uparrow$ & Top-1$^{*}$ $\downarrow$ \\ 
+%         \midrule 
+%         Baseline (B) & 0.72 & 0.63 & 0.76 & 0.68 \\ 
+%         B + SR & 0.59 & 0.54 & 0.01 & 0.0 \\ 
+%         \cc{15}B + Ours & \cc{15}0.62 & \cc{15}0.58 & \cc{15}0.14 & \cc{15}0.0 \\ \bottomrule 
+%     \end{tabular} 
+%     }%
+%     \end{minipage}%
+% \end{table*}
+
+Our method, combined with SLD or SAFREE, significantly improves safety performance while maintaining image quality. Notably, the extent of improvement varies considerably depending on the characteristics of the prompts. For instance, with MMA-Diffusion prompts, %
+the performance of text-based baselines (like SLD) is markedly inferior ($88.1\%$ generated images are unsafe) compared to their performance on other prompt datasets such as Ring-A-Bell or UnlearnDiff. This discrepancy arises because MMA-Diffusion prompts lack explicit nudity information due to being part of a white-box adversarial attack, making it challenging for text-based safety methods to erase such concepts. In contrast, our approach employs purely image-based guidance, which results in substantial performance gains from $88.1\%$ to $48.1\%$ in ASR on MMA-Diffusion when combined with existing text-based methods. Our method significantly improves the performance across all other prompt datasets, not limited to MMA-Diffusion.
+
+% New Contents in NeurIPS2025
+
+\input{Manuscript/sources/asr}
+
+% New Contents in NeurIPS2025
+\paragraph{Inappropriate Probability in CoPro Dataset}
+
+\tabref{ip_CoPro} presents that our method consistently achieves enhancement of safe content generation against multiple categories while maintaining a balance in textual prompt alignments across all baselines. Since training-based approaches do not provide official checkpoints for this task, we focus on training-free approaches. Overall, our method effectively improves inappropriate probability (IP) on CoPro dataset. Notably, all baselines show a reduction in average IP when combined with our method. Additionally, our method effectively preserves the alignment between human instructions (prompts) and generated images, with any introduced misalignment being minimal, as demonstrated by CLIP scores. Furthurmore, our method performs on-par with previous methods in terms of the sample-wise aesthetic scores, showing that there is a minimal impact in the sample quality by applying our method, see Appendix~\ref{sec:additional_result}. %Our method accomplishes a balanced reduction in IP, avoding unfavorable situations where improvement is limited to specific categories and the others do not benefit. 
+These results suggest that our method effectively manages multiple concepts simultaneously while reliably generations away from unsafe content.
+
+\paragraph{Ablation Studies} 
+
+We present a pair of ablation studies to evaluate the robustness and effectiveness of our method. First, \figref{ablation_1} shows the effect of the number of unsafe data points on model performance. We observe that increasing the number of unsafe data points leads to better performance. %
+
+% \begin{figure}[t]%
+% 	\centering
+%  \begin{subfigure}{0.48\linewidth}
+% 		\centering
+% 		\includegraphics[width=\linewidth]{Figures/Experiments/unsafe_data.pdf}
+%         \vskip -0.05in
+% 		\subcaption{Effect on $N$}
+% 	\end{subfigure}
+%     \hfil
+%  \begin{subfigure}{0.48\linewidth}
+% 		\centering
+% 		\includegraphics[width=\linewidth]{Figures/Experiments/beta.pdf}
+%         \vskip -0.05in
+% 		\subcaption{Effect on $\beta_{t}$}
+% 	\end{subfigure}
+%     \hfil
+%  % \begin{subfigure}{0.31\linewidth}
+% 	% 	\centering
+% 	% 	\includegraphics[width=\linewidth]{Figures/Experiments/sld.pdf}
+%  %        \vskip -0.05in
+% 	% 	\subcaption{Effect on prompt weights}
+% 	% \end{subfigure}
+%  \vskip -0.05in
+% 	\caption{Ablation studies of (a) the effect on the number of unsafe data ($N$), (b) the effect on the threshold ($\beta_{t}$).} %, and (c) the effect on the prompt weights. All metrics are evalauted on MMA-Diffusion}
+%     \label{fig:ablation}
+% 	 %
+% \end{figure}
+
+\begin{figure}[t]
+    \begin{minipage}[t]{0.64\linewidth}
+        \centering
+        \begin{subfigure}{0.48\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{Figures/Experiments/unsafe_data.pdf}
+            \vskip -0.05in
+            \subcaption{Effect on $N$}
+            \label{fig:ablation_1}
+        \end{subfigure}
+        \begin{subfigure}{0.48\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{Figures/Experiments/beta.pdf}
+            \vskip -0.05in
+            \subcaption{Effect on $\beta_{t}$}
+            \label{fig:ablation_2}
+        \end{subfigure}
+        \vskip -0.05in
+        \captionof{figure}{Ablation studies of (a) the effect on the number of unsafe data ($N$), (b) the effect on the threshold ($\beta_{t}$).}
+        \label{fig:ablation}
+    \end{minipage}
+    \hfill
+    \centering
+    \begin{minipage}[t]{0.32\linewidth}
+    \vspace*{-3.2cm}
+        \centering
+        \captionof{table}{Experiments of the class negation on ImageNet. Top-1* is the classification accuracy of the generated samples on the negated class (Chihuahua). Refer Appendix~\ref{sec:pixel_detail} and \ref{sec:additional_result}.}
+        \label{tab:imagenet_side_by_side}
+        \resizebox{\linewidth}{!}{
+            \begin{tabular}{lcccc}
+                \toprule
+                Method & Prec $\uparrow$ & Rec $\uparrow$ & Top-1* $\downarrow$ \\
+                \midrule
+                Baseline & 0.72 & 0.63 & 0.68 \\
+                B + SR & 0.59 & 0.54 & 0.00 \\
+                \cc{15}B + Ours & \cc{15}0.62 & \cc{15}0.58 & \cc{15}0.00 \\ \bottomrule
+            \end{tabular}
+        }
+    \end{minipage}
+    \vskip -0.1in
+\end{figure}
+
+
+We then explore the influence of the threshold parameter $\beta_{t}$ (see \algoref{safer}), which governs the application of the safe denoiser. For simplicity, we fixed $\beta_{t}$ across all time steps. \figref{ablation_2} shows the performance exhibits a U-shaped relationship to $\beta_{t}$. Specifically, when $\beta_{t} = 0$, the safe denoiser is applied to all samples $\mathbf{x}_{t}$ regardless of their safety status. Conversely, when $\beta_{t} = \infty$, the safe denoiser is not applied. At intermediate values of $\beta_{t}$, the safe denoiser is applied selectively to a certain proportion of unsafe samples $\mathbf{x}_{t}$. The U-shaped trend indicates 
+%
+that selectively applying the safe denoiser to unsafe samples based on an appropriate $\beta_{t}$ value is optimal, thereby balancing denoising efficacy and computational efficiency. Additional ablation studies are presented in Appendix to discuss in-depth analysis of the scalability, robustness, and effectiveness of our methods.  
+%
+
+%Finally, we assess the performance with varying the negative prompt weight in text-based methods. To establish that our approach consistently enhances performance across diverse setups when integrated with existing methodologies, we conduct a series of experiments. \figref{ablation}‑(c) shows as the weight of SLD increases from Weak to Max, SLD performs inadequately in MMA-Diffusion prompts. In contrast, our safe denoiser improves performance and widens the performance gap, underscoring its robustness and effectiveness as a superior enhancement.
+%
+
+\paragraph{Computation Overhead}
+
+\begin{wraptable}{r}{0.35\columnwidth}
+  \vskip -0.2in
+\caption{Wall-clock time.}
+  \label{tab:wall_clock}
+\begin{tabular}{lc}
+\toprule
+\multicolumn{1}{c}{Models}                 & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Time \\ (s/img) \end{tabular}} \\
+\midrule
+SD-v1.4                    & 3.18         \\
+\cc{15} + Ours ($N=515$)       & \cc{15}3.20         \\
+\midrule
+SAFREE                & 4.22         \\
+\cc{15} + Ours ($N=515$)   & \cc{15}4.24         \\
+\cc{15} + Ours ($N=3,000$) & \cc{15}4.29         \\
+\bottomrule
+\end{tabular}
+\vskip -0.1in
+\end{wraptable}
+\tabref{wall_clock} presents the wall-clock time for image generation on NVIDIA RTX4090 with 24GB memory. Thanks to GPU parallelism, the additional time introduced by our method scales sub-linearly since modern GPUs optimize batched matrix multiplications with efficient job scheduling. For example, our method increases from 4.22s to 4.29s when using $3,000$ negative images (an overhead of only 0.07s), while increasing from 4.22s to 4.24s when using $515$ images. Conversely, SAFREE adds over 1s per image. Given that SAFREE and ours perform similarly in \tabref{sole}, our method shows a better performance-efficiency curve.
+
+\subsection{Class-Conditional and Unconditional Generation with Safe Denoiser}
+
+\begin{wraptable}{r}{0.35\columnwidth}
+  \vskip -0.2in
+\caption{Performance in FFHQ. We use ResNet18~\citep{he2016deep} to classify the sex of generated samples. We compute FID by comparing male data and generated images.}
+    \label{tab:ffhq}
+    \centering
+    % \resizebox{0.70\columnwidth}{!}{%
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{lccc}
+        \toprule
+        Models & Female $\downarrow$ & Male $\uparrow$ & FID $\downarrow$ \\\midrule
+        Baseline (B)         & $64.0\%$ & $36.0\%$ & 109.07  \\
+        B + SR   & $53.1\%$ & $46.9\%$ & 130.52   \\
+        \cc{15}B + Ours       & \cc{15}$55.6\%$ & \cc{15}$44.4\%$ & \cc{15}96.57   \\
+        \bottomrule
+    \end{tabular}
+    }
+    \vskip -0.1in
+\end{wraptable}
+This subsection evaluates the performance of safe denoiser when applied in isolation. Specifically, to assess our safe denoiser in a simplified setting, we conduct experiments on two distinct tasks: a class-conditional model trained on ImageNet~\citep{russakovsky2015imagenet} for removing a specific class (e.g., Chihuahua); and on an unconditional model trained on FFHQ~\citep{karras2019style} to negate generating specific sex (e.g., female), see Appendix~\ref{sec:pixel_detail} for details of experiments. For the class removal, \tabref{imagenet_side_by_side} presents precision, recall~\citep{kynkaanniemi2019improved}, and Top-1* (classification accuracy of generated images conditioned by Chihuahua class) metrics for negating the Chihuahua class. As conventional text-based safety techniques are not directly applicable, we compare our method against Sparse Repellency (SR), as described in \secref{related}. \tabref{imagenet_side_by_side} showcases that our method outperforms SR in terms of precision, recall, and Top-1*, indicating that ours avoid generating Chihuahua while being more diverse and precise than SR. 
+In the FFHQ experiments, where we targeted the negation of female images, \tabref{ffhq} indicates that while SR exhibits classification results that deceptively suggest successful negation, the FID scores and qualitative comparisons in Appendix~\ref{sec:additional_result} demonstrate that this apparent achievement comes at the cost of significantly degraded image quality. Indeed, our experiments show that our methodology consistently produces visually convincing samples, whereas SR frequently generates out-of-distribution images with artifacts.
+
+% In FFHQ, we aim to prevent the generation of a specific sex. However, since the whole data points are used in training, we select 1K female images from CelebA~\citep{liu2015faceattributes} validation split to serve as unseen negative data, thereby establishing the negative dataset $\{\mathbf{x}^{(1)},...,\mathbf{x}^{(1000)}\}$. We then employ our safe denoiser to sample 1K images. As shown in Table~\ref{tab:ffhq}, classification accuracy for these generated samples reveal that our method more effectively avoids the female class compared to the baseline pretrained model. According to Table~\ref{tab:ffhq}, our algorithm generates more male images compared to Sparse Repellency (SR) while achieving a lower FID score. This suggests that the images produced by SR are of lower quality compared to those generated by ours, leading to increased confusion for the classifier.
+
+% In ImageNet, we focus on negating a specific Chihuahua class during generation. We select the validation set of Chihuahua class as the negative images. We generate 50 samples per class and classify samples from 999 classes by a classifier~\citep{dhariwal2021diffusion} and report the accuracy by Top-1. Also, we measure the Top-1 accuracy of 50 samples from Chihuahua class, reporting it by Top-1* in \tabref{imagenet}. From the result, we note that our method excels generating other 999 classes, while SR cannot generate images from those 999 classes. To evaluate the overall quality, \tabref{imagenet} further report the precision (sample accuracy) and recall (sample diversity)~\citep{kynkaanniemi2019improved} over 50K samples, indicating that our method is better than SR in negating a specific class. 
+
+%
+
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+
+
+% \subsection{Pixel-Space Generation: Unconditional and Class Conditional Cases}
+% \label{sec:pixel}
+
+% In this section, we use our safe denoiser in the DMs without text inputs. Specifically, we employ experiments on FFHQ~\cite{karras2019style} and ImageNet~\cite{russakovsky2015imagenet} in the $256\times256$ resolution. We utilize the pretrained diffusion models from \cite{chung2022diffusion} for FFHQ and \cite{dhariwal2021diffusion} for ImageNet. For the experiments, we use a DPM solver~\cite{lu2022dpm} with 100 steps.
+
+% In FFHQ, we aim to prevent the generation of a specific sex. However, since the whole data points are used in training, we select 1K female images from CelebA~\cite{liu2015faceattributes} validation split to serve as unseen negative data, thereby establishing the negative dataset $\{\mathbf{x}^{(1)},...,\mathbf{x}^{(1000)}\}$. We then employ our safe denoiser to sample 1K images. As shown in Table~\ref{tab:ffhq}, classification accuracy for these generated samples reveal that our method more effectively avoids the female class compared to the baseline pretrained model. According to Table~\ref{tab:ffhq}, our algorithm generates more male images compared to Sparse Repellency (SR) while achieving a lower FID score. This suggests that the images produced by SR are of lower quality compared to those generated by ours, leading to increased confusion for the classifier.
+
+% In ImageNet, we focus on negating a specific Chihuahua class during generation. We select the validation set of Chihuahua class as the negative images. We generate 50 samples per class and classify samples from 999 classes by a classifier~\cite{dhariwal2021diffusion} and report the accuracy by Top-1. Also, we measure the Top-1 accuracy of 50 samples from Chihuahua class, reporting it by Top-1* in \tabref{imagenet}. From the result, we note that our method excels generating other 999 classes, while SR cannot generate images from those 999 classes. To evaluate the overall quality, \tabref{imagenet} further report the precision (sample accuracy) and recall (sample diversity)~\cite{kynkaanniemi2019improved} over 50K samples, indicating that our method is better than SR in negating a specific class. 
+%
+%

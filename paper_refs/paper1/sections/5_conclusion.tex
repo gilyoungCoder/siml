@@ -1,0 +1,16 @@
+\section{Conclusion}
+
+Recent advances in image and video generation models have heightened the risk of producing toxic or unsafe content. Existing methods that rely on model unlearning or editing update pre-trained model weights, limiting their flexibility and versatility. To address this, we propose \ours{}, a novel training-free approach to safe text-to-image and video generation. Our method first identifies the embedding subspace of the target concept within the overall text embedding space and assesses the proximity of input text tokens to this toxic subspace by measuring the projection distance after masking specific tokens. Based on this proximity, we selectively remove critical tokens that direct the prompt embedding toward the toxic subspace. \ours{} effectively prevents the generation of unsafe content while preserving the quality of benign textual requests. We believe our method will serve as a strong training-free baseline in safe text-to-image and video generation, facilitating further research into safer and more responsible generative models.
+
+\section*{Ethics Statement}
+In recent text-to-image (T2I) and text-to-video (T2V) models, there are significant ethical concerns related to the generation of unsafe or toxic content. These threats include the creation of explicit, violent, or otherwise harmful visual content through adversarial prompts or misuse by users. Safe image and video generation models, including our proposed \ours{}, play a crucial role in mitigating these risks by incorporating unlearning techniques, which help the models forget harmful associations, and filtering mechanisms, which detect and block inappropriate content. Ensuring the ethical usage of these models is essential for promoting a safer and more responsible deployment in creative, social, and educational contexts.
+
+
+\section*{Reproducibility Statement}
+This paper fully discloses all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions. To maximize reproducibility, we have included our code in the supplementary material. Also, we report all of our hyperparameter settings and model details in the Appendix. 
+
+
+
+
+\section*{Acknowledgement}
+We thank the reviewers and Jaemin Cho, Zhongjie Mi, and Chumeng Liang for the useful discussion and feedback. This work was supported by the National Institutes of Health (NIH) under other transactions 1OT2OD038045-01, DARPA ECOLE Program No. HR00112390060, NSF-AI Engage Institute DRL-2112635, DARPA Machine Commonsense (MCS) Grant N66001-19-2-4031, ARO Award W911NF2110220, and ONR Grant N00014-23-1-2356. The views contained in this article are those of the authors and not of the funding agency. 

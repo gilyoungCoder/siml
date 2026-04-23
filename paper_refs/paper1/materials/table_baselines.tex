@@ -1,0 +1,22 @@
+\begin{table*}
+\caption{\textbf{Comparison of our approach with recent safe vision generation methods.} Most of the work is primarily designed to prevent the generalization of toxic images by modifying the weights of the pre-trained diffusion model. These methods lack versatility (deploying different diffusion models, image editing, and video generation tasks, etc.), and are vulnerable to multimodal attacks and/or multiple controls.}\label{tab:baselines}
+\setlength{\tabcolsep}{2mm}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccccccccccc}
+\toprule
+\textbf{Methods} & \textbf{Publications} & \textbf{Generation Task} & \textbf{Image Filter} & \textbf{Video Filter} & \textbf{Text Filter} & \textbf{Training-Free} & \textbf{Model Agnostic}\\ \midrule
+DALL$\cdot$E 3~\citep{2023dalle3} & - & Text-to-Image & \textcolor{Green}{\cmark} & \xmark & \textcolor{Green}{\cmark} & \textcolor{Green}{\cmark} & \xmark\\
+SLD~\citep{schramowski2023safe} & CVPR 23' & Text-to-Image & \xmark & \xmark & \xmark & \textcolor{Green}{\cmark} & \xmark\\
+ESD~\citep{gandikota2023erasing} & ICCV 23' & Text-to-Image & \xmark & \xmark & \xmark & \xmark & \xmark\\
+UCE~\citep{liu2024rethinking} & & Text-to-Image & \xmark & \xmark & \xmark & \xmark & \xmark\\
+TBD\\
+TBD\\
+TBD\\
+TBD\\
+% Ethic-Lens~\citep{cai2024ethical} & arXiv 24.04 & Text-to-Image & \textcolor{Green}{\cmark} & \xmark & \textcolor{Green}{\cmark} & \xmark & \textcolor{Green}{\cmark}\\
+\midrule
+\textbf{\ours{}} (Ours) & - & Text-to-Image/Video &\multicolumn{3}{c}{[\textcolor{Green}{\cmark}~Multimodal Compositional Safety Filter]} & \textcolor{Green}{\cmark} & \textcolor{Green}{\cmark}\\
+\bottomrule
+\vspace{-.1in}
+\end{tabular}}
+\end{table*}

@@ -1,0 +1,86 @@
+\section{Experimental Results}
+\subsection{Experimental Setup}
+We use StableDiffusion-v1.4 (SD-v1.4)~\citep{rombach2022high} as the primary T2I backbone, following recent work~\citep{gandikota2023erasing,gandikota2024unified,gong2024reliable}. All methods are tested on adversarial prompts from red-teaming methods: I2P~\citep{schramowski2023safe}, P4D~\citep{chin2024prompting4debugging}, Ring-a-Bell~\citep{tsai2024ring}, MMA-Diffusion~\citep{yang2024mma}, and UnlearnDiff~\citep{zhang2023generate}. Following~\cite{gandikota2023erasing}, we also evaluate models on artist-style removal tasks, using two datasets: one with five famous artists (Van Gogh, Picasso, Rembrandt, Warhol, Caravaggio) and the other with five modern artists (McKernan, Kinkade, Edlin, Eng, Ajin: Demi-Human), whose styles can be mimicked by SD. We extend \ours{} to text-to-video generation, applying it to ZeroScopeT2V~\citep{2023zeroscope} and CogVideoX~\citep{yang2024cogvideox} with different model backbones (UNet~\citep{ronneberger2015u} and Diffusion Transformer~\citep{peebles2023scalable}). For quantitative evaluation, we use SafeSora~\citep{dai2024safesora} with 600 toxic prompts across 12 concepts, constructing a benchmark of 296 examples across 5 categories. 
+
+
+
+
+
+
+
+
+% We employ StableDiffusion-v1.4 (SD-v1.4)~\citep{rombach2022high} as the main text-to-image generation backbone, following the recent literature~\citep{gandikota2023erasing,gandikota2024unified,gong2024reliable}.
+% We evaluate our approach and baselines on inappropriate or adversarial prompts from multiple red-teaming techniques:  I2P~\citep{schramowski2023safe}, P4D~\citep{chin2024prompting4debugging}, Ring-a-bell~\citep{tsai2024ring}, MMA-Diffusion~\citep{yang2024mma}, and UnlearnDiff~\citep{zhang2023generate}. 
+
+% In addition to evaluating safe T2I generation, we further assess the models' reliability in artist-style removal tasks. Following \cite{gandikota2023erasing}, we employ two datasets: The first includes five famous artists: \textit{Van Gogh}, \textit{Pablo Picasso}, \textit{Rembrandt}, \textit{Andy Warhol}, and \textit{Caravaggio}, while the second contains five modern artists: \textit{Kellly McKernan}, \textit{Thomas Kinkade}, \textit{Tyler Edlin}, \textit{Kilian Eng}, and \textit{Ajin: Demi-Human}, whose styles have been confirmed to be imitable by SD.
+
+% We further extend our \ours{} to text-to-video generation. We apply our method to two video generation models, ZeroScopeT2V~\citep{2023zeroscope} and CogVideoX~\citep{yang2024cogvideox} with different model backbones (UNet and Diffusion Transformer~\citep{peebles2023scalable}). To quantitatively evaluate the unsafe concept filtering ability on T2V, we choose SafeSora~\citep{dai2024safesora}, which contains 600 toxic textual prompts across 12 toxic concepts as our testbed. We further select 5 representative categories within 12 concepts, and thus construct a safe video generation benchmark with 296 examples.
+% For the evaluation metrics, we follow the automatic evaluation via ChatGPT proposed by T2VSafetybench~\citep{miao2024t2vsafetybench}. 
+% We input sampled 16 video frames along with the same prompt design presented in T2VSafetybench to GPT-4o~\citep{gpt4o} for binary safety checking.
+
+\subsection{Baselines and Evaluation Metrics} \textbf{Baselines.} We compare our method with training-free approaches: \textbf{SLD}~\citep{schramowski2023safe} and \textbf{UCE}~\citep{gandikota2024unified}, as well as training-based methods including \textbf{ESD}~\citep{gandikota2023erasing}, \textbf{SA}~\citep{heng2023selective}, \textbf{CA}~\citep{kumari2023ablating}, \textbf{MACE}~\citep{lu2024mace}, \textbf{SDID}~\citep{li2024self}, and \textbf{RECE}~\citep{gong2024reliable}. Additional details are in the Appendix.        
+
+
+\input{materials/table_main}
+\input{materials/table_efficiency}
+
+\textbf{Evaluation Metrics.} We assess safeguard capability via Attack Success Rate (ASR) on adversarial nudity prompts~\citep{gong2024reliable}. For generation quality, we use FID~\citep{heusel2017gans}, CLIP score, and TIFA~\citep{hu2023tifa} on COCO-30k~\citep{lin2014microsoft}, evaluating 1k samples. For artist-style removal, LPIPS~\citep{zhang2018unreasonable} measures perceptual difference. We frame style removal as a multi-choice question-answering task, using GPT-4o~\citep{gpt4o} to identify the artist from generated images. Safe T2V Metrics follow ChatGPT-based evaluation from T2VSafetybench~\citep{miao2024t2vsafetybench}. We provide 16 sampled video frames, following the prompt design outlined in T2VSafetybench, to GPT-4o~\citep{gpt4o} for binary safety assessment.
+
+
+\subsection{Evaluating the Effectiveness of \ours{}}
+\textbf{\ours{} achieves training-free SoTA performance without altering model weights.} We compare different methods for safe T2I generation, extensively and comprehensively evaluating each model's vulnerability to adversarial attacks (i.e., attack success rate (ASR)) and their performance across multiple attack scenarios. 
+As shown in~\Cref{tab:t2i_main} and~\Cref{fig:vis}, \ours{} consistently achieves significantly lower ASR than all training-free baselines across all attack types. Notably, it demonstrates \textbf{47\%, 13\%, and 34\% lower ASR} compared to the best-performing counterparts, I2P, MMA-diffusion, and UnlearnDiff, respectively, highlighting its strong resilience against adversarial attacks. 
+
+
+\textbf{\ours{} shows competitive results against training-based methods.} In addition, we compare our approach with training-based methods. Surprisingly, our approach achieves competitive performance against these techniques. While SA and MACE exhibit strong safeguarding capabilities, they significantly degrade the overall quality of image generation due to excessive modifications of SD weights, often making them impractical for real-world applications as they frequently cause severe distortions. Notably, \ours{} delivers comparable safeguarding performance while generating high-quality images on the COCO-30k dataset, all within a \textit{training-free} framework.
+
+\textbf{\ours{} is highly flexible and adaptive while maintaining generation quality.} 
+\ours{} does not require additional training or model weight modifications (more detailed comparison in later~\Cref{tab:t2i_efficiency}), providing key advantages over other methods (e.g., ESD, SA, and CA) which depend on unlearning or stochastic optimization, thereby increasing complexity. 
+\ours{} allows for dynamic control of the number of filtered denoising steps based on inputs in an adaptable manner without extensive retraining or model modifications. 
+Furthermore, it is worth noting that, compared with other methods, 
+% \ours{} is able to \textbf{preserve the safe content} within the original prompt through targeted filtering in both the token and pixel spaces, ensuring that the projected embeddings remain within the input space, which makes \ours{} a highly efficient and reliable solution for real-world applications. 
+compared to other methods, \ours{} \textbf{preserves safe content} in the original prompt through targeted joint filtering and ensures projected embeddings stay within the input space, making it highly efficient and reliable for real-world applications.
+
+As shown in~\Cref{fig:vis} left-top, when requiring removing the artist concept (``Van Gogh"), \ours{} deletes this targeted art style (first row) while preserving other artists style (second row) by producing semantically similar outputs to the original SD. The examples of removing the ``nudity" concept as shown in~\Cref{fig:vis} left-bottom draw a similar conclusion. It demonstrates \ours{} is a highly adaptive safe generation solution that is able to maintain untargeted safe concepts well.
+
+\begin{figure}
+    \centering
+    \vspace{-0.2in}
+    \includegraphics[width=0.92\linewidth]{assets/vis.pdf}\vspace{-0.1in}
+    \caption{Generated examples of \ours{} and safe T2I baselines. \textbf{Left}: Comparison with other methods on different concept removal tasks. \textbf{Right}: \ours{} incorporates with different T2I and T2V models. We provide more visualizations in the appendix (\Cref{app:vis}).}
+    \label{fig:vis}\vspace{-0.15in}
+\end{figure}
+
+
+\textbf{Ablations.} We validate the effectiveness of three components of \ours{} in~\Cref{tab:t2i_ablation} using SD-v1.4. First, we examine the impact of the adaptive toxic token selection (T, \Cref{sec:subsec:concept_subspace}). We replace the selected token embeddings with either the null token embedding (N) or our proposed projected embeddings (P, \Cref{sec:subsec:orthogonal_modification}). Both variants significantly reduce ASR from adversarial prompts, demonstrating the effectiveness of our toxic token selection. However, we observe that using N results in degraded image quality, as inserting null tokens disrupts the prompt structure and shifts the input embeddings outside their original space. In contrast, our orthogonal projection (P) achieves competitive safeguard performance with better COCO evaluation results. Incorporating self-validating filtering (S, \Cref{eq:self-valid}) further enhances image quality by amplifying the filtering when input tokens are relevant to toxic concepts, although it can slightly reduce filtering capability. By integrating these components with latent-level re-attention (L, \Cref{sec:subsec:latent_attention}), our method strikes a strong balance between effective, safe filtering while preserving image quality for prompts unrelated to toxic concepts.
+
+
+\subsection{\updated{Evaluating \ours{} on Artist Concept Removal Tasks}}
+As shown in~\Cref{tab:t2i_art}, \ours{} achieves higher LPIPS$_e$ and LPIPS$_u$ scores compared to the baselines, where LPIPS$_e$ and LPIPS$_u$ denote the average LPIPS for images generated in the target erased artist styles and others (unerased), respectively. The higher LPIPS$_u$ score is likely due to our approach performing denoising processes guided by a coherent yet projected conditional embedding within the input space. As shown in~\Cref{fig:artist}, \ours{} enables generation models to retain the artistic styles of other artists very clearly even with larger feature distances (i.e., high LPIPS$_u$). 
+To validate whether the generated art styles are accurately removed or preserved, we frame these tasks as a multiple-choice QA problem, moving beyond feature-level distance assessments. Here, Acc$_e$ and Acc$_u$ represent the average accuracy of erased and unerased artist styles predicted by GPT-4o based on corresponding text prompts. As shown in ~\Cref{tab:t2i_art}, \ours{} effectively remove targeted artist concepts, while baselines struggle to erase key representations of target artists. 
+
+
+
+% \input{materials/table_efficiency}
+
+
+\subsection{Efficiency of \ours{}}
+We compare the efficiency of various methods, including the training-based ESD/CA, which update models through online optimization and loss, and the training-free UCE/RECE, which modify model attention weights using closed-form edits. Similar to SLD, our method (\ours{}) is training-free and filtering-based, without altering diffusion model weights. As shown in~\Cref{tab:t2i_efficiency},  while UCE/RECE offer fast model editing, they still require additional time for updates. In contrast, \ours{} requires no model editing or modification, providing flexibility for model development across different conditions while maintaining competitive generation speeds. 
+Based on~\Cref{tab:t2i_main} and~\Cref{tab:t2i_efficiency}, \ours{} delivers the best overall performance in concept safeguarding, generation quality, and flexibility.
+
+
+\input{materials/table_concept_removal_artists}
+\input{materials/table_xl_and_v3}
+
+\subsection{Generalization and Extensibility of \ours{}}\label{sec:t2v}
+
+
+To further validate the robustness and generalization of \ours{}, we apply our method to various Text-to-Image (T2I) backbone models and Text-to-Video (T2V) applications. 
+We extend \ours{} from SD-v1.4 to more advanced models, including SDXL, a scaled UNet-based model, and SD-V3, a Diffusion Transformer~\citep{peebles2023scalable} model. 
+\ours{} demonstrates strong, training-free filtering of unsafe concepts, seamlessly integrating with these backbones. As shown in~\Cref{tab:xlv3}, \ours{} reduces unsafe outputs by \textbf{48\% and 47\%} across benchmarks/datasets for SD-XL and SD-V3, respectively.
+We also extend \ours{} to T2V generation, testing it on ZeroScopeT2V~\citep{2023zeroscope} (UNet based) and CogVideoX-5B~\citep{yang2024cogvideox} (Diffusion Transformer based) using the SafeSora~\citep{dai2024safesora} benchmark. 
+As listed in~\Cref{tab:t2v}, \ours{} significantly reduces a range of unsafe concepts across both models. 
+It highlights \ours{}'s strong generalization across architectures and applications, offering an efficient safeguard for generative AI. This is also evident in~\Cref{fig:vis} right, demonstrating that \ours{} with recent powerful T2I/T2V generation models can produce safe yet faithful (e.g., preserve the concept of `woman' in CogVideoX + \ours{}) and quality visual outputs. More visualizations for T2I and T2V models are included in the Appendix.
+
+
+

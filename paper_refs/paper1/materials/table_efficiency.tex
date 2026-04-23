@@ -1,0 +1,43 @@
+\begin{table*}[t]
+\centering
+\label{tab:combined}
+\vspace{-0.05in}
+\begin{minipage}{0.47\textwidth}
+\centering
+\caption{Ablation Study on \ours{}. \textbf{T}: Token Projection. \textbf{S}: Self-validating filtering. \textbf{L}: Latent Re-attention. \textbf{N}: Replacing with Null embedding. \textbf{P}: Orthogonal Token Projection.}\label{tab:t2i_ablation}\vspace{-0.1in}
+\small
+\setlength{\tabcolsep}{1.mm}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccccccc}
+\toprule
+\multirow{2}{*}{\textbf{Method}} & \multicolumn{1}{c}{\multirow{2}{*}{\textbf{T}}} & \multicolumn{1}{c}{\multirow{2}{*}{\textbf{S}}} & \multicolumn{1}{c}{\multirow{2}{*}{\textbf{L}}} & \multicolumn{2}{c}{\textbf{Adversarial Prompt}}                     & \multicolumn{2}{c}{\textbf{CoCo}}                                \\ \cmidrule(lr){5-8} 
+                                 & \multicolumn{1}{c}{}                                & \multicolumn{1}{c}{}                                    & \multicolumn{1}{c}{}                                 & \multicolumn{1}{c}{\textbf{P4D}$\downarrow$} & \multicolumn{1}{c}{\textbf{MMA-Diffusion}$\downarrow$} & \multicolumn{1}{c}{\textbf{FID}$\downarrow$} & \multicolumn{1}{c}{\textbf{CLIP}$\uparrow$} \\ \midrule
+SD-v1.4 & - & - &-&0.987&0.957&-&31.3\\ \midrule
+\multirow{5}{*}{\begin{tabular}[c]{@{}l@{}}\ours{}\\ Ours\end{tabular}}& N &-&-&0.430&\textbf{0.512}&37.6&30.9\\ 
+&P &-&-&0.417&0.597&36.5&31.1\\ 
+&P &$\checkmark$&-&0.461&0.598&\textbf{36.1}&\textbf{31.1}\\
+&P &-&$\checkmark$&0.410&0.588&42.2&30.7\\
+&P &$\checkmark$&$\checkmark$&\textbf{0.384}&\underline{0.585}&\underline{36.4}&\underline{31.1}\\ \bottomrule
+\end{tabular}
+}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.49\textwidth}
+\centering
+\caption{Model Efficiency Comparison. All experiments are tested on a single A6000, 100 steps, and with a setting that removes the 'nudity' concept. }\label{tab:t2i_efficiency}\vspace{-0.05in}
+\setlength{\tabcolsep}{1.mm}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Training/Editing}\\ \textbf{Time (s)}\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Inference}\\ \textbf{Time (s/sample)}\end{tabular}}  & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Model}\\ \textbf{Modification (\%)}\end{tabular}} \\ \midrule
+ESD &$\sim$4500& 6.78 & 94.65\\
+CA    &$\sim$484&5.94& 2.23 \\
+UCE & $\sim$1 &6.78 & 2.23 \\ 
+RECE  &$\sim$3& 6.80 & 2.23\\ \midrule
+SLD-Max & 0 & 9.82 & 0 \\
+\ours{} & 0 & 9.85& 0\\ \bottomrule
+\end{tabular}
+}
+\end{minipage}
+\vspace{-0.1in}
+\end{table*}

@@ -1,0 +1,66 @@
+\begin{table*}
+\vspace{-0.2in}
+\caption{Attack Success Rate (ASR) and generation quality comparison with training-free and training-based safe T2I generation methods. The best results are \textbf{bolded}. We \textcolor{mygray}{gray out} training-based methods for a fair comparison. SD-v1.4 is the backbone model for all methods. We measure the FID scores of safe T2I models by comparing their generated outputs with the ones from SD-v1.4.}
+\label{tab:t2i_main}\vspace{-0.in}
+\small
+\centering
+\setlength{\tabcolsep}{1.mm}
+\resizebox{\textwidth}{!}{
+\begin{tabu}{lcc|ccccc|ccc}
+\toprule
+& \multirow{3}{*}{\begin{tabular}{c}
+     \textbf{No Weights}\\
+     \textbf{Modification}
+\end{tabular}} & \multirow{3}{*}{\begin{tabular}{c}
+     \textbf{Training}\\
+     \textbf{-Free}
+\end{tabular}}
+&\multirow{3}{*}{\textbf{I2P} $\downarrow$}&\multirow{3}{*}{\textbf{P4D} $\downarrow$}&\multirow{3}{*}{\textbf{Ring-A-Bell} $\downarrow$}&\multirow{3}{*}{\textbf{MMA-Diffusion} $\downarrow$}&\multirow{3}{*}{\textbf{UnlearnDiffAtk} $\downarrow$}&\multicolumn{3}{c}{\textbf{COCO}}\\ 
+\cmidrule(lr){9-11}
+\textbf{Method}& &&
+&&&&&\textbf{FID} $\downarrow$ &\textbf{CLIP} $\uparrow$&\textbf{TIFA} $\uparrow$\\
+\midrule
+SD-v1.4 &-&
+-&0.178&
+0.987&0.831&0.957&0.697
+&-
+&31.3&0.803\\
+\midrule
+\rowfont{\color{mygray}}
+{ESD~\citep{gandikota2023erasing}} &\xmark&\xmark& 0.140 & 0.750 &0.528&0.873&0.761
+&-
+&30.7&-\\
+\rowfont{\color{mygray}}
+SA~\citep{heng2023selective}&\xmark&\xmark&
+0.062&0.623&0.329&0.205 & 0.268 &54.98& 30.6&0.776 \\
+\rowfont{\color{mygray}}
+CA~\citep{kumari2023ablating}&\xmark& \xmark&0.178&0.927&0.773&0.855&0.866&40.99&31.2&0.805\\ 
+\rowfont{\color{mygray}}
+{MACE~\citep{lu2024mace}}&\xmark&\xmark&
+0.023& 0.146 &0.076&0.183&0.176&52.24&29.4 &0.711\\
+\rowfont{\color{mygray}}
+{SDID~\citep{li2024self}}&\xmark&\xmark&0.270 & 0.933 & 0.696 & 0.907 & 0.697 & 22.99 & {30.5}&0.802 \\
+\midrule
+UCE~\citep{gandikota2024unified}&\xmark&\textcolor{Green}{\cmark}&
+0.103&0.667&0.331&0.867&0.430
+&{31.25}
+&{31.3}&{0.805}\\
+RECE~\citep{gong2024reliable}&\xmark&\textcolor{Green}{\cmark}&
+0.064&0.381&0.134&0.675&0.655&37.60&30.9&0.787\\ \midrule
+SLD-Medium~\citep{schramowski2023safe} &\textcolor{Green}{\cmark}&
+\textcolor{Green}{\cmark}&0.142&0.934
+&0.646&0.942&0.648
+&\textbf{31.47}
+&31.0&0.782
+\\
+SLD-Strong~\citep{schramowski2023safe}&\textcolor{Green}{\cmark}&\textcolor{Green}{\cmark}&0.131&0.861&0.620&0.920&0.570&40.88&{29.6}&0.766\\
+SLD-Max~\citep{schramowski2023safe} &\textcolor{Green}{\cmark}&\textcolor{Green}{\cmark}&
+0.115&0.742&0.570&0.837&0.479&50.51
+&{28.5}
+&0.720 \\
+\midrule
+\ours~(Ours) &\textcolor{Green}{\cmark}&\textcolor{Green}{\cmark}&\textbf{0.034}&\textbf{0.384}&\textbf{0.114}&\textbf{0.585}&\textbf{0.282}&{36.35}&\textbf{31.1}&\textbf{0.790}\\
+\bottomrule
+\end{tabu}
+}
+\end{table*}

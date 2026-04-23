@@ -1,0 +1,251 @@
+\newpage
+
+\appendix
+
+\section*{Appendix} 
+
+In this Appendix, we present the following:
+\begin{itemize}[leftmargin=15pt]
+\item Experiment Setups including our method implementation details (\Cref{app:exp_setup}), baseline implementation details, and evaluation metrics details (\Cref{app:exp_setup}). 
+\item Extra analysis on undesirable prompts and distance to toxic concept subspace (\Cref{app:extra}).
+\item Extra visualization of our methods and other baselines, T2I generation with other backbone models (SDXL and SD-v3), video generation results with T2V backbones (ZeroScopeT2V and CogVideoX) (\Cref{app:vis}).
+\item Extra Discussion with Image Attribute Control Works.
+\item Limitations and Broader Impact of our proposed \ours{} (\Cref{app:limitation}).
+\item License information (\Cref{app:license}).
+
+\end{itemize}
+
+
+
+
+\section{Experimental Results}
+\subsection{Experimental Setup}\label{app:exp_setup}
+We employ StableDiffusion-v1.4 (SD-v1.4)~\citep{rombach2022high} as the main text-to-image generation backbone, following the recent literature~\citep{gandikota2023erasing,gandikota2024unified,gong2024reliable}.
+We evaluate our approach and baselines on inappropriate or adversarial prompts from multiple red-teaming techniques:  I2P~\citep{schramowski2023safe}, P4D~\citep{chin2024prompting4debugging}, Ring-a-bell~\citep{tsai2024ring}, MMA-Diffusion~\citep{yang2024mma}, and UnlearnDiff~\citep{zhang2023generate}. 
+
+In addition to evaluating safe T2I generation, we further assess the models' reliability in artist-style removal tasks. Following \cite{gandikota2023erasing}, we employ two datasets: The first includes five famous artists: \textit{Van Gogh}, \textit{Pablo Picasso}, \textit{Rembrandt}, \textit{Andy Warhol}, and \textit{Caravaggio}, while the second contains five modern artists: \textit{Kellly McKernan}, \textit{Thomas Kinkade}, \textit{Tyler Edlin}, \textit{Kilian Eng}, and \textit{Ajin: Demi-Human}, whose styles have been confirmed to be imitable by SD.
+
+We further extend \ours{} to text-to-video generation. We apply our method to two video generation models, ZeroScopeT2V~\citep{2023zeroscope} and CogVideoX~\citep{yang2024cogvideox} with different model backbones (UNet and Diffusion Transformer~\citep{peebles2023scalable}). To quantitatively evaluate the unsafe concept filtering ability on T2V, we choose SafeSora~\citep{dai2024safesora}, which contains 600 toxic textual prompts across 12 toxic concepts as our testbed. We further select 5 representative categories within 12 concepts, and thus construct a safe video generation benchmark with 296 examples.
+For the evaluation metrics, we follow the automatic evaluation via ChatGPT proposed by T2VSafetybench~\citep{miao2024t2vsafetybench}. 
+We input sampled 16 video frames along with the same prompt design presented in T2VSafetybench to GPT-4o~\citep{gpt4o} for binary safety checking.
+
+\subsection{Baselines and Evaluation Metrics}\label{app:exp_baseline}
+\textbf{Baselines.} We primarily compare our method with recently proposed training-free approaches allowing instant weight editing or filtering: variants of \textbf{SLD}~\citep{schramowski2023safe} and \textbf{UCE}~\citep{gandikota2024unified} and \textbf{RECE}~\citep{gong2024reliable}. 
+In addition, we compare \ours{} with training-based baselines to highlight the advantages of our approach encompassing decent safeguard capability through a training-free framework:
+\textbf{ESD}~\citep{gandikota2023erasing}, \textbf{SA}~\citep{heng2023selective}, 
+\textbf{CA}~\citep{kumari2023ablating}, \textbf{MACE}~\citep{lu2024mace}, \textbf{SDID}~\citep{li2024self}. We provide further details of baselines in the Appendix.
+ 
+\textbf{Evaluation Metrics.} We measure the Attack Success Rate (ASR) on adversarial prompts in terms of nudity following~\cite{gong2024reliable} to evaluate the safeguard capability of methods. To evaluate the original generation quality of safe generation or unlearning methods, we measure the FID~\citep{heusel2017gans}, CLIP score, and a fine-grained faithfulness evaluation metric TIFA score~\citep{hu2023tifa} on COCO-30k~\citep{lin2014microsoft} dataset. Among these, we randomly select 1k samples for evaluating FID and TIFA. In artist concept removal tasks, we use LPIPS~\citep{zhang2018unreasonable} to calculate the perceptual difference between SD-v1.4 output and filtered images following~\cite{gong2024reliable}. 
+To more accurately evaluate whether the model removes characteristic (artist) "styles" in its output while preserving neighbor and interconnected concepts, we frame the task as a Multiple Choice Question Answering (MCQA) problem. Given the generated images, we ask GPT-4o~\citep{gpt4o} to identify the best matching artist name from five candidates.
+
+
+\updated{\section{Analysis: Correlation Between \textit{Undesirable Prompts} and Distance to \textit{Toxic Concept Subspace}.}} \label{app:extra}
+To assess the soundness of our approach across various T2I generation tasks, we present visualizations of predicted toxicity scores obtained from the Nudenet detector~\citep{nudenet2019}. These scores are based on adversarial prompts from the Ring-A-Bell~\citep{tsai2024ring} and normal (non-toxic) prompts from COCO-30k~\citep{lin2014microsoft} datasets and are plotted against the distance between token embeddings and the \updated{subspace of \textit{nudity} concept.} 
+\updated{\Cref{fig:embedding_stats_gaussian} Left plots toxicity scores against the distance from the toxic subspace, measured using the Nudenet detector. Non-toxic COCO prompts show lower toxicity and are farther from the toxic subspace, while Ring-a-Bell prompts have higher toxicity and tend to be closer. This demonstrates that prompts with higher toxicity tend to be nearer to the toxic concept subspace, validating our method for identifying potentially undesirable prompts based on their distance from the target subspace. This is further supported by the significant disparity between the Gaussian distribution of the distances of COCO and Ring-a-Bell prompt embeddings to the toxic subspace, as visualized in~\Cref{fig:embedding_stats_gaussian} Right.}
+
+\input{materials/figure_stats}
+
+
+\section{More Qualitative Visualization} \label{app:vis}
+We provide more visualization in this Appendix.
+We provide visualization of artist concept removal in~\Cref{fig:artist,fig:vangogh1,fig:vangogh2,fig:vangogh3}, where we remove 'Van Gogh' in the model. Across ~\Cref{fig:artist,fig:vangogh1,fig:vangogh2}, we observe that \ours{} can effectively remove 'Van Gogh' without updating any model weights while other methods, even for training-based method, still struggle for removing this concept. Meanwhile, \ours{} keep maximum faithfulness to the desirable concepts in the given prompts. 
+\ours{} can generate the same subjects/scenes as the base model did but remove the targeted style concepts. 
+Furthermore, as shown in~\Cref{fig:vangogh3}, we test both \ours{} and other baseline methods with text prompts containing other artist concepts. All models removed the 'Van Gogh' concept in their own way. Ours successfully preserved other artist styles by maintaining a high similarity to the original SD-1.4 outputs. Meanwhile, other methods like CA/SLD failed to hold the desirable concept. We further show more results by removing the 'nudity' concept in~\Cref{fig:nude1,fig:nude2,fig:nude3}, and draw a similar conclusion.
+
+We further change our diffusion model backbones to more advanced SDXL~\citep{podell2023sdxl} and SD-v3~\citep{2024sdv3}, as well as Text-to-Video generation backbone models, ZeroScopeT2V~\citep{2023zeroscope} and CogVideoX~\citep{yang2024cogvideox}. 
+As shown in~\Cref{fig:sdxl}, our method shows robustness across Text-to-Image model backbones, and can effectively filter user-defined unsafe concepts but still keep maximum faithfulness to the safe concepts in the given toxic prompts. 
+As illusrated in~\Cref{fig:cogvideox1,fig:cogvideox2,fig:cogvideox3,fig:zeroscope1,fig:zeroscope2,fig:zeroscope3}, \ours{} shows good generalization ability to Text-to-Video settings. It helps to guard against diverse unsafe/toxic concepts (e.g., animal abuse, porn, violence, terrorism) while preserving faithfulness to the remaining desirable content (e.g., building/human/animals).  
+
+\updated{\section{Extra Discussion with Image Attribute Control Works}}
+
+
+\updated{Given that our method perturbs the text embedding fed into the model, we further discuss related works that utilize text embedding modifications for enhancing performance.}
+
+\updated{\citet{baumann2024continuous} propose optimization-based and optimization-free methods in the CLIP text embedding space for fine-grained image attribute editing (e.g., age). Unlike their focus on image attribute editing, SAFREE manipulates text embeddings for safe text-to-image/video generation.}
+
+\updated{\citet{zarei2024understanding} improve attribute composition in T2I models via text embedding optimization. In contrast, SAFREE is training-free and not only perturbs text embeddings but also re-attends latent space in T2I/T2V models for safe generation.}
+
+
+\section{Limitation \& Broader Impact} \label{app:limitation}
+While \ours{} demonstrates remarkable effectiveness in concept safeguarding and generalization abilities across backbone models and tasks, we notice that it is still not a perfect method to ensure safe generation in any case. Specifically, our filtering-based \ours{} method exhibits limitations when toxic prompts become much more implicit and in a chain-of-thought style. such kind of toxic prompts can still jailbreak \ours{} and yield unsafe/inappropriate content generation. However, we also note that perfect safeguarding in generative models is a challenging open problem that needs more future studies.
+
+Photorealistic Text-to-Image/Video Generation inherits biases from their training data, leading to several broader impacts, including societal stereotypes, biased interpretation of actions, and privacy concerns. 
+To mitigate these broader impacts, it is essential to carefully develop and implement generative and video description models, such as considering diversifying training datasets, implementing fairness and bias evaluation metrics, and engaging communities to understand and address their concerns. 
+
+
+\section{License Information}\label{app:license}
+We will make our code publicly accessible. 
+We use standard licenses from the community and provide the following links to the licenses for the datasets and models that we used in this paper. 
+For further information, please refer to the specific link.
+
+\noindent\textbf{StableDiffusion 1.4:} \href{https://huggingface.co/spaces/CompVis/stable-diffusion-license}{https://huggingface.co/spaces/CompVis/stable-diffusion-license}
+
+
+\noindent\textbf{SDXL:} \href{https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/LICENSE.md}{https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/LICENSE.md}
+
+\noindent\textbf{SD-v3:} \href{https://huggingface.co/stabilityai/stable-diffusion-3-medium/blob/main/LICENSE.md}{https://huggingface.co/stabilityai/stable-diffusion-3-medium/blob/main/LICENSE.md}
+
+\noindent\textbf{ZeroScopeT2V:} \href{https://spdx.org/licenses/CC-BY-NC-4.0}{https://spdx.org/licenses/CC-BY-NC-4.0}
+
+\noindent\textbf{CogVideoX:} \href{https://github.com/THUDM/CogVideo/blob/main/LICENSE}{https://github.com/THUDM/CogVideo/blob/main/LICENSE}
+
+
+
+\noindent\textbf{I2P:} \href{https://github.com/ml-research/safe-latent-diffusion?tab=MIT-1-ov-file#readme}{https://github.com/ml-research/safe-latent-diffusion?tab=MIT-1-ov-file}
+
+\noindent\textbf{P4D:}\href{https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/cc-by-4.0.md}{https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/cc-by-4.0.md}
+
+\noindent\textbf{Ring-A-Bell:} \href{https://github.com/chiayi-hsu/Ring-A-Bell?tab=MIT-1-ov-file#readme}{https://github.com/chiayi-hsu/Ring-A-Bell?tab=MIT-1-ov-file}
+
+\noindent\textbf{MMA-Diffusion} \href{https://github.com/cure-lab/MMA-Diffusion/blob/main/LICENSE}{https://github.com/cure-lab/MMA-Diffusion/blob/main/LICENSE}
+
+\noindent\textbf{UnlearnDiffAtk:}\href{https://github.com/OPTML-Group/Diffusion-MU-Attack?tab=MIT-1-ov-file#readme}{https://github.com/OPTML-Group/Diffusion-MU-Attack?tab=MIT-1-ov-file}
+
+\noindent\textbf{COCO:}\href{https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/cc-by-4.0.md}{https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/cc-by-4.0.md}
+
+\noindent\textbf{SafeSora:} \href{https://spdx.org/licenses/CC-BY-NC-4.0}{https://spdx.org/licenses/CC-BY-NC-4.0}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Recent advances in image and video generation models have significantly increased the risk of generating toxic or unsafe content. Recent approaches based on model unlearning or model editing aim to remove these concepts by directly updating pre-trained model weights. However, these methods are limited in their flexibility and versatility since they require the modification of the original diffusion models' weights.
+% To address this, we propose \ours{}, a novel training-free approach to safe text-to-image and video generation. We first identify the embedding subspace of the target concept within the entire text embedding space. We then assess the proximity of input text tokens with the toxic concept subspace by measuring the its projection distance from input prompts after masking out specific tokens . Based on this proximity, we selectively remove critical tokens that push the prompt embedding toward the toxic concept subspace. \ours{} demonstrates robust capabilities for preventing the generation of unsafe content while maintaining the original generation quality when processing benign textual requests. We believe our proposed method will be a good training-free baseline\vpc{saying baseline undermines the contributions?} in the field of safe text-to-image and video generation, accelerating the following research for promoting safer and more responsible generative models.
+
+
+
+\input{materials/figure_concept_removal_artists}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.9\linewidth]{assets/vangogh1.pdf}
+    \caption{More Text-to-Image generated examples. We filter the Van Gogh style/concept in the diffusion model.}
+    \label{fig:vangogh1}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.9\linewidth]{assets/vangogh2.pdf}
+    \caption{More Text-to-Image generated examples. We filter the Van Gogh style/concept in the diffusion model.}
+    \label{fig:vangogh2}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.9\linewidth]{assets/vangogh3.pdf}
+    \caption{More Text-to-Image generated examples. We filter the Van Gogh style/concept in the diffusion model.}
+    \label{fig:vangogh3}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.9\linewidth]{assets/nude1.pdf}
+    \caption{More T2I generated examples. We filter the unsafe nudity concept in the diffusion model. We manually masked unsafe generated results for display purposes.}
+    \label{fig:nude1}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.9\linewidth]{assets/nude2.pdf}
+    \caption{More T2I generated examples. We filter the unsafe nudity concept in the diffusion model. We manually masked unsafe generated results for display purposes.}
+    \label{fig:nude2}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.9\linewidth]{assets/nude3.pdf}
+    \caption{More T2I generated examples. We filter the unsafe nudity concept in the diffusion model. We manually masked unsafe generated results for display purposes.}
+    \label{fig:nude3}
+\end{figure}
+
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.9\linewidth]{assets/sdxl.pdf}
+    \caption{More T2I generated examples with different diffusion model backbone (SDXL and SD-v3). \ours can guard the 'nudity' concept in any given diffusion models and still keep faithfulness to the safe concepts in the toxic prompts. We manually masked unsafe generated results for display purposes.}
+    \label{fig:sdxl}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.9\linewidth]{assets/cogvideo1.pdf}
+    \caption{More Text-to-Video generated examples with CogVideoX. We manually blurred unsafe video and masked out sensitive text prompts for display purposes.}
+    \label{fig:cogvideox1}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{assets/cogvideo2.pdf}
+    \caption{More Text-to-Video generated examples with CogVideoX. We manually blurred unsafe video and masked out sensitive text prompts for display purposes.}
+    \label{fig:cogvideox2}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{assets/cogvideo3.pdf}
+    \caption{More Text-to-Video generated examples with CogVideoX. We manually blurred unsafe video and masked out sensitive text prompts for display purposes.}
+    \label{fig:cogvideox3}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{assets/cogvideo4.pdf}
+    \caption{More Text-to-Video generated examples with CogVideoX. We manually blurred unsafe video and masked out sensitive text prompts for display purposes.}
+    \label{fig:cogvideox4}
+\end{figure}
+
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{assets/zeroscope.pdf}
+    \caption{More Text-to-Video generated examples with ZeroScopeT2v. We manually blurred unsafe video and masked out sensitive text prompts for display purposes.}
+    \label{fig:zeroscope1}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{assets/zeroscope2.pdf}
+    \caption{More Text-to-Video generated examples with ZeroScopeT2v. We manually blurred unsafe video and masked out sensitive text prompts for display purposes.}
+    \label{fig:zeroscope2}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{assets/zeroscope3.pdf}
+    \caption{More Text-to-Video generated examples with ZeroScopeT2v. We manually blurred unsafe video and masked out sensitive text prompts for display purposes.}
+    \label{fig:zeroscope3}
+\end{figure}
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{assets/zeroscope4.pdf}
+    \caption{More Text-to-Video generated examples with ZeroScopeT2v. We manually blurred unsafe video and masked out sensitive text prompts for display purposes.}
+    \label{fig:zeroscope4}
+\end{figure}
+
+
+
+
+
