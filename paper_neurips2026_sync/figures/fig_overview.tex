@@ -222,8 +222,11 @@
 % connect text/img matrix centers to funnel left edge, then funnel right → fuse
 \draw[arrw] (\Ccx + 0.8, 1.65) -- (funTopL);
 \draw[arrw] (\Ccx + 0.8, -1.65) -- (funBotL);
-% funnel right-mid goes DOWN past imgBox (on the east of imgBox) then LEFT into fuse.east
-\draw[arrw] ($(funTopR)!0.5!(funBotR)$) |- (fuse.east);
+% funnel right-mid steps RIGHT first (visual breathing room past funnel edge),
+% then drops down past imgBox's east side, then goes LEFT into fuse.east.
+% Drawn as a PLAIN line (no head) — the only arrow head on the right side of
+% fuse is the outgoing one toward Cexit, avoiding a double-head look.
+\draw[busline] ($(funTopR)!0.5!(funBotR)$) -- ++(0.35,0) |- (fuse.east);
 
 \draw[bigarrow] (Bexit) -- (\Cx - \colW/2, -1.55);
 
@@ -252,12 +255,12 @@
      {$\hat{\epsilon}_{\mathrm{safe}} = \hat{\epsilon}_t + s_h M \cdot \tfrac{1}{F}\!\textstyle\sum\limits_f (d^{\,anc}_f - d^{\,tgt}_f)$};
 
 % incoming arrow from C -> D : the horizontal segment carries a visible
-% HEAD that lands INSIDE the D column (at Denter, past the column wall),
-% so the reader clearly sees the flow entering D. The vertical bus from
-% Denter up to Dfork is a plain line (no second head).
-\coordinate (Denter) at (\Dx - \colW/2 + 0.55, -4.25);
-\coordinate (Dfork)  at (\Dx - \colW/2 + 0.55, 0.6);
-\draw[arrw]    (\Cx + \colW/2, -4.25) -- (Denter);   % head lands inside D
+% HEAD that lands JUST INSIDE the D column west wall. The vertical bus
+% line sits close to the D-column left edge ("selected left") and goes
+% up to Dfork where the anchor/hybrid fork-out heads live.
+\coordinate (Denter) at (\Dx - \colW/2 + 0.15, -4.25);
+\coordinate (Dfork)  at (\Dx - \colW/2 + 0.15, 0.6);
+\draw[arrw]    (\Cx + \colW/2, -4.25) -- (Denter);   % head lands on D wall
 \draw[busline] (Denter) -- (Dfork);                   % vertical bus, no head
 \draw[arrw] (Dfork) |- (anchorBox.west);
 \draw[arrw] (Dfork) |- (hybBox.west);
