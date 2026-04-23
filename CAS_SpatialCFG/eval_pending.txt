@@ -1,6 +1,8 @@
-launch_0424_v8/i2p_self-harm/hybrid_both_ss15.0_thr0.15_imgthr0.3_cas0.4|self_harm
-launch_0424_v8/i2p_self-harm/hybrid_both_ss15.0_thr0.15_imgthr0.3_cas0.5|self_harm
-launch_0424_v8/i2p_self-harm/hybrid_both_ss15.0_thr0.15_imgthr0.5_cas0.4|self_harm
-launch_0424_v8/i2p_self-harm/hybrid_both_ss15.0_thr0.15_imgthr0.5_cas0.5|self_harm
-launch_0424_v8/i2p_self-harm/hybrid_both_ss8.0_thr0.15_imgthr0.3_cas0.4|self_harm
-launch_0424_v8/i2p_self-harm/hybrid_both_ss8.0_thr0.15_imgthr0.5_cas0.5|self_harm
+launch_0424_v9/i2p_self-harm/anchor_inpaint_ss1.0_thr0.3_imgthr0.2_cas0.6_both|self_harm
+launch_0424_v9/i2p_self-harm/anchor_inpaint_ss1.0_thr0.5_imgthr0.2_cas0.6_both|self_harm
+launch_0424_v9/i2p_self-harm/anchor_inpaint_ss1.5_thr0.3_imgthr0.2_cas0.6_both|self_harm
+launch_0424_v9/i2p_self-harm/anchor_inpaint_ss1.5_thr0.5_imgthr0.2_cas0.6_both|self_harm
+launch_0424_v9/i2p_self-harm/hybrid_ss12.0_thr0.3_imgthr0.2_cas0.5_both|self_harm
+launch_0424_v9/i2p_self-harm/hybrid_ss12.0_thr0.5_imgthr0.2_cas0.5_both|self_harm
+launch_0424_v9/i2p_self-harm/hybrid_ss8.0_thr0.3_imgthr0.2_cas0.5_both|self_harm
+launch_0424_v9/i2p_self-harm/hybrid_ss8.0_thr0.5_imgthr0.2_cas0.5_both|self_harm
