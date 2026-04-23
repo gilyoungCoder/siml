@@ -218,15 +218,18 @@
 \coordinate (funBotR) at (\funR, -1.6);
 \draw[draw=black!50,fill=black!6,line width=0.4pt]
   (funTopL) -- (funTopR) -- (funBotR) -- (funBotL) -- cycle;
-% "max_f" centered inside the trapezoid — widened so text fits comfortably
-\node[font=\scriptsize] at ($(funTopL)!0.5!(funBotR)$) {$\max_f$};
+% Funnel now represents MODALITY union (max of text/img) WITHIN a family,
+% followed by WINNER-TAKE-ALL across families. Label shows both steps.
+\node[font=\scriptsize,align=center] at ($(funTopL)!0.5!(funBotR)$)
+     {\shortstack{$\max$\\[-1pt]\scriptsize mod}};
 
-% fusion box — placed DIRECTLY BELOW image probe box, aligned with \Ccx,
-% with ~0.3cm gap under imgBox.south so there is no overlap
+% fusion box — shows the pixel-wise winner-take-all partition step.
+% M^f is the within-family modality max; {M̃_f} is the disjoint partition.
 \node[draw,rounded corners=2pt,fill=black!4,line width=0.4pt,
-      minimum width=4.2cm,minimum height=0.75cm,anchor=center,font=\scriptsize]
+      minimum width=5.0cm,minimum height=0.95cm,anchor=center,font=\scriptsize]
      (fuse) at (\Ccx, -4.25)
-     {$M = \min\!\big(1,\; M_{\mathrm{text}} + M_{\mathrm{img}}\big)$};
+     {\shortstack{$M^f = \max(M^f_{\mathrm{text}},\,M^f_{\mathrm{img}})$\\[1pt]
+      $\widetilde{M}_f = M^f \cdot \mathbb{1}\!\big[f=\arg\max_{f'} M^{f'}\big]$}};
 
 % connect text/img matrix centers to funnel left edge, then funnel right → fuse
 \draw[arrw] (\Ccx + 0.8, 1.65) -- (funTopL);
@@ -242,21 +245,23 @@
      (colD) at (\Dx,-0.6) {};
 \node[stageTitle,anchor=north,text=howPurple] at (\Dx,3.25) {D.~How: two modes};
 
-% Anchor-inpaint branch (TOP) — shorter + narrower so boxes "float" in column
-\node[colBG,fill=anchorBG,minimum width=\colDin cm,minimum height=2.0cm,anchor=north]
+% Anchor-inpaint branch (TOP) — LERP substitution using WINNING family
+% w = argmax_f M^f (pixel-wise). Matches Eq. \ref{eq:anchor_inpaint} in method.tex.
+\node[colBG,fill=anchorBG,minimum width=\colDin cm,minimum height=2.2cm,anchor=north]
      (anchorBox) at (\Dx, 2.35) {};
 \node[anchor=north,font=\scriptsize\bfseries,text=packAccent] at (\Dx,2.23)
      {Anchor inpaint};
-\node[anchor=center,font=\scriptsize] at (\Dx, 1.50)
-     {$\hat{\epsilon}_{\mathrm{safe}} = \hat{\epsilon}_t - s_a M \cdot \tfrac{1}{F}\!\textstyle\sum\limits_f d^{\,tgt}_f$};
+\node[anchor=center,font=\scriptsize,align=center] at (\Dx, 1.45)
+     {$\hat{\epsilon}_{\mathrm{safe}} = (1{-}\beta)\,\hat{\epsilon}_t + \beta\,\big(\epsilon_\varnothing + \omega\, d^{\,anc}_{\mathsf{w}}\big)$\\[1pt]
+      \scriptsize$\beta = \min(s_a\,\widetilde{M},\,1)$};
 
-% Hybrid branch (BOTTOM) — shorter + narrower to match
-\node[colBG,fill=hybridBG,minimum width=\colDin cm,minimum height=2.0cm,anchor=north]
-     (hybBox) at (\Dx, -0.45) {};
-\node[anchor=north,font=\scriptsize\bfseries,text=howPurple] at (\Dx,-0.57)
+% Hybrid branch (BOTTOM) — target-to-anchor push using winning family w
+\node[colBG,fill=hybridBG,minimum width=\colDin cm,minimum height=2.2cm,anchor=north]
+     (hybBox) at (\Dx, -0.25) {};
+\node[anchor=north,font=\scriptsize\bfseries,text=howPurple] at (\Dx,-0.37)
      {Hybrid};
-\node[anchor=center,font=\scriptsize] at (\Dx, -1.30)
-     {$\hat{\epsilon}_{\mathrm{safe}} = \hat{\epsilon}_t + s_h M \cdot \tfrac{1}{F}\!\textstyle\sum\limits_f (d^{\,anc}_f - d^{\,tgt}_f)$};
+\node[anchor=center,font=\scriptsize] at (\Dx, -1.15)
+     {$\hat{\epsilon}_{\mathrm{safe}} = \hat{\epsilon}_t + s_h\,\widetilde{M}\,\big(d^{\,anc}_{\mathsf{w}} - d^{\,tgt}_{\mathsf{w}}\big)$};
 
 % incoming arrow from C -> D : vertical bus sits JUST OUTSIDE D's west
 % wall (in the C-D gap), so the line does NOT run through the interior
