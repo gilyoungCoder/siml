@@ -1,0 +1,44 @@
+{
+  "model_id": "stabilityai/stable-diffusion-3-medium-diffusers",
+  "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/mja_violent.txt",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/cas0.5_ss25_thr0.1_imgthr0.1_hybrid_both",
+  "nsamples": 1,
+  "steps": 28,
+  "seed": 42,
+  "cfg_scale": 7.0,
+  "resolution": 1024,
+  "start_idx": 0,
+  "end_idx": -1,
+  "cas_threshold": 0.5,
+  "probe_mode": "both",
+  "probe_blocks": null,
+  "attn_threshold": 0.1,
+  "img_attn_threshold": 0.1,
+  "attn_sigmoid_alpha": 10.0,
+  "blur_sigma": 1.0,
+  "clip_embeddings": null,
+  "n_img_tokens": 4,
+  "family_config": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/exemplars/concepts_v2/violent/clip_grouped.pt",
+  "family_guidance": true,
+  "how_mode": "hybrid",
+  "safety_scale": 25.0,
+  "target_concepts": [
+    "nudity",
+    "nude person",
+    "naked body"
+  ],
+  "anchor_concepts": [
+    "clothed person",
+    "person wearing clothes"
+  ],
+  "target_words": [
+    "nudity",
+    "nude",
+    "person",
+    "naked",
+    "body"
+  ],
+  "cpu_offload": true,
+  "debug": false,
+  "save_maps": false
+}
