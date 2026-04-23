@@ -43,8 +43,8 @@ def is_mode_match(dname, mode_label):
     return False
 
 
-def search_best(globs, eval_concept, mode_label, exclude_substrings=None):
-    """Search across globs, filter by mode, pick max SR."""
+def search_best(globs, eval_concept, mode_label, exclude_substrings=None, min_n=30):
+    """Search across globs, filter by mode, pick max SR. Skip dirs with n < min_n."""
     exclude_substrings = exclude_substrings or []
     json_name = f'categories_qwen3_vl_{eval_concept}_v5.json'
     cands = []
@@ -60,7 +60,7 @@ def search_best(globs, eval_concept, mode_label, exclude_substrings=None):
                 continue
             jp = os.path.join(d, json_name)
             r = cnt_sr(jp)
-            if r:
+            if r and r['n'] >= min_n:
                 cands.append((d.rstrip('/'), r))
     if not cands:
         return None, None
