@@ -36,14 +36,16 @@
 ]
 
 % ============== LAYOUT CONSTANTS ==============
-\def\colW{5.6}     % column width
+\def\colW{5.6}     % column width for B/C/D
+\def\colWA{6.4}    % WIDER width for column A (concept-pack labels + brace)
 \def\colWin{4.0}   % inner box width  (reduced so max_f funnel has room)
 \def\colDin{5.0}   % inner box width for D column (tighter than col so boxes
                    %  visually "float" with side margin; Hybrid equation fits)
-\def\gap{1.25}     % WIDER gap between columns for breathing room
+\def\gap{1.25}     % gap between columns for breathing room
 
 \pgfmathsetmacro{\Ax}{0}
-\pgfmathsetmacro{\Bx}{\Ax + \colW + \gap}
+% A uses \colWA (wider); B/C/D use \colW — edge-to-edge gap is \gap
+\pgfmathsetmacro{\Bx}{\Ax + \colWA/2 + \colW/2 + \gap}
 \pgfmathsetmacro{\Cx}{\Bx + \colW + \gap}
 \pgfmathsetmacro{\Dx}{\Cx + \colW + \gap}
 
@@ -62,7 +64,7 @@
 }
 
 % ============== COLUMN A : CONCEPT PACK ==============
-\node[colBG,fill=packBG,minimum width=\colW cm,minimum height=9.6cm,anchor=center]
+\node[colBG,fill=packBG,minimum width=\colWA cm,minimum height=9.6cm,anchor=center]
      (colA) at (\Ax,0) {};
 \node[stageTitle,anchor=north,text=packAccent] at (\Ax,4.6) {A.~Concept Pack};
 \node[font=\scriptsize\itshape,anchor=north,text=packAccent!80!black] at (\Ax,4.15)
@@ -102,7 +104,7 @@
 \node[chip,minimum width=4.2cm,anchor=center,below=2.5mm of danc] (kw)
    {keywords $\mathcal{W}_f$};
 
-\coordinate (Aexit) at (\Ax + \colW/2, -1.3);
+\coordinate (Aexit) at (\Ax + \colWA/2, -1.3);
 
 % ============== COLUMN B : DENOISING LOOP ==============
 \node[colBG,dashed,line width=0.5pt,fill=white,
@@ -120,24 +122,31 @@
 \draw[arrw] (eps) -- (ztm);
 \draw[arrw] (ztm.north) .. controls +(0,0.45) and +(0,0.45) .. (zt.north);
 
-% CAS diamond (red) — moved DOWN for better vertical spacing from eps chain
-\node[diamond,draw=casRed,line width=0.8pt,fill=casRed!8,aspect=2.4,
-      inner sep=2pt,minimum width=4.8cm,minimum height=1.9cm,
+% CAS gate — switched from diamond to ROUNDED RECTANGLE so it fits cleanly
+% inside column B (no corners poking across the dashed B boundary).
+\node[draw=casRed,line width=0.8pt,fill=casRed!8,rounded corners=3pt,
+      inner sep=3pt,minimum width=4.2cm,minimum height=1.35cm,
       align=center]
-     (cas) at (\Bx, -0.85)
+     (cas) at (\Bx, -1.1)
      {\scriptsize\textbf{CAS gate}\\[1pt]
       $\displaystyle \mathrm{CAS}(t)=\max_f \cos(d_{prompt},\bar d^{\,tgt}_f)\,>\,\tau$};
 
-\draw[arrw] (eps.south) .. controls +(0,-0.6) and +(0,0.9) .. (cas.north);
+% straight vertical feeder from eps to CAS
+\draw[arrw] (eps.south) -- (cas.north);
 
-\coordinate (Bexit) at (\Bx + \colW/2, -1.55);
-\draw[bigarrow] (cas.east) .. controls +(0.4,0) and +(-0.3,0.2) .. (Bexit);
+% CAS output → C : bulk of the arrow is in the B-C GAP; only the very
+% start (inside B to reach cas.east) and the head (at C's west wall)
+% touch the column walls.
+\draw[bigarrow] (cas.east) -- (\Cx - \colW/2, -1.55);
 \node[font=\scriptsize,text=txtAccent!60!black,anchor=west]
-     at ($(cas.east)+(0.15,0.25)$) {\checkmark\ fire};
+     at ($(cas.east)+(0.10,0.25)$) {\checkmark\ fire};
 
-% A -> B : unified arrow (no label, per user request)
-\draw[bigarrow] (Aexit) -- (\Bx - \colW/2 + 0.25, -1.3)
-  -- (\Bx - \colW/2 + 0.25, 2.0) -- (zt.west);
+% A -> B : unified arrow. Bulk of the line sits in the A-B GAP (at
+% x = Bx - colW/2 - 0.1, i.e. 0.1 cm OUTSIDE B's west wall) so the
+% arrow does not run through the interior of B; only the final
+% horizontal stub crosses into B to reach zt.west.
+\draw[bigarrow] (Aexit) -- (\Bx - \colW/2 - 0.1, -1.3)
+  -- (\Bx - \colW/2 - 0.1, 2.0) -- (zt.west);
 
 % ============== COLUMN C : DUAL PROBE ==============
 \node[colBG,fill=white,minimum width=\colW cm,minimum height=8.4cm,anchor=center]
@@ -222,16 +231,11 @@
 % connect text/img matrix centers to funnel left edge, then funnel right → fuse
 \draw[arrw] (\Ccx + 0.8, 1.65) -- (funTopL);
 \draw[arrw] (\Ccx + 0.8, -1.65) -- (funBotL);
-% funnel right-mid steps RIGHT first (visual breathing room past funnel edge),
+% funnel right-mid steps RIGHT first (breathing room past funnel edge),
 % then drops down past imgBox's east side, then goes LEFT into fuse.east.
-% Drawn as a PLAIN line (no head) — the only arrow head on the right side of
-% fuse is the outgoing one toward Cexit, avoiding a double-head look.
-\draw[busline] ($(funTopR)!0.5!(funBotR)$) -- ++(0.35,0) |- (fuse.east);
-
-\draw[bigarrow] (Bexit) -- (\Cx - \colW/2, -1.55);
-
-\coordinate (Cexit) at (\Cx + \colW/2, -4.25);
-\draw[bigarrow] (fuse.east) -- (Cexit);
+% HEAD is restored — per-user: the masking-merge arrow should visibly
+% terminate at the fusion box.
+\draw[arrw] ($(funTopR)!0.5!(funBotR)$) -- ++(0.35,0) |- (fuse.east);
 
 % ============== COLUMN D : HOW (two modes) ==============
 \node[colBG,fill=white,minimum width=\colW cm,minimum height=8.4cm,anchor=center]
@@ -254,29 +258,31 @@
 \node[anchor=center,font=\scriptsize] at (\Dx, -1.30)
      {$\hat{\epsilon}_{\mathrm{safe}} = \hat{\epsilon}_t + s_h M \cdot \tfrac{1}{F}\!\textstyle\sum\limits_f (d^{\,anc}_f - d^{\,tgt}_f)$};
 
-% incoming arrow from C -> D : the horizontal segment carries a visible
-% HEAD that lands JUST INSIDE the D column west wall. The vertical bus
-% line sits close to the D-column left edge ("selected left") and goes
-% up to Dfork where the anchor/hybrid fork-out heads live.
-\coordinate (Denter) at (\Dx - \colW/2 + 0.15, -4.25);
-\coordinate (Dfork)  at (\Dx - \colW/2 + 0.15, 0.6);
-\draw[arrw]    (\Cx + \colW/2, -4.25) -- (Denter);   % head lands on D wall
-\draw[busline] (Denter) -- (Dfork);                   % vertical bus, no head
+% incoming arrow from C -> D : vertical bus sits JUST OUTSIDE D's west
+% wall (in the C-D gap), so the line does NOT run through the interior
+% of D. Only the short fork horizontals cross into D to reach the box
+% west edges — where the arrow heads live.
+\coordinate (Denter) at (\Dx - \colW/2 - 0.1, -4.25);
+\coordinate (Dfork)  at (\Dx - \colW/2 - 0.1, 0.6);
+\draw[arrw]    (fuse.east) -- (Denter);   % single arrow from fuse through gap
+\draw[busline] (Denter) -- (Dfork);        % vertical bus outside D, no head
 \draw[arrw] (Dfork) |- (anchorBox.west);
 \draw[arrw] (Dfork) |- (hybBox.west);
 
-% merge point — invisible coordinate where anchor/hybrid outputs converge
-% into the feedback path. The two merge segments are plain lines (no heads)
-% so arrowheads do not pile up at an invisible point.
-\coordinate (mergeNode) at (\Dx + \colW/2 - 0.35, 0.1);
-\draw[busline] (anchorBox.east) -- ++(0.15,0) |- (mergeNode);
-\draw[busline] (hybBox.east)    -- ++(0.15,0) |- (mergeNode);
+% merge point — coordinate JUST OUTSIDE D's east wall (in the post-D
+% margin) so the vertical feedback trunk is not inside D. The short
+% horizontal stubs from each box east cross D's east wall to reach it.
+\coordinate (mergeNode) at (\Dx + \colW/2 + 0.1, 0.1);
+\draw[busline] (anchorBox.east) -- ++(0.4,0) -- (mergeNode);
+\draw[busline] (hybBox.east)    -- ++(0.4,0) -- (mergeNode);
 
-% feedback to B loop — originates at mergeNode, loops over the top back to z_t
+% feedback to B loop — originates at mergeNode (outside D east), rises
+% along x=Dx+colW/2+0.1 (outside D), crosses the top above the banner,
+% and drops straight down into zt.north. Entering zt from the NORTH
+% avoids a double-arrowhead pileup at zt.west with the A→zt line.
 \draw[bigarrow,draw=howPurple!70!black,dashed]
-  (mergeNode) -- ++(0,0.5) -| (\Dx + \colW/2 - 0.35, 5.75)
-  -- (\Bx - \colW/2 + 0.5, 5.75)
-  -- (\Bx - \colW/2 + 0.5, 2.0) -- (zt.west);
+  (mergeNode) -- (\Dx + \colW/2 + 0.1, 5.75)
+  -- (\Bx - 1.7, 5.75) -- (zt.north);
 \node[font=\scriptsize,text=howPurple!70!black,anchor=south]
   at (\Cx, 5.85) {guided update $\rightarrow$ loop};
 
