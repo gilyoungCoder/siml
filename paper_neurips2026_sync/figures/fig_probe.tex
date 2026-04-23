@@ -1,0 +1,28 @@
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,calc}
+
+\definecolor{txtAccent}{HTML}{059669}
+\definecolor{imgAccent}{HTML}{EA580C}
+
+\begin{document}
+\begin{tikzpicture}[
+  font=\footnotesize,
+  thin,
+]
+
+% ============== TITLE ==============
+\node[anchor=south,font=\normalsize\bfseries,text=black] at (0, 0.20)
+  {Probe mask localizes unsafe regions while sparing safe background};
+
+% ============== MAIN IMAGE : 3x3 probe grid ==============
+% columns = {Generated image, Probe attention (top-20\% of activations), Overlay on original}
+% rows    = 3 test prompts covering explicit (nudity), implicit (scenic), adversarial
+\node[anchor=north,inner sep=0] (cam)
+  at (0, 0.0) {\includegraphics[width=13.5cm]{cam_grid.png}};
+
+\end{tikzpicture}
+\end{document}
