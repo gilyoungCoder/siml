@@ -19,29 +19,7 @@
 \usepackage{enumitem}
 \usepackage{subcaption}
 \usepackage{pifont}
-\usepackage[section]{placeins}  % keep floats inside their section
-
-% --- Caption / float spacing ---
-% neurips_2026.sty swaps abovecaptionskip<->belowcaptionskip for `table` so the
-% caption is flush-top with 7pt below before \toprule. It does NOT do this for
-% `table*`, which makes wide tables' captions collide with \toprule. Patch it:
-\makeatletter
-\renewenvironment{table*}
-  {\setlength{\abovecaptionskip}{\@neuripsbelowcaptionskip}%
-   \setlength{\belowcaptionskip}{\@neuripsabovecaptionskip}%
-   \@dblfloat{table}}
-  {\end@dblfloat}
-\makeatother
-\setlength{\textfloatsep}{10pt plus 2.0pt minus 2.0pt}
-\setlength{\floatsep}{8pt plus 2.0pt minus 2.0pt}
-\setlength{\intextsep}{10pt plus 2.0pt minus 2.0pt}
-
-% Override NeurIPS \@notice: the default uses a bottom float that reserves
-% ~30\% of page 1 via \bottomfraction, pushing \section{Introduction} to page 2.
-% Suppress the float entirely; notice text is restored as \thanks on the title.
-\makeatletter
-\renewcommand{\@notice}{}
-\makeatother
+\usepackage[section]{placeins}
 
 % Custom commands
 \usepackage{xspace}
@@ -50,13 +28,12 @@
 \newcommand{\ie}{\textit{i.e.}}
 \newcommand{\etc}{\textit{etc.}}
 
-\title{Example-Based Spatial Guidance for Training-Free \\Concept Erasure in Diffusion Models\thanks{Submitted to the 40th Conference on Neural Information Processing Systems (NeurIPS 2026). Do not distribute.}}
+\title{Example-Based Spatial Guidance for Training-Free \\Concept Erasure in Diffusion Models}
 
-\author{
-  Younghwan Gil \\
-  Department of Artificial Intelligence \\
-  University \\
-  \texttt{yhgil99@university.edu}
+\author{%
+  Anonymous Authors \\
+  Anonymous Affiliation \\
+  \texttt{anonymous@neurips.cc}
 }
 
 \begin{document}
@@ -75,5 +52,8 @@
 
 \appendix
 \input{sec/A_appendix}
+
+\newpage
+\input{checklist.tex}
 
 \end{document}
