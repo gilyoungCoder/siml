@@ -198,20 +198,22 @@
 % "max_f" centered inside the trapezoid — widened so text fits comfortably
 \node[font=\scriptsize] at ($(funTopL)!0.5!(funBotR)$) {$\max_f$};
 
-% fusion box
+% fusion box — placed DIRECTLY BELOW image probe box, aligned with \Ccx,
+% with ~0.3cm gap under imgBox.south so there is no overlap
 \node[draw,rounded corners=2pt,fill=black!4,line width=0.4pt,
       minimum width=4.2cm,minimum height=0.75cm,anchor=center,font=\scriptsize]
-     (fuse) at (\Cx + 0.3, -3.5)
+     (fuse) at (\Ccx, -4.25)
      {$M = \min\!\big(1,\; M_{\mathrm{text}} + M_{\mathrm{img}}\big)$};
 
 % connect text/img matrix centers to funnel left edge, then funnel right → fuse
 \draw[arrw] (\Ccx + 0.8, 1.65) -- (funTopL);
 \draw[arrw] (\Ccx + 0.8, -1.65) -- (funBotL);
-\draw[arrw] ($(funTopR)!0.5!(funBotR)$) -- ++(0.25,0) |- (fuse.east);
+% funnel right-mid goes DOWN past imgBox (on the east of imgBox) then LEFT into fuse.east
+\draw[arrw] ($(funTopR)!0.5!(funBotR)$) |- (fuse.east);
 
 \draw[bigarrow] (Bexit) -- (\Cx - \colW/2, -1.55);
 
-\coordinate (Cexit) at (\Cx + \colW/2, -3.5);
+\coordinate (Cexit) at (\Cx + \colW/2, -4.25);
 \draw[bigarrow] (fuse.east) -- (Cexit);
 
 % ============== COLUMN D : HOW (two modes) ==============
@@ -236,17 +238,20 @@
      {$\hat{\epsilon}_{\mathrm{safe}} = \hat{\epsilon}_t + s_h M \cdot \tfrac{1}{F}\!\textstyle\sum\limits_f (d^{\,anc}_f - d^{\,tgt}_f)$};
 
 % incoming arrow from C, forks into anchor/hybrid
-\coordinate (Denter) at (\Dx - \colW/2 + 0.15, -3.5);
+% The bus line (C-exit -> Denter -> Dfork) is a plain line (no head);
+% heads live only at the TRUE destinations (anchorBox.west, hybBox.west).
+\coordinate (Denter) at (\Dx - \colW/2 + 0.15, -4.25);
 \coordinate (Dfork)  at (\Dx - \colW/2 + 0.15, 0.6);
-\draw[arrw] (\Cx + \colW/2, -3.5) -- (Denter) -- (Dfork);
+\draw[line width=0.8pt,draw=greyLine] (\Cx + \colW/2, -4.25) -- (Denter) -- (Dfork);
 \draw[arrw] (Dfork) |- (anchorBox.west);
 \draw[arrw] (Dfork) |- (hybBox.west);
 
 % merge point — invisible coordinate where anchor/hybrid outputs converge
-% into the feedback path. No "safe eps" label, no safe-image thumbnail.
+% into the feedback path. The two merge segments are plain lines (no heads)
+% so the arrowheads don't pile up at an invisible point.
 \coordinate (mergeNode) at (\Dx + \colW/2 + 0.05, 0.1);
-\draw[arrw] (anchorBox.east) -- ++(0.15,0) |- (mergeNode);
-\draw[arrw] (hybBox.east)    -- ++(0.15,0) |- (mergeNode);
+\draw[line width=0.8pt,draw=greyLine] (anchorBox.east) -- ++(0.15,0) |- (mergeNode);
+\draw[line width=0.8pt,draw=greyLine] (hybBox.east)    -- ++(0.15,0) |- (mergeNode);
 
 % feedback to B loop — originates at mergeNode, loops over the top back to z_t
 \draw[bigarrow,draw=howPurple!70!black,dashed]
