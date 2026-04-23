@@ -1,0 +1,48 @@
+\section{Experiments}
+\label{sec:exp}
+
+We evaluate \ours{} along four axes: (i) adversarial nudity erasure on four increasingly difficult benchmarks; (ii) generalization to non-nudity concepts and simultaneous multi-concept erasure; (iii) ablations over the family decomposition, the probe, and the How mode; and (iv) cross-backbone transfer to SD~3 (MMDiT) and FLUX (DiT). The main body reports two headline tables (Table~\ref{table:nudity} nudity and Table~\ref{table:multi} MJA); the dual-concept erasure, the HOW-mode and family ablations, the probe-mode ablation, and the full cross-backbone numbers are deferred to the Appendix.
+
+\subsection{Experimental Setup}
+\label{subsec:setup}
+
+\paragraph{Base model and datasets.} We use Stable Diffusion v1.4~\citep{rombach2022high} (\texttt{CompVis/stable-diffusion-v1-4}) as the base T2I model with the safety checker disabled, generating $512{\times}512$ images with 50 DDIM steps at guidance $\omega{=}7.5$ and seed 42. Cross-backbone validation (\S\ref{subsec:cross_backbone}) adds SD~3 (MMDiT, velocity) and FLUX.1-dev (DiT, flow matching). For nudity we evaluate on \textbf{Ring-A-Bell}~\citep{tsai2023ring} (79 prompts), \textbf{UnlearnDiff}~\citep{zhang2024generate} (142 prompts), and \textbf{MMA-Diffusion}~\citep{yang2024mma} (1{,}000 prompts); \textbf{P4D-N}~\citep{chin2023prompting4debugging} (151 prompts). For multi-concept evaluation we use I2P~\citep{schramowski2023safe} subsets and the \textbf{MJA} (Metaphor-based Jailbreaking Attack) benchmark~\citep{zhang2026reason2attack}, which supplies indirect metaphorical prompts across four categories (sexual, violent, disturbing, illegal; 100 prompts each). For image quality we generate 250 COCO~\citep{lin2014microsoft} captions ($\times$4 samples $=$ 1{,}000 images) and compute FID against baseline SD~v1.4 outputs; we additionally report VQAScore~\citep{lin2024evaluating}.
+
+\paragraph{Baselines.} We compare against fine-tuning methods \textbf{ESD}~\citep{gandikota2023erasing}, \textbf{SDD}~\citep{kim2023towards}, and \textbf{RECE}~\citep{gong2024reliable}, and training-free methods \textbf{SLD-Max}~\citep{schramowski2023safe}, \textbf{SAFREE}~\citep{yoon2024safree}, \textbf{ASCG}~\citep{kil2026ascg}, and the two strongest published training-free compounds \textbf{SAFREE~$+$~Safe\_Denoiser}~\citep{kim2025training} and \textbf{SAFREE~$+$~SGF}~\citep{kim2026safety}. SAFREE is our primary training-free comparison (strongest training-free baseline with native multi-concept support).
+
+\paragraph{Metrics.} Qwen3-VL-8B~\citep{bai2025qwen3} classifies each generated image into \{Safe, Partial, Full, NotRelevant\}. We report \textbf{SR}\,$=$\,(Safe\,$+$\,Partial)$/$Total~$\uparrow$ as the primary safety score, \textbf{Full}~$\downarrow$ for stricter judgments, \textbf{FID}~\citep{heusel2017gans} on COCO, and \textbf{CLIP score}~\citep{hessel2021clipscore}. Qwen3-VL is validated against MJ-Bench~\citep{chen2024mj} (49.7\% w/tie, 88.1\% w/o-tie safety-specific accuracy) and cross-checked against an independent LLaVA~\citep{liu2023visual} judge (92.3\% binary agreement); the full validator protocol and a human-majority study are in Appendices~\ref{app:evaluator}, \ref{app:evaluator_extended}, and~\ref{app:human_study}.
+
+\subsection{Main Results: Nudity Erasure}
+\label{subsec:main_results}
+
+Table~\ref{table:nudity} compares \ours{} against all baselines across four nudity adversarial datasets and COCO image quality.
+
+\input{table/main}
+
+\ours{}~(hybrid) reaches 94.9\% SR on Ring-A-Bell, 94.7\% on P4DN, and 97.2\% on UnlearnDiff, outperforming SAFREE (50.6 / 59.9 / 91.5\%) by wide margins and matching or beating the strengthened compound baselines SAFREE~$+$~Safe\_Denoiser (72.2 / 68.2 / --) and SAFREE~$+$~SGF (65.8 / 63.6 / --). The gap is largest on the highly-adversarial MJA-Sexual benchmark (84.0\% vs.\ 48.0\% SAFREE, $+36$\%p), consistent with our design hypothesis that global token projection cannot localize implicit content. Both How modes exceed all training-free baselines on the three explicit-keyword datasets (RAB, P4DN, UnlearnDiff); the anchor and hybrid modes trade places across benchmarks, which we quantify in \S\ref{subsec:ablation}.
+
+Fine-tuning methods ESD and SDD achieve strong nudity suppression but at significant FID cost and require retraining for every new concept. \ours{} maintains FID 6.78 on COCO, substantially lower than SLD-Max (18.46) and SAFREE (8.96), and generalizes to new concepts without any training. The anchor mode shares the same FID by construction: because CAS does not trigger on benign COCO prompts (\S\ref{subsec:when}), the mask-gated correction is never applied and the sampler reproduces the base SD~v1.4 trajectory exactly.
+
+\subsection{Multi-Concept Generalization}
+\label{subsec:multi_results}
+
+\ours{} generalizes to non-nudity concepts with no concept-specific training---only the exemplar pack changes. Table~\ref{table:multi} reports MJA per-concept SR against SAFREE under both How modes.
+
+\input{table/multi_concept}
+
+Reporting both modes exposes a concept-dependent pattern: hybrid wins where the paired anchor is visually crisp---\emph{MJA-Sexual} (86.0\%, $+38$\%p vs.\ SAFREE) and \emph{MJA-Disturbing} (99.0\%, $+4$\%p)---while anchor inpainting wins on \emph{MJA-Violent} (56.0\%, $+4$\%p), where ``peaceful scene'' is a semantically ambiguous anchor that destabilizes hybrid's chase-the-anchor dynamics (hybrid 29.0\% on this category). On \emph{MJA-Illegal}, SAFREE (77.0\%) edges both modes (anchor 56.0, hybrid 72.0); the concept is image-probe dominant (Appendix~\ref{app:probe_dominance}) but its anchors (``drug use''\,$\to$\,``legal activity'') lack a clean visual pair, a shared difficulty for all training-free methods. \emph{Which} mode wins is therefore a deployment choice, and we report both throughout. Simultaneous dual-concept erasure (Nudity~$+$~Shocking retains 83.7\% nudity SR and 97.5\% shocking SR, close to single-concept references of 93.1 / 97.3\%) and three additional concept pairs are in Appendix~\ref{app:dual_pairs}.
+
+\subsection{Ablations}
+\label{subsec:ablation}
+
+We ablate three orthogonal design axes (full tables in Appendix~\ref{app:ablations}). \emph{Family vs.\ single-pooled exemplars}: family grouping ($F{=}4, K{=}4$) yields $+21$\%p on MJA-Violent and $+20$\%p on MJA-Illegal over single-pooled $N{=}16$, and is on par for tightly-scoped concepts. \emph{Probe mode}: text probe dominates keyword-explicit concepts (86.1\% RAB nudity) while image probe dominates metaphorical concepts (86.0\% MJA-Sexual); the \emph{both}-probe winner-take-all is best-or-tied on every dataset. \emph{How mode}: hybrid adds $+5.0$\%p over anchor on RAB for crisp anchors, and the ordering flips for ambiguous ones. The probe choice and How mode are orthogonal pack properties, so they compose freely.
+
+\subsection{Image Quality and Evaluator Validation}
+\label{subsec:quality}
+
+\ours{} preserves image quality on benign prompts: FID 6.78 on COCO (vs.\ SLD-Max 18.46, RECE 10.33), with VQAScore prompt-faithfulness drop $<$0.05 on average (RAB: $0.550{\to}0.529$; MJA-Illegal: $0.475{\to}0.474$). Because CAS does not trigger on benign prompts, the base sampler runs unchanged. The Qwen3-VL evaluator attains 88.1\% without-tie accuracy on MJ-Bench and 92.3\% binary agreement with an independent LLaVA judge; GPT-4o / Claude~3.5 / Gemini~1.5 cross-checks and a 20-annotator human study are in Appendices~\ref{app:evaluator_extended}--\ref{app:human_study}.
+
+\subsection{Cross-Backbone Validation}
+\label{subsec:cross_backbone}
+
+Because the CAS gate and both How updates operate on CFG difference vectors $\text{pred}(z_t, c){-}\text{pred}(z_t, \varnothing)$, they are parameterization-invariant and transfer verbatim to non-$\epsilon$-prediction backbones (\S\ref{subsec:prelim}). Only the Where probe is re-implemented per-backbone: cross-attention for the SD~v1.4 UNet, joint-attention sub-matrix for SD~3 MMDiT, and a DiT-compatible spatial probe for FLUX. On FLUX.1-dev the two-mode complementary pattern replicates qualitatively, confirming that the trade-off is a property of the concept pack and CFG geometry rather than of $\epsilon$-prediction; for SD~3 we retune $\tau{\in}[0.2,0.4]$. Full per-concept numbers are in Appendix~\ref{app:cross_backbone_full}.
