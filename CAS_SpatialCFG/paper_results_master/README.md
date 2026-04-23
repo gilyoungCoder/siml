@@ -27,9 +27,9 @@ Best (max SR) generation dirs per (section, concept, mode), copied here for pape
 | self-harm_hybrid | 61.7 | 6.7 | 60 | `launch_0420_i2p/ours_sd14_grid_v1pack_b/self-harm/hybrid_ss22_thr0.1_imgthr0.4_both` |
 | shocking_anchor | 78.3 | 18.3 | 60 | `launch_0424_rerun_sd14/i2p_shocking/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_cas0.6_both` |
 | shocking_hybrid | 88.3 | 11.7 | 60 | `launch_0423_shocking_imgheavy/hybrid_ss22_thr0.15_imgthr0.1_both` |
-| illegal_activity_anchor | 45.0 | 23.3 | 60 | `launch_0420_i2p/ours_sd14/illegal_activity/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_imgonly` |
+| illegal_activity_anchor | 46.7 | 20.0 | 60 | `launch_0424_v5/i2p_illegal_activity/anchor_inpaint_ss1.0_thr0.1_imgthr0.7_cas0.6_both` |
 | illegal_activity_hybrid | 48.3 | 20.0 | 60 | `launch_0420_i2p/ours_sd14_v1pack_repatched/illegal_activity/hybrid_ss20_thr0.1_imgthr0.5_both` |
-| harassment_anchor | 63.3 | 26.7 | 60 | `launch_0423_retune/i2p/harassment/anchor_inpaint_cas0.5_ss2.0_thr0.1_imgthr0.4_both` |
+| harassment_anchor | 71.7 | 18.3 | 60 | `launch_0424_v5/i2p_harassment/anchor_inpaint_ss2.5_thr0.1_imgthr0.3_cas0.5_both` |
 | harassment_hybrid | 56.7 | 26.7 | 60 | `launch_0423_retune/i2p/harassment/hybrid_cas0.5_ss25_thr0.1_imgthr0.5_both` |
 | hate_anchor | 60.0 | 33.3 | 60 | `launch_0424_rerun_sd14/i2p_hate/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_cas0.6_both` |
 | hate_hybrid | 66.7 | 16.7 | 60 | `launch_0423_harhate_imgheavy/hate/hybrid_ss22_thr0.25_imgthr0.1_both` |
@@ -41,8 +41,8 @@ Best (max SR) generation dirs per (section, concept, mode), copied here for pape
 | mja_sexual_anchor | 90.0 | 10.0 | 90 | `launch_0420/ours_sd14/mja_sexual/anchor_ss2.5_thr0.1_imgthr0.3_both` |
 | mja_sexual_hybrid | 97.6 | 2.4 | 85 | `launch_0424_rerun_sd14/mja_sexual/hybrid_ss22.0_thr0.15_imgthr0.1_cas0.6_both` |
 | mja_violent_anchor | 56.0 | 26.0 | 100 | `launch_0420/ours_sd14/mja_violent/anchor_ss1.8_thr0.1_imgthr0.3_both` |
-| mja_violent_hybrid | 50.0 | 43.0 | 100 | `launch_0420/ours_sd14/mja_violent/hybrid_ss20_thr0.1_imgthr0.5_both` |
-| mja_illegal_anchor | 69.0 | 7.0 | 100 | `launch_0423_illegal_aggro/anchor_inpaint_cas0.3_ss2.0_thr0.1_imgthr0.5_both` |
+| mja_violent_hybrid | 69.0 | 16.0 | 100 | `launch_0424_v6/mja_violent/hybrid_ss25.0_thr0.15_imgthr0.1_cas0.4_both` |
+| mja_illegal_anchor | 76.0 | 8.0 | 100 | `launch_0424_v5/mja_illegal/anchor_inpaint_ss2.5_thr0.1_imgthr0.3_cas0.4_both` |
 | mja_illegal_hybrid | 71.0 | 16.0 | 100 | `launch_0423_illegal_aggro/hybrid_cas0.1_ss30_thr0.1_imgthr0.6_both` |
 | mja_disturbing_anchor | 96.0 | 2.0 | 100 | `launch_0424_rerun_sd14/mja_disturbing/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_cas0.6_both` |
 | mja_disturbing_hybrid | 93.0 | 5.0 | 100 | `launch_0424_rerun_sd14/mja_disturbing/hybrid_ss22.0_thr0.15_imgthr0.1_cas0.6_both` |
@@ -54,11 +54,11 @@ Best (max SR) generation dirs per (section, concept, mode), copied here for pape
 | mja_sexual_anchor | 81.0 | 19.0 | 100 | `launch_0420/ours_sd3/mja_sexual/cas0.6_ss3.0_thr0.2_anchor_inpaint_both` |
 | mja_sexual_hybrid | 84.0 | 16.0 | 100 | `launch_0420/ours_sd3/mja_sexual/hybrid_ss15_thr0.1_imgthr0.3_both` |
 | mja_violent_anchor | 58.0 | 42.0 | 100 | `launch_0420/ours_sd3/mja_violent/cas0.6_ss1.5_thr0.1_anchor_inpaint_both` |
-| mja_violent_hybrid | 23.0 | 72.0 | 100 | `launch_0420/ours_sd3/mja_violent/cas0.5_ss25_thr0.1_imgthr0.1_hybrid_both` |
+| mja_violent_hybrid | 36.0 | 57.0 | 100 | `launch_0424_v4_sd3/mja_violent/hybrid_ss20.0_thr0.15_imgthr0.1_cas0.3_both` |
 | mja_illegal_anchor | 53.0 | 42.0 | 100 | `launch_0420/ours_sd3/mja_illegal/cas0.6_ss2.5_thr0.1_anchor_inpaint_both` |
-| mja_illegal_hybrid | 50.0 | 36.0 | 100 | `launch_0420/ours_sd3/mja_illegal/cas0.45_ss25_thr0.1_imgthr0.1_hybrid_both` |
+| mja_illegal_hybrid | 67.0 | 16.0 | 100 | `launch_0424_v4_sd3/mja_illegal/hybrid_ss20.0_thr0.15_imgthr0.1_cas0.3_both` |
 | mja_disturbing_anchor | 86.0 | 14.0 | 100 | `launch_0420/ours_sd3/mja_disturbing/cas0.6_ss1.5_thr0.1_anchor_inpaint_both` |
-| mja_disturbing_hybrid | 47.0 | 53.0 | 100 | `launch_0420/ours_sd3/mja_disturbing/cas0.6_ss25_thr0.1_imgthr0.1_hybrid_both` |
+| mja_disturbing_hybrid | 90.0 | 10.0 | 100 | `launch_0424_v4_sd3/mja_disturbing/hybrid_ss20.0_thr0.15_imgthr0.1_cas0.4_both` |
 
 ## 05_mja_flux1_4concept
 
@@ -112,7 +112,7 @@ Best (max SR) generation dirs per (section, concept, mode), copied here for pape
 | illegal_activity_both | 48.3 | 20.0 | 60 | `launch_0420_i2p/ours_sd14_v1pack_repatched/illegal_activity/hybrid_ss20_thr0.1_imgthr0.5_both` |
 | harassment_txtonly | 38.3 | 35.0 | 60 | `launch_0420_i2p/ours_sd14_ablation_txtonly/harassment/hybrid_ss20_thr0.1_txtonly` |
 | harassment_imgonly | 46.7 | 35.0 | 60 | `launch_0420_i2p/ours_sd14_ablation_imgonly/harassment/hybrid_ss20_thr0.1_imgthr0.1_imgonly` |
-| harassment_both | 55.0 | 35.0 | 60 | `launch_0424_rerun_sd14/i2p_harassment/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_cas0.6_both` |
+| harassment_both | 71.7 | 18.3 | 60 | `launch_0424_v5/i2p_harassment/anchor_inpaint_ss2.5_thr0.1_imgthr0.3_cas0.5_both` |
 | hate_txtonly | 51.7 | 33.3 | 60 | `launch_0420_i2p/ours_sd14_ablation_txtonly/hate/hybrid_ss20_thr0.1_txtonly` |
 | hate_imgonly | 60.0 | 18.3 | 60 | `launch_0420_i2p/ours_sd14_ablation_imgonly/hate/hybrid_ss20_thr0.1_imgthr0.1_imgonly` |
 | hate_both | 66.7 | 16.7 | 60 | `launch_0423_harhate_imgheavy/hate/hybrid_ss22_thr0.25_imgthr0.1_both` |

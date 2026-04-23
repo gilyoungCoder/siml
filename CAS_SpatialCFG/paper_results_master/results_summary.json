@@ -120,11 +120,11 @@
     "n": 60
   },
   "02_i2p_top60_sd14_6concept/illegal_activity_anchor": {
-    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14/illegal_activity/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_imgonly",
+    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v5/i2p_illegal_activity/anchor_inpaint_ss1.0_thr0.1_imgthr0.7_cas0.6_both",
     "eval_concept": "illegal",
     "mode": "anchor",
-    "sr": 45.0,
-    "full": 23.333333333333332,
+    "sr": 46.666666666666664,
+    "full": 20.0,
     "n": 60
   },
   "02_i2p_top60_sd14_6concept/illegal_activity_hybrid": {
@@ -136,11 +136,11 @@
     "n": 60
   },
   "02_i2p_top60_sd14_6concept/harassment_anchor": {
-    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0423_retune/i2p/harassment/anchor_inpaint_cas0.5_ss2.0_thr0.1_imgthr0.4_both",
+    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v5/i2p_harassment/anchor_inpaint_ss2.5_thr0.1_imgthr0.3_cas0.5_both",
     "eval_concept": "harassment",
     "mode": "anchor",
-    "sr": 63.33333333333333,
-    "full": 26.666666666666668,
+    "sr": 71.66666666666667,
+    "full": 18.333333333333332,
     "n": 60
   },
   "02_i2p_top60_sd14_6concept/harassment_hybrid": {
@@ -192,19 +192,19 @@
     "n": 100
   },
   "03_mja_sd14_4concept/mja_violent_hybrid": {
-    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd14/mja_violent/hybrid_ss20_thr0.1_imgthr0.5_both",
+    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v6/mja_violent/hybrid_ss25.0_thr0.15_imgthr0.1_cas0.4_both",
     "eval_concept": "violence",
     "mode": "hybrid",
-    "sr": 50.0,
-    "full": 43.0,
+    "sr": 69.0,
+    "full": 16.0,
     "n": 100
   },
   "03_mja_sd14_4concept/mja_illegal_anchor": {
-    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0423_illegal_aggro/anchor_inpaint_cas0.3_ss2.0_thr0.1_imgthr0.5_both",
+    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v5/mja_illegal/anchor_inpaint_ss2.5_thr0.1_imgthr0.3_cas0.4_both",
     "eval_concept": "illegal",
     "mode": "anchor",
-    "sr": 69.0,
-    "full": 7.000000000000001,
+    "sr": 76.0,
+    "full": 8.0,
     "n": 100
   },
   "03_mja_sd14_4concept/mja_illegal_hybrid": {
@@ -256,11 +256,11 @@
     "n": 100
   },
   "04_mja_sd3_4concept/mja_violent_hybrid": {
-    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/cas0.5_ss25_thr0.1_imgthr0.1_hybrid_both",
+    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v4_sd3/mja_violent/hybrid_ss20.0_thr0.15_imgthr0.1_cas0.3_both",
     "eval_concept": "violence",
     "mode": "hybrid",
-    "sr": 23.0,
-    "full": 72.0,
+    "sr": 36.0,
+    "full": 56.99999999999999,
     "n": 100
   },
   "04_mja_sd3_4concept/mja_illegal_anchor": {
@@ -272,11 +272,11 @@
     "n": 100
   },
   "04_mja_sd3_4concept/mja_illegal_hybrid": {
-    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_illegal/cas0.45_ss25_thr0.1_imgthr0.1_hybrid_both",
+    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v4_sd3/mja_illegal/hybrid_ss20.0_thr0.15_imgthr0.1_cas0.3_both",
     "eval_concept": "illegal",
     "mode": "hybrid",
-    "sr": 50.0,
-    "full": 36.0,
+    "sr": 67.0,
+    "full": 16.0,
     "n": 100
   },
   "04_mja_sd3_4concept/mja_disturbing_anchor": {
@@ -288,11 +288,11 @@
     "n": 100
   },
   "04_mja_sd3_4concept/mja_disturbing_hybrid": {
-    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_disturbing/cas0.6_ss25_thr0.1_imgthr0.1_hybrid_both",
+    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v4_sd3/mja_disturbing/hybrid_ss20.0_thr0.15_imgthr0.1_cas0.4_both",
     "eval_concept": "disturbing",
     "mode": "hybrid",
-    "sr": 47.0,
-    "full": 53.0,
+    "sr": 90.0,
+    "full": 10.0,
     "n": 100
   },
   "05_mja_flux1_4concept/mja_sexual_anchor": {
@@ -552,11 +552,11 @@
     "n": 60
   },
   "07_ablation_sd14_probe/harassment_both": {
-    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_rerun_sd14/i2p_harassment/anchor_inpaint_ss2.0_thr0.1_imgthr0.4_cas0.6_both",
+    "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v5/i2p_harassment/anchor_inpaint_ss2.5_thr0.1_imgthr0.3_cas0.5_both",
     "eval_concept": "harassment",
     "mode": "both",
-    "sr": 55.00000000000001,
-    "full": 35.0,
+    "sr": 71.66666666666667,
+    "full": 18.333333333333332,
     "n": 60
   },
   "07_ablation_sd14_probe/hate_txtonly": {
