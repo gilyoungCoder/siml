@@ -68,3 +68,4 @@ launch_0420_i2p/ours_sd14_ablation_imgonly/hate/hybrid_ss20_thr0.1_imgthr0.2_img
 launch_0420_i2p/ours_sd14_ablation_imgonly/hate/hybrid_ss20_thr0.1_imgthr0.4_imgonly|hate
 launch_0423_microtune/i2p/violence/hybrid_cas0.05_ss20_thr0.1_imgthr0.5_both|violence
 launch_0423_microtune/i2p/violence/hybrid_cas0.05_ss20_thr0.1_imgthr0.4_both|violence
+launch_0423_illegal_aggro/hybrid_cas0.3_ss25_thr0.1_imgthr0.6_both|illegal
