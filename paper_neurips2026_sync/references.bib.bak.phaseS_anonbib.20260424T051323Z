@@ -1,5 +1,6 @@
 % =============================================================================
-% Bibliography file
+% Verified references — sourced from workshop paper main.bib + related_work docs
+% Each entry marked with verification source
 % =============================================================================
 
 % --- Diffusion Model Foundations ---
@@ -121,6 +122,7 @@
   year={2024}
 }
 
+% [Our prior work — CVPR 2026 Workshop need to upload arxiv]
 @inproceedings{kil2026ascg,
   title={ASCG: Adaptive Spatial Classifier Guidance for Surgical Concept Suppression in Diffusion Models},
   author={Younghwan Kil and Joonhyeong Park and Giung Nam and Juho Lee},
@@ -196,6 +198,7 @@
   year={2023}
 }
 
+% [VERIFIED: workshop main.bib]
 @misc{notai_nudenet_2019,
   author={notAI Tech},
   title={{NudeNet}: Neural Nets for Nudity Classification, Detection, and Selective Censoring},
