@@ -2,3 +2,6 @@
 [2026. 04. 23. (목) 01:25:08 KST] [g6] [run] ss=10 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_disturbing/hybrid_ss10_thr0.1_imgthr0.5_both
 [2026. 04. 23. (목) 10:47:59 KST] [g6] [run] ss=15 txt=0.1 img=0.4 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_disturbing/hybrid_ss15_thr0.1_imgthr0.4_both
 [2026. 04. 23. (목) 19:58:24 KST] [g6] [run] ss=20 txt=0.1 img=0.3 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.3_both
+scripts/launch_0420/mja_disturbing_hybrid_grid_flux1.sh: line 42: 1821454 Killed                  CUDA_VISIBLE_DEVICES=$GPU $PYTHON $REPO/CAS_SpatialCFG/generate_flux1_v1.py --prompts "$PROMPTS" --outdir "$outdir" --family_guidance --family_config "$PACK" --probe_mode both --how_mode hybrid --cas_threshold 0.6 --safety_scale "$SS" --attn_threshold "$TXT_THR" --img_attn_threshold "$IMG_THR" --device cuda:0 --height 1024 --width 1024 >> "$LOG" 2>&1
+[g6] FAILED ss=20 imgthr=0.3
+[2026. 04. 24. (금) 02:41:47 KST] [g6] [run] ss=20 txt=0.1 img=0.5 -> /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/mja_disturbing/hybrid_ss20_thr0.1_imgthr0.5_both
