@@ -9,7 +9,7 @@ mkdir -p $LOGD
 echo "[w$WORKER] start host=$(hostname) cuda=$CUDA_VISIBLE_DEVICES list=$(wc -l < $LIST)" >> $LOGD/worker_$WORKER.log
 i=0
 while IFS='|' read -r D C; do
-  if [ $((i % 15)) -eq $WORKER ]; then
+  if [ $((i % ${EVAL_WC:-15})) -eq $WORKER ]; then
     R=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/$D/categories_qwen3_vl_${C}_v5.json
     if [ -f "$R" ]; then
       echo "[w$WORKER] SKIP $D $C" >> $LOGD/worker_$WORKER.log
