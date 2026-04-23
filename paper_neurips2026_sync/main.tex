@@ -38,15 +38,9 @@
 
 % Override NeurIPS \@notice: the default uses a bottom float that reserves
 % ~30\% of page 1 via \bottomfraction, pushing \section{Introduction} to page 2.
-% We replace it with a plain \vfill + centered line so the notice still
-% appears at the bottom of page 1 but does not reserve float space.
+% Suppress the float entirely; notice text is restored as \thanks on the title.
 \makeatletter
-\renewcommand{\@notice}{%
-  \par\vspace*{\fill}%
-  \noindent\hrule\@width\textwidth\@height\z@%
-  \vspace{4pt}%
-  {\footnotesize\noindent\@noticestring\par}%
-}
+\renewcommand{\@notice}{}
 \makeatother
 
 % Custom commands
@@ -56,7 +50,7 @@
 \newcommand{\ie}{\textit{i.e.}}
 \newcommand{\etc}{\textit{etc.}}
 
-\title{Example-Based Spatial Guidance for Training-Free \\Concept Erasure in Diffusion Models}
+\title{Example-Based Spatial Guidance for Training-Free \\Concept Erasure in Diffusion Models\thanks{Submitted to the 40th Conference on Neural Information Processing Systems (NeurIPS 2026). Do not distribute.}}
 
 \author{
   Younghwan Gil \\
