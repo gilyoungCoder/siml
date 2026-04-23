@@ -5,7 +5,7 @@
 \item {\bf Claims}
     \item[] Question: Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The abstract and introduction state the three claims evaluated in the paper: (i)~\ours{} is a training-free family-indexed exemplar-pack framework realized through a When--Where--How decomposition (verified in \S\ref{sec:method}), (ii)~it outperforms training-free baselines on four adversarial nudity benchmarks and four MJA categories while preserving COCO image quality (Tables~\ref{table:nudity}, \ref{table:multi} in \S\ref{sec:exp}), and (iii)~it transfers to SD~3 (MMDiT) and FLUX (DiT) without algorithmic change (\S\ref{subsec:cross_backbone} and Appendix~\ref{app:cross_backbone_full}).
+    \item[] Justification: The abstract and introduction state the three claims evaluated in the paper---the training-free family-indexed exemplar-pack framework with a When--Where--How decomposition, the nudity / MJA / multi-concept results, and the cross-backbone transfer---all of which match the theoretical description in \S\ref{sec:method} and the experimental results in \S\ref{sec:exp}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the abstract and introduction do not include the claims made in the paper.
@@ -17,7 +17,7 @@
 \item {\bf Limitations}
     \item[] Question: Does the paper discuss the limitations of the work performed by the authors?
     \item[] Answer: \answerYes{}
-    \item[] Justification: A dedicated Limitations paragraph appears at the end of the Conclusion, discussing residual MMA-Diffusion failure cases, multi-concept interference, per-backbone CAS threshold retuning, and image-probe-dominant concepts whose anchors are semantically ambiguous. An extended failure-case analysis with qualitative examples is provided in Appendix~\ref{app:limitations}.
+    \item[] Justification: We discuss limitations in the main text (end of Conclusion) and provide an expanded Limitations and Failure Cases section in Appendix~\ref{app:limitations}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper has no limitation while the answer \answerNo{} means that the paper has limitations, but those are not discussed in the paper.
@@ -33,7 +33,7 @@
 \item {\bf Theory assumptions and proofs}
     \item[] Question: For each theoretical result, does the paper provide the full set of assumptions and a complete (and correct) proof?
     \item[] Answer: \answerNA{}
-    \item[] Justification: The paper is methodological and does not contain formal theorems or proofs. All equations (CAS gate, dual-probe fusion, anchor-inpainting update, hybrid update, multi-concept composition) are algorithmic definitions, derived directly from classifier-free guidance, and are numbered and cross-referenced in \S\ref{sec:method}.
+    \item[] Justification: The paper does not include theoretical results. All equations in \S\ref{sec:method} are algorithmic definitions derived directly from classifier-free guidance.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include theoretical results.
@@ -47,7 +47,7 @@
     \item {\bf Experimental result reproducibility}
     \item[] Question: Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper (regardless of whether the code and data are provided or not)?
     \item[] Answer: \answerYes{}
-    \item[] Justification: \S\ref{subsec:setup} specifies the exact base model checkpoint (\texttt{CompVis/stable-diffusion-v1-4}), sampler (DDIM, 50 steps), guidance scale ($\omega{=}7.5$), seed (42), and all benchmark datasets with prompt counts. \S\ref{sec:method} fully specifies the algorithm (equations for CAS, dual-probe, both How modes, multi-concept composition). Per-concept hyperparameters (pack size $F,K$, probe mode, How mode, $\tau$, scale) appear in Appendix~\ref{app:hyperparams}; the concept pack layout is documented in Appendix~\ref{app:pack_layout}. Anonymized code is provided in the supplementary material.
+    \item[] Justification: We disclose all experimental details in the main paper and appendix, including hyperparameters (Appendix~\ref{app:hyperparams}), the concept-pack schema (Appendix~\ref{app:pack_layout}), and all datasets used. For reproducibility we plan to release our code upon acceptance.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -67,7 +67,7 @@
 \item {\bf Open access to data and code}
     \item[] Question: Does the paper provide open access to the data and code, with sufficient instructions to faithfully reproduce the main experimental results, as described in supplemental material?
     \item[] Answer: \answerYes{}
-    \item[] Justification: Anonymized source code, concept packs, and an inference script that reproduces the nudity-erasure (Table~\ref{table:nudity}) and MJA (Table~\ref{table:multi}) numbers on SD~v1.4 are included as supplementary material. All evaluation datasets are publicly available benchmarks (I2P, Ring-A-Bell, UnlearnDiff, MMA-Diffusion, P4D-N, MJA) cited in \S\ref{subsec:setup}, and the base model checkpoint is the public \texttt{CompVis/stable-diffusion-v1-4}.
+    \item[] Justification: We release anonymized code to the reviewers in the supplementary material to regenerate our experimental results. After acceptance we plan to release the code and the concept packs publicly.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that paper does not include experiments requiring code.
@@ -84,7 +84,7 @@
 \item {\bf Experimental setting/details}
     \item[] Question: Does the paper specify all the training and test details (e.g., data splits, hyperparameters, how they were chosen, type of optimizer) necessary to understand the results?
     \item[] Answer: \answerYes{}
-    \item[] Justification: Our method is training-free, so there is no optimizer or training split. Inference-time settings (base model, sampler, steps, guidance scale, seed, evaluator model) are fully specified in \S\ref{subsec:setup}; per-concept deployment choices (probe mode, How mode, $\tau$, $s_{\text{a}}/s_{\text{h}}$) are listed in Appendix~\ref{app:hyperparams} with the rationale for each choice.
+    \item[] Justification: The inference-time setup (base model, sampler, guidance scale, seed, evaluator model) is in \S\ref{subsec:setup}; all per-concept hyperparameters are documented in Appendix~\ref{app:hyperparams}. Our method is training-free so there is no optimizer or training split.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -95,7 +95,7 @@
 \item {\bf Experiment statistical significance}
     \item[] Question: Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?
     \item[] Answer: \answerNo{}
-    \item[] Justification: We follow the standard protocol used by all compared training-free concept-erasure baselines (SLD, SAFREE, Safe Denoiser, SGF): a single deterministic DDIM run per prompt at fixed seed~42, with success rate computed as a population proportion over the full benchmark (79--1{,}000 prompts depending on dataset). The margins between \ours{} and the strongest training-free baselines (\eg, $+36$\%p on MJA-Sexual, $+44$\%p on Ring-A-Bell) are large relative to any plausible run-to-run variance under this protocol, so we do not report error bars in the main tables.
+    \item[] Justification: We have not reported error bars, mainly due to the lack of computational resources. SR is computed as a population proportion over the full benchmark, following the protocol used by all compared training-free baselines.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -112,7 +112,7 @@
 \item {\bf Experiments compute resources}
     \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
     \item[] Answer: \answerYes{}
-    \item[] Justification: All experiments are run on a single NVIDIA RTX 3090 GPU. \ours{} is training-free and adds roughly $15$--$20\%$ inference overhead over vanilla CFG-sampled SD~v1.4 on the same hardware, from one extra per-family UNet forward and one CLIP image-encoder call per step; fine-tuning baselines (ESD, RECE, SDD) take on the order of $20$--$30$~minutes per concept for training before inference.
+    \item[] Justification: All experiments run on a single NVIDIA RTX 3090; \ours{} is training-free and adds roughly $15$--$20\%$ inference overhead over vanilla CFG-sampled SD~v1.4 from one extra per-family UNet forward plus one CLIP image-encoder call per step.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -124,7 +124,7 @@
 \item {\bf Code of ethics}
     \item[] Question: Does the research conducted in the paper conform, in every respect, with the NeurIPS Code of Ethics \url{https://neurips.cc/public/EthicsGuidelines}?
     \item[] Answer: \answerYes{}
-    \item[] Justification: We have reviewed the NeurIPS Code of Ethics. The research is a defensive safety technique (concept erasure at inference time), generates no new training data of real people, uses only public benchmarks, and displays censored/masked images for any unsafe qualitative examples with an explicit Content Warning below the abstract.
+    \item[] Justification: We faithfully follow the NeurIPS Code of Ethics. The paper studies a defensive safety technique (concept erasure at inference time) and displays only censored / masked qualitative examples under an explicit Content Warning.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the authors have not reviewed the NeurIPS Code of Ethics.
@@ -136,7 +136,7 @@
 \item {\bf Broader impacts}
     \item[] Question: Does the paper discuss both potential positive societal impacts and negative societal impacts of the work performed?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The Conclusion contains a dedicated Broader Impact paragraph: the intended positive impact is safer deployment of text-to-image models; the acknowledged negative is that spatial localization could in principle be inverted to amplify harmful content, and we recommend deploying \ours{} only as one component of a pipeline that includes upstream prompt filtering and downstream content review.
+    \item[] Justification: We discuss broader impacts as a separate section, ``Broader Impact'', in Appendix~\ref{app:broader_impact}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that there is no societal impact of the work performed.
@@ -150,7 +150,7 @@
 \item {\bf Safeguards}
     \item[] Question: Does the paper describe safeguards that have been put in place for responsible release of data or models that have a high risk for misuse (e.g., pre-trained language models, image generators, or scraped datasets)?
     \item[] Answer: \answerYes{}
-    \item[] Justification: We do not release a new generative model; the paper only releases a training-free inference-time safety \emph{defense} and its concept packs. Any qualitative examples of unsafe generations in the paper appear with masked/censored sensitive regions and an explicit Content Warning below the abstract. The released code and packs are intended to support responsible deployment rather than attack.
+    \item[] Justification: We used the HuggingFace library for checkpoints and adversarial-attack datasets; these assets are distributed under user-enrollment and license terms we respect. This paper focuses on a defensive safety mechanism for generative models, aligning with the concern.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper poses no such risks.
@@ -162,7 +162,7 @@
 \item {\bf Licenses for existing assets}
     \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
     \item[] Answer: \answerYes{}
-    \item[] Justification: All third-party assets are cited with the originating papers (\eg, Stable Diffusion v1.4~\citep{rombach2022high}, COCO~\citep{lin2014microsoft}, Ring-A-Bell~\citep{tsai2023ring}, UnlearnDiff~\citep{zhang2024generate}, MMA-Diffusion~\citep{yang2024mma}, P4D-N~\citep{chin2023prompting4debugging}, I2P~\citep{schramowski2023safe}, MJA~\citep{zhang2026reason2attack}, Qwen3-VL~\citep{bai2025qwen3}). These are released under research-use-permissive licenses (CreativeML OpenRAIL-M for SD~v1.4; CC-BY-4.0 or research-use licenses for the benchmarks). We use each asset within its stated terms.
+    \item[] Justification: We properly credit the original owners of all assets by citation. In our code release we comply with the license and terms of each asset.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not use existing assets.
@@ -178,7 +178,7 @@
 \item {\bf New assets}
     \item[] Question: Are new assets introduced in the paper well documented and is the documentation provided alongside the assets?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The only new asset is the concept-pack directory format ($F$~sub-category folders, each with $K$ paired target/anchor prompts, $K$ target images, and a keyword list). Its schema, the packs used for nudity, sexual, violent, disturbing, illegal, shocking, and self-harm categories, and a README documenting how to author a new pack are provided in the anonymized supplementary ZIP and described in Appendix~\ref{app:pack_layout}.
+    \item[] Justification: We document the concept-pack schema and the evaluator rubrics in Appendices~\ref{app:pack_layout} and~\ref{app:eval_prompt}; the anonymized packs are included in the supplementary material.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not release new assets.
@@ -190,7 +190,7 @@
 \item {\bf Crowdsourcing and research with human subjects}
     \item[] Question: For crowdsourcing experiments and research with human subjects, does the paper include the full text of instructions given to participants and screenshots, if applicable, as well as details about compensation (if any)?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The only human-subject component is a small evaluator-validation study where 20 adult volunteer annotators independently classified a random subset of generated images as safe/partial/full-unsafe to benchmark the automated Qwen3-VL judge. Appendix~\ref{app:human_study} reports the full instructions shown to annotators, the Content-Warning screen participants saw before starting, the consent-and-opt-out protocol, and the per-annotator time/compensation ($\ge$ local minimum wage). No personal data was collected beyond anonymous label responses.
+    \item[] Justification: An auxiliary human-agreement study (Appendix~\ref{app:human_study}) uses $\sim\!20$ adult volunteer annotators with informed consent, content-warning gating, opt-out, and task-proportional compensation at or above the local minimum wage.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not involve crowdsourcing nor research with human subjects.
@@ -201,7 +201,7 @@
 \item {\bf Institutional review board (IRB) approvals or equivalent for research with human subjects}
     \item[] Question: Does the paper describe potential risks incurred by study participants, whether such risks were disclosed to the subjects, and whether Institutional Review Board (IRB) approvals (or an equivalent approval/review based on the requirements of your country or institution) were obtained?
     \item[] Answer: \answerYes{}
-    \item[] Justification: Before beginning, participants saw an explicit Content Warning describing the nature of the material (potentially sexual/violent/disturbing imagery from safety benchmarks), were informed of their right to skip or withdraw at any time with full compensation, and gave informed consent. The protocol was reviewed and approved by the research team's institutional ethics review equivalent; institutional identity is withheld here to preserve anonymity and will be disclosed in the camera-ready version. Details are in Appendix~\ref{app:human_study}.
+    \item[] Justification: The auxiliary human-agreement study in Appendix~\ref{app:human_study} was reviewed under an institutional ethics-equivalent process; participants saw an explicit content warning and were free to withdraw at any time with full compensation. The institution identity is withheld to preserve anonymity and will be disclosed in the camera-ready version.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not involve crowdsourcing nor research with human subjects.
@@ -213,7 +213,7 @@
 \item {\bf Declaration of LLM usage}
     \item[] Question: Does the paper describe the usage of LLMs if it is an important, original, or non-standard component of the core methods in this research? Note that if the LLM is used only for writing, editing, or formatting purposes and does \emph{not} impact the core methodology, scientific rigor, or originality of the research, declaration is not required.
     \item[] Answer: \answerYes{}
-    \item[] Justification: A vision-language model is used exclusively as an \emph{evaluator}, not as a component of the proposed method. Qwen3-VL-8B~\citep{bai2025qwen3} serves as the sole safety judge; its four-class rubric and per-image agreement with a human-majority annotation are documented in Appendices~\ref{app:evaluator_extended}--\ref{app:human_study}. The proposed method (\ours{}) contains no LLM call and uses only a frozen UNet and a frozen CLIP.
+    \item[] Justification: A vision-language model, Qwen3-VL-8B~\citep{bai2025qwen3}, is used exclusively as the safety \emph{evaluator} under the four-class rubric described in Appendix~\ref{app:evaluator_extended}. The proposed method (\ours{}) contains no LLM call and uses only a frozen UNet and a frozen CLIP.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the core method development in this research does not involve LLMs as any important, original, or non-standard components.
