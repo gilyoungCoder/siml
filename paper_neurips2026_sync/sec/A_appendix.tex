@@ -4,13 +4,13 @@
 \subsection{Concept Pack Layout}
 \label{app:pack_layout}
 
-Every concept in \ours{} is materialized as a self-contained \emph{concept pack} (Eq.~\ref{eq:pack}) on disk. A pack contains $F$ family directories (default $F{=}4$), each holding $K$ paired $(\text{target}, \text{anchor})$ prompts and $K$ precomputed images (default $K{=}4$), plus family-level keyword lists. Packs are consumed by the loader described in \S\ref{subsec:prelim}; no other metadata is required. Adding a new concept is therefore a purely data operation.
+Every concept in \ours{} is materialized as a self-contained \emph{concept pack} (Eq.~\ref{eq:pack}) on disk. A pack contains $F$ family directories (default $F{=}4$), each holding $K$ paired $(\text{target}, \text{anchor})$ short keywords and $K$ target image exemplars (default $K{=}3$, the first three entries in each list). At runtime the keyword lists drive both the family-mean text-embedding direction (Eq.~\ref{eq:fam_dirs}) and the cross-attention text probe (\S\ref{subsec:where}); the image exemplars feed the image probe through a family-mean CLIP embedding. Packs are consumed by the loader described in \S\ref{subsec:prelim}; no other metadata is required, so adding a new concept is a purely data operation.
 
 \begin{table}[h]
 \centering
 \renewcommand{\arraystretch}{1.15}
 \setlength{\tabcolsep}{0.5em}
-\caption{Family decomposition used in our concept packs. Each family carries $K{=}4$ paired target/anchor prompts and $K{=}4$ CLIP exemplars.}
+\caption{Family decomposition used in our concept packs. Each family carries a list of target and anchor keywords (mean-pooled at $K{=}3$) plus a family-mean CLIP exemplar.}
 \label{table:families}
 \small
 \begin{tabular}{@{}ll@{}}
@@ -32,24 +32,24 @@ Self-harm       & cutting, ingestion, restraint, despair scene \\
 \centering
 \renewcommand{\arraystretch}{1.15}
 \setlength{\tabcolsep}{0.45em}
-\caption{Representative \emph{family-level} exemplar pairs (target / anchor) for two concepts. Each row contributes to one family-mean embedding $\bar{e}_f$.}
+\caption{Representative \emph{family-level} target/anchor keyword pairs for two concepts. Each row's keyword list contributes to the family-mean text-embedding direction of Eq.~\ref{eq:fam_embed}; keywords are short descriptors (1--4 words), not full sentences.}
 \label{table:exemplar_prompts}
 \small
 \begin{tabular}{@{}l l p{4.6cm} p{4.6cm}@{}}
 \toprule
-\textbf{Concept} & \textbf{Family} & \textbf{Target prompt (example)} & \textbf{Anchor prompt (example)} \\
+\textbf{Concept} & \textbf{Family} & \textbf{Target keywords (examples)} & \textbf{Anchor keywords (examples)} \\
 \midrule
 \multirow{4}{*}{Sexual}
- & naked body      & ``a fully naked woman lying on a bed, explicit nudity'' & ``a fully clothed woman lying on a bed, reading a book'' \\
- & sexual act      & ``two people engaged in an explicit sexual act''          & ``two people hugging warmly in a living room'' \\
- & exposed parts   & ``close-up of exposed intimate body parts''                 & ``close-up of hands, face, everyday clothing'' \\
- & suggestive pose & ``a model in a highly suggestive pose, revealing outfit''   & ``a model in a confident pose, modest outfit'' \\
+ & naked body      & ``naked body'', ``nude figure'', ``bare-skinned person'' & ``clothed body'', ``fully dressed'', ``covered figure'' \\
+ & sexual act      & ``sexual act'', ``explicit intercourse'', ``erotic contact'' & ``warm hug'', ``casual conversation'', ``friendly greeting'' \\
+ & exposed parts   & ``exposed breasts'', ``exposed genitals'', ``intimate body parts'' & ``everyday clothing'', ``business attire'', ``casual outfit'' \\
+ & suggestive pose & ``suggestive pose'', ``revealing outfit'', ``seductive posture''   & ``confident stance'', ``modest outfit'', ``neutral pose'' \\
 \midrule
 \multirow{4}{*}{Violent}
- & blood / gore    & ``a corpse lying in a pool of blood, bloody floor''        & ``a clean empty bedroom with morning light'' \\
- & weapon attack   & ``a person attacking another with a knife''                 & ``two people shaking hands at a meeting'' \\
- & brutal action   & ``a brutal street fight, kicking and punching''             & ``a friendly group chatting on a sidewalk'' \\
- & dismemberment   & ``a severed limb lying on the ground''                      & ``a healthy person resting on a park bench'' \\
+ & blood / gore    & ``blood splatter'', ``bloody wound'', ``pool of blood''           & ``clean scene'', ``empty room'', ``peaceful setting'' \\
+ & weapon attack   & ``knife attack'', ``shooting someone'', ``weapon threat''         & ``handshake'', ``friendly greeting'', ``calm conversation'' \\
+ & brutal action   & ``brutal fight'', ``punching victim'', ``kicking on ground''      & ``friendly chat'', ``group conversation'', ``peaceful gathering'' \\
+ & dismemberment   & ``severed limb'', ``dismembered body'', ``mutilated corpse''      & ``healthy person'', ``intact body'', ``calm portrait'' \\
 \bottomrule
 \end{tabular}
 \end{table}
