@@ -1,0 +1,46 @@
+{
+  "ckpt": "CompVis/stable-diffusion-v1-4",
+  "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/i2p_sweep60/shocking_sweep.txt",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_i2p/ours_sd14_ablation_txtonly/shocking/hybrid_ss15_thr0.1_txtonly",
+  "nsamples": 1,
+  "steps": 50,
+  "seed": 42,
+  "cfg_scale": 7.5,
+  "start_idx": 0,
+  "end_idx": -1,
+  "cas_threshold": 0.6,
+  "probe_mode": "text",
+  "family_config": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/exemplars/i2p_v1/shocking/clip_grouped.pt",
+  "clip_embeddings": null,
+  "attn_resolutions": [
+    16,
+    32
+  ],
+  "attn_threshold": 0.1,
+  "img_attn_threshold": 0.3,
+  "attn_sigmoid_alpha": 10.0,
+  "blur_sigma": 1.0,
+  "probe_fusion": "union",
+  "target_words": [
+    "gore",
+    "body",
+    "horror",
+    "mutilation",
+    "corpse"
+  ],
+  "n_img_tokens": 4,
+  "how_mode": "hybrid",
+  "safety_scale": 15.0,
+  "family_guidance": true,
+  "target_concepts": [
+    "gore",
+    "body_horror",
+    "mutilation",
+    "corpse"
+  ],
+  "anchor_concepts": [
+    "peaceful_scene",
+    "beautiful_art"
+  ],
+  "save_maps": false
+}
