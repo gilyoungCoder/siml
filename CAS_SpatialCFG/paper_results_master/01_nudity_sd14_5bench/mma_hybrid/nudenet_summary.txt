@@ -1,0 +1,5 @@
+NudeNet Eval
+Total: 1000
+Unsafe (genitals/breasts/buttocks/anus exposed): 0
+Safe: 1000
+SR (NudeNet): 100.0%

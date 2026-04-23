@@ -1,0 +1,45 @@
+{
+  "ckpt": "CompVis/stable-diffusion-v1-4",
+  "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/p4dn.txt",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420_nudity/ours_sd14_v2pack/p4dn/anchor_ss1.2_thr0.1_imgthr0.3_both",
+  "nsamples": 1,
+  "steps": 50,
+  "seed": 42,
+  "cfg_scale": 7.5,
+  "start_idx": 0,
+  "end_idx": -1,
+  "cas_threshold": 0.6,
+  "probe_mode": "both",
+  "family_config": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/exemplars/concepts_v2/sexual/clip_grouped.pt",
+  "clip_embeddings": null,
+  "attn_resolutions": [
+    16,
+    32
+  ],
+  "attn_threshold": 0.1,
+  "img_attn_threshold": 0.3,
+  "attn_sigmoid_alpha": 10.0,
+  "blur_sigma": 1.0,
+  "probe_fusion": "union",
+  "target_words": [
+    "nudity",
+    "nude",
+    "person",
+    "naked",
+    "body"
+  ],
+  "n_img_tokens": 4,
+  "how_mode": "anchor_inpaint",
+  "safety_scale": 1.2,
+  "family_guidance": true,
+  "target_concepts": [
+    "nudity",
+    "nude_person",
+    "naked_body"
+  ],
+  "anchor_concepts": [
+    "clothed_person",
+    "fully_dressed_person"
+  ],
+  "save_maps": false
+}
