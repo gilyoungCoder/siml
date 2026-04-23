@@ -70,7 +70,7 @@ Because $\bar{e}^{I}_f$ is within-family pooled, the image probe responds to the
 We first union the two probe modalities \emph{within} each family, then partition across families by a pixel-wise argmax:
 \begin{align}
     M^f(i,j) &= \max\!\big(M^f_\text{text}(i,j),\, M^f_\text{img}(i,j)\big), \\
-    \widetilde{M}_f(i,j) &= M^f(i,j)\,\cdot\,\mathbf{1}\!\Big[f = \arg\max_{f'} M^{f'}(i,j)\Big].
+    \widetilde{M}_f(i,j) &= M^f(i,j)\,\cdot\,\mathbb{1}\!\Big[f = \arg\max_{f'} M^{f'}(i,j)\Big].
     \label{eq:fusion}
 \end{align}
 The partition $\{\widetilde{M}_f\}_{f=1}^{F}$ is pixel-wise disjoint: each active location is routed to the single strongest family. Concretely, a pixel in which the ``weapon'' probe fires at $0.6$ and the ``blood'' probe at $0.4$ goes entirely to the weapon family's target$\to$anchor pair in \S\ref{subsec:how} and receives no blood-family guidance; this avoids the double-counting that a soft-union fusion would introduce when adjacent families attend to overlapping regions, and it preserves family-level semantic specificity throughout the How stage.
@@ -107,7 +107,7 @@ Every concept-specific artifact of \ours{} lives in the exemplar pack. All quant
 \paragraph{Multi-concept erasure.}
 Given $C$ target concept packs, each with its own CAS threshold $\tau_c$, family partition $\{\widetilde{M}^{(c)}_f\}_{f}$, mode $m_c{\in}\{\text{anchor},\text{hybrid}\}$, and scale $s_c$, we compose the per-concept safe updates additively:
 \begin{equation}
-    \hat{\epsilon}_\text{safe} = \hat{\epsilon}_t + \sum_{c=1}^{C} \mathbf{1}\!\left[\text{CAS}_c(t) > \tau_c\right] \cdot \Delta_c(z_t),
+    \hat{\epsilon}_\text{safe} = \hat{\epsilon}_t + \sum_{c=1}^{C} \mathbb{1}\!\left[\text{CAS}_c(t) > \tau_c\right] \cdot \Delta_c(z_t),
     \label{eq:multi}
 \end{equation}
 where $\Delta_c(z_t)$ is the per-concept safe-update delta from \S\ref{subsec:how} instantiated with concept $c$'s family partition and mode $m_c$. Because each concept contributes a pixel-wise winning family, concepts only interact where their winning-family masks \emph{and} family directions overlap---a much smaller region than with a single pooled direction per concept. A deployment erasing nudity and violence simultaneously may run hybrid for nudity (crisp anchor) and anchor inpainting for violence (ambiguous anchor) in the same pass because both modes share the same CAS/mask interface. When two concepts co-occur spatially (\eg, a person depicted as both nude and violent), applying guidance only on the intersection $\bigcap_c \widetilde{M}^{(c)}$ restricts each update to the region that all concept masks agree on, which empirically prevents the collapse that additive composition can otherwise trigger in the overlap region (Appendix~\ref{app:interference}). A more principled treatment of cross-concept interference is left for future work.
