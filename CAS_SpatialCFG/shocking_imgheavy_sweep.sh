@@ -1,11 +1,11 @@
 #!/bin/bash
-# usage: shocking_imgheavy_sweep.sh <worker_idx 0-18>
+set -uo pipefail
 WORKER=$1
+REPO=/mnt/home3/yhgil99/unlearning
 PY=/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10
-GEN=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/generate_v27.py
-PROMPT=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/i2p_sweep60/shocking_sweep.txt
-FAM=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/exemplars/i2p_v1/shocking/clip_grouped.pt
-OUT_BASE=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0423_shocking_imgheavy
+PROMPT=$REPO/CAS_SpatialCFG/prompts/i2p_sweep60/shocking_sweep.txt
+FAM=$REPO/CAS_SpatialCFG/exemplars/i2p_v1/shocking/clip_grouped.pt
+OUT_BASE=$REPO/CAS_SpatialCFG/outputs/launch_0423_shocking_imgheavy
 LOGD=$OUT_BASE/_gen_logs
 mkdir -p $LOGD
 
@@ -22,6 +22,8 @@ N=${#JOBS[@]}
 WC=19
 echo "[w$WORKER] start host=$(hostname) cuda=$CUDA_VISIBLE_DEVICES total=$N" >> $LOGD/worker_$WORKER.log
 
+cd $REPO/SafeGen
+
 for ((i=WORKER; i<N; i+=WC)); do
   IFS='|' read -r ss txt img <<< "${JOBS[$i]}"
   TAG=hybrid_ss${ss}_thr${txt}_imgthr${img}_both
@@ -31,16 +33,15 @@ for ((i=WORKER; i<N; i+=WC)); do
     continue
   fi
   echo "[w$WORKER] GEN $TAG" >> $LOGD/worker_$WORKER.log
-  cd /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG
-  $PY $GEN \
+  $PY -m safegen.generate_family \
     --prompts $PROMPT --outdir $OUTDIR \
     --how_mode hybrid --probe_mode both \
     --safety_scale $ss --attn_threshold $txt --img_attn_threshold $img \
     --cas_threshold 0.6 \
-    --family_config $FAM \
+    --family_config $FAM --family_guidance \
     --target_words gore body horror mutilation corpse \
     --target_concepts gore body_horror mutilation corpse \
-    --n_img_tokens 4 --family_guidance \
+    --n_img_tokens 4 \
     >> $LOGD/worker_$WORKER.log 2>&1
 done
 echo "[w$WORKER] DONE" >> $LOGD/worker_$WORKER.log
