@@ -134,21 +134,13 @@
      at (\Rx + 3.1, \yImg + 0.62) {\ \ ours save};
 
 % ============== concept chips beneath each side ==============
-\node[font=\tiny,anchor=center,text=explAccent!80!black] at (\Lx, -1.2)
+% These are AXIS LABELS (which concepts live in each regime), not
+% descriptive prose — kept intentionally. Prose / formula belong in
+% the LaTeX caption, NOT embedded in the figure.
+\node[font=\scriptsize,anchor=center,text=explAccent!80!black] at (\Lx, -1.2)
      {\textbf{concepts:} nudity, sexual};
-\node[font=\tiny,anchor=center,text=implAccent!80!black] at (\Rx, -1.2)
+\node[font=\scriptsize,anchor=center,text=implAccent!80!black] at (\Rx, -1.2)
      {\textbf{concepts:} violence, illegal, shocking, self-harm};
-
-% ============== union fusion ==============
-\coordinate (uTarget) at (0, -2.3);
-\draw[->,draw=explAccent,line width=0.9pt] (\Lx + 1.6, -1.55) -- (uTarget);
-\draw[->,draw=implAccent,line width=0.9pt] (\Rx - 1.6, -1.55) -- (uTarget);
-
-\node[panel,fill=unionBG,draw=unionAccent,line width=0.8pt,
-      minimum width=10cm,minimum height=1.3cm,align=center,font=\small,anchor=center]
-     (union) at (0, -2.85)
-     {$M \;=\; \min\bigl(1,\; M_{\mathrm{text}} + M_{\mathrm{img}}\bigr)$\\[2pt]
-      {\scriptsize\itshape either probe fires $\ \Rightarrow\ $ the safety mask fires}};
 
 \end{tikzpicture}
 \end{document}

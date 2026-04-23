@@ -7,7 +7,7 @@ import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
 import numpy as np
 
-OUT_DIR = "/mnt/c/Users/yhgil/paper_figures_out/tradeoff"
+OUT_DIR = "/mnt/c/Users/yhgil/_work_overview"
 
 # ---- palette (colorblind-safe) ----
 BLUE = "#1f77b4"   # anchor inpaint
@@ -108,16 +108,16 @@ ax.text(1.88, 0.85, "hybrid", fontsize=8.5,
         color=RED, ha="right", va="center", fontweight="bold", zorder=6)
 
 # ---- callout boxes with leader lines ----
-# Anchor-inpaint callout: upper-right of the blue marker.
-# Nudged slightly right (1.65 -> 1.72) so it does not collide with the
-# new consolidated anchor-side leader that heads to (0.55, 0.45).
+# Callouts carry QUALITATIVE characterization only — no specific
+# scale ranges or compute multipliers. Those details live in the
+# paper body (Methods / Appendix), not inside the figure itself.
 anchor_callout_xy = (1.72, 0.58)
-anchor_text = "$s_a \\in [0.5, 3.0]$\n1$\\times$ compute\nrobust when anchor is ambiguous"
+anchor_text = "lighter compute,\nrobust when anchor\nis ambiguous"
 ax.annotate(
     anchor_text,
     xy=(1.0, 0.30), xycoords="data",
     xytext=anchor_callout_xy, textcoords="data",
-    fontsize=8,
+    fontsize=8.5,
     ha="left", va="center",
     bbox=dict(boxstyle="round,pad=0.35", fc="white",
               ec=BLUE, lw=0.8, alpha=0.95),
@@ -126,14 +126,13 @@ ax.annotate(
     zorder=7,
 )
 
-# Hybrid callout: lower-right of the red marker
 hybrid_callout_xy = (2.12, 0.45)
-hybrid_text = "$s_h \\in [10, 20]$\n2$\\times$ compute\nwins when anchor is crisp"
+hybrid_text = "heavier compute,\nwins when anchor\nis crisp"
 ax.annotate(
     hybrid_text,
     xy=(2.0, 0.85), xycoords="data",
     xytext=hybrid_callout_xy, textcoords="data",
-    fontsize=8,
+    fontsize=8.5,
     ha="left", va="center",
     bbox=dict(boxstyle="round,pad=0.35", fc="white",
               ec=RED, lw=0.8, alpha=0.95),
@@ -172,5 +171,5 @@ for sp in ax.spines.values():
 plt.tight_layout()
 
 # ---- dual save: paper artifact + rubric preview ----
-plt.savefig(f"{OUT_DIR}/figure.pdf", bbox_inches="tight")
-plt.savefig(f"{OUT_DIR}/preview.png", dpi=200, bbox_inches="tight")
+plt.savefig(f"{OUT_DIR}/fig_tradeoff.pdf", bbox_inches="tight")
+plt.savefig(f"{OUT_DIR}/fig_tradeoff_preview.png", dpi=200, bbox_inches="tight")
