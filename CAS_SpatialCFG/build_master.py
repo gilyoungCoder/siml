@@ -96,7 +96,7 @@ for cdir, cf in I2P_CONCEPTS:
         f'{REPO}/outputs/launch_0420_i2p_q16top60/ours_sd14*/{cdir}/*/',
         f'{REPO}/outputs/launch_0423_*/{cdir}/*/',
         f'{REPO}/outputs/launch_0423_*/i2p/{cdir}/*/',
-        f'{REPO}/outputs/launch_0424_rerun_sd14/i2p_{cdir}/*/',
+        f"{REPO}/outputs/launch_0424_rerun_sd14/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v3/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v5/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v6/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v7/i2p_{cdir}/*/",
     ]
     if cdir == 'shocking':
         globs.append(f'{REPO}/outputs/launch_0423_shocking_imgheavy/*/')
@@ -160,7 +160,7 @@ for cdir, cf in I2P_CONCEPTS:
         f'{REPO}/outputs/launch_0420_i2p/ours_sd14*/{cdir}/*/',
         f'{REPO}/outputs/launch_0423_shocking_imgheavy/*/' if cdir == 'shocking' else None,
         f'{REPO}/outputs/launch_0423_harhate_imgheavy/{cdir}/*/' if cdir in ('harassment', 'hate') else None,
-        f'{REPO}/outputs/launch_0424_rerun_sd14/i2p_{cdir}/*/',
+        f"{REPO}/outputs/launch_0424_rerun_sd14/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v3/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v5/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v6/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v7/i2p_{cdir}/*/",
     ]
     both_globs = [g for g in both_globs if g]
     JOBS.append(('07_ablation_sd14_probe', f'{cdir}_txtonly', txt_globs, cf, 'txtonly', []))
