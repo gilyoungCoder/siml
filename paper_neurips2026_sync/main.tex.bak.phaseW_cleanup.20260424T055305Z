@@ -19,7 +19,6 @@
 \usepackage{enumitem}
 \usepackage{subcaption}
 \usepackage{pifont}
-\usepackage[most]{tcolorbox}
 \usepackage[section]{placeins}
 
 % Suppress the sty's bottom-float notice on page 1 so the introduction

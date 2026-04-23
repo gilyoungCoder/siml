@@ -112,7 +112,7 @@
 \item {\bf Experiments compute resources}
     \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
     \item[] Answer: \answerYes{}
-    \item[] Justification: All experiments are run on a single NVIDIA RTX 3090 GPU. \ours{} is training-free and adds roughly $15$--$20\%$ inference overhead over vanilla CFG-sampled SD~v1.4 on the same hardware, from one extra per-family UNet forward and one CLIP image-encoder call per step; fine-tuning baselines (ESD, RECE, SDD) take on the order of $20$--$30$~minutes per concept for training before inference.
+    \item[] Justification: Compute details (GPU type, memory, wall-clock time per benchmark, and per-step overhead of \ours{} relative to vanilla CFG) are reported in Appendix~\ref{app:compute}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -162,7 +162,7 @@
 \item {\bf Licenses for existing assets}
     \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
     \item[] Answer: \answerYes{}
-    \item[] Justification: All third-party assets are cited with the originating papers (\eg, Stable Diffusion v1.4~\citep{rombach2022high}, COCO~\citep{lin2014microsoft}, Ring-A-Bell~\citep{tsai2023ring}, UnlearnDiff~\citep{zhang2024generate}, MMA-Diffusion~\citep{yang2024mma}, P4D-N~\citep{chin2023prompting4debugging}, I2P~\citep{schramowski2023safe}, MJA~\citep{zhang2026reason2attack}, Qwen3-VL~\citep{bai2025qwen3}). These are released under research-use-permissive licenses (CreativeML OpenRAIL-M for SD~v1.4; CC-BY-4.0 or research-use licenses for the benchmarks). We use each asset within its stated terms.
+    \item[] Justification: All third-party assets are cited with the originating papers (\eg, Stable Diffusion v1.4~\citep{rombach2022high}, COCO~\citep{lin2014microsoft}, Ring-A-Bell~\citep{tsai2023ring}, UnlearnDiff~\citep{zhang2024generate}, MMA-Diffusion~\citep{yang2024mma}, P4D-N~\citep{chin2023prompting4debugging}, I2P~\citep{schramowski2023safe}, MJA~\citep{zhang2026reason2attack}, Qwen3-VL~\citep{bai2025qwen3}, LLaVA~\citep{liu2023visual}). These are released under research-use-permissive licenses (CreativeML OpenRAIL-M for SD~v1.4; CC-BY-4.0 or research-use licenses for the benchmarks). We use each asset within its stated terms.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not use existing assets.
@@ -213,7 +213,7 @@
 \item {\bf Declaration of LLM usage}
     \item[] Question: Does the paper describe the usage of LLMs if it is an important, original, or non-standard component of the core methods in this research? Note that if the LLM is used only for writing, editing, or formatting purposes and does \emph{not} impact the core methodology, scientific rigor, or originality of the research, declaration is not required.
     \item[] Answer: \answerYes{}
-    \item[] Justification: A vision-language model is used exclusively as an \emph{evaluator}, not as a component of the proposed method. Qwen3-VL-8B~\citep{bai2025qwen3} serves as the sole safety judge; its four-class rubric and per-image agreement with a human-majority annotation are documented in Appendices~\ref{app:evaluator_extended}--\ref{app:human_study}. The proposed method (\ours{}) contains no LLM call and uses only a frozen UNet and a frozen CLIP.
+    \item[] Justification: Large vision-language models are used exclusively as \emph{evaluators}, not as components of the proposed method. Qwen3-VL-8B~\citep{bai2025qwen3} is the primary safety judge (\S\ref{subsec:setup}); LLaVA~\citep{liu2023visual} provides a secondary cross-check; GPT-4o / Claude~3.5 / Gemini~1.5 are used only in the extended evaluator-robustness study (Appendix~\ref{app:evaluator_extended}). The proposed method (\ours{}) contains no LLM call and uses only a frozen UNet and a frozen CLIP.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the core method development in this research does not involve LLMs as any important, original, or non-standard components.
