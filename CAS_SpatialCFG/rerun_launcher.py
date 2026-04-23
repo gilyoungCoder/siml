@@ -162,9 +162,10 @@ def main():
         '--cas_threshold', str(cfg['cas']),
         '--n_img_tokens', '4',
         '--target_concepts', *tc,
-        '--target_words', *tw,
         '--anchor_concepts', *ac,
     ]
+    if backbone in ('sd14', 'sd3'):
+        cmd += ['--target_words', *tw]
     if backbone == 'flux1':
         cmd += ['--dtype', 'bfloat16']
 
