@@ -223,15 +223,15 @@
 \node[font=\scriptsize,align=center] at ($(funTopL)!0.5!(funBotR)$)
      {\shortstack{$\max$\\[-1pt]\scriptsize mod}};
 
-% fusion box — centered in column C (width fits inside \colW=5.6 with
-% margin). More vertical gap under imgBox.south and between the two
-% formula lines to avoid cramping.
+% fusion box — centered in column C. Uses direct notation (M tilde for
+% winning mask value, w for winning family index) instead of an indicator
+% function — these are exactly the two quantities consumed by the D column.
 \node[draw,rounded corners=2pt,fill=black!4,line width=0.4pt,
       minimum width=4.8cm,minimum height=1.25cm,anchor=center,font=\scriptsize,
       align=center,inner sep=4pt]
      (fuse) at (\Cx, -4.70)
      {$M^f \,=\, \max\!\bigl(M^f_{\mathrm{text}},\; M^f_{\mathrm{img}}\bigr)$\\[3pt]
-      $\widetilde{M}_f \,=\, M^f \cdot \mathbf{1}\!\left[\,f = \arg\max_{f'} M^{f'}\,\right]$};
+      $\widetilde{M} \,=\, \max_f M^f,\quad \mathsf{w} \,=\, \arg\max_f M^f$};
 
 % connect text/img matrix centers to funnel left edge, then funnel right → fuse
 \draw[arrw] (\Ccx + 0.8, 1.65) -- (funTopL);
