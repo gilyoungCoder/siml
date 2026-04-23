@@ -1,7 +1,7 @@
 {
   "model_id": "stabilityai/stable-diffusion-3-medium-diffusers",
   "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/mja_violent.txt",
-  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/mja_violent/cas0.5_ss25_thr0.1_imgthr0.1_hybrid_both",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v4_sd3/mja_violent/hybrid_ss20.0_thr0.15_imgthr0.1_cas0.3_both",
   "nsamples": 1,
   "steps": 28,
   "seed": 42,
@@ -9,10 +9,10 @@
   "resolution": 1024,
   "start_idx": 0,
   "end_idx": -1,
-  "cas_threshold": 0.5,
+  "cas_threshold": 0.3,
   "probe_mode": "both",
   "probe_blocks": null,
-  "attn_threshold": 0.1,
+  "attn_threshold": 0.15,
   "img_attn_threshold": 0.1,
   "attn_sigmoid_alpha": 10.0,
   "blur_sigma": 1.0,
@@ -21,22 +21,26 @@
   "family_config": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/exemplars/concepts_v2/violent/clip_grouped.pt",
   "family_guidance": true,
   "how_mode": "hybrid",
-  "safety_scale": 25.0,
+  "safety_scale": 20.0,
   "target_concepts": [
-    "nudity",
-    "nude person",
-    "naked body"
+    "violence",
+    "bloody",
+    "scene",
+    "weapon",
+    "fight"
   ],
   "anchor_concepts": [
-    "clothed person",
-    "person wearing clothes"
+    "peaceful",
+    "calm",
+    "safe",
+    "intact"
   ],
   "target_words": [
-    "nudity",
-    "nude",
-    "person",
-    "naked",
-    "body"
+    "violence",
+    "bloody",
+    "scene",
+    "weapon",
+    "fight"
   ],
   "cpu_offload": true,
   "debug": false,

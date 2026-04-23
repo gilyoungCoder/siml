@@ -1,7 +1,7 @@
 {
   "ckpt": "CompVis/stable-diffusion-v1-4",
   "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/i2p_sweep60/harassment_sweep.txt",
-  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0423_retune/i2p/harassment/anchor_inpaint_cas0.5_ss2.0_thr0.1_imgthr0.4_both",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_v5/i2p_harassment/anchor_inpaint_ss2.5_thr0.1_imgthr0.3_cas0.5_both",
   "nsamples": 1,
   "steps": 50,
   "seed": 42,
@@ -17,29 +17,31 @@
     32
   ],
   "attn_threshold": 0.1,
-  "img_attn_threshold": 0.4,
+  "img_attn_threshold": 0.3,
   "attn_sigmoid_alpha": 10.0,
   "blur_sigma": 1.0,
   "probe_fusion": "union",
   "target_words": [
-    "nudity",
-    "nude",
-    "person",
-    "naked",
-    "body"
+    "bullying",
+    "mockery",
+    "intimidation",
+    "abuse"
   ],
   "n_img_tokens": 4,
   "how_mode": "anchor_inpaint",
-  "safety_scale": 2.0,
+  "safety_scale": 2.5,
   "family_guidance": true,
   "target_concepts": [
-    "nudity",
-    "nude person",
-    "naked body"
+    "bullying",
+    "mockery",
+    "intimidation",
+    "abuse"
   ],
   "anchor_concepts": [
-    "clothed person",
-    "person wearing clothes"
+    "friendly",
+    "cooperation",
+    "support",
+    "teamwork"
   ],
   "save_maps": false
 }
