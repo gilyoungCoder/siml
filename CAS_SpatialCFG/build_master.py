@@ -96,7 +96,7 @@ for cdir, cf in I2P_CONCEPTS:
         f'{REPO}/outputs/launch_0420_i2p_q16top60/ours_sd14*/{cdir}/*/',
         f'{REPO}/outputs/launch_0423_*/{cdir}/*/',
         f'{REPO}/outputs/launch_0423_*/i2p/{cdir}/*/',
-        f"{REPO}/outputs/launch_0424_rerun_sd14/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v3/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v5/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v6/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v7/i2p_{cdir}/*/",
+        f"{REPO}/outputs/launch_0424_rerun_sd14/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v3/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v5/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v6/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v7/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v8/i2p_{cdir}/*/",
     ]
     if cdir == 'shocking':
         globs.append(f'{REPO}/outputs/launch_0423_shocking_imgheavy/*/')
@@ -112,7 +112,7 @@ MJA_CONCEPTS = [('mja_sexual', 'nudity'), ('mja_violent', 'violence'),
 for cdir, cf in MJA_CONCEPTS:
     globs = [
         f'{REPO}/outputs/launch_*/ours_sd14*/{cdir}/*/',
-        f'{REPO}/outputs/launch_0424_rerun_sd14/{cdir}/*/',
+        f"{REPO}/outputs/launch_0424_rerun_sd14/{cdir}/*/", f"{REPO}/outputs/launch_0424_v5/{cdir}/*/", f"{REPO}/outputs/launch_0424_v6/{cdir}/*/",
     ]
     if cdir == 'mja_illegal':
         globs.append(f'{REPO}/outputs/launch_0423_illegal_aggro/*/')
@@ -124,7 +124,7 @@ for cdir, cf in MJA_CONCEPTS:
 for cdir, cf in MJA_CONCEPTS:
     globs = [
         f'{REPO}/outputs/launch_*/ours_sd3*/{cdir}/*/',
-        f'{REPO}/outputs/launch_0424_rerun_sd3/{cdir}/*/',
+        f"{REPO}/outputs/launch_0424_rerun_sd3/{cdir}/*/", f"{REPO}/outputs/launch_0424_v3_sd3/{cdir}/*/", f"{REPO}/outputs/launch_0424_v4_sd3/{cdir}/*/",
     ]
     for mode in ['anchor', 'hybrid']:
         JOBS.append(('04_mja_sd3_4concept', f'{cdir}_{mode}', globs, cf, mode,
@@ -160,7 +160,7 @@ for cdir, cf in I2P_CONCEPTS:
         f'{REPO}/outputs/launch_0420_i2p/ours_sd14*/{cdir}/*/',
         f'{REPO}/outputs/launch_0423_shocking_imgheavy/*/' if cdir == 'shocking' else None,
         f'{REPO}/outputs/launch_0423_harhate_imgheavy/{cdir}/*/' if cdir in ('harassment', 'hate') else None,
-        f"{REPO}/outputs/launch_0424_rerun_sd14/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v3/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v5/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v6/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v7/i2p_{cdir}/*/",
+        f"{REPO}/outputs/launch_0424_rerun_sd14/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v3/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v5/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v6/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v7/i2p_{cdir}/*/", f"{REPO}/outputs/launch_0424_v8/i2p_{cdir}/*/",
     ]
     both_globs = [g for g in both_globs if g]
     JOBS.append(('07_ablation_sd14_probe', f'{cdir}_txtonly', txt_globs, cf, 'txtonly', []))
