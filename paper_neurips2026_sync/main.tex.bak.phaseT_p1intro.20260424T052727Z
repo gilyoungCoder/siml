@@ -21,14 +21,6 @@
 \usepackage{pifont}
 \usepackage[section]{placeins}
 
-% Suppress the sty's bottom-float notice on page 1 so the introduction
-% starts on the same page as the abstract (the float otherwise reserves
-% up to 40% of page 1 via \bottomfraction). This is a local preamble
-% override of \@notice, not an edit to neurips_2026.sty itself.
-\makeatletter
-\renewcommand{\@notice}{}
-\makeatother
-
 % Custom commands
 \usepackage{xspace}
 \newcommand{\ours}{EBSG\xspace}
