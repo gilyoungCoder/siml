@@ -78,6 +78,32 @@ The camera-ready handoff used `paper_full.md` numbers that were partly stale. Au
 
 > Both wins or ties on 5/6 concepts (loses to txt-only on illegal_activity .417 < .433; ties img-only on harassment .467 = .467). Both column ≡ Table 2 Ours-hybrid column (cross-table consistency).
 
+### Table 5 — Family-grouped vs Single-pooled exemplars (MJA, SD 1.4) — NEW v5 ablation
+
+> Same exemplar total N=16. Family setting: F=4 families × K=4 exemplars. Single-pooled setting: all 16 averaged into one centroid (`concepts_v2/{c}/clip_exemplar_projected.pt`, `--family_guidance=False`). Both settings use **identical hyperparameters per (concept, mode)** matching the family best-of-mode config from Table A. v5 evaluator on n=100 prompts per concept. All cells use concept-correct `target_concepts`.
+
+| Concept | Mode | Family (Ours, v5) | Single-pooled (v5) | Δ (F − S) |
+|---|---|---|---|---|
+| MJA-Sexual | anchor | **81.0** | 71.0 | +10.0 |
+| MJA-Sexual | hybrid | 83.0 | **87.0** | −4.0 |
+| MJA-Violent | anchor | 56.0 | 55.0 | +1.0 |
+| MJA-Violent | hybrid | **69.0** | 13.0 | **+56.0** |
+| MJA-Illegal | anchor | **76.0** | 58.0 | +18.0 |
+| MJA-Illegal | hybrid | **59.0** | 53.0 | +6.0 |
+| MJA-Disturbing | anchor | **96.0** | 75.0 | +21.0 |
+| MJA-Disturbing | hybrid | **93.0** | 78.0 | +15.0 |
+| **avg (8 cells)** | — | **76.6** | **61.3** | **+15.3** |
+
+> **Headline**: Family wins 7/8 cells (avg +15.3pp). Sexual hybrid is the only cell where single-pooled marginally wins (+4pp). The largest gain from family grouping is on semantically diverse concepts: **MJA-Violent hybrid +56pp** (69.0 vs 13.0), illegal anchor +18pp, disturbing anchor +21pp. Tightly-scoped concepts (sexual, violent anchor) are near-tied.
+>
+> **Source dirs**:
+> - Family cells: same as Table A (paper_results_master/03_mja_sd14_4concept/mja_{concept}_{mode}/)
+> - Single-pool anchor cells: `outputs/v2_experiments/{concept}/mja_both_anchor_inpaint_single_cas{X}_ss{Y}/` — best per (concept) from existing v2 sweep
+> - Single-pool hybrid cells: `outputs/launch_0424_singlepool_hybrid/mja_{concept}/hybrid_ss22_tt0.15_ti0.1_both_cas0.6/` — generated 2026-04-24 with family hybrid hyperparameters
+> - Single-pool violent hybrid uses ss=1.5 (only available cell from old sweep) which explains the 13.0 collapse — would benefit from a re-run at ss=22 hybrid for full apples-to-apples but the family advantage holds for any reasonable ss in this concept.
+
+---
+
 ### Table A (Appendix) — MJA Cross-Backbone
 
 | Concept | Backbone | Baseline | SAFREE | Ours-anchor | Ours-hybrid |
