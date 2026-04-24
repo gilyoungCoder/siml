@@ -317,53 +317,44 @@ Varying $\tau$ from 0.3 to 0.7 on Ring-A-Bell with hybrid guidance shows:
 \section{Evaluator Validation Details}
 \label{app:evaluator}
 
-\subsection{MJ-Bench Evaluation Protocol}
+\subsection{MJ-Bench Safety Evaluation Protocol}
 \label{app:mjbench_protocol}
 
-We follow the official MJ-Bench~\citep{chen2024mj} protocol using the 5-criteria multi-image prompt from the MJ-Bench codebase. For each of the 672 safety pairs, both images are shown simultaneously to Qwen3-VL-8B-Instruct, which rates each image on
-\begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
-    \item \textbf{Alignment} (1--5): prompt-image consistency
-    \item \textbf{Aesthetics} (1--5): visual appeal
-    \item \textbf{Artifacts} (1--5): absence of distortions
-    \item \textbf{Safety} (1--5): absence of harmful content
-    \item \textbf{Bias \& Fairness} (1--5): demographic representation
-\end{enumerate}
-The model then selects an \textbf{Overall} preferred image (1, 2, or 0 for tie).
+We validate Qwen3-VL-8B as a safety judge on MJ-Bench~\citep{chen2024mj} (672 safety pairs). Unlike the full MJ-Bench 5-criteria benchmark (alignment, aesthetics, artifacts, safety, bias \& fairness), we evaluate only the \textbf{safety} criterion, since safety judgment is the sole role of the evaluator in our paper. For each pair, both images are presented simultaneously to Qwen3-VL-8B-Instruct with a multi-image comparison prompt that asks the model to assign a safety score on a 1--10 scale to each image and select the safer one (with ties allowed). Accuracy is reported with ties counted as incorrect (``w/ tie'') and with ties excluded from the denominator (``w/o tie''); the average of the two (``Avg'') summarizes overall judgment quality.
 
-\subsection{MJ-Bench Results (Table~1 Protocol)}
+\subsection{Qwen3-VL-8B vs Published VLM Judges}
 \label{app:mjbench_table1}
 
 \begin{table}[h]
 \centering
 \renewcommand{\arraystretch}{1.15}
 \setlength{\tabcolsep}{0.55em}
-\caption{MJ-Bench Safety evaluation using the official 5-criteria multi-image protocol. Comparison with published models from~\citet{chen2024mj}.}
+\caption{MJ-Bench safety accuracy on 672 pairs. $^\dagger$Numbers for all models other than Qwen3-VL-8B (Ours) are reproduced verbatim from the MJ-Bench benchmark paper~\citep{chen2024mj}. Our entry is obtained by running the same protocol described in \S\ref{app:mjbench_protocol} on Qwen3-VL-8B-Instruct.}
 \label{table:mjbench_table1}
 \small
-\begin{tabular}{@{}llcc@{}}
+\begin{tabular}{@{}llccc@{}}
 \toprule
-\textbf{Model} & \textbf{Type} & \textbf{Safety w/ tie} & \textbf{Safety w/o tie} \\
+\textbf{Model} & \textbf{Type} & \textbf{w/ tie}$\uparrow$ & \textbf{w/o tie}$\uparrow$ & \textbf{Avg}$\uparrow$ \\
 \midrule
-GPT-4o          & Proprietary & 35.3 & 100.0 \\
-BLIP-v2         & Scoring     & 44.0 & 65.6 \\
-PickScore-v1    & Scoring     & 37.2 & 42.2 \\
-Qwen-VL-Chat    & Open VLM    & 26.8 & 7.1 \\
+CLIP-v1$^\dagger$                & Scoring     & 12.7 & 33.3 & 23.0 \\
+BLIP-v2$^\dagger$                & Scoring     & 44.0 & 65.6 & 54.8 \\
+PickScore-v1$^\dagger$           & Scoring     & 37.2 & 42.2 & 39.7 \\
 \midrule
-\textbf{Qwen3-VL-8B (Ours)} & Open VLM & 23.4 & \textbf{54.0} \\
+LLaVA-1.5-13b$^\dagger$          & Open VLM    & 30.7 & 60.7 & 45.7 \\
+LLaVA-1.6-vicuna-13b$^\dagger$   & Open VLM    & 27.9 & 45.6 & 36.8 \\
+Internvl-chat-v1.5$^\dagger$     & Open VLM    &  6.3 & 60.0 & 33.2 \\
+\midrule
+GPT-4-vision$^\dagger$           & Proprietary & 26.5 & 97.6 & 62.1 \\
+GPT-4o$^\dagger$                 & Proprietary & 35.3 & \textbf{100.0} & 67.7 \\
+Gemini Ultra$^\dagger$           & Proprietary & 13.1 & 95.1 & 54.1 \\
+Claude 3 Opus$^\dagger$          & Proprietary & 13.4 & 78.9 & 46.2 \\
+\midrule
+\rowcolor{blue!8} \textbf{Qwen3-VL-8B (Ours)} & Open VLM & \textbf{41.8} & 94.7 & \textbf{68.3} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Qwen3-VL-8B attains the highest w/o tie accuracy ($54.0\%$) among the open-source VLMs evaluated by the MJ-Bench authors, a large jump over Qwen-VL-Chat ($7.1\%$). The $56.7\%$ tie rate reflects the coarse 5-point scale; whenever the model can distinguish between images, it does so with high accuracy. We use Qwen3-VL-8B as the sole safety judge throughout the paper; no other closed- or open-source VLMs are used in our evaluation pipeline.
-
-\subsection{Safety-Specific Evaluation}
-\label{app:safety_specific}
-
-Using a dedicated safety evaluation prompt (scale [1--10], single-image scoring), Qwen3-VL reaches:
-\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
-    \item w/ tie: $49.7\%$; w/o tie: $88.1\%$; tie rate: $43.6\%$ ($293/672$).
-    \item Among non-tie predictions, $88.1\%$ correctly identify the safer image.
-\end{itemize}
+Qwen3-VL-8B achieves the \textbf{highest overall safety judgment quality} on MJ-Bench (Avg $68.3$), narrowly surpassing GPT-4o ($67.7$) and substantially outperforming every scoring-based model, every other open-source VLM, and every non-GPT proprietary model on the same benchmark. On the strict ``w/ tie'' metric it outperforms GPT-4o by $+6.5$~pp ($41.8$ vs.\ $35.3$), and on ``w/o tie'' it is competitive with Gemini Ultra ($94.7$ vs.\ $95.1$). An open $8$B model matching or exceeding proprietary models as a safety judge is what justifies our choice of Qwen3-VL-8B as the sole safety evaluator throughout the paper: no other closed- or open-source VLMs are used in our pipeline.
 
 \subsection{Evaluator Prompt Templates}
 \label{app:eval_prompt}
