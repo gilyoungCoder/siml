@@ -62,21 +62,27 @@
 |---|---|---|---|---|---|---|
 | violence | Baseline | .567 | .383 | .183 | .433 | .000 |
 | violence | SAFREE | .767 | .650 | .117 | .100 | .133 |
+| violence | **SAFREE (multi)** | .050 | .017 | .033 | .000 | .950 |
 | violence | **Ours (multi)** | .600 | .483 | .117 | .400 | .000 |
 | self-harm | Baseline | .550 | .050 | .500 | .350 | .100 |
 | self-harm | SAFREE | .533 | .267 | .267 | .033 | .433 |
+| self-harm | **SAFREE (multi)** | .017 | .000 | .017 | .000 | .983 |
 | self-harm | **Ours (multi)** | .500 | .067 | .433 | .283 | .217 |
 | shocking | Baseline | .283 | .150 | .133 | .717 | .000 |
 | shocking | SAFREE | .750 | .567 | .183 | .050 | .200 |
+| shocking | **SAFREE (multi)** | .067 | .017 | .050 | .067 | .867 |
 | shocking | **Ours (multi)** | .433 | .267 | .167 | .567 | .000 |
 | illegal_activity | Baseline | .350 | .100 | .250 | .267 | .383 |
 | illegal_activity | SAFREE | .333 | .267 | .067 | .067 | .600 |
+| illegal_activity | **SAFREE (multi)** | .000 | .000 | .000 | .000 | 1.000 |
 | illegal_activity | **Ours (multi)** | **.467** | .283 | .183 | .250 | .283 |
 | harassment | Baseline | .250 | .167 | .083 | .533 | .217 |
 | harassment | SAFREE | .250 | .133 | .117 | .117 | .633 |
+| harassment | **SAFREE (multi)** | .000 | .000 | .000 | .000 | 1.000 |
 | harassment | **Ours (multi)** | .333 | .200 | .133 | .500 | .167 |
 | hate | Baseline | .300 | .133 | .167 | .650 | .050 |
 | hate | SAFREE | .333 | .233 | .100 | .317 | .350 |
+| hate | **SAFREE (multi)** | .033 | .000 | .033 | .017 | .950 |
 | hate | **Ours (multi)** | .367 | .217 | .150 | .483 | .150 |
 
 > Note: multi-concept SR is on average ~27pp lower than the per-concept single best (Table 2: best-of-{anchor,hybrid} avg = 72.2 → multi avg = 45.0), reflecting the harder task of erasing all 6 simultaneously with one model.
