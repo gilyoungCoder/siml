@@ -29,19 +29,22 @@
     arrw/.style={->, line width=1.1pt, draw=greyLine},
     bigarrow/.style={->, line width=1.7pt, draw=greyLine},
     busline/.style={line width=1.1pt, draw=greyLine},
-    thumb/.style={draw=packAccent!70,line width=0.4pt,fill=white,minimum width=5.5mm,minimum height=4mm,inner sep=0pt},
-    chip/.style={draw=packAccent,line width=0.5pt,fill=white,rounded corners=1pt,inner sep=2.5pt,font=\scriptsize},
+    thumb/.style={draw=packAccent!70,line width=0.5pt,fill=white,minimum width=5.5mm,minimum height=4mm,inner sep=0pt},
+    chip/.style={draw=packAccent,line width=0.7pt,fill=white,rounded corners=1pt,inner sep=2.5pt,font=\scriptsize},
     stageTitle/.style={font=\small\bfseries},
-    colBG/.style={rounded corners=3pt,draw=black!20,line width=0.4pt},
+    colBG/.style={rounded corners=3pt,draw=black!35,line width=0.9pt},
+    innerBox/.style={rounded corners=3pt,draw=black!35,line width=0.9pt,
+                     drop shadow={shadow xshift=0.6pt,shadow yshift=-0.6pt,opacity=0.18,fill=black!80}},
+    outerFrame/.style={rounded corners=8pt,draw=black!45,line width=1.4pt,
+                       dash pattern=on 2.5pt off 1.5pt},
 ]
 
 % ============== LAYOUT CONSTANTS ==============
-\def\colW{5.6}     % column width for B/C/D
-\def\colWA{6.4}    % WIDER width for column A (concept-pack labels + brace)
-\def\colWin{4.0}   % inner box width  (reduced so max_f funnel has room)
-\def\colDin{5.0}   % inner box width for D column (tighter than col so boxes
-                   %  visually "float" with side margin; Hybrid equation fits)
-\def\gap{1.25}     % gap between columns for breathing room
+\def\colW{6.1}     % WIDER B/C/D column (gives breathing room around inner boxes)
+\def\colWA{6.4}    % column A (concept-pack labels + brace)
+\def\colWin{4.2}   % inner box width for C column (text/img probes)
+\def\colDin{5.5}   % inner box width for D column (anchor/hybrid equations)
+\def\gap{1.25}     % gap between columns
 
 \pgfmathsetmacro{\Ax}{0}
 % A uses \colWA (wider); B/C/D use \colW — edge-to-edge gap is \gap
@@ -122,21 +125,21 @@
 \draw[arrw] (eps) -- (ztm);
 \draw[arrw] (ztm.north) .. controls +(0,0.45) and +(0,0.45) .. (zt.north);
 
-% CAS gate — switched from diamond to ROUNDED RECTANGLE so it fits cleanly
-% inside column B (no corners poking across the dashed B boundary).
-\node[draw=casRed,line width=0.8pt,fill=casRed!8,rounded corners=3pt,
+% CAS gate — rounded rectangle inside B. Center y aligned with the
+% C-entry y (=-1.55) so cas.east y == C.west entry y => HORIZONTAL arrow.
+\node[draw=casRed,line width=1.4pt,fill=casRed!8,rounded corners=3pt,
       inner sep=3pt,minimum width=4.2cm,minimum height=1.35cm,
-      align=center]
-     (cas) at (\Bx, -1.1)
+      align=center,
+      drop shadow={shadow xshift=0.7pt,shadow yshift=-0.7pt,opacity=0.22,fill=casRed!60}]
+     (cas) at (\Bx, -1.55)
      {\scriptsize\textbf{CAS gate}\\[1pt]
       $\displaystyle \mathrm{CAS}(t)=\max_f \cos(d_{prompt},\bar d^{\,tgt}_f)\,>\,\tau$};
 
 % straight vertical feeder from eps to CAS
 \draw[arrw] (eps.south) -- (cas.north);
 
-% CAS output → C : bulk of the arrow is in the B-C GAP; only the very
-% start (inside B to reach cas.east) and the head (at C's west wall)
-% touch the column walls.
+% CAS output → C : horizontal arrow (same y on both ends); bulk lives
+% in the B-C gap, only the tail is inside B and the head lands on C.west.
 \draw[bigarrow] (cas.east) -- (\Cx - \colW/2, -1.55);
 \node[font=\scriptsize,text=txtAccent!60!black,anchor=west]
      at ($(cas.east)+(0.10,0.25)$) {\checkmark\ fire};
@@ -158,7 +161,7 @@
 \pgfmathsetmacro{\Ccx}{\Cx - 0.55}   % probe-box center (shifted left from column center)
 
 % --- TOP sub-row: Text probe ---
-\node[colBG,fill=txtBG,minimum width=\colWin cm,minimum height=3.1cm,anchor=north]
+\node[innerBox,fill=txtBG,draw=txtAccent!50,minimum width=\colWin cm,minimum height=3.1cm,anchor=north]
      (txtBox) at (\Ccx, 2.75) {};
 % header pushed down slightly for breathing room from box top edge
 \node[anchor=north,font=\scriptsize\bfseries,text=txtAccent] at (\Ccx,2.55) {Text probe};
@@ -185,7 +188,7 @@
   {$M^f_{\mathrm{text}} \propto \sigma\!\big(\textstyle\max_{w\in\mathcal{W}_f}\! A_w\big)$};
 
 % --- BOTTOM sub-row: Image probe ---
-\node[colBG,fill=imgBG,minimum width=\colWin cm,minimum height=3.1cm,anchor=north]
+\node[innerBox,fill=imgBG,draw=imgAccent!50,minimum width=\colWin cm,minimum height=3.1cm,anchor=north]
      (imgBox) at (\Ccx, -0.55) {};
 % header pushed down slightly
 \node[anchor=north,font=\scriptsize\bfseries,text=imgAccent] at (\Ccx,-0.75) {Image probe};
@@ -207,7 +210,7 @@
   \node[draw=imgAccent,fill=imgAccent!70,minimum size=2.5mm,inner sep=0pt] at (\tx,\ty) {};
 }
 \node[anchor=north,font=\scriptsize] at (\Ccx, -2.65)
-  {$M^f_{\mathrm{img}} \propto \sigma\!\big(\cos(f,\bar e_f)\big)$};
+  {$M^f_{\mathrm{img}} \propto \sigma\!\big(A^{I}_f\big)$};
 
 % max-mod funnel — LEFT edge y-coords pinned to the probe box east y-coords
 % (txtBox center y=1.20, imgBox center y=-2.10) so the incoming arrows are
@@ -221,30 +224,35 @@
 \coordinate (funTopR) at (\funR,  0.55);
 \coordinate (funBotL) at (\funL, -2.10);   % matches imgBox.east.y
 \coordinate (funBotR) at (\funR, -1.45);
-\draw[draw=black!50,fill=black!6,line width=0.4pt]
+\draw[draw=black!55,fill=black!8,line width=0.9pt]
   (funTopL) -- (funTopR) -- (funBotR) -- (funBotL) -- cycle;
 % "max mod" placed at the vertical MIDPOINT of the trapezoid (average of
 % all four corner ys) so it sits visually centered top-to-bottom.
 \node[font=\scriptsize,align=center] at (\funCx, -0.45)
      {\shortstack{$\max$\\[-1pt]\scriptsize mod}};
 
-% fusion box — centered in column C. Uses direct notation (M tilde for
-% winning mask value, w for winning family index) instead of an indicator
-% function — these are exactly the two quantities consumed by the D column.
-\node[draw,rounded corners=2pt,fill=black!4,line width=0.4pt,
-      minimum width=4.8cm,minimum height=1.25cm,anchor=center,font=\scriptsize,
-      align=center,inner sep=4pt]
+% fusion box — centered in column C.
+% Line 1: modality union within each family.
+% Line 2: winner-take-all partition via indicator, matching method.tex
+%         Eq. (eq:fusion); w is introduced as the winning family index
+%         used by the D-column equations.
+\node[draw=black!50,rounded corners=2pt,fill=black!5,line width=1.0pt,
+      minimum width=5.9cm,minimum height=1.45cm,anchor=center,font=\scriptsize,
+      align=center,inner sep=4pt,
+      drop shadow={shadow xshift=0.6pt,shadow yshift=-0.6pt,opacity=0.18,fill=black!80}]
      (fuse) at (\Cx, -4.70)
-     {$M^f \,=\, \max\!\bigl(M^f_{\mathrm{text}},\; M^f_{\mathrm{img}}\bigr)$\\[3pt]
-      $\widetilde{M} \,=\, \max_f M^f,\quad \mathsf{w} \,=\, \arg\max_f M^f$};
+     {$M^f(i,j) \,=\, \max\!\bigl(M^f_{\mathrm{text}},\; M^f_{\mathrm{img}}\bigr)$\\[3pt]
+      $\widetilde{M}_f(i,j) \,=\, M^f(i,j)\,\cdot\,\mathbf{1}\!\left[\,f = \arg\max_{f'} M^{f'}(i,j)\,\right]$};
 
 % connect text/img probe BOX EAST EDGES horizontally to funnel left corners
 \draw[arrw] (txtBox.east) -- (funTopL);
 \draw[arrw] (imgBox.east) -- (funBotL);
-% funnel right-mid drops DOWN along the east side of imgBox (still inside
-% column C, past imgBox's east wall), then LEFT into fuse.east.
-% Head preserved — arrow visibly terminates at the fusion box.
-\draw[arrw] ($(funTopR)!0.5!(funBotR)$) |- (fuse.east);
+% funnel right-mid → steps slightly RIGHT, then drops straight DOWN and
+% lands on the fuse box TOP edge. Final segment is vertical, so the arrow
+% head points down into the fusion box (as requested). The step-right +
+% vertical combination stays inside column C.
+\coordinate (funOut) at ($(funTopR)!0.5!(funBotR) + (0.15, 0)$);
+\draw[arrw] ($(funTopR)!0.5!(funBotR)$) -- (funOut) -- (funOut |- fuse.north);
 
 % ============== COLUMN D : HOW (two modes) ==============
 \node[colBG,fill=white,minimum width=\colW cm,minimum height=9.6cm,anchor=center]
@@ -253,7 +261,7 @@
 
 % Anchor-inpaint branch (TOP) — LERP substitution using WINNING family
 % w = argmax_f M^f (pixel-wise). Matches Eq. \ref{eq:anchor_inpaint} in method.tex.
-\node[colBG,fill=anchorBG,minimum width=\colDin cm,minimum height=2.2cm,anchor=north]
+\node[innerBox,fill=anchorBG,draw=packAccent!55,minimum width=\colDin cm,minimum height=2.2cm,anchor=north]
      (anchorBox) at (\Dx, 2.35) {};
 \node[anchor=north,font=\scriptsize\bfseries,text=packAccent] at (\Dx,2.23)
      {Anchor inpaint};
@@ -262,7 +270,7 @@
       \scriptsize$\beta = \min(s_a\,\widetilde{M},\,1)$};
 
 % Hybrid branch (BOTTOM) — target-to-anchor push using winning family w
-\node[colBG,fill=hybridBG,minimum width=\colDin cm,minimum height=2.2cm,anchor=north]
+\node[innerBox,fill=hybridBG,draw=howPurple!55,minimum width=\colDin cm,minimum height=2.2cm,anchor=north]
      (hybBox) at (\Dx, -0.25) {};
 \node[anchor=north,font=\scriptsize\bfseries,text=howPurple] at (\Dx,-0.37)
      {Hybrid};
