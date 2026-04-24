@@ -301,7 +301,7 @@
 
 <section>
   <h2>Probe Mode &mdash; Text&nbsp;/&nbsp;Image&nbsp;/&nbsp;Both</h2>
-  <p class="sub">SD&nbsp;1.4, I2P top-60. Same family pack and hyperparameters; only the active probe channel changes.</p>
+  <p class="sub">SD&nbsp;1.4, I2P top-60. Same family pack, mode, and hyperparameters; only the active probe channel changes.</p>
   <table>
     <tr>
       <th style="text-align:left;">Concept</th>
@@ -310,17 +310,18 @@
       <th><strong>both</strong></th>
     </tr>
     <tr><td class="l">violence</td><td>86.7</td><td>86.7</td><td class="best">91.7</td></tr>
-    <tr><td class="l">self-harm</td><td>55.0</td><td>55.0</td><td class="best">68.3</td></tr>
+    <tr><td class="l">self-harm</td><td>55.0</td><td>55.0</td><td class="best">61.7</td></tr>
     <tr><td class="l">shocking</td><td>60.0</td><td>78.3</td><td class="best">88.3</td></tr>
-    <tr><td class="l">illegal_activity</td><td>43.3</td><td>38.3</td><td class="best">48.3</td></tr>
-    <tr><td class="l">harassment</td><td>38.3</td><td>46.7</td><td class="best">71.7</td></tr>
+    <tr><td class="l">illegal_activity</td><td class="best">43.3</td><td>38.3</td><td>41.7</td></tr>
+    <tr><td class="l">harassment</td><td>38.3</td><td class="best">46.7</td><td class="best">46.7</td></tr>
     <tr><td class="l">hate</td><td>51.7</td><td>60.0</td><td class="best">66.7</td></tr>
     <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>55.8</strong></td><td><strong>60.8</strong></td><td><strong>62.8</strong></td></tr>
   </table>
   <div class="box box-new" style="font-size:0.76em;">
-    <strong>Both is best on 6/6 concepts.</strong> Text and image probes capture
-    complementary signals &mdash; text wins on keyword-explicit prompts, image wins on
-    metaphor-laden ones, and pixel-wise winner-take-all keeps both inside one disjoint partition.
+    <strong>Both wins or ties on 5/6 concepts</strong> (loses to txt-only on illegal_activity, ties img-only on harassment).
+    Average SR: txt&nbsp;55.8 &rarr; img&nbsp;60.8 &rarr; <strong>both&nbsp;62.8</strong>.
+    Text and image probes capture complementary signals &mdash; text wins on keyword-explicit prompts,
+    image wins on metaphor-laden ones, and pixel-wise winner-take-all keeps both inside one disjoint partition.
   </div>
 </section>
 
@@ -447,7 +448,7 @@
         3 concepts each &mdash; we report both as first-class and let the deployer pick by anchor cleanliness.</li>
     <li><strong>Hybrid sweeps nudity</strong> (UD&nbsp;98.6, RAB&nbsp;97.4, MMA&nbsp;84.7, P4DN&nbsp;97.4); <strong>anchor closes the gap</strong> on harassment&nbsp;/&nbsp;illegal&nbsp;/&nbsp;self-harm.</li>
     <li><strong>One pack, three backbones.</strong> Average SR on MJA: SD&nbsp;1.4&nbsp;83.7, SD&nbsp;3&nbsp;74.8, FLUX.1&nbsp;92.5.</li>
-    <li><strong>Probe = both</strong> beats single channels on every I2P concept.</li>
+    <li><strong>Probe = both</strong> wins or ties on 5/6 I2P concepts (avg 62.8 vs img 60.8 vs txt 55.8).</li>
     <li><strong>Evaluator</strong>: 4-class VLM rubric with explicit collapse class &mdash; no scalar-detector loophole; ongoing human study.</li>
     <li><strong>Open</strong>: multi-concept image-probe capacity, missing baseline cells, COCO-FID for hybrid.</li>
   </ul>
