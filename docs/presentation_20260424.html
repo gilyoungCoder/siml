@@ -230,36 +230,31 @@
   </div>
 </section>
 
-<!-- ===== 9. MULTI-CONCEPT (NEW) ===== -->
+<!-- ===== 9. MULTI-CONCEPT ===== -->
 <section>
-  <h2>Multi-Concept &mdash; One Model Erases Six <span class="tag tag-orange">NEW</span></h2>
-  <p class="sub">Single 24-family pack (6&times;4) loaded into one wrapper, hybrid mode, $s$ tuned per concept.</p>
+  <h2>Multi-Concept &mdash; One Model Erases Six</h2>
+  <p class="sub">Same 24-family pack (6&times;4) loaded into one wrapper, hybrid mode, $s$ tuned per concept. Compared against our own single-concept models on the same I2P top-60 prompts.</p>
   <table>
     <tr>
       <th style="text-align:left;">Concept</th>
       <th>Baseline</th>
-      <th>SAFREE</th>
+      <th>Ours&nbsp;(single)</th>
       <th>Ours&nbsp;(multi)</th>
-      <th>Single-best&nbsp;(ref.)</th>
-      <th>vs SAFREE</th>
+      <th>&Delta;&nbsp;(multi&nbsp;&minus;&nbsp;single)</th>
     </tr>
-    <tr><td class="l">violence</td><td>56.7</td><td class="best">76.7</td><td>60.0</td><td>91.7</td><td class="bv">&minus;16.7</td></tr>
-    <tr><td class="l">self-harm</td><td>55.0</td><td>53.3</td><td>50.0</td><td>68.3</td><td>&minus;3.3</td></tr>
-    <tr><td class="l">shocking</td><td>28.3</td><td class="best">75.0</td><td>43.3</td><td>88.3</td><td class="bv">&minus;31.7</td></tr>
-    <tr><td class="l">illegal_activity</td><td>35.0</td><td>33.3</td><td class="best">46.7</td><td>46.7</td><td class="gv">+13.4</td></tr>
-    <tr><td class="l">harassment</td><td>25.0</td><td>25.0</td><td class="best">33.3</td><td>71.7</td><td class="gv">+8.3</td></tr>
-    <tr><td class="l">hate</td><td>30.0</td><td>33.3</td><td class="best">36.7</td><td>66.7</td><td class="gv">+3.4</td></tr>
+    <tr><td class="l">violence</td><td>56.7</td><td class="best">91.7</td><td>60.0</td><td class="bv">&minus;31.7</td></tr>
+    <tr><td class="l">self-harm</td><td>55.0</td><td class="best">68.3</td><td>50.0</td><td class="bv">&minus;18.3</td></tr>
+    <tr><td class="l">shocking</td><td>28.3</td><td class="best">88.3</td><td>43.3</td><td class="bv">&minus;45.0</td></tr>
+    <tr><td class="l">illegal_activity</td><td>35.0</td><td class="best">46.7</td><td>46.7</td><td>0.0</td></tr>
+    <tr><td class="l">harassment</td><td>25.0</td><td class="best">71.7</td><td>33.3</td><td class="bv">&minus;38.4</td></tr>
+    <tr><td class="l">hate</td><td>30.0</td><td class="best">66.7</td><td>36.7</td><td class="bv">&minus;30.0</td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>72.2</strong></td><td><strong>45.0</strong></td><td class="bv"><strong>&minus;27.2</strong></td></tr>
   </table>
-  <div class="two-col">
-    <div class="box box-green" style="font-size:0.74em;">
-      <strong>Wins.</strong> Ours-multi beats SAFREE on illegal&nbsp;/&nbsp;harassment&nbsp;/&nbsp;hate;
-      ties on self-harm.
-    </div>
-    <div class="box box-warn" style="font-size:0.74em;">
-      <strong>Cost.</strong> Multi gives up &asymp;17&nbsp;pp on average vs.&nbsp;the single-concept best.
-      Image-probe pseudo-token capacity is currently capped at 4 unique families &mdash; explains the
-      violence&nbsp;/&nbsp;shocking regressions and is the next thing to fix.
-    </div>
+  <div class="box box-warn" style="font-size:0.78em;">
+    <strong>Cost of multi.</strong> A single shared model loses &asymp;27&nbsp;pp on average vs.&nbsp;our per-concept models.
+    Image-probe pseudo-token capacity is currently capped at 4 unique families &mdash; with 24 families loaded,
+    only the first 4 receive unique centroids, the rest are padded with the last family's centroid.
+    Lifting this cap is the next concrete fix; SAFREE multi-concept rows are still pending.
   </div>
 </section>
 
