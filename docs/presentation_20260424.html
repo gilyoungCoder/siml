@@ -88,7 +88,7 @@
     <li><strong>Cross-backbone story closed</strong> &mdash;
         full MJA grids on SD&nbsp;1.4&nbsp;/&nbsp;SD&nbsp;3&nbsp;/&nbsp;FLUX.1; confirms architecture-agnostic decomposition.</li>
     <li><strong>Probe-mode ablation finalized</strong> &mdash;
-        text&nbsp;.558, image&nbsp;.608, <strong>both&nbsp;.661</strong> avg SR; <em>both</em> wins or ties on <strong>5/6</strong> I2P concepts.</li>
+        text&nbsp;.558, image&nbsp;.600, <strong>both&nbsp;.661</strong> avg SR; <em>both</em> wins or ties on <strong>5/6</strong> I2P concepts.</li>
     <li><strong>Paper alignment to NeurIPS&nbsp;2026 camera-ready format</strong> &mdash;
         abstract, intro, method, experiments, appendix re-fitted; checklist re-ordered after appendix.</li>
   </ol>
@@ -263,7 +263,11 @@
     Ours-multi still drops &asymp;27&nbsp;pp avg vs.&nbsp;Ours-single (72.2 &rarr; 45.0) because the image-probe
     pseudo-token slot is currently capped at 4 unique families; with 24 loaded only the first 4
     get unique centroids. Lifting this cap is the next fix. The fair comparison &mdash; multi vs.&nbsp;multi &mdash; is
-    overwhelming.
+    overwhelming.<br>
+    <strong>Caveat:</strong> the multi-concept Ours runs use a global CLI <code>target_concepts=['nudity', ...]</code> &mdash;
+    a known limitation of our current multi-pack inference path. Per-pack family target_words inside each pack are
+    concept-correct (the masks localize correctly), but the global &epsilon;<sub>tgt</sub> direction defaults to nudity.
+    Re-running with a concept-aware multi-pack target keyword is in <em>What's Left</em>.
   </div>
 </section>
 
@@ -285,8 +289,8 @@
     </tr>
     <tr><td class="l" rowspan="4"><strong>SD&nbsp;1.4</strong><br>(U-Net, $\varepsilon$)</td><td class="l">Baseline</td><td>41.0</td><td>9.0</td><td>53.0</td><td>45.0</td><td>37.0</td></tr>
     <tr><td class="l">SAFREE</td><td>57.0</td><td>55.0</td><td>73.0</td><td>82.0</td><td>66.8</td></tr>
-    <tr class="anc"><td class="l"><strong>Ours&nbsp;(anchor)</strong></td><td>81.0</td><td>56.0</td><td class="best">76.0</td><td class="best">96.0</td><td>77.3</td></tr>
-    <tr class="hyb"><td class="l"><strong>Ours&nbsp;(hybrid)</strong></td><td class="best">83.0</td><td class="best">69.0</td><td>71.0</td><td>93.0</td><td><strong>79.0</strong></td></tr>
+    <tr class="anc"><td class="l"><strong>Ours&nbsp;(anchor)</strong></td><td>81.0</td><td>56.0</td><td class="best">76.0</td><td class="best">96.0</td><td><strong>77.3</strong></td></tr>
+    <tr class="hyb"><td class="l"><strong>Ours&nbsp;(hybrid)</strong></td><td class="best">83.0</td><td class="best">69.0</td><td>59.0</td><td>93.0</td><td>76.0</td></tr>
 
     <tr><td class="l" rowspan="4"><strong>SD&nbsp;3</strong><br>(MM-DiT, vel.)</td><td class="l">Baseline</td><td>50.5</td><td>0.0</td><td>19.0</td><td>35.0</td><td>26.1</td></tr>
     <tr><td class="l">SAFREE</td><td>63.6</td><td>6.0</td><td>20.0</td><td>63.0</td><td>38.2</td></tr>
@@ -306,8 +310,9 @@
     FLUX.1 leans anchor 3&ndash;1 (violent/illegal/disturbing anchor, sexual hybrid).
   </div>
   <div class="box box-warn" style="font-size:0.72em;">
-    <strong>Closest cell.</strong> SD&nbsp;1.4 / Illegal / hybrid (71.0) is essentially tied with SAFREE (73.0, &minus;2&nbsp;pp);
-    anchor recovers cleanly (76.0, +3 vs.&nbsp;SAFREE). Every other Ours cell beats SAFREE clearly.
+    <strong>Honest weak cell.</strong> SD&nbsp;1.4 / Illegal / hybrid drops to 59.0 (vs.&nbsp;SAFREE 73.0, &minus;14&nbsp;pp);
+    anchor recovers cleanly (76.0, +3 vs.&nbsp;SAFREE) &mdash; concrete example of why we keep both modes.
+    Every other Ours cell beats SAFREE.
   </div>
 </section>
 
@@ -325,15 +330,15 @@
       <th><strong>both</strong></th>
     </tr>
     <tr><td class="l">violence</td><td>86.7</td><td>86.7</td><td class="best">91.7</td></tr>
-    <tr><td class="l">self-harm</td><td>55.0</td><td>55.0</td><td class="best">61.7</td></tr>
+    <tr><td class="l">self-harm</td><td class="best">55.0</td><td>50.0</td><td class="best">61.7</td></tr>
     <tr><td class="l">shocking</td><td>60.0</td><td>78.3</td><td class="best">88.3</td></tr>
     <tr><td class="l">illegal_activity</td><td class="best">43.3</td><td>38.3</td><td>41.7</td></tr>
     <tr><td class="l">harassment</td><td>38.3</td><td class="best">46.7</td><td class="best">46.7</td></tr>
     <tr><td class="l">hate</td><td>51.7</td><td>60.0</td><td class="best">66.7</td></tr>
-    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>55.8</strong></td><td><strong>60.8</strong></td><td><strong>66.1</strong></td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>55.8</strong></td><td><strong>60.0</strong></td><td><strong>66.1</strong></td></tr>
   </table>
   <div class="box box-new" style="font-size:0.76em;">
-    <strong>Both wins or ties on 5/6 concepts</strong> (avg 66.1 vs.&nbsp;img 60.8 vs.&nbsp;txt 55.8);
+    <strong>Both wins or ties on 5/6 concepts</strong> (avg 66.1 vs.&nbsp;img 60.0 vs.&nbsp;txt 55.8);
     loses to txt-only on illegal_activity, ties img-only on harassment.
     Text and image probes are complementary &mdash; text wins on keyword-explicit prompts,
     image wins on metaphor-laden ones; pixel-wise winner-take-all keeps both inside one disjoint partition.
@@ -419,9 +424,10 @@
   <div class="two-col">
     <div>
       <div class="box box-new">
-        <strong>1. Multi-concept &mdash; expand</strong>
+        <strong>1. Multi-concept &mdash; expand &amp; clean</strong>
         <ul style="font-size:0.82em; margin:4px 0;">
           <li>Lift image-probe pseudo-token cap from 4 &rarr; 24 (recover violence&nbsp;/&nbsp;shocking)</li>
+          <li><strong>Re-run with concept-aware global <code>target_concepts</code></strong> (current runs default to nudity)</li>
           <li>Multi on SD&nbsp;3 / FLUX.1 (currently SD&nbsp;1.4 only)</li>
           <li>Pairwise dual-concept matrix (Nudity&nbsp;&times;&nbsp;Shocking already done)</li>
         </ul>
@@ -464,7 +470,7 @@
         anchor avg 68.9 vs.&nbsp;hybrid 66.1 (+2.8&nbsp;pp), neither dominates &mdash; we report both as first-class.</li>
     <li><strong>Hybrid sweeps nudity</strong> (UD&nbsp;97.2, RAB&nbsp;96.2, MMA&nbsp;84.4, P4DN&nbsp;97.4); +9&ndash;26&nbsp;pp over SAFREE.</li>
     <li><strong>One pack, three backbones.</strong> Best-of-mode avg SR on MJA: SD&nbsp;1.4&nbsp;81.0, SD&nbsp;3&nbsp;74.8, FLUX.1&nbsp;92.5.</li>
-    <li><strong>Probe = both</strong> wins or ties on 5/6 I2P concepts (avg 66.1 vs.&nbsp;img 60.8 vs.&nbsp;txt 55.8).</li>
+    <li><strong>Probe = both</strong> wins or ties on 5/6 I2P concepts (avg 66.1 vs.&nbsp;img 60.0 vs.&nbsp;txt 55.8).</li>
     <li><strong>Multi-concept</strong>: SAFREE collapses (avg SR 2.8); Ours retains 45.0 &mdash; <strong>+42&nbsp;pp absolute</strong>, win on every concept.</li>
     <li><strong>Evaluator</strong>: 4-class VLM rubric with explicit collapse class &mdash; no scalar-detector loophole; ongoing human study.</li>
     <li><strong>Open</strong>: multi-concept image-probe pseudo-token cap (4&rarr;24); v5 re-eval of training-based baselines (ESD/SDD/RECE/SLD); COCO-FID for hybrid.</li>
