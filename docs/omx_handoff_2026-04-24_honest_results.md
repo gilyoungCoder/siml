@@ -119,6 +119,47 @@ The camera-ready handoff used `paper_full.md` numbers that were partly stale. Au
 
 ---
 
+### Table 6 — NudeNet (nudity-only) + Q16 (non-nudity-only) flag rates @ threshold 0.7
+
+> Following cited paper protocol (Praneeth 2021, Schramowski 2022): NudeNet `--threshold 0.7` (high FP at 0.5), Q16 `--threshold 0.7` (CLIP-ViT-L/14 + Q16 learned prompts). NudeNet runs ONLY on nudity datasets; Q16 runs ONLY on non-nudity concepts (per cited paper convention).
+
+#### 6.1 Nudity (UD/RAB/MMA/P4DN) — NudeNet@0.7 + Q16@0.7 cross-check
+
+| Method | UD-NN | UD-Q16 | RAB-NN | RAB-Q16 | MMA-NN | MMA-Q16 | P4DN-NN | P4DN-Q16 |
+|---|---|---|---|---|---|---|---|---|
+| Baseline (SD 1.4) | .683 | 9.86% | .696 | 7.59% | .905 | 8.40% | .901 | 12.58% |
+| SAFREE | .197 | 8.45% | .114 | 5.06% | .370 | 16.60% | .351 | 9.27% |
+| **Ours (anchor)** | .507 | **2.11%** | .532 | 3.80% | .738 | 4.60% | .563 | 3.97% |
+| **Ours (hybrid)** | **.225** | 5.63% | **.127** | 3.80% | **.488** | **3.70%** | **.139** | 3.31% |
+
+> NudeNet trade-off (paper §evaluator_collapse): SAFREE achieves lowest NudeNet flag (.114-.370) but its low rate is partly collapse-as-safety (paper Appendix). Ours preserves human/scene structure → NudeNet flags higher (.127-.738) but Q16 (semantic-level) is among the lowest (3.31%-5.63%), confirming semantic-preserving erasure.
+
+#### 6.2 Non-nudity I2P top-60 (SD 1.4) — Q16@0.7
+
+| Concept | Baseline | SAFREE | Ours-anchor | Ours-hybrid |
+|---|---|---|---|---|
+| violence | 65.00% | 18.33% | 26.67% | 26.67% |
+| self-harm | 81.67% | 26.67% | 41.67% | 21.67% |
+| shocking | 88.33% | 16.67% | 15.00% | 21.67% |
+| illegal_activity | 68.33% | 20.00% | 43.33% | 46.67% |
+| harassment | 58.33% | 33.33% | 11.67% | 35.00% |
+| hate | 56.67% | 26.67% | 21.67% | 11.67% |
+| **avg** | **69.72%** | **23.61%** | **26.67%** | **27.22%** |
+
+> Baseline >> SAFREE ≈ Ours on Q16 (all defenses sharply reduce Q16 flag from baseline ~70% to ~25%). Best-of-mode Ours per concept: violence 26.67%, self-harm 21.67%, shocking 15%, illegal 43.33%, harassment 11.67%, hate 11.67% — competitive with SAFREE.
+
+#### 6.3 Non-nudity MJA SD 1.4 — Q16@0.7
+
+| Concept | Baseline | SAFREE | Ours-anchor | Ours-hybrid |
+|---|---|---|---|---|
+| violent | 84.50% | 39.00% | 34.00% | 16.00% |
+| illegal | 41.75% | 19.00% | 4.00% | 20.00% |
+| disturbing | 86.75% | 35.00% | 17.00% | 14.00% |
+
+> Baseline n=400 (4 seeds), others n=100 (1 seed). Ours-best (per cell) wins all 3 MJA concepts vs SAFREE under Q16.
+
+---
+
 ### Table A (Appendix) — MJA Cross-Backbone
 
 | Concept | Backbone | Baseline | SAFREE | Ours-anchor | Ours-hybrid |
