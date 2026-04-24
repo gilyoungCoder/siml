@@ -88,7 +88,7 @@
     <li><strong>Cross-backbone story closed</strong> &mdash;
         full MJA grids on SD&nbsp;1.4&nbsp;/&nbsp;SD&nbsp;3&nbsp;/&nbsp;FLUX.1; confirms architecture-agnostic decomposition.</li>
     <li><strong>Probe-mode ablation finalized</strong> &mdash;
-        text&nbsp;.558, image&nbsp;.608, <strong>both&nbsp;.689</strong> avg SR; <em>both</em> wins on <strong>6/6</strong> I2P concepts.</li>
+        text&nbsp;.558, image&nbsp;.608, <strong>both&nbsp;.661</strong> avg SR; <em>both</em> wins or ties on <strong>5/6</strong> I2P concepts.</li>
     <li><strong>Paper alignment to NeurIPS&nbsp;2026 camera-ready format</strong> &mdash;
         abstract, intro, method, experiments, appendix re-fitted; checklist re-ordered after appendix.</li>
   </ol>
@@ -155,16 +155,17 @@
     <tr><td class="l">violence</td><td>76.7</td><td>88.3</td><td class="best">91.7</td><td><span class="tag tag-purple">hybrid</span></td><td>peaceful scene&nbsp;(crisp)</td></tr>
     <tr><td class="l">self-harm</td><td>53.3</td><td class="best">68.3</td><td>61.7</td><td><span class="tag tag-orange">anchor</span></td><td>healing&nbsp;(ambiguous)</td></tr>
     <tr><td class="l">shocking</td><td>75.0</td><td>78.3</td><td class="best">88.3</td><td><span class="tag tag-purple">hybrid</span></td><td>calm scene&nbsp;(crisp)</td></tr>
-    <tr><td class="l">illegal_activity</td><td>33.3</td><td>46.7</td><td class="best">48.3</td><td><span class="tag tag-purple">hybrid</span></td><td>legal activity&nbsp;(ambiguous, near-tie)</td></tr>
-    <tr><td class="l">harassment</td><td>25.0</td><td class="best">71.7</td><td>56.7</td><td><span class="tag tag-orange">anchor</span></td><td>cooperation&nbsp;(ambiguous)</td></tr>
+    <tr><td class="l">illegal_activity</td><td>33.3</td><td class="best">46.7</td><td>41.7</td><td><span class="tag tag-orange">anchor</span></td><td>legal activity&nbsp;(ambiguous)</td></tr>
+    <tr><td class="l">harassment</td><td>25.0</td><td class="best">71.7</td><td>46.7</td><td><span class="tag tag-orange">anchor</span></td><td>cooperation&nbsp;(ambiguous)</td></tr>
     <tr><td class="l">hate</td><td>33.3</td><td>60.0</td><td class="best">66.7</td><td><span class="tag tag-purple">hybrid</span></td><td>diversity&nbsp;(crisp-ish)</td></tr>
-    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>49.4</strong></td><td><strong>68.9</strong></td><td><strong>68.9</strong></td><td colspan="2">4 hybrid / 2 anchor &mdash; <strong>avg tied</strong></td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>49.4</strong></td><td><strong>68.9</strong></td><td><strong>66.1</strong></td><td colspan="2">3 hybrid / 3 anchor &mdash; <strong>avg anchor +2.8&nbsp;pp</strong></td></tr>
   </table>
   <div class="box box-warn" style="font-size:0.78em;">
-    <strong>Honest position.</strong> Per concept hybrid wins 4 (vio, shoc, ill, hate) and anchor wins 2 (sh, har),
-    but the per-concept averages are <strong>identical at 68.9&#37;</strong>. The mode that wins on a given concept
-    depends on the <em>visual cleanliness of the paired anchor</em>; either mode is a defensible default,
-    so the paper reports <strong>both as first-class rows</strong> and exposes the tradeoff to the reader.
+    <strong>Honest position.</strong> 3-3 split per concept (vio/shoc/hate hybrid; sh/illegal/har anchor).
+    Anchor leads on average (68.9 vs.&nbsp;66.1, +2.8&nbsp;pp), but neither mode dominates everywhere.
+    The mode that wins on a given concept depends on the <em>visual cleanliness of the paired anchor</em>;
+    we report <strong>both as first-class rows</strong> and expose the tradeoff to the reader.
+    All cells use concept-correct CLI keywords (no nudity-default fallback).
   </div>
 </section>
 
@@ -218,14 +219,14 @@
     <tr><td class="l">violence</td><td>56.7</td><td>76.7</td><td>88.3</td><td class="best">91.7</td><td class="gv">+15.0</td></tr>
     <tr><td class="l">self-harm</td><td>55.0</td><td>53.3</td><td class="best">68.3</td><td>61.7</td><td class="gv">+15.0</td></tr>
     <tr><td class="l">shocking</td><td>28.3</td><td>75.0</td><td>78.3</td><td class="best">88.3</td><td class="gv">+13.3</td></tr>
-    <tr><td class="l">illegal_activity</td><td>35.0</td><td>33.3</td><td>46.7</td><td class="best">48.3</td><td class="gv">+15.0</td></tr>
-    <tr><td class="l">harassment</td><td>25.0</td><td>25.0</td><td class="best">71.7</td><td>56.7</td><td class="gv">+46.7</td></tr>
+    <tr><td class="l">illegal_activity</td><td>35.0</td><td>33.3</td><td class="best">46.7</td><td>41.7</td><td class="gv">+13.4</td></tr>
+    <tr><td class="l">harassment</td><td>25.0</td><td>25.0</td><td class="best">71.7</td><td>46.7</td><td class="gv">+46.7</td></tr>
     <tr><td class="l">hate</td><td>30.0</td><td>33.3</td><td>60.0</td><td class="best">66.7</td><td class="gv">+33.4</td></tr>
-    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>49.4</strong></td><td><strong>68.9</strong></td><td><strong>68.9</strong></td><td class="gv"><strong>+23.1</strong></td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>49.4</strong></td><td><strong>68.9</strong></td><td><strong>66.1</strong></td><td class="gv"><strong>+22.8</strong></td></tr>
   </table>
   <div class="box box-green" style="font-size:0.76em;">
-    Ours wins <strong>all 6 concepts</strong>; average <strong>+23.1&nbsp;pp</strong> over SAFREE
-    (best-of-{anchor, hybrid} per concept). Anchor and hybrid averages are tied at 68.9&#37;.
+    Ours wins <strong>all 6 concepts</strong>; average <strong>+22.8&nbsp;pp</strong> over SAFREE
+    (best-of-{anchor, hybrid} per concept). Anchor avg 68.9 vs.&nbsp;hybrid 66.1 &mdash; per-concept tradeoff (3-3 split).
   </div>
 </section>
 
@@ -246,10 +247,10 @@
     <tr><td class="l">violence</td><td>56.7</td><td>76.7</td><td class="bv">5.0</td><td class="best">91.7</td><td>60.0</td><td class="gv">+55.0</td></tr>
     <tr><td class="l">self-harm</td><td>55.0</td><td>53.3</td><td class="bv">1.7</td><td class="best">68.3</td><td>50.0</td><td class="gv">+48.3</td></tr>
     <tr><td class="l">shocking</td><td>28.3</td><td>75.0</td><td class="bv">6.7</td><td class="best">88.3</td><td>43.3</td><td class="gv">+36.6</td></tr>
-    <tr><td class="l">illegal_activity</td><td>35.0</td><td>33.3</td><td class="bv">0.0</td><td class="best">48.3</td><td>46.7</td><td class="gv">+46.7</td></tr>
+    <tr><td class="l">illegal_activity</td><td>35.0</td><td>33.3</td><td class="bv">0.0</td><td class="best">46.7</td><td>46.7</td><td class="gv">+46.7</td></tr>
     <tr><td class="l">harassment</td><td>25.0</td><td>25.0</td><td class="bv">0.0</td><td class="best">71.7</td><td>33.3</td><td class="gv">+33.3</td></tr>
     <tr><td class="l">hate</td><td>30.0</td><td>33.3</td><td class="bv">3.3</td><td class="best">66.7</td><td>36.7</td><td class="gv">+33.4</td></tr>
-    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>49.4</strong></td><td class="bv"><strong>2.8</strong></td><td><strong>72.5</strong></td><td><strong>45.0</strong></td><td class="gv"><strong>+42.2</strong></td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>49.4</strong></td><td class="bv"><strong>2.8</strong></td><td><strong>72.2</strong></td><td><strong>45.0</strong></td><td class="gv"><strong>+42.2</strong></td></tr>
   </table>
   <div class="box box-green" style="font-size:0.78em;">
     <strong>Multi-concept is where the gap explodes.</strong> SAFREE's token-projection set
@@ -259,7 +260,7 @@
   </div>
   <div class="box box-warn" style="font-size:0.74em;">
     <strong>Honest cost vs.&nbsp;our own single-concept models.</strong>
-    Ours-multi still drops &asymp;27&nbsp;pp avg vs.&nbsp;Ours-single (72.5 &rarr; 45.0) because the image-probe
+    Ours-multi still drops &asymp;27&nbsp;pp avg vs.&nbsp;Ours-single (72.2 &rarr; 45.0) because the image-probe
     pseudo-token slot is currently capped at 4 unique families; with 24 loaded only the first 4
     get unique centroids. Lifting this cap is the next fix. The fair comparison &mdash; multi vs.&nbsp;multi &mdash; is
     overwhelming.
@@ -326,15 +327,16 @@
     <tr><td class="l">violence</td><td>86.7</td><td>86.7</td><td class="best">91.7</td></tr>
     <tr><td class="l">self-harm</td><td>55.0</td><td>55.0</td><td class="best">61.7</td></tr>
     <tr><td class="l">shocking</td><td>60.0</td><td>78.3</td><td class="best">88.3</td></tr>
-    <tr><td class="l">illegal_activity</td><td>43.3</td><td>38.3</td><td class="best">48.3</td></tr>
-    <tr><td class="l">harassment</td><td>38.3</td><td>46.7</td><td class="best">56.7</td></tr>
+    <tr><td class="l">illegal_activity</td><td class="best">43.3</td><td>38.3</td><td>41.7</td></tr>
+    <tr><td class="l">harassment</td><td>38.3</td><td class="best">46.7</td><td class="best">46.7</td></tr>
     <tr><td class="l">hate</td><td>51.7</td><td>60.0</td><td class="best">66.7</td></tr>
-    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>55.8</strong></td><td><strong>60.8</strong></td><td><strong>68.9</strong></td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>55.8</strong></td><td><strong>60.8</strong></td><td><strong>66.1</strong></td></tr>
   </table>
   <div class="box box-new" style="font-size:0.76em;">
-    <strong>Both wins on 6/6 concepts</strong> (avg 68.9 vs.&nbsp;img 60.8 vs.&nbsp;txt 55.8). Text and image
-    probes are complementary &mdash; text wins on keyword-explicit prompts, image wins on
-    metaphor-laden ones; pixel-wise winner-take-all keeps both inside one disjoint partition.
+    <strong>Both wins or ties on 5/6 concepts</strong> (avg 66.1 vs.&nbsp;img 60.8 vs.&nbsp;txt 55.8);
+    loses to txt-only on illegal_activity, ties img-only on harassment.
+    Text and image probes are complementary &mdash; text wins on keyword-explicit prompts,
+    image wins on metaphor-laden ones; pixel-wise winner-take-all keeps both inside one disjoint partition.
   </div>
 </section>
 
@@ -458,11 +460,11 @@
   <h2>Summary &amp; Talking Points</h2>
   <ul style="font-size:0.85em;">
     <li><strong>Anchor vs.&nbsp;hybrid is a tradeoff, not a choice.</strong>
-        Per-concept hybrid wins 4 (vio, shoc, ill, hate), anchor wins 2 (sh, har),
-        but the per-concept averages are <strong>tied at 68.9&#37;</strong>; we report both as first-class.</li>
+        Per-concept <strong>3-3 split</strong> (vio/shoc/hate hybrid; sh/illegal/har anchor);
+        anchor avg 68.9 vs.&nbsp;hybrid 66.1 (+2.8&nbsp;pp), neither dominates &mdash; we report both as first-class.</li>
     <li><strong>Hybrid sweeps nudity</strong> (UD&nbsp;97.2, RAB&nbsp;96.2, MMA&nbsp;84.4, P4DN&nbsp;97.4); +9&ndash;26&nbsp;pp over SAFREE.</li>
     <li><strong>One pack, three backbones.</strong> Best-of-mode avg SR on MJA: SD&nbsp;1.4&nbsp;81.0, SD&nbsp;3&nbsp;74.8, FLUX.1&nbsp;92.5.</li>
-    <li><strong>Probe = both</strong> wins all 6/6 I2P concepts (avg 68.9 vs.&nbsp;img 60.8 vs.&nbsp;txt 55.8).</li>
+    <li><strong>Probe = both</strong> wins or ties on 5/6 I2P concepts (avg 66.1 vs.&nbsp;img 60.8 vs.&nbsp;txt 55.8).</li>
     <li><strong>Multi-concept</strong>: SAFREE collapses (avg SR 2.8); Ours retains 45.0 &mdash; <strong>+42&nbsp;pp absolute</strong>, win on every concept.</li>
     <li><strong>Evaluator</strong>: 4-class VLM rubric with explicit collapse class &mdash; no scalar-detector loophole; ongoing human study.</li>
     <li><strong>Open</strong>: multi-concept image-probe pseudo-token cap (4&rarr;24); v5 re-eval of training-based baselines (ESD/SDD/RECE/SLD); COCO-FID for hybrid.</li>
