@@ -317,21 +317,19 @@ Varying $\tau$ from 0.3 to 0.7 on Ring-A-Bell with hybrid guidance shows:
 \section{Evaluator Validation Details}
 \label{app:evaluator}
 
-The main paper reports the Safety-Recovery rate SR under a four-class VLM rubric rather than a binary safety detector. This choice is not aesthetic: binary detectors such as NudeNet~\citep{notai_nudenet_2019} and CLIP-based classifiers such as Q16~\citep{schramowski2022can} systematically conflate two distinct failure modes---over-sensitivity on benign content and collapse-as-safety on destroyed generations---that a \emph{semantic-preserving} erasure method (§\ref{sec:method}) must be able to tell apart. This appendix establishes three properties of our evaluator, in order. (C.1--C.3)~Qwen3-VL-8B matches or exceeds published proprietary VLM judges on the standard MJ-Bench safety protocol, so it is a competitive choice in absolute terms. (C.4)~No binary or CLIP-embedding detector admits a drop-in replacement, because both families treat semantic collapse as \emph{safer} than the original unsafe prompt---a pathology that is directly incompatible with the main-paper thesis. (C.5)~Qwen3-VL-8B's per-image label tracks a human-majority annotation on a stratified I2P audit, so the SR numbers reported throughout are faithful to human-perceived safety rather than to an isolated model idiosyncrasy.
-
 \subsection{MJ-Bench Safety Evaluation Protocol}
 \label{app:mjbench_protocol}
 
-We validate Qwen3-VL-8B as a safety judge on MJ-Bench~\citep{chen2024mj} (672 safety pairs). Unlike the full MJ-Bench five-criteria benchmark (alignment, aesthetics, artifacts, safety, bias \& fairness), we evaluate only the \textbf{safety} criterion: safety judgment is the sole role of the evaluator throughout our paper. For each pair, both images are presented simultaneously to Qwen3-VL-8B-Instruct with a multi-image comparison prompt that assigns a safety score on a $1$--$10$ scale to each image and selects the safer one (ties allowed). Accuracy is reported with ties counted as incorrect (``w/ tie''), with ties excluded from the denominator (``w/o tie''), and as their average (``Avg'') for an overall summary.
+We validate Qwen3-VL-8B as a safety judge on MJ-Bench~\citep{chen2024mj} (672 safety pairs). Unlike the full MJ-Bench 5-criteria benchmark (alignment, aesthetics, artifacts, safety, bias \& fairness), we evaluate only the \textbf{safety} criterion, since safety judgment is the sole role of the evaluator in our paper. For each pair, both images are presented simultaneously to Qwen3-VL-8B-Instruct with a multi-image comparison prompt that asks the model to assign a safety score on a 1--10 scale to each image and select the safer one (with ties allowed). Accuracy is reported with ties counted as incorrect (``w/ tie'') and with ties excluded from the denominator (``w/o tie''); the average of the two (``Avg'') summarizes overall judgment quality.
 
-\subsection{Qwen3-VL-8B vs.\ Published VLM Judges}
+\subsection{Qwen3-VL-8B vs Published VLM Judges}
 \label{app:mjbench_table1}
 
 \begin{table}[h]
 \centering
 \renewcommand{\arraystretch}{1.15}
 \setlength{\tabcolsep}{0.55em}
-\caption{MJ-Bench safety accuracy on 672 pairs. $^\dagger$Numbers for all models other than Qwen3-VL-8B (Ours) are reproduced verbatim from the MJ-Bench benchmark paper~\citep{chen2024mj}. Our entry is obtained by running the protocol of \S\ref{app:mjbench_protocol} on Qwen3-VL-8B-Instruct.}
+\caption{MJ-Bench safety accuracy on 672 pairs. $^\dagger$Numbers for all models other than Qwen3-VL-8B (Ours) are reproduced verbatim from the MJ-Bench benchmark paper~\citep{chen2024mj}. Our entry is obtained by running the same protocol described in \S\ref{app:mjbench_protocol} on Qwen3-VL-8B-Instruct.}
 \label{table:mjbench_table1}
 \small
 \begin{tabular}{@{}llccc@{}}
@@ -356,12 +354,12 @@ Claude 3 Opus$^\dagger$          & Proprietary & 13.4 & 78.9 & 46.2 \\
 \end{tabular}
 \end{table}
 
-Qwen3-VL-8B attains the \textbf{highest overall judgment quality} (Avg $68.3$), narrowly surpassing GPT-4o ($67.7$) and substantially outperforming every scoring model, every other open VLM, and every non-GPT proprietary model. On the strict ``w/ tie'' accuracy it outperforms GPT-4o by $+6.5$~pp ($41.8$ vs.\ $35.3$); on ``w/o tie'' it is competitive with Gemini Ultra ($94.7$ vs.\ $95.1$). An open $8$B model matching or exceeding frontier proprietary models as a safety judge is what justifies our choice of Qwen3-VL-8B as the \emph{sole} evaluator throughout the paper: no other closed- or open-source VLMs are used in our pipeline.
+Qwen3-VL-8B achieves the \textbf{highest overall safety judgment quality} on MJ-Bench (Avg $68.3$), narrowly surpassing GPT-4o ($67.7$) and substantially outperforming every scoring-based model, every other open-source VLM, and every non-GPT proprietary model on the same benchmark. On the strict ``w/ tie'' metric it outperforms GPT-4o by $+6.5$~pp ($41.8$ vs.\ $35.3$), and on ``w/o tie'' it is competitive with Gemini Ultra ($94.7$ vs.\ $95.1$). An open $8$B model matching or exceeding proprietary models as a safety judge is what justifies our choice of Qwen3-VL-8B as the sole safety evaluator throughout the paper: no other closed- or open-source VLMs are used in our pipeline.
 
 \subsection{Evaluator Prompt Templates}
 \label{app:eval_prompt}
 
-Each image is classified by Qwen3-VL-8B-Instruct with greedy decoding (\texttt{do\_sample=False}, \texttt{max\_new\_tokens=100}) under a JSON-only response format. We use two rubric templates: a \textbf{nudity} template with labels \{\textsc{NotPeople}, \textsc{Safe}, \textsc{Partial}, \textsc{Full}\} and a \textbf{generic-harm} template with labels \{\textsc{NotRelevant}, \textsc{Safe}, \textsc{Partial}, \textsc{Full}\} shared across the seven non-nudity I2P concepts (violence, harassment, hate, shocking, disturbing, illegal, self-harm). Figure~\ref{fig:rubric_nudity} shows the nudity prompt verbatim; the generic-harm prompt follows the same structure, swapping only the concept noun and the concrete domain-specific examples in each label (\eg, ``naked body'' $\to$ ``knife attack''/``bloody wound'' for violence). Both templates share three design invariants: (i)~each label is spelled out with concrete examples spanning photoreal, cartoon, anime, painterly, render, 3D, and sketch styles; (ii)~stylization does \emph{not} downgrade severity; (iii)~a recognizable famous figure is rated by the depiction rather than the identity. The rubric is content-based and never names a source dataset, so evaluation remains fair across all benchmarks (MJA, I2P, RAB, P4D-N, UnlearnDiff, MMA-Diffusion).
+Each image is classified by Qwen3-VL-8B-Instruct with greedy decoding (\texttt{do\_sample=False}, \texttt{max\_new\_tokens=100}) under a JSON-only response format. We use two rubric templates: a \textbf{nudity} template with labels \{\textsc{NotPeople}, \textsc{Safe}, \textsc{Partial}, \textsc{Full}\} and a \textbf{generic harm} template with labels \{\textsc{NotRelevant}, \textsc{Safe}, \textsc{Partial}, \textsc{Full}\} shared across the seven non-nudity I2P concepts (violence, harassment, hate, shocking, disturbing, illegal, self-harm). Figure~\ref{fig:rubric_nudity} shows the nudity prompt verbatim; the generic harm prompt follows the same structure, swapping only the concept noun and the concrete domain-specific examples in each label (\eg, ``naked body'' $\to$ ``knife attack'' / ``bloody wound'' for violence). Both templates share three design invariants: each label is spelled out with concrete examples spanning photoreal, cartoon, anime, painterly, render, 3D, and sketch styles; stylization does \emph{not} downgrade severity; a recognizable famous figure is rated by the depiction rather than the identity. The rubric is content-based and never names a source dataset, so evaluation is fair across all benchmarks (MJA, I2P, RAB, P4DN, UnlearnDiff, MMA-Diffusion).
 
 \begin{figure}[h]
 \centering
@@ -386,85 +384,50 @@ Respond ONLY with this JSON: \{``category'': ``<NotPeople$\vert$Safe$\vert$Parti
 \label{fig:rubric_nudity}
 \end{figure}
 
-\subsection{Why a Four-Class VLM Rubric Is Necessary}
+\subsection{Why VLM-based evaluation is necessary}
 \label{app:evaluator_extended}
 
-The main paper frames concept erasure as \emph{semantic-preserving}: an unsafe prompt must map to one of three qualitatively distinct outcomes---(i)~\textsc{Full}, the unsafe concept is clearly present; (ii)~\textsc{Safe}/\textsc{Partial}, the unsafe concept is suppressed but the benign portion of the prompt remains visible; (iii)~\textsc{NotPeople}/\textsc{NotRelevant}, the generation has collapsed to noise, artifacts, or an unrelated scene. Binary safety detectors and CLIP-based classifiers collapse (ii) and (iii) into a single ``safe'' decision, which directly rewards safety-by-destruction and invalidates the evaluation for any method that targets (ii) without (iii). We make this argument in three steps: (\S\ref{app:evaluator_limits})~detector-level failure modes on the over-sensitivity axis, (\S\ref{app:evaluator_collapse})~protocol-level failure modes on the semantic-collapse axis, and (\S\ref{app:evaluator_vlm})~how the four-class VLM rubric resolves both.
+This section motivates the four-class VLM-based rubric that underpins the SR metric in the main paper, with emphasis on jointly assessing \emph{safety} and \emph{semantic fidelity}.
 
-\subsubsection{Limitations of Existing Evaluation Metrics}
+\subsubsection{Limitations of existing evaluation metrics}
 \label{app:evaluator_limits}
 
-Safety-oriented diffusion studies targeting nudity or sexually explicit content are commonly evaluated with automated nudity detectors and classifier-based safety metrics for their scalability. NudeNet~\citep{notai_nudenet_2019} is widely adopted as a default tool that produces a coarse binary nudity decision. Several works report CLIP-based safety classifiers (\eg, Q16~\citep{schramowski2022can}) as a complementary signal, which estimate inappropriateness through image-text similarity against curated descriptors rather than by direct semantic verification.
+Safety-oriented diffusion studies targeting nudity or sexually explicit content are commonly evaluated with automated nudity detectors and classifier-based safety metrics for their scalability. NudeNet~\citep{notai_nudenet_2019} is widely adopted as a default tool, typically producing a coarse binary nudity decision. Other works report CLIP-based safety classifiers (\eg, Q16~\citep{schramowski2022can}) as a complementary signal, estimating inappropriate content through image-text similarity against curated descriptors rather than direct semantic verification.
 
-Both families exhibit systematic limitations for safety \emph{with} semantic preservation. \emph{First}, coarse nudity detectors conflate benign exposure (\eg, swimwear, athletic attire, portraits with visible shoulders) with genuinely harmful content, yielding a steady stream of false positives that incentivize over-suppression (Figure~\ref{fig:case_oversensitivity}); a method that uniformly darkens or blurs human skin will score better than a method that preserves a fully-clothed subject, which is the opposite of what a deployment would want. \emph{Second}, embedding-based safety classifiers are not designed to assess whether an image remains semantically coherent; they can assign a low-risk score even when the generation has degenerated into artifacts, blur, or off-distribution noise, because the discriminative signal they rely on (``does the CLIP embedding resemble the nudity descriptors?'') saturates on degenerate inputs. Consequently, detector-only evaluation risks \emph{misidentifying semantic collapse as safety}, which is fundamentally misaligned with human judgment.
+While convenient, these metrics exhibit systematic limitations for safety \emph{with semantic preservation}. \emph{First}, coarse nudity detectors conflate benign exposure (\eg, swimwear, athletic attire) with genuinely harmful content, yielding false positives that incentivize over-suppression. \emph{Second}, embedding-based safety classifiers are not designed to assess whether an image remains semantically coherent: they may assign a low-risk score even when the generation has degraded into artifacts, blur, or noise. Consequently, detector-only evaluation risks \emph{misidentifying semantic collapse as safety}, rendering these metrics fundamentally misaligned with human perception.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.96\linewidth]{figures/grid_nudenet_vs_VLM_nude.png}
-\caption{\textbf{Over-sensitivity case study.} Even at a standard threshold, NudeNet's binary classification flags socially acceptable exposure (swimwear, athletic attire, clothed subjects with visible skin) as \emph{full nudity}. Under the four-class VLM rubric these images are correctly routed to \textsc{Safe} or \textsc{Partial}, matching human judgment and removing the over-suppression incentive.}
-\label{fig:case_oversensitivity}
-\end{figure}
-
-\subsubsection{Semantic Collapse Confounds Evaluation}
+\subsubsection{Semantic collapse confounds evaluation}
 \label{app:evaluator_collapse}
 
-A second, protocol-level confound arises even when the detector itself is internally consistent. Image quality and prompt adherence are typically reported on benign benchmarks (\eg, COCO), while safety detectors are applied on sensitive prompts. This split leaves semantic fidelity on sensitive prompts largely \emph{unmeasured}: a method may preserve quality on benign data yet destroy generations under unsafe prompts, and still be scored as safe because the detector fails to activate on unrecognizable outputs. Safety is thus overstated unless semantic validity is audited on the same sensitive-prompt distribution that drives the safety score.
-
-Figure~\ref{fig:case_collapse} gives a concrete instantiation: when a guidance scale is tuned aggressively, high-magnitude corrections destroy image structure, and NudeNet labels the resulting noise as \emph{safe} simply because no recognizable human features remain. Our VLM rubric flags these images as \textsc{NotPeople}/\textsc{NotRelevant}, so they are \emph{not} counted as successful erasures in SR. A semantic-preserving erasure must turn \textsc{Full} into \textsc{Safe} (or \textsc{Partial}); turning \textsc{Full} into \textsc{NotPeople} is collapse, not erasure, and the SR accounting used throughout the main paper reflects this invariant by construction.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.96\linewidth]{figures/grid_nudenet_vs_VLM_notrel.png}
-\caption{\textbf{Semantic-collapse case study.} When aggressive safety guidance destroys image structure, NudeNet scores the resulting unrecognizable output as \emph{safe} because no human features remain. The VLM rubric flags these cases as \textsc{NotPeople}/\textsc{NotRelevant}, separating semantic collapse from genuine erasure.}
-\label{fig:case_collapse}
-\end{figure}
-
-\paragraph{Quantitative illustration on three nudity benchmarks.}
-Table~\ref{table:nudenet_flagrate} reports the fraction of samples that NudeNet flags as unsafe at its standard threshold on three nudity benchmarks, for a representative cross-section of defenses. Read in isolation, these numbers are misleading in two opposite directions. On the one hand, \emph{over-sensitivity} pushes the SD baseline to a near-universal unsafe rate ($0.945$ on MMA), partly because of benign exposure (Figure~\ref{fig:case_oversensitivity}). On the other hand, \emph{collapse-as-safety} drives methods such as RECE and SAFREE into near-zero NudeNet flag rates ($0.553/0.114/0.134$ and $0.348/0.089/0.141$ respectively) that mask a sizable migration into \textsc{NotPeople}/\textsc{NotRelevant} in the underlying image distribution---a migration the binary NudeNet decision cannot see. This is precisely why the main paper reports SR under the four-class VLM rubric, which for the same methods separates genuine concept suppression from the over-sensitivity and collapse components.
-
-\begin{table}[h]
-\centering
-\renewcommand{\arraystretch}{1.15}
-\setlength{\tabcolsep}{0.6em}
-\caption{NudeNet-flag fraction at its standard threshold on three nudity benchmarks, for published training-based (top block) and training-free (middle block) defenses, together with \ours{} (bottom row, to be re-evaluated on the current concept pack and exemplars). These numbers are what NudeNet alone reports; they should be read \emph{jointly} with the four-class VLM breakdown in the main paper (Table~\ref{table:nudity}), because a low NudeNet flag rate alone cannot distinguish suppression from semantic collapse (Figure~\ref{fig:case_collapse}).}
-\label{table:nudenet_flagrate}
-\small
-\begin{tabular}{@{}lccc@{}}
-\toprule
-\textbf{Method} & \textbf{MMA-Diffusion}$\downarrow$ & \textbf{Ring-A-Bell}$\downarrow$ & \textbf{UnlearnDiff}$\downarrow$ \\
-\midrule
-SD Baseline                & 0.945 & 0.684 & 0.641 \\
-\midrule
-ESD~\citep{gandikota2023erasing}    & 0.646 & 0.354 & 0.451 \\
-SDD~\citep{kim2023towards}          & 0.561 & 0.253 & 0.296 \\
-UCE~\citep{gandikota2024unified}    & 0.899 & 0.532 & 0.430 \\
-RECE~\citep{gong2024reliable}       & 0.553 & 0.114 & 0.134 \\
-\midrule
-SLD-Weak~\citep{schramowski2023safe}    & 0.940 & 0.709 & 0.599 \\
-SLD-Medium~\citep{schramowski2023safe}  & 0.921 & 0.608 & 0.514 \\
-SLD-Strong~\citep{schramowski2023safe}  & 0.898 & 0.646 & 0.465 \\
-SLD-Max~\citep{schramowski2023safe}     & 0.822 & 0.494 & 0.423 \\
-SAFREE~\citep{yoon2024safree}           & 0.348 & 0.089 & 0.141 \\
-\midrule
-\rowcolor{blue!8} \textbf{\ours{} (anchor, family)} & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} \\
-\rowcolor{blue!8} \textbf{\ours{} (hybrid, family)} & \texttt{TBD} & \texttt{TBD} & \texttt{TBD} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsubsection{A Four-Class VLM Rubric Resolves Both Failure Modes}
-\label{app:evaluator_vlm}
-
-To align automatic evaluation with human visual judgment, we adopt a VLM-based protocol using Qwen3-VL-8B. Each generated image is assigned to one of four labels under the nudity rubric---\textsc{NotPeople}, \textsc{Safe}, \textsc{Partial}, \textsc{Full}---and one of four under the generic-harm rubric---\textsc{NotRelevant}, \textsc{Safe}, \textsc{Partial}, \textsc{Full} (Figure~\ref{fig:rubric_nudity}). This taxonomy separates \emph{safety severity} (Safe~$<$~Partial~$<$~Full) from \emph{semantic validity} (\textsc{NotPeople}/\textsc{NotRelevant} vs.\ the other three) in a single label, without commitment to a binary threshold. Because \textsc{NotPeople}/\textsc{NotRelevant} is a distinct bin rather than an absorbing state attached to ``safe'', the rubric is robust to both failure modes diagnosed in~\S\ref{app:evaluator_limits} and~\S\ref{app:evaluator_collapse}: over-sensitive binary detectors would split NudeNet's single ``unsafe'' decision into \textsc{Safe}, \textsc{Partial}, or \textsc{Full} (removing the over-suppression incentive), while collapsing detectors would move ``unsafe'' into \textsc{NotPeople}/\textsc{NotRelevant} rather than into ``safe'' (removing the collapse-as-safety incentive).
+A distinct confound arises from the evaluation \emph{protocol} rather than any single detector. Image quality and prompt adherence are typically reported on benign benchmarks, while safety detectors are applied on sensitive prompts. This mismatch leaves semantic fidelity on sensitive prompts largely unmeasured: a method may preserve quality on benign data yet collapse generations under unsafe prompts, and still be scored as safe because the detector fails to activate on unrecognizable outputs. Safety can therefore be \emph{overstated} unless semantic validity is audited on the same sensitive-prompt distribution that drives the safety score.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.94\linewidth]{figures/position_map_revised.png}
-\caption{\textbf{NudeNet vs.\ four-class VLM rubric on the same generations.} Each cell is a sample judged by NudeNet (binary) and by the VLM rubric (four classes). Detector-only evaluation conflates over-sensitivity (benign \textsc{Safe}/\textsc{Partial} flagged as unsafe) and semantic collapse (\textsc{NotPeople}/\textsc{NotRelevant} scored as safe) into its binary decision. The four-class rubric resolves both failure modes simultaneously, which is what makes the main-paper SR numbers a meaningful measurement of \emph{semantic-preserving} erasure rather than of generic suppression.}
+\caption{Qualitative comparison of NudeNet versus our VLM-based evaluation. NudeNet's binary prediction conflates benign exposure (\eg, swimwear, athletic attire) with harmful content, labeling such cases as \emph{Unsafe}. The four-class VLM rubric assigns them to \textsc{Safe} or \textsc{Partial}, matching human judgment and reducing the incentive to over-suppress.}
 \label{fig:nudenet_vs_vlm_positionmap}
 \end{figure}
 
-This is \emph{not} a claim that VLM judges are infallible: it is a claim that the rubric shape---four classes, with \textsc{NotPeople}/\textsc{NotRelevant} as a separate bin---rules out the pathologies that make NudeNet/Q16 unsuitable for evaluating semantic-preserving erasure. The residual concern---that the VLM's per-image label may still diverge from human perception on individual images---is addressed by the human-agreement audit in~\S\ref{app:human_study}.
+\subsubsection{VLM-based evaluation with Qwen3-VL}
+\label{app:evaluator_vlm}
+
+To align automatic evaluation with human visual judgment, we adopt a VLM-based protocol using Qwen3-VL-8B. Each generated image is assigned to one of four categories under the nudity rubric---\textsc{NotPeople}, \textsc{Safe}, \textsc{Partial}, \textsc{Full}---and one of four under the generic harm rubric---\textsc{NotRelevant}, \textsc{Safe}, \textsc{Partial}, \textsc{Full} (see Figure~\ref{fig:rubric_nudity} for the full prompt texts). This taxonomy jointly characterizes \emph{safety severity} and \emph{semantic validity}, enabling a fine-grained analysis beyond coarse detector outputs.
+
+Crucially, the VLM-based protocol distinguishes controlled concept suppression from \emph{safety-by-destruction}: semantically collapsed generations are explicitly captured as \textsc{NotPeople}/\textsc{NotRelevant} rather than being implicitly counted as \textsc{Safe}. A semantic-preserving erasure must turn \textsc{Full} into \textsc{Safe}; turning \textsc{Full} into \textsc{NotPeople} is collapse, not erasure, and our SR accounting reflects this invariant. Figure~\ref{fig:nudenet_vs_vlm_positionmap} illustrates the over-sensitivity failure mode, and Figures~\ref{fig:case_oversensitivity} and~\ref{fig:case_collapse} provide concrete case studies of the two failure modes that motivate the VLM protocol.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/grid_nudenet_vs_VLM_nude.png}
+\caption{A case study of NudeNet evaluation under over-sensitivity. Even with a standard threshold, NudeNet's binary classification incorrectly flags socially acceptable exposure as full nudity. Under the four-class VLM rubric these images are routed to \textsc{Safe} or \textsc{Partial}, matching human judgment.}
+\label{fig:case_oversensitivity}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/grid_nudenet_vs_VLM_notrel.png}
+\caption{A case study of NudeNet evaluation under semantic collapse. When high guidance scales destroy image structure, NudeNet incorrectly labels the resulting not-relevant noise as \emph{safe} simply because no recognizable human features remain. The VLM rubric flags these images as \textsc{NotPeople}/\textsc{NotRelevant}, so they are not counted as successful erasures.}
+\label{fig:case_collapse}
+\end{figure}
 
 \subsection{Human Agreement Study}
 \label{app:human_study}
@@ -473,13 +436,13 @@ This is \emph{not} a claim that VLM judges are infallible: it is a claim that th
 Directly validate that Qwen3-VL-8B's four-class label matches the label a pool of human annotators converges on, so that the main-paper SR numbers are a meaningful proxy for human-perceived safety.
 
 \paragraph{Protocol.}
-\emph{Annotators.} Approximately 20 adult annotators recruited under content-warning consent, English-literate, task-compensated; opt-out is allowed at any time. \emph{Stimuli.} For each of the eight I2P concepts we sample 100 generated images from the I2P test set, balanced across methods (baseline, SAFREE, \ours{}-anchor, \ours{}-hybrid), yielding $8 \times 100 = 800$ images total. \emph{Task.} Each image is presented with a one-paragraph compressed form of the rubric in Figure~\ref{fig:rubric_nudity}, and each annotator classifies the image as one of \{\textsc{Full}, \textsc{Partial}, \textsc{Safe}, \textsc{NotRelevant} (or \textsc{NotPeople} for nudity)\} under forced choice. \emph{Ground truth.} Per-image ground truth is the \emph{majority vote} across the $\sim\!20$ annotators. \emph{VLM agreement.} For every image we compare Qwen3-VL-8B's label against the human majority and report two metrics: \textbf{exact-match agreement} (identical labels) and \textbf{within-1 accuracy} (the VLM label is at most one rubric step away from the majority, \eg \textsc{Partial} vs.\ \textsc{Safe} counts as within-1 but \textsc{Full} vs.\ \textsc{Safe} does not).
+\emph{Annotators.} Approximately 20 adult annotators, recruited under content-warning consent, English-literate, task-compensated; opt-out is allowed at any time. \emph{Stimuli.} For each of the eight I2P concepts we sample 100 generated images from the I2P test set, balanced across methods (baseline, SAFREE, \ours{}-anchor, \ours{}-hybrid), yielding $8{\times}100 = 800$ images total. \emph{Task.} Each image is shown to the annotators together with a one-paragraph compressed form of the rubric in Figure~\ref{fig:rubric_nudity}, and each annotator classifies the image as one of \{\textsc{Full}, \textsc{Partial}, \textsc{Safe}, \textsc{NotRelevant} (or \textsc{NotPeople} for nudity)\} under forced choice. \emph{Ground truth.} Per-image ground-truth label is the \emph{majority vote} across the $\sim\!20$ annotators. \emph{VLM agreement.} For every image we compare Qwen3-VL-8B's label against the human majority and report two metrics: \textbf{exact-match agreement} (identical labels) and \textbf{within-1 accuracy} (the VLM label is at most one rubric step away from the majority, \eg{} \textsc{Partial} vs.\ \textsc{Safe} counts as within-1 but \textsc{Full} vs.\ \textsc{Safe} does not).
 
 \begin{table}[h]
 \centering
 \renewcommand{\arraystretch}{1.15}
 \setlength{\tabcolsep}{0.7em}
-\caption{Human agreement study. $n{\approx}20$ annotators classify 100 I2P images per concept; ground truth is the per-image annotator majority, and we report Qwen3-VL-8B's agreement with this majority. All cells dashed pending full data collection; the camera-ready version will report completed numbers.}
+\caption{Human agreement study. $n{\approx}20$ annotators classify 100 I2P images per concept; ground truth is the per-image annotator majority. We report Qwen3-VL-8B's agreement with the majority. All cells dashed pending full data collection.}
 \label{table:human_study}
 \small
 \begin{tabular}{@{}lccc@{}}
@@ -501,39 +464,31 @@ Self-harm       & 100 & -- & -- \\
 \end{table}
 
 \paragraph{Interpretation.}
-High exact-match agreement (and near-saturated within-1 accuracy) would establish that Qwen3-VL-8B tracks the label that a pool of human annotators converges on, making the SR numbers reported throughout a reliable stand-in for human evaluation at scale.
+High exact-match agreement (and near-saturated within-1 accuracy) would establish that Qwen3-VL-8B faithfully tracks the label that a pool of human annotators converges on, making the SR numbers reported in the main paper a reliable stand-in for human evaluation at scale.
 
 \section{Cross-Backbone Validation (Full Results)}
 \label{app:cross_backbone_full}
 
-The main body (\S\ref{subsec:cross_backbone}) summarizes the cross-backbone validation; this appendix reports the full per-concept numbers and the architectural take-away. Only the Where probe is re-implemented per backbone---cross-attention for SD~v1.4 UNet, a joint-attention sub-matrix for SD~3 MMDiT, and a DiT-compatible spatial probe for FLUX.1-dev---while the CAS gate (Eq.~\ref{eq:cas}) and both How updates (Eqs.~\ref{eq:anchor_inpaint}--\ref{eq:hybrid}) are reused verbatim. Table~\ref{table:cross_backbone} reports MJA SR per concept on all three backbones.
+The main body (\S\ref{subsec:cross_backbone}) summarizes the cross-backbone validation; this appendix reports the full per-concept numbers and discusses the architectural take-away. Only the Where probe is re-implemented per backbone---cross-attention for SD~v1.4 UNet, joint-attention sub-matrix for SD~3 MMDiT, a DiT-compatible spatial probe for FLUX---while the CAS gate (Eq.~\ref{eq:cas}) and both How updates (Eqs.~\ref{eq:anchor_inpaint}--\ref{eq:hybrid}) are reused verbatim. Table~\ref{table:cross_backbone} reports MJA SR per concept on all three backbones.
 
 \input{table/cross_backbone}
 
-\paragraph{What transfers.}
-On FLUX.1-dev the two-mode trade-off observed on SD~v1.4 replicates: hybrid dominates on concepts with a visually crisp paired anchor (sexual, disturbing), while anchor inpainting dominates on concepts with ambiguous anchors (violent, illegal). This is evidence that the trade-off is a property of the \emph{concept pack and CFG geometry}, not of the $\epsilon$-prediction UNet. On SD~3 (MMDiT) we report only the anchor row in this revision: the CAS threshold $\tau{=}0.6$ was calibrated for $\epsilon$-prediction and lies above SD~3's velocity-parameterization CAS range ($0.03$--$0.51$), so hybrid guidance is effectively never triggered under that threshold. A per-backbone $\tau$ retune is in progress (we expect $\tau \in [0.2, 0.4]$ for SD~3) and the corresponding cells will be filled once the sweep stabilizes; we deliberately do \emph{not} report contaminated SD~3 hybrid numbers.
+\paragraph{What transfers.} On FLUX.1-dev the two-mode trade-off we observe on SD~v1.4 replicates: hybrid dominates on concepts with a visually crisp paired anchor (sexual, disturbing), while anchor inpainting dominates on concepts with ambiguous anchors (violent, illegal). This is strong evidence that the trade-off is a property of the \emph{concept pack and CFG geometry}, not of the $\epsilon$-prediction UNet. On SD~3 (MMDiT) we report only the anchor row in this revision: the CAS threshold $\tau{=}0.6$ was calibrated for $\epsilon$-prediction and lies above SD~3's velocity-parameterization CAS range ($0.03$--$0.51$), so hybrid guidance is effectively never triggered under that threshold. A per-backbone $\tau$ retune is in progress (we expect $\tau{\in}[0.2,0.4]$ for SD~3) and the corresponding cells will be filled when stable; we intentionally do \emph{not} report contaminated SD~3 hybrid numbers.
 
-\paragraph{What this validates.}
-The take-away is architectural rather than purely numerical. CAS is a cosine of \emph{direction differences} and both How modes are \emph{linear} in the prediction, so the When and How components are identical up to a per-backbone scale; only Where requires per-backbone re-implementation. The fact that concept-level trends---image-dominant concepts benefit from the image probe across all three backbones; hybrid-vs-anchor winners align between SD~v1.4 and FLUX---transfer across $\epsilon$-prediction, velocity, and flow-matching parameterizations is what converts \ours{} from an SD~v1.4-specific recipe into a \emph{framework} usable on any backbone for which a spatial probe can be extracted from the denoiser.
+\paragraph{What this validates.} The take-away is architectural rather than numerical: CAS is a cosine of \emph{direction differences}, and both How modes are \emph{linear} in the prediction, so the When and How components are identical up to a per-backbone scale; only Where requires per-backbone re-implementation. Cross-backbone transfer of concept-level trends---image-dominant concepts benefit from the image probe across all three backbones; hybrid-vs-anchor winners align between SD~v1.4 and FLUX---therefore confirms that \ours{} is a \emph{framework}, not an SD~v1.4-specific recipe.
 
 \section{Limitations and Failure Cases}
 \label{app:limitations}
 
-We group the limitations of \ours{} along four axes that correspond to the three-stage When/Where/How decomposition of the main paper, plus one evaluator-side caveat.
+\paragraph{Adversarial robustness.} On MMA-Diffusion~\citep{yang2024mma}, \ours{} still misses $\sim20\%$ of sophisticated adversarial prompts whose CAS stays below threshold throughout denoising.
 
-\paragraph{When: adversarial robustness of the CAS gate.}
-On the strongest adversarial benchmark, MMA-Diffusion~\citep{yang2024mma}, \ours{} still misses approximately $20\%$ of sophisticated jailbreaks whose CAS stays below $\tau$ for the entire denoising trajectory. These prompts do not align strongly with any concept-level descriptor pack in cosine space, so the gate never fires and the pipeline is effectively bypassed. Lowering $\tau$ uniformly is not a fix: benign-prompt false-positive rates on COCO rise above $8\%$ at $\tau{=}0.3$ (\S\ref{app:cas_threshold}). Learned or prompt-aware $\tau$ selection on a small validation split is a promising direction but left for future work.
+\paragraph{Concept overlap in multi-concept erasure.} When two concepts share the person region (\eg, nudity$+$hate), masks can overlap; family packs mitigate but do not eliminate destructive interference.
 
-\paragraph{Where: concept overlap in multi-concept erasure.}
-When two concepts share the person region (\eg, nudity$+$hate), per-family masks overlap, and the pixel-wise winner-take-all resolves the conflict by selecting whichever (concept, family) has the stronger per-pixel score. The \emph{losing} (concept, family), however, then contributes no guidance on that pixel. Family packs mitigate but do not eliminate destructive interference in this regime (Table~\ref{table:dual_all}); the largest drop we observe is $-26.0$~pp on nudity for the nudity$+$hate pair. A more principled arbiter---\eg, a soft cross-concept mixture rather than a hard partition---is a natural next step.
+\paragraph{CAS threshold sensitivity.} $\tau$ transfers well within concept categories but requires per-concept tuning across categories; automated selection on a tiny validation set is a promising direction.
 
-\paragraph{How: per-backbone re-tuning of magnitudes.}
-CAS and both How updates are parameterization-invariant in form but not in magnitude: $\tau$ and the guidance scale (particularly $s_\text{h}$ on hybrid) require per-backbone re-calibration because the CFG direction's magnitude depends on the denoiser's output parameterization (\S\ref{app:cross_backbone_full}). Hyperparameter transfer between backbones is a practical limitation and likely not fully resolvable without a principled normalization of the CFG direction.
-
-\paragraph{Evaluator.}
-The main-paper SR numbers rely on Qwen3-VL-8B as the sole safety judge (\S\ref{app:evaluator}). MJ-Bench (\S\ref{app:mjbench_table1}) and the in-progress human-agreement study (\S\ref{app:human_study}) provide strong evidence of judge reliability, but any single-evaluator protocol carries residual risk; we will release per-image labels at camera-ready so that downstream studies can re-score under alternative judges.
+\paragraph{Base model dependency.} Our main evaluation is on SD~v1.4. The framework is architecture-agnostic in principle, but hyperparameters and exemplar embeddings may need re-tuning for SDXL, SD3 (MMDiT), or FLUX (DiT) backbones.
 
 \section{Broader Impact}
 \label{app:broader_impact}
 
-\ours{} is designed to mitigate safety concerns in generative models and contributes to responsible deployment of T2I diffusion systems. The same spatial localization techniques could, in principle, be repurposed to \emph{amplify} harmful content if applied maliciously---running the pipeline with swapped target/anchor directions would push the generation \emph{toward} the concept rather than away from it. We therefore recommend deploying \ours{} as one component of a comprehensive safety pipeline that also includes upstream prompt filtering and downstream content review. We release the concept packs used in our evaluation as human-readable prompt-and-image directories so that practitioners and auditors can inspect, extend, or contest the safety policy directly, rather than relying on an opaque classifier.
+\ours{} is designed to mitigate safety concerns in generative models and contributes to responsible AI deployment. The same spatial localization techniques could in principle be repurposed to amplify harmful content if applied maliciously, and should therefore be deployed as one component of a comprehensive safety pipeline that also includes upstream prompt filtering and downstream content review. Releasing the concept packs used in our evaluation as human-readable prompt-and-image directories is intended to support auditability and responsible adaptation rather than misuse.
