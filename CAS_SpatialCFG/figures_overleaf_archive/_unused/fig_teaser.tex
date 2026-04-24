@@ -1,0 +1,36 @@
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,calc,arrows.meta,backgrounds,fit}
+
+\definecolor{hitRed}{HTML}{DC2626}
+\definecolor{okGreen}{HTML}{10B981}
+
+\begin{document}
+\begin{tikzpicture}[
+  font=\footnotesize,
+  >={Stealth[length=2mm]},
+  thin,
+]
+
+% ============== TITLE ==============
+\node[anchor=south,font=\normalsize\bfseries,text=black] at (0, 0.25)
+  {Generated samples: baseline vs.\ ours};
+
+% ============== MAIN IMAGE (2x2 grid, already includes per-column headers + prompts) ==============
+\node[anchor=north,inner sep=0] (samples)
+  at (0, -0.05) {\includegraphics[width=11.5cm]{_raster_src/baseline_vs_ours.png}};
+
+% ============== BOTTOM CAPTION ==============
+\node[anchor=north,align=center,font=\scriptsize,text=black!75,text width=13.8cm]
+  at ($(samples.south)+(0,-0.25)$)
+  {\textbf{Ring-A-Bell adversarial prompts.}
+   \textit{Left (red):} SD~v1.4 baseline generates unsafe content.
+   \textit{Right (green):} Our dual-probe method erases the unsafe regions
+   while preserving scene composition via spatially masked anchor inpainting ---\\
+   no training, no fine-tuning, no per-prompt tuning.};
+
+\end{tikzpicture}
+\end{document}

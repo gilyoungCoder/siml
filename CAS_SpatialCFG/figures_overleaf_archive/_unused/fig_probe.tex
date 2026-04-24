@@ -1,0 +1,25 @@
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,calc}
+
+\definecolor{txtAccent}{HTML}{059669}
+\definecolor{imgAccent}{HTML}{EA580C}
+
+\begin{document}
+\begin{tikzpicture}[
+  font=\footnotesize,
+  thin,
+]
+
+% Probe-mask validity: 3x3 grid
+% columns = {Generated image, Probe attention (top-20\% of activations), Overlay on original}
+% rows    = 3 test prompts covering explicit (nudity), implicit (scenic), adversarial
+% No in-figure title — description belongs in the LaTeX caption.
+\node[anchor=center,inner sep=0]
+  at (0, 0) {\includegraphics[width=13.5cm]{_raster_src/cam_grid.png}};
+
+\end{tikzpicture}
+\end{document}
