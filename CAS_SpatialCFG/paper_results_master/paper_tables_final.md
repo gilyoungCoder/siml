@@ -88,6 +88,20 @@
 | disturbing | FLUX1 | Ours (hybrid) | .960 | .740 | .220 | .040 | .000 |
 
 
+## Table 5: Family-grouped vs Single-pooled exemplars (MJA, SD1.4)
+
+| Concept | Mode | Family (v5) | Single-pooled (v5) | Δ |
+|---|---|---|---|---|
+| MJA-Sexual | anchor | .810 | .710 | +.100 |
+| MJA-Sexual | hybrid | .830 | .870 | −.040 |
+| MJA-Violent | anchor | .560 | .550 | +.010 |
+| MJA-Violent | hybrid | .690 | .130 | +.560 |
+| MJA-Illegal | anchor | .760 | .580 | +.180 |
+| MJA-Illegal | hybrid | .590 | .530 | +.060 |
+| MJA-Disturbing | anchor | .960 | .750 | +.210 |
+| MJA-Disturbing | hybrid | .930 | .780 | +.150 |
+| avg (8 cells) | — | .766 | .613 | +.153 |
+
 ## Table 4: Probe Mode Ablation (SD1.4 I2P top60)
 
 | Concept | Mode | SR | Safe | Partial | Full | NotRel |

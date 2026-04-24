@@ -175,6 +175,34 @@
 
 ---
 
+## 08_ablation_family_vs_single_v5  (Table 5 main paper, NEW 2026-04-24 15:48 KST)
+
+> Same total N=16. Family = F=4×K=4 from `concepts_v2/{c}/clip_grouped.pt`. Single-pooled = N=16 averaged into one centroid via `concepts_v2/{c}/clip_exemplar_projected.pt` + `--family_guidance=False`. Identical hyperparameters per (concept, mode) matching family best from §03.
+
+| Cell | SR | Full | n | Config | dir |
+|---|---|---|---|---|---|
+| sexual_anchor_family | 81.0 | 9.0 | 100 | anchor_inpaint cas=0.6 ss=2.5 τ_t=0.1 τ_i=0.3 both | paper_results_master/03_mja_sd14_4concept/mja_sexual_anchor |
+| sexual_anchor_single | 71.0 | 19.0 | 100 | anchor_inpaint cas=0.6 ss=1.2 τ_t=0.3 τ_i=0.3 both | v2_experiments/sexual/mja_both_anchor_inpaint_single_cas0.6_ss1.2 |
+| sexual_hybrid_family | 83.0 | 2.0 | 100 | hybrid cas=0.6 ss=22 τ_t=0.15 τ_i=0.1 both | paper_results_master/03_mja_sd14_4concept/mja_sexual_hybrid |
+| sexual_hybrid_single | 87.0 | 3.0 | 100 | hybrid cas=0.6 ss=22 τ_t=0.15 τ_i=0.1 both | launch_0424_singlepool_hybrid/mja_sexual/hybrid_ss22_tt0.15_ti0.1_both_cas0.6 |
+| violent_anchor_family | 56.0 | 26.0 | 100 | anchor_inpaint cas=0.6 ss=1.8 τ_t=0.1 τ_i=0.3 both | paper_results_master/03_mja_sd14_4concept/mja_violent_anchor |
+| violent_anchor_single | 55.0 | 20.0 | 100 | anchor_inpaint cas=0.3 ss=2.0 τ_t=0.3 τ_i=0.3 both | v2_experiments/violent/mja_both_anchor_inpaint_single_cas0.3_ss2.0 |
+| violent_hybrid_family | 69.0 | 16.0 | 100 | hybrid cas=0.4 ss=25 τ_t=0.15 τ_i=0.1 both | paper_results_master/03_mja_sd14_4concept/mja_violent_hybrid |
+| violent_hybrid_single | 13.0 | 82.0 | 100 | hybrid cas=0.4 ss=1.5 τ_t=0.3 τ_i=0.3 both | v2_experiments/violent/mja_both_hybrid_single_cas0.4_ss1.5 (only available; ss differs from family) |
+| illegal_anchor_family | 76.0 | 8.0 | 100 | anchor_inpaint cas=0.4 ss=2.5 τ_t=0.1 τ_i=0.3 both | paper_results_master/03_mja_sd14_4concept/mja_illegal_anchor |
+| illegal_anchor_single | 58.0 | 17.0 | 100 | anchor_inpaint cas=0.5 ss=1.5 τ_t=0.3 τ_i=0.3 both | v2_experiments/illegal/mja_both_anchor_inpaint_single_cas0.5_ss1.5 |
+| illegal_hybrid_family | 59.0 | 28.0 | 100 | hybrid cas=0.6 ss=22 τ_t=0.15 τ_i=0.1 both | launch_0424_rerun_sd14/mja_illegal/hybrid_ss22.0_thr0.15_imgthr0.1_cas0.6_both |
+| illegal_hybrid_single | 53.0 | 34.0 | 100 | hybrid cas=0.6 ss=22 τ_t=0.15 τ_i=0.1 both | launch_0424_singlepool_hybrid/mja_illegal/hybrid_ss22_tt0.15_ti0.1_both_cas0.6 |
+| disturbing_anchor_family | 96.0 | 2.0 | 100 | anchor_inpaint cas=0.6 ss=2.0 τ_t=0.1 τ_i=0.4 both | paper_results_master/03_mja_sd14_4concept/mja_disturbing_anchor |
+| disturbing_anchor_single | 75.0 | 4.0 | 100 | anchor_inpaint cas=0.3 ss=3.0 τ_t=0.3 τ_i=0.3 both | v2_experiments/disturbing/mja_both_anchor_inpaint_single_cas0.3_ss3.0 |
+| disturbing_hybrid_family | 93.0 | 5.0 | 100 | hybrid cas=0.6 ss=22 τ_t=0.15 τ_i=0.1 both | paper_results_master/03_mja_sd14_4concept/mja_disturbing_hybrid |
+| disturbing_hybrid_single | 78.0 | 0.0 | 100 | hybrid cas=0.6 ss=22 τ_t=0.15 τ_i=0.1 both | launch_0424_singlepool_hybrid/mja_disturbing/hybrid_ss22_tt0.15_ti0.1_both_cas0.6 |
+
+> avg: Family **76.6** vs Single-pool **61.3** → **+15.3pp**, Family wins 7/8 cells. Sexual hybrid is the only single-pool win (+4pp).
+> Caveat: violent/illegal/sexual/disturbing single-pool ANCHOR cells use older sweep hyperparameters that differ from family best (cas/ss/tt). Hybrid single cells (sexual/illegal/disturbing) generated 2026-04-24 with family hybrid hyperparameters → strict apples-to-apples for hybrid. Violent hybrid single is the lone non-strict cell (ss=1.5 only available).
+
+---
+
 ## Cross-table consistency check (verified 2026-04-24 14:30 KST)
 
 - HOW Mode `hybrid` (slide 6) ≡ I2P Single `hybrid` (slide 9 top, Table 2) ≡ Probe Ablation `both` (slide 14, Table 4) — ✅ all 6 concepts match

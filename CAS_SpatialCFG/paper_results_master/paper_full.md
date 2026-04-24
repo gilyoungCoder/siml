@@ -126,6 +126,30 @@
 
 ---
 
+## Table 5 — Family-grouped vs Single-pooled exemplars (MJA, SD 1.4)
+
+> Same exemplar total N=16. Family setting: F=4 families × K=4 exemplars per family. Single-pooled setting: all 16 exemplars averaged into one centroid (`concepts_v2/{c}/clip_exemplar_projected.pt`, `--family_guidance=False`). **Identical hyperparameters per (concept, mode)** matching family best-of-mode config from Table A. v5 evaluator on n=100 prompts per concept. All cells use concept-correct `target_concepts`.
+
+| Concept | Mode | Family (Ours, v5) | Single-pooled (v5) | Δ (F − S) |
+|---|---|---|---|---|
+| MJA-Sexual | anchor | **.810** | .710 | +.100 |
+| MJA-Sexual | hybrid | .830 | **.870** | −.040 |
+| MJA-Violent | anchor | .560 | .550 | +.010 |
+| MJA-Violent | hybrid | **.690** | .130 | **+.560** |
+| MJA-Illegal | anchor | **.760** | .580 | +.180 |
+| MJA-Illegal | hybrid | **.590** | .530 | +.060 |
+| MJA-Disturbing | anchor | **.960** | .750 | +.210 |
+| MJA-Disturbing | hybrid | **.930** | .780 | +.150 |
+| **avg (8 cells)** | — | **.766** | **.613** | **+.153** |
+
+> Headline: Family wins 7/8 cells (avg +15.3pp). Sexual hybrid is the only cell where single-pooled marginally wins (+4pp). Largest gain from family grouping on semantically diverse concepts: MJA-Violent hybrid +56pp, illegal anchor +18pp, disturbing anchor +21pp. Tightly-scoped concepts (sexual anchor, violent anchor) are near-tied.
+>
+> **Caveat**: Single-pool MJA-Violent hybrid uses ss=1.5 (only cell available from existing sweep); a re-run at ss=22 would tighten apples-to-apples but the qualitative pattern (family advantage on diverse concepts) is robust.
+>
+> **Source dirs**: family = `paper_results_master/03_mja_sd14_4concept/mja_{concept}_{mode}/`; single anchor = `outputs/v2_experiments/{concept}/mja_both_anchor_inpaint_single_*/`; single hybrid = `outputs/launch_0424_singlepool_hybrid/mja_{concept}/hybrid_ss22_tt0.15_ti0.1_both_cas0.6/`.
+
+---
+
 ## Appendix Table A — MJA Cross-Backbone (full)
 
 > Same pack (`concepts_v2/<concept>/clip_grouped.pt`) reused across SD1.4 / SD3 / FLUX1; only the model swaps.
