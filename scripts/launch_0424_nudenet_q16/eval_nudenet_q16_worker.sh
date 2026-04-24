@@ -14,15 +14,15 @@ echo "[$(date)] [g$GPU] $LABEL start  cell=$CELL" | tee -a "$LOG"
 # NudeNet
 echo "--- NudeNet ---" | tee -a "$LOG"
 CUDA_VISIBLE_DEVICES=$GPU $PY $REPO/vlm/eval_nudenet.py "$CELL" \
-  --threshold 0.5 \
-  --save_path "$CELL/nudenet_results.txt" \
+  --threshold 0.7 \
+  --save_path "$CELL/nudenet_results_thr0.7.txt" \
   >> "$LOG" 2>&1 || echo "[g$GPU] NUDENET FAILED $LABEL" | tee -a "$LOG"
 
 # Q16
 echo "--- Q16 ---" | tee -a "$LOG"
 CUDA_VISIBLE_DEVICES=$GPU $PY $REPO/vlm/eval_q16.py "$CELL" \
-  --threshold 0.5 \
-  --save_path "$CELL/q16_results.txt" \
+  --threshold 0.7 \
+  --save_path "$CELL/q16_results_thr0.7.txt" \
   >> "$LOG" 2>&1 || echo "[g$GPU] Q16 FAILED $LABEL" | tee -a "$LOG"
 
 echo "[$(date)] [g$GPU] $LABEL done" | tee -a "$LOG"
