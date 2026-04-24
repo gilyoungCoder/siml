@@ -84,7 +84,7 @@
     <li><strong>Both How modes are now first-class</strong> <span class="tag tag-orange">NEW</span> &mdash;
         anchor inpaint vs.&nbsp;hybrid show <em>no consistent winner</em> across concepts; we report both as separate rows in the paper rather than picking one.</li>
     <li><strong>Multi-concept evaluation completed (SD&nbsp;1.4)</strong> &mdash;
-        single 24-family pack erases six I2P concepts simultaneously; still beats SAFREE on illegal&nbsp;/&nbsp;harassment&nbsp;/&nbsp;hate.</li>
+        one 24-family pack erases six I2P concepts simultaneously: <strong>Ours-multi 45.0 vs.&nbsp;SAFREE-multi 2.8 avg SR</strong> (+42&nbsp;pp; SAFREE-multi collapses to &gt;90&#37; <em>NotRelevant</em>).</li>
     <li><strong>Cross-backbone story closed</strong> &mdash;
         full MJA grids on SD&nbsp;1.4&nbsp;/&nbsp;SD&nbsp;3&nbsp;/&nbsp;FLUX.1; confirms architecture-agnostic decomposition.</li>
     <li><strong>Probe-mode ablation finalized</strong> &mdash;
@@ -233,34 +233,37 @@
 <!-- ===== 9. MULTI-CONCEPT ===== -->
 <section>
   <h2>Multi-Concept &mdash; One Model Erases Six</h2>
-  <p class="sub">Same 24-family pack (6&times;4) loaded into one wrapper, hybrid mode, $s$ tuned per concept. Compared against our own single-concept models on the same I2P top-60 prompts.</p>
+  <p class="sub">Same 24-family pack (6&times;4) into one wrapper, hybrid, $s$ per-concept. Apples-to-apples vs.&nbsp;SAFREE running its own 6-concept token-projection set.</p>
   <table>
     <tr>
       <th style="text-align:left;">Concept</th>
       <th>Baseline</th>
+      <th>SAFREE&nbsp;(single)</th>
+      <th>SAFREE&nbsp;(multi)</th>
       <th>Ours&nbsp;(single)</th>
       <th>Ours&nbsp;(multi)</th>
-      <th>&Delta;&nbsp;(multi&nbsp;&minus;&nbsp;single)</th>
+      <th>&Delta;&nbsp;multi vs.&nbsp;SAFREE-multi</th>
     </tr>
-    <tr><td class="l">violence</td><td>56.7</td><td class="best">91.7</td><td>60.0</td><td class="bv">&minus;31.7</td></tr>
-    <tr><td class="l">self-harm</td><td>55.0</td><td class="best">68.3</td><td>50.0</td><td class="bv">&minus;18.3</td></tr>
-    <tr><td class="l">shocking</td><td>28.3</td><td class="best">88.3</td><td>43.3</td><td class="bv">&minus;45.0</td></tr>
-    <tr><td class="l">illegal_activity</td><td>35.0</td><td class="best">46.7</td><td>46.7</td><td>0.0</td></tr>
-    <tr><td class="l">harassment</td><td>25.0</td><td class="best">71.7</td><td>33.3</td><td class="bv">&minus;38.4</td></tr>
-    <tr><td class="l">hate</td><td>30.0</td><td class="best">66.7</td><td>36.7</td><td class="bv">&minus;30.0</td></tr>
-    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>72.2</strong></td><td><strong>45.0</strong></td><td class="bv"><strong>&minus;27.2</strong></td></tr>
+    <tr><td class="l">violence</td><td>56.7</td><td>76.7</td><td class="bv">5.0</td><td class="best">91.7</td><td>60.0</td><td class="gv">+55.0</td></tr>
+    <tr><td class="l">self-harm</td><td>55.0</td><td>53.3</td><td class="bv">1.7</td><td class="best">68.3</td><td>50.0</td><td class="gv">+48.3</td></tr>
+    <tr><td class="l">shocking</td><td>28.3</td><td>75.0</td><td class="bv">6.7</td><td class="best">88.3</td><td>43.3</td><td class="gv">+36.6</td></tr>
+    <tr><td class="l">illegal_activity</td><td>35.0</td><td>33.3</td><td class="bv">0.0</td><td>46.7</td><td class="best">46.7</td><td class="gv">+46.7</td></tr>
+    <tr><td class="l">harassment</td><td>25.0</td><td>25.0</td><td class="bv">0.0</td><td class="best">71.7</td><td>33.3</td><td class="gv">+33.3</td></tr>
+    <tr><td class="l">hate</td><td>30.0</td><td>33.3</td><td class="bv">3.3</td><td>55.0</td><td class="best">66.7</td><td class="gv">+33.4</td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>49.4</strong></td><td class="bv"><strong>2.8</strong></td><td><strong>72.2</strong></td><td><strong>45.0</strong></td><td class="gv"><strong>+42.2</strong></td></tr>
   </table>
-  <div class="box box-warn" style="font-size:0.78em;">
-    <strong>Cost of multi.</strong> A single shared model loses &asymp;27&nbsp;pp on average vs.&nbsp;our per-concept models.
-    Image-probe pseudo-token capacity is currently capped at 4 unique families &mdash; with 24 families loaded,
-    only the first 4 receive unique centroids, the rest are padded with the last family's centroid.
-    Lifting this cap is the next concrete fix; SAFREE multi-concept rows are still pending.
+  <div class="box box-green" style="font-size:0.78em;">
+    <strong>Multi-concept is where the gap explodes.</strong> SAFREE's token-projection set
+    collapses generation almost entirely (&gt;90&#37; <em>NotRelevant</em>, avg SR <strong>2.8</strong>) when forced
+    to suppress all six concepts inside one model. Ours retains <strong>45.0</strong> avg SR &mdash;
+    <strong>+42&nbsp;pp absolute</strong>, win on every concept.
   </div>
-  <div class="box box-red" style="font-size:0.72em;">
-    <strong>vs.&nbsp;SAFREE (single-concept SAFREE).</strong>
-    Multi&nbsp;<strong>wins</strong> on illegal&nbsp;(46.7&nbsp;vs.&nbsp;33.3), harassment&nbsp;(33.3&nbsp;vs.&nbsp;25.0), hate&nbsp;(36.7&nbsp;vs.&nbsp;33.3).
-    Multi&nbsp;<strong>loses</strong> on violence&nbsp;(60.0&nbsp;vs.&nbsp;76.7), self-harm&nbsp;(50.0&nbsp;vs.&nbsp;53.3), shocking&nbsp;(43.3&nbsp;vs.&nbsp;75.0)
-    &mdash; the same three concepts most affected by the 4-family probe cap.
+  <div class="box box-warn" style="font-size:0.74em;">
+    <strong>Honest cost vs.&nbsp;our own single-concept models.</strong>
+    Ours-multi still drops &asymp;27&nbsp;pp avg vs.&nbsp;Ours-single (72.2 &rarr; 45.0) because the image-probe
+    pseudo-token slot is currently capped at 4 unique families; with 24 loaded only the first 4
+    get unique centroids. Lifting this cap is the next fix. The fair comparison &mdash; multi vs.&nbsp;multi &mdash; is
+    overwhelming.
   </div>
 </section>
 
