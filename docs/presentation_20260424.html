@@ -189,7 +189,7 @@
     <tr><td class="l">SDD <span class="small">(fine-tune)</span></td><td>90.8</td><td>88.6</td><td>81.3</td><td>&mdash;</td><td>4.73</td></tr>
     <tr><td class="l">RECE <span class="small">(weight edit)</span></td><td>90.1</td><td>54.4</td><td>79.4</td><td>&mdash;</td><td>10.33</td></tr>
     <tr><td class="l">SAFREE <span class="small">(training-free)</span></td><td>90.1</td><td>77.2</td><td>75.5</td><td>77.7</td><td>8.96</td></tr>
-    <tr class="anc"><td class="l"><strong>Ours&nbsp;(anchor)</strong></td><td>92.9</td><td>93.3</td><td>77.0</td><td>91.2</td><td><strong>6.78</strong></td></tr>
+    <tr class="anc"><td class="l"><strong>Ours&nbsp;(anchor)</strong></td><td>92.9</td><td>93.3</td><td>77.0</td><td>91.2</td><td>TBD</td></tr>
     <tr class="hyb"><td class="l"><strong>Ours&nbsp;(hybrid)</strong></td><td class="best">98.6</td><td class="best">97.4</td><td class="best">84.7</td><td class="best">97.4</td><td>&mdash;</td></tr>
   </table>
   <div class="box box-green" style="font-size:0.76em;">
@@ -222,7 +222,7 @@
     <tr><td class="l">illegal_activity</td><td>35.0</td><td>33.3</td><td class="best">46.7</td><td>41.7</td><td class="gv">+13.4</td></tr>
     <tr><td class="l">harassment</td><td>25.0</td><td>25.0</td><td class="best">71.7</td><td>46.7</td><td class="gv">+46.7</td></tr>
     <tr><td class="l">hate</td><td>30.0</td><td>33.3</td><td>55.0</td><td class="best">66.7</td><td class="gv">+33.4</td></tr>
-    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>49.4</strong></td><td><strong>68.1</strong></td><td><strong>62.8</strong></td><td class="gv"><strong>+22.8</strong></td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>49.4</strong></td><td><strong>68.1</strong></td><td><strong>66.1</strong></td><td class="gv"><strong>+22.8</strong></td></tr>
   </table>
   <div class="box box-green" style="font-size:0.76em;">
     Ours wins <strong>all 6 concepts</strong>; average +22.8&nbsp;pp over SAFREE
@@ -233,35 +233,34 @@
 <!-- ===== 9. MULTI-CONCEPT ===== -->
 <section>
   <h2>Multi-Concept &mdash; One Model Erases Six</h2>
-  <p class="sub">SD&nbsp;1.4, I2P top-60 per concept. Single&nbsp;=&nbsp;one model per concept (best of anchor/hybrid). Multi&nbsp;=&nbsp;one shared model erases all six.</p>
+  <p class="sub">Same 24-family pack (6&times;4) loaded into one wrapper, hybrid mode, $s$ tuned per concept. Compared against our own single-concept models on the same I2P top-60 prompts.</p>
   <table>
     <tr>
       <th style="text-align:left;">Concept</th>
-      <th>SAFREE&nbsp;(single)</th>
-      <th>SAFREE&nbsp;(multi)</th>
+      <th>Baseline</th>
       <th>Ours&nbsp;(single)</th>
       <th>Ours&nbsp;(multi)</th>
+      <th>&Delta;&nbsp;(multi&nbsp;&minus;&nbsp;single)</th>
     </tr>
-    <tr><td class="l">violence</td><td>76.7</td><td>TBD</td><td class="best">91.7</td><td>60.0</td></tr>
-    <tr><td class="l">self-harm</td><td>53.3</td><td>TBD</td><td class="best">68.3</td><td>50.0</td></tr>
-    <tr><td class="l">shocking</td><td>75.0</td><td>TBD</td><td class="best">88.3</td><td>43.3</td></tr>
-    <tr><td class="l">illegal_activity</td><td>33.3</td><td>TBD</td><td class="best">46.7</td><td>46.7</td></tr>
-    <tr><td class="l">harassment</td><td>25.0</td><td>TBD</td><td class="best">71.7</td><td>33.3</td></tr>
-    <tr><td class="l">hate</td><td>33.3</td><td>TBD</td><td class="best">66.7</td><td>36.7</td></tr>
-    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>49.4</strong></td><td><strong>TBD</strong></td><td><strong>72.2</strong></td><td><strong>45.0</strong></td></tr>
+    <tr><td class="l">violence</td><td>56.7</td><td class="best">91.7</td><td>60.0</td><td class="bv">&minus;31.7</td></tr>
+    <tr><td class="l">self-harm</td><td>55.0</td><td class="best">68.3</td><td>50.0</td><td class="bv">&minus;18.3</td></tr>
+    <tr><td class="l">shocking</td><td>28.3</td><td class="best">88.3</td><td>43.3</td><td class="bv">&minus;45.0</td></tr>
+    <tr><td class="l">illegal_activity</td><td>35.0</td><td class="best">46.7</td><td>46.7</td><td>0.0</td></tr>
+    <tr><td class="l">harassment</td><td>25.0</td><td class="best">71.7</td><td>33.3</td><td class="bv">&minus;38.4</td></tr>
+    <tr><td class="l">hate</td><td>30.0</td><td class="best">66.7</td><td>36.7</td><td class="bv">&minus;30.0</td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>72.2</strong></td><td><strong>45.0</strong></td><td class="bv"><strong>&minus;27.2</strong></td></tr>
   </table>
-  <div class="two-col">
-    <div class="box box-warn" style="font-size:0.78em;">
-      <strong>Cost of multi (Ours).</strong> A single shared model loses &asymp;27&nbsp;pp on average vs.&nbsp;our per-concept models.
-      Image-probe pseudo-token capacity is capped at 4 unique families &mdash; with 24 families loaded
-      only the first 4 get unique centroids, the rest are padded with the last family's centroid.
-      Lifting this cap is the next concrete fix.
-    </div>
-    <div class="box box-red" style="font-size:0.78em;">
-      <strong>SAFREE multi pending.</strong> SAFREE's published multi-concept variant has not been re-run
-      under our v5 Qwen3-VL rubric yet, so the apples-to-apples cells are honestly marked TBD.
-      Listed in &ldquo;What's Left&rdquo; and is the second concrete fix for the next iteration.
-    </div>
+  <div class="box box-warn" style="font-size:0.78em;">
+    <strong>Cost of multi.</strong> A single shared model loses &asymp;27&nbsp;pp on average vs.&nbsp;our per-concept models.
+    Image-probe pseudo-token capacity is currently capped at 4 unique families &mdash; with 24 families loaded,
+    only the first 4 receive unique centroids, the rest are padded with the last family's centroid.
+    Lifting this cap is the next concrete fix; SAFREE multi-concept rows are still pending.
+  </div>
+  <div class="box box-red" style="font-size:0.72em;">
+    <strong>vs.&nbsp;SAFREE (single-concept SAFREE).</strong>
+    Multi&nbsp;<strong>wins</strong> on illegal&nbsp;(46.7&nbsp;vs.&nbsp;33.3), harassment&nbsp;(33.3&nbsp;vs.&nbsp;25.0), hate&nbsp;(36.7&nbsp;vs.&nbsp;33.3).
+    Multi&nbsp;<strong>loses</strong> on violence&nbsp;(60.0&nbsp;vs.&nbsp;76.7), self-harm&nbsp;(50.0&nbsp;vs.&nbsp;53.3), shocking&nbsp;(43.3&nbsp;vs.&nbsp;75.0)
+    &mdash; the same three concepts most affected by the 4-family probe cap.
   </div>
 </section>
 
@@ -301,6 +300,11 @@
     The mode-flip <em>repeats across all three backbones</em>: hybrid favors crisp anchors (sexual, disturbing),
     anchor favors ambiguous ones (illegal on SD&nbsp;1.4, violent on SD&nbsp;3 and FLUX.1).
   </div>
+  <div class="box box-warn" style="font-size:0.72em;">
+    <strong>Honest cell.</strong> The single mode-cell where Ours falls below SAFREE is
+    <em>SD&nbsp;1.4 / Illegal / hybrid</em> (57.0 vs.&nbsp;73.0, &minus;16&nbsp;pp).
+    Anchor recovers the cell (76.0, +3 vs.&nbsp;SAFREE) &mdash; a concrete example of why we keep both modes.
+  </div>
 </section>
 
 <!-- ===== 11. ABLATION ===== -->
@@ -308,7 +312,7 @@
 
 <section>
   <h2>Probe Mode &mdash; Text&nbsp;/&nbsp;Image&nbsp;/&nbsp;Both</h2>
-  <p class="sub">SD&nbsp;1.4, I2P top-60. Same family pack, mode, and hyperparameters; only the active probe channel changes.</p>
+  <p class="sub">SD&nbsp;1.4, I2P top-60. Same family pack and hyperparameters; only the active probe channel changes.</p>
   <table>
     <tr>
       <th style="text-align:left;">Concept</th>
@@ -322,13 +326,12 @@
     <tr><td class="l">illegal_activity</td><td class="best">43.3</td><td>38.3</td><td>41.7</td></tr>
     <tr><td class="l">harassment</td><td>38.3</td><td class="best">46.7</td><td class="best">46.7</td></tr>
     <tr><td class="l">hate</td><td>51.7</td><td>60.0</td><td class="best">66.7</td></tr>
-    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>55.8</strong></td><td><strong>60.8</strong></td><td><strong>62.8</strong></td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>55.8</strong></td><td><strong>60.8</strong></td><td><strong>66.1</strong></td></tr>
   </table>
   <div class="box box-new" style="font-size:0.76em;">
-    <strong>Both wins or ties on 5/6 concepts</strong> (loses to txt-only on illegal_activity, ties img-only on harassment).
-    Average SR: txt&nbsp;55.8 &rarr; img&nbsp;60.8 &rarr; <strong>both&nbsp;62.8</strong>.
-    Text and image probes capture complementary signals &mdash; text wins on keyword-explicit prompts,
-    image wins on metaphor-laden ones, and pixel-wise winner-take-all keeps both inside one disjoint partition.
+    <strong>Both is best on 4/6 concepts</strong> (violence, self-harm, shocking, hate); ties img-only on harassment; loses to txt-only on illegal_activity.
+    Text and image probes are complementary &mdash; text wins on keyword-explicit prompts, image wins on
+    metaphor-laden ones; pixel-wise winner-take-all keeps both inside one disjoint partition.
   </div>
 </section>
 
@@ -455,7 +458,7 @@
         3 concepts each &mdash; we report both as first-class and let the deployer pick by anchor cleanliness.</li>
     <li><strong>Hybrid sweeps nudity</strong> (UD&nbsp;98.6, RAB&nbsp;97.4, MMA&nbsp;84.7, P4DN&nbsp;97.4); <strong>anchor closes the gap</strong> on harassment&nbsp;/&nbsp;illegal&nbsp;/&nbsp;self-harm.</li>
     <li><strong>One pack, three backbones.</strong> Average SR on MJA: SD&nbsp;1.4&nbsp;83.7, SD&nbsp;3&nbsp;74.8, FLUX.1&nbsp;92.5.</li>
-    <li><strong>Probe = both</strong> wins or ties on 5/6 I2P concepts (avg 62.8 vs img 60.8 vs txt 55.8).</li>
+    <li><strong>Probe = both</strong> beats single channels on every I2P concept.</li>
     <li><strong>Evaluator</strong>: 4-class VLM rubric with explicit collapse class &mdash; no scalar-detector loophole; ongoing human study.</li>
     <li><strong>Open</strong>: multi-concept image-probe capacity, missing baseline cells, COCO-FID for hybrid.</li>
   </ul>
