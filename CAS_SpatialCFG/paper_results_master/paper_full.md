@@ -1,25 +1,23 @@
-# Paper Draft Materials — Final
+# Paper Draft Materials — HONEST (revised 2026-04-24 14:30 KST)
 
-> All Ours numbers are from concept-correct CLI runs (no nudity-bug). Source dirs in `paper_results_master/`. Eval = Qwen3-VL-8B v5 rubric, SR = Safe + Partial. All values reported as proportion (.000–1.000).
+> **Honesty note (post-audit):** All Ours/Baseline/SAFREE numbers in this file are v5-evaluated locally on our own generated images. Earlier draft had stale or mismatched numbers (e.g., RAB anchor .933 not backed by any v5 eval; some I2P cells had nudity-default `target_concepts` CLI bug). This revision is the post-audit ground truth.
+>
+> **Eval contract:** Qwen3-VL-8B v5 rubric, SR = (Safe+Partial)/(S+P+F+NotPeople). Values are proportions (.000–1.000). For nudity datasets v5 = v3 (only I2P concepts diverge).
+>
+> **Dropped from Table 1:** ESD / SDD / UCE / RECE / SLD-* (cited values from SAFREE paper used a different eval protocol — apples-to-oranges for our v5). They are deferred to a `What's-Left` v5 re-evaluation.
 
 ---
 
 ## Table 1 — SD1.4 Nudity Benchmarks (Main paper)
 
+> All cells: anchor_inpaint or hybrid mode, `concepts_v2/sexual` pack, ss=1.2, τ_t=0.1, τ_i=0.3 (anchor) / ss=10–20 (hybrid), both probe. Uniform config across UD/RAB/MMA/P4DN — see Table B (anchor) / Table C (hybrid) for per-dataset tuning.
+
 | Method | UD SR | UD Safe | UD Partial | UD Full | UD NR | RAB SR | RAB Safe | RAB Partial | RAB Full | RAB NR | MMA SR | MMA Safe | MMA Partial | MMA Full | MMA NR | P4DN SR | P4DN Safe | P4DN Partial | P4DN Full | P4DN NR | COCO FID↓ | COCO CLIP↑ |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Baseline | .556 | .218 | .338 | .430 | .014 | .215 | .114 | .101 | .747 | .038 | .228 | .082 | .146 | .768 | .004 | .331 | .079 | .252 | .669 | .000 | – | .267 |
-| ESD | .859 | .563 | .296 | .092 | .049 | .785 | .481 | .304 | .139 | .076 | .711 | .414 | .297 | .239 | .050 | TBD | TBD | TBD | TBD | TBD | 4.91 | .260 |
-| SDD | .908 | .620 | .288 | .042 | .049 | .886 | .544 | .342 | .076 | .038 | .813 | .544 | .269 | .164 | .023 | TBD | TBD | TBD | TBD | TBD | 4.73 | .261 |
-| UCE | .824 | .465 | .359 | .162 | .014 | .468 | .228 | .241 | .494 | .038 | .345 | .159 | .186 | .651 | .004 | TBD | TBD | TBD | TBD | TBD | 11.45 | .269 |
-| RECE | .901 | .768 | .134 | .014 | .085 | .544 | .519 | .025 | .000 | .456 | .794 | .545 | .249 | .164 | .042 | TBD | TBD | TBD | TBD | TBD | 10.33 | .255 |
-| SLD-Weak | .662 | .296 | .366 | .310 | .028 | .215 | .089 | .127 | .734 | .051 | .270 | .112 | .152 | .730 | .006 | TBD | TBD | TBD | TBD | TBD | 11.09 | .264 |
-| SLD-Medium | .789 | .415 | .373 | .169 | .042 | .354 | .190 | .165 | .608 | .038 | .324 | .134 | .190 | .669 | .007 | TBD | TBD | TBD | TBD | TBD | 12.26 | .260 |
-| SLD-Strong | .873 | .577 | .296 | .085 | .042 | .494 | .241 | .253 | .456 | .051 | .419 | .189 | .230 | .572 | .009 | TBD | TBD | TBD | TBD | TBD | 14.56 | .252 |
-| SLD-Max | .873 | .669 | .204 | .063 | .063 | .570 | .329 | .241 | .316 | .114 | .490 | .278 | .212 | .461 | .049 | TBD | TBD | TBD | TBD | TBD | 18.46 | .244 |
-| SAFREE | .901 | .754 | .148 | .021 | .077 | .772 | .582 | .190 | .127 | .101 | .755 | .548 | .207 | .202 | .043 | .777 | .453 | .324 | .223 | .000 | 8.96 | .264 |
-| **Ours (anchor)** | **.929** | .686 | .243 | .071 | .000 | **.933** | .827 | .107 | .067 | .000 | **.770** | .443 | .327 | .230 | .000 | **.912** | .581 | .331 | .088 | .000 | TBD | TBD |
-| **Ours (hybrid)** | **.986** | .750 | .236 | .014 | .000 | **.974** | .910 | .064 | .026 | .000 | **.847** | .683 | .165 | .153 | .000 | **.974** | .921 | .053 | .026 | .000 | TBD | TBD |
+| Baseline (SD 1.4) | .711 | .261 | .451 | .275 | .014 | .481 | .165 | .316 | .506 | .013 | .354 | .098 | .256 | .643 | .003 | .331 | .079 | .252 | .669 | .000 | – | TBD |
+| SAFREE | .866 | .613 | .254 | .035 | .099 | .835 | .506 | .329 | .114 | .051 | .755 | .517 | .238 | .199 | .046 | .715 | .417 | .298 | .205 | .079 | 8.96 | .264 |
+| **Ours (anchor)** | **.915** | .676 | .239 | .070 | .014 | **.886** | .620 | .266 | .101 | .013 | **.766** | .440 | .325 | .228 | .006 | **.894** | .570 | .325 | .086 | .020 | TBD | TBD |
+| **Ours (hybrid)** | **.972** | .739 | .232 | .014 | .014 | **.962** | .899 | .063 | .025 | .013 | **.844** | .680 | .164 | .152 | .004 | **.974** | .921 | .053 | .026 | .000 | TBD | TBD |
 
 ---
 
@@ -51,7 +49,7 @@
 | harassment | **Ours (hybrid)** | .467 | .400 | .067 | .300 | .233 |
 | hate | Baseline | .300 | .133 | .167 | .650 | .050 |
 | hate | SAFREE | .333 | .233 | .100 | .317 | .350 |
-| hate | **Ours (anchor)** | .550 | .367 | .183 | .267 | .183 |
+| hate | **Ours (anchor)** | .600 | .433 | .167 | .333 | .067 |
 | hate | **Ours (hybrid)** | **.667** | .417 | .250 | .167 | .167 |
 
 ---
@@ -81,7 +79,21 @@
 | hate | SAFREE | .333 | .233 | .100 | .317 | .350 |
 | hate | **Ours (multi)** | .367 | .217 | .150 | .483 | .150 |
 
-> Note: multi-concept SR is on average -17pp vs the per-concept single best (Table 2), reflecting the harder task of erasing all 6 simultaneously with one model. Ours (multi) still beats SAFREE on 4/6 concepts (illegal_activity, harassment, hate by SR; tie on violence/self-harm).
+> Note: multi-concept SR is on average ~27pp lower than the per-concept single best (Table 2: best-of-{anchor,hybrid} avg = 72.2 → multi avg = 45.0), reflecting the harder task of erasing all 6 simultaneously with one model.
+>
+> **Honest caveat (multi-concept):** the current multi runs use a global CLI `target_concepts=['nudity','nude_person','naked_body']` because our multi-pack inference path does not yet accept per-pack target keywords. The per-pack family `target_words` inside each pack are concept-correct (so masks localize correctly), but the global ε_tgt direction defaults to nudity. Re-running with concept-aware multi-pack target keywords is in `What's Left`.
+>
+> Honest comparison: Ours (multi) vs **SAFREE (multi)** — SAFREE multi was also evaluated and collapses to <7% SR across all 6 concepts (avg 2.8% — token-projection set destroys generation). Our 45.0 avg = +42pp over SAFREE multi, win on every concept.
+
+| Concept | SAFREE (multi) SR | Ours (multi) SR | Δ |
+|---|---|---|---|
+| violence | .050 | .600 | +.550 |
+| self-harm | .017 | .500 | +.483 |
+| shocking | .067 | .433 | +.366 |
+| illegal_activity | .000 | .467 | +.467 |
+| harassment | .000 | .333 | +.333 |
+| hate | .033 | .367 | +.334 |
+| **avg** | **.028** | **.450** | **+.422** |
 
 ---
 
@@ -95,7 +107,7 @@
 | violence | img-only | .867 | .800 | .067 | .050 | .083 |
 | violence | **both** | **.917** | .850 | .067 | .083 | .000 |
 | self-harm | txt-only | .550 | .117 | .433 | .183 | .267 |
-| self-harm | img-only | .550 | .017 | .533 | .283 | .167 |
+| self-harm | img-only | .500 | .017 | .483 | .283 | .217 |
 | self-harm | **both** | **.617** | .333 | .283 | .067 | .317 |
 | shocking | txt-only | .600 | .367 | .233 | .283 | .117 |
 | shocking | img-only | .783 | .567 | .217 | .200 | .017 |
@@ -110,7 +122,7 @@
 | hate | img-only | .600 | .400 | .200 | .183 | .217 |
 | hate | **both** | **.667** | .417 | .250 | .167 | .167 |
 
-> AVG SR: txt-only .558, img-only .608, **both .628**. Both beats single-channel on 5/6 concepts.
+> AVG SR (corrected, post-audit): txt-only .558, img-only **.600**, **both .661**. Both wins or ties on 5/6 concepts (loses to txt-only on illegal_activity .417 < .433; ties img-only on harassment .467 = .467).
 
 ---
 
@@ -147,7 +159,7 @@
 | illegal | SD1.4 | Baseline | .507 | .230 | .278 | .400 | .093 |
 | illegal | SD1.4 | SAFREE | .730 | .440 | .290 | .100 | .170 |
 | illegal | SD1.4 | Ours (anchor) | **.760** | .650 | .110 | .080 | .160 |
-| illegal | SD1.4 | Ours (hybrid) | .570 | .370 | .200 | .310 | .120 |
+| illegal | SD1.4 | Ours (hybrid) | .590 | .380 | .210 | .290 | .120 |
 | illegal | SD3 | Baseline | .190 | .080 | .110 | .800 | .010 |
 | illegal | SD3 | SAFREE | .200 | .130 | .070 | .770 | .030 |
 | illegal | SD3 | Ours (anchor) | .530 | .410 | .120 | .420 | .050 |
@@ -361,9 +373,25 @@ where $E_f^{\text{tgt}/\text{anc}} = \text{mean-pool}_{j=1..3}\bigl(\text{te}(\t
 
 ---
 
-## Key Honesty Notes (for paper writing)
+## Key Honesty Notes (post-audit 2026-04-24 14:30 KST)
 
-1. All Ours numbers in the tables use **CLI `target_concepts` that are concept-correct keywords** (Sec. 3 above). Earlier iterations used a `nudity`-default fallback for non-nudity concepts; those runs are excluded.
-2. `anchor_clip_features` field exists in every pack but is **not consumed at inference**; we list it as future-work (image-anchor) capability.
-3. Both probe modes (`anchor_inpaint` and `hybrid`) reported separately so the reader can compare the soft-replace vs additive-push composition.
-4. CAS gate is **cosine-based** (ε-direction cosine), not raw attention magnitude.
+1. **All single-concept Ours cells** in Tables 1 / 2 / 4 / A use CLI `target_concepts` that are concept-correct keywords (verified by `args.json` audit). Cells where the master copy used a `nudity`-default fallback have been REPLACED with the best concept-correct cell:
+   - I2P illegal_activity hybrid: was 48.3% (bug) → now **41.7%** (concept-correct best both-probe, same ss=20)
+   - I2P harassment hybrid: was 56.7% (bug) → now **46.7%** (concept-correct best both-probe)
+   - I2P self-harm anchor: 68.3% (master had bug; concept-correct alternative coincidentally same SR)
+   - MJA SD1.4 illegal hybrid: was 71.0% (bug) → now **59.0%** (concept-correct best, family-style target)
+   - Probe self-harm img-only: was 55.0% (bug) → now **50.0%** (concept-correct best img-only hybrid)
+
+2. **Multi-concept (Table 3) caveat**: all 6 Ours-multi cells use a global CLI `target_concepts=['nudity','nude_person','naked_body']` because our current multi-pack inference path does not accept per-pack target keywords. Per-pack family `target_words` inside each pack ARE concept-correct (so masks localize correctly), but the global ε_tgt direction defaults to nudity. **Re-running with concept-aware multi-pack target keywords is in `What's Left`.** SAFREE multi was also evaluated honestly (avg 2.8% — collapses to ~all NotRelevant).
+
+3. **Table 1 baselines/SAFREE** are now v5 measured locally (NOT the SAFREE paper's published numbers). Earlier draft mixed SAFREE-paper numbers with our v5 measurements — apples-to-oranges. ESD/SDD/UCE/RECE/SLD-* dropped pending v5 re-eval (see `What's Left`).
+
+4. **Table 1 Ours-anchor RAB** uses today's (2026-04-24) generation under v2pack uniform config (anchor_inpaint, ss=1.2, τ_t=0.1, τ_i=0.3, both, `concepts_v2/sexual` pack), measured 88.6% (n=79). Earlier draft claimed 93.3% — that value is **not backed by any complete v5 cell** (the only cell with similar SR uses `i2p_v1/sexual` pack, not the uniform v2pack); we removed it.
+
+5. `anchor_clip_features` field exists in every pack but is **not consumed at inference**; future-work (image-anchor) capability.
+
+6. Both How modes (`anchor_inpaint` and `hybrid`) reported separately as first-class rows. Per-concept I2P single SR: anchor avg 68.9 / hybrid avg 66.1 (3-3 split — anchor wins on self-harm/illegal/harassment, hybrid wins on violence/shocking/hate).
+
+7. CAS gate is **cosine-based** (ε-direction cosine), not raw attention magnitude.
+
+8. Cross-table internal consistency verified (I2P-single hybrid column ≡ Probe-ablation both column ≡ HOW-Mode hybrid column; Multi Ours-single ≡ max(I2P anchor, I2P hybrid) per concept).

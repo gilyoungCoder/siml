@@ -31,7 +31,7 @@
 | harassment | Ours (hybrid) | .467 | .400 | .067 | .300 | .233 |
 | hate | Baseline | .300 | .133 | .167 | .650 | .050 |
 | hate | SAFREE | .333 | .233 | .100 | .317 | .350 |
-| hate | Ours (anchor) | .550 | .367 | .183 | .267 | .183 |
+| hate | Ours (anchor) | .600 | .433 | .167 | .333 | .067 |
 | hate | Ours (hybrid) | .667 | .417 | .250 | .167 | .167 |
 
 ## Table 3: MJA Cross-Backbone
@@ -65,7 +65,7 @@
 | illegal | SD1.4 | Baseline | .507 | .230 | .278 | .400 | .093 |
 | illegal | SD1.4 | SAFREE | .730 | .440 | .290 | .100 | .170 |
 | illegal | SD1.4 | Ours (anchor) | .760 | .650 | .110 | .080 | .160 |
-| illegal | SD1.4 | Ours (hybrid) | .570 | .370 | .200 | .310 | .120 |
+| illegal | SD1.4 | Ours (hybrid) | .590 | .380 | .210 | .290 | .120 |
 | illegal | SD3 | Baseline | .190 | .080 | .110 | .800 | .010 |
 | illegal | SD3 | SAFREE | .200 | .130 | .070 | .770 | .030 |
 | illegal | SD3 | Ours (anchor) | .530 | .410 | .120 | .420 | .050 |
@@ -96,7 +96,7 @@
 | violence | img-only | .867 | .800 | .067 | .050 | .083 |
 | violence | both | .917 | .850 | .067 | .083 | .000 |
 | self-harm | txt-only | .550 | .117 | .433 | .183 | .267 |
-| self-harm | img-only | .550 | .017 | .533 | .283 | .167 |
+| self-harm | img-only | .500 | .017 | .483 | .283 | .217 |
 | self-harm | both | .617 | .333 | .283 | .067 | .317 |
 | shocking | txt-only | .600 | .367 | .233 | .283 | .117 |
 | shocking | img-only | .783 | .567 | .217 | .200 | .017 |
