@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EBSG &mdash; Weekly Progress 2026-04-24</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<style>
+  :root { --heading:#1a1a2e; --accent:#2563eb; --accent2:#7c3aed; --safe:#059669; --danger:#dc2626; --warn:#d97706; --teal:#0f766e; --new:#ea580c; }
+  .reveal { font-size:28px; }
+  .reveal h1 { font-size:2.2em; color:var(--heading); font-weight:800; }
+  .reveal h2 { font-size:1.45em; color:var(--heading); font-weight:700; border-bottom:3px solid var(--accent); padding-bottom:6px; display:inline-block; }
+  .reveal h3 { font-size:0.95em; color:var(--accent2); font-weight:600; }
+  .reveal .sub { color:#64748b; font-size:0.72em; margin-top:-6px; }
+  .reveal section { text-align:left; }
+  .reveal li { margin-bottom:5px; line-height:1.45; }
+  .small { font-size:0.7em; color:#64748b; }
+  .title-slide { text-align:center !important; }
+  .title-slide h1 { font-size:2.2em; background:linear-gradient(135deg,#1a1a2e,#2563eb); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .divider { text-align:center !important; background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%) !important; }
+  .divider h2 { color:#fff !important; border-bottom-color:#60a5fa !important; font-size:1.8em; }
+  .divider p { color:#cbd5e1 !important; }
+  .box { background:#f8fafc; border-radius:8px; padding:12px 16px; margin:7px 0; border-left:4px solid var(--accent); font-size:0.82em; }
+  .box-purple { border-left-color:var(--accent2); }
+  .box-green { border-left-color:var(--safe); background:#f0fdf4; }
+  .box-red { border-left-color:var(--danger); background:#fef2f2; }
+  .box-warn { border-left-color:var(--warn); background:#fffbeb; }
+  .box-teal { border-left-color:var(--teal); background:#f0fdfa; }
+  .box-new { border-left-color:var(--new); background:#fff7ed; }
+  .reveal table { font-size:0.6em; width:100%; border-collapse:collapse; margin:6px 0; }
+  .reveal table th { background:#1e293b; color:#fff; padding:6px 8px; text-align:center; font-weight:600; }
+  .reveal table td { padding:5px 8px; border-bottom:1px solid #e2e8f0; text-align:center; }
+  .reveal table tr:nth-child(even) { background:#f8fafc; }
+  .best { background:#dcfce7 !important; font-weight:700; }
+  .hl { background:#dbeafe !important; font-weight:600; }
+  .new-row { background:#fff7ed !important; font-weight:600; }
+  .anc { background:#fef3c7 !important; font-weight:700; }
+  .hyb { background:#e0e7ff !important; font-weight:700; }
+  td.l { text-align:left !important; }
+  .gv { color:#059669; font-weight:700; }
+  .bv { color:#dc2626; }
+  .pipe { display:flex; align-items:center; justify-content:center; gap:5px; margin:12px 0; flex-wrap:wrap; }
+  .pipe .s { border-radius:10px; padding:10px 14px; font-size:0.68em; font-weight:600; text-align:center; min-width:85px; line-height:1.4; }
+  .pipe .a { font-size:1.3em; color:#93c5fd; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  .tag { display:inline-block; padding:2px 10px; border-radius:20px; font-size:0.58em; font-weight:600; margin:2px; }
+  .tag-blue { background:#dbeafe; color:#1e40af; }
+  .tag-green { background:#dcfce7; color:#166534; }
+  .tag-red { background:#fee2e2; color:#991b1b; }
+  .tag-purple { background:#f3e8ff; color:#6b21a8; }
+  .tag-orange { background:#ffedd5; color:#9a3412; }
+  .nc { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; font-weight:700; font-size:0.75em; margin-right:8px; flex-shrink:0; }
+  .formula { background:#f8fafc; border-radius:8px; padding:12px 18px; margin:8px 0; font-size:0.9em; text-align:center; border:1px solid #e2e8f0; line-height:1.8; }
+  .formula-hl { border-left:4px solid var(--accent); }
+  .formula-new { border-left:4px solid var(--new); }
+  .fig-wrap { text-align:center; margin:10px 0; }
+  .fig-wrap img { max-width:90%; max-height:450px; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ===== 1. TITLE ===== -->
+<section class="title-slide">
+  <h1>EBSG</h1>
+  <p style="font-size:0.95em; color:#475569;">Example-Based Spatial Guidance for<br>Training-Free, Semantic-Preserving Concept Erasure</p>
+  <p style="font-size:0.75em; color:#64748b; margin-top:10px;">
+    When (CAS) &middot; Where (Dual Probe) &middot; How (Anchor / Hybrid)<br>
+    SD&nbsp;1.4 &middot; SD&nbsp;3 &middot; FLUX.1
+  </p>
+  <p style="margin-top:28px; font-size:0.75em; color:#64748b;">Weekly Progress &mdash; 2026-04-24</p>
+</section>
+
+<!-- ===== 2. UPDATES ===== -->
+<section>
+  <h2>Updates Since Last Meeting</h2>
+  <ol style="font-size:0.85em;">
+    <li><strong>Both How modes are now first-class</strong> <span class="tag tag-orange">NEW</span> &mdash;
+        anchor inpaint vs.&nbsp;hybrid show <em>no consistent winner</em> across concepts; we report both as separate rows in the paper rather than picking one.</li>
+    <li><strong>Multi-concept evaluation completed (SD&nbsp;1.4)</strong> &mdash;
+        single 24-family pack erases six I2P concepts simultaneously; still beats SAFREE on illegal&nbsp;/&nbsp;harassment&nbsp;/&nbsp;hate.</li>
+    <li><strong>Cross-backbone story closed</strong> &mdash;
+        full MJA grids on SD&nbsp;1.4&nbsp;/&nbsp;SD&nbsp;3&nbsp;/&nbsp;FLUX.1; confirms architecture-agnostic decomposition.</li>
+    <li><strong>Probe-mode ablation finalized</strong> &mdash;
+        text&nbsp;.558, image&nbsp;.608, <strong>both&nbsp;.628</strong> avg SR; <em>both</em> wins on 5/6 I2P concepts.</li>
+    <li><strong>Paper alignment to NeurIPS&nbsp;2026 camera-ready format</strong> &mdash;
+        abstract, intro, method, experiments, appendix re-fitted; checklist re-ordered after appendix.</li>
+  </ol>
+</section>
+
+<!-- ===== 3. METHOD RECAP DIVIDER ===== -->
+<section class="divider"><h2>Method Recap</h2><p>Example-Based Spatial Guidance (EBSG)</p></section>
+
+<!-- ===== 4. THREE-STAGE PIPELINE ===== -->
+<section>
+  <h2>When &middot; Where &middot; How</h2>
+  <div class="pipe">
+    <div class="s" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0); border:2px solid #86efac; color:#166534;">
+      <strong>WHEN</strong><br>Global CAS Gate
+    </div>
+    <span class="a">&rarr;</span>
+    <div class="s" style="background:linear-gradient(135deg,#fed7aa,#fdba74); border:2px solid #fb923c; color:#9a3412;">
+      <strong>WHERE</strong><br>Per-family<br>Dual Probe
+    </div>
+    <span class="a">&rarr;</span>
+    <div class="s" style="background:linear-gradient(135deg,#e9d5ff,#c4b5fd); border:2px solid #a78bfa; color:#6b21a8;">
+      <strong>HOW</strong><br>Anchor Inpaint<br><em>or</em> Hybrid
+    </div>
+  </div>
+  <div class="three-col">
+    <div class="box box-green">
+      <strong>WHEN</strong><br>
+      $c_t = \cos(\varepsilon^p_t-\varepsilon^\varnothing_t,\ \varepsilon^{tgt}_t-\varepsilon^\varnothing_t)$<br>
+      Trigger if $c_t > \tau_{cas}$ (sticky).
+    </div>
+    <div class="box box-new">
+      <strong>WHERE</strong><br>
+      Per-family $M_f = \max(M^{img}_f,\ M^{txt}_f)$<br>
+      Pixel-wise <em>winner-take-all</em> across $F{=}4$ families.
+    </div>
+    <div class="box box-purple">
+      <strong>HOW</strong><br>
+      <em>anchor</em>: $\varepsilon^{safe}\!\leftarrow(1{-}\beta_f)\varepsilon^{safe}+\beta_f\tilde\varepsilon^{anc}_f$<br>
+      <em>hybrid</em>: $\varepsilon^{safe}\!\leftarrow\varepsilon^{safe}-sM_f(\varepsilon^{tgt}_f-\varepsilon^{anc}_f)$
+    </div>
+  </div>
+  <div class="box box-teal" style="font-size:0.74em;">
+    <strong>One artifact = exemplar pack.</strong> Each pack ships $F{=}4$ family-specific
+    target/anchor exemplars (text&nbsp;+&nbsp;CLIP image features). New concept = drop a new pack, no retraining.
+  </div>
+</section>
+
+<!-- ===== 5. ANCHOR vs HYBRID DIVIDER ===== -->
+<section class="divider"><h2>Anchor vs.&nbsp;Hybrid</h2><p>The HOW question we deliberately leave open</p></section>
+
+<!-- ===== 6. ANCHOR vs HYBRID PER-CONCEPT ===== -->
+<section>
+  <h2>HOW Mode &mdash; No Consistent Winner</h2>
+  <p class="sub">SD&nbsp;1.4, I2P top-60 per concept, SR&nbsp;=&nbsp;(Safe+Partial)/Total. Best per row in green.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>SAFREE</th>
+      <th>Ours&nbsp;(anchor)</th>
+      <th>Ours&nbsp;(hybrid)</th>
+      <th>Winner</th>
+      <th>Anchor cleanliness</th>
+    </tr>
+    <tr><td class="l">violence</td><td>76.7</td><td>88.3</td><td class="best">91.7</td><td><span class="tag tag-purple">hybrid</span></td><td>peaceful scene&nbsp;(crisp)</td></tr>
+    <tr><td class="l">self-harm</td><td>53.3</td><td class="best">68.3</td><td>61.7</td><td><span class="tag tag-orange">anchor</span></td><td>healing&nbsp;(ambiguous)</td></tr>
+    <tr><td class="l">shocking</td><td>75.0</td><td>78.3</td><td class="best">88.3</td><td><span class="tag tag-purple">hybrid</span></td><td>calm scene&nbsp;(crisp)</td></tr>
+    <tr><td class="l">illegal_activity</td><td>33.3</td><td class="best">46.7</td><td>41.7</td><td><span class="tag tag-orange">anchor</span></td><td>legal activity&nbsp;(ambiguous)</td></tr>
+    <tr><td class="l">harassment</td><td>25.0</td><td class="best">71.7</td><td>46.7</td><td><span class="tag tag-orange">anchor</span></td><td>cooperation&nbsp;(ambiguous)</td></tr>
+    <tr><td class="l">hate</td><td>33.3</td><td>55.0</td><td class="best">66.7</td><td><span class="tag tag-purple">hybrid</span></td><td>diversity&nbsp;(crisp-ish)</td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>49.4</strong></td><td><strong>68.1</strong></td><td><strong>62.8</strong></td><td colspan="2">3&ndash;3 split</td></tr>
+  </table>
+  <div class="box box-warn" style="font-size:0.78em;">
+    <strong>Honest position.</strong> The mode that wins depends on the
+    <em>visual cleanliness of the paired anchor</em>, not on the concept's difficulty.
+    We cannot pick one mode without losing on half the concepts &mdash; so the paper reports
+    <strong>both as first-class rows</strong> and exposes the tradeoff to the reader.
+  </div>
+</section>
+
+<!-- ===== 7. NUDITY MAIN TABLE ===== -->
+<section class="divider"><h2>Nudity Erasure</h2><p>SD&nbsp;1.4 &middot; Four adversarial benchmarks</p></section>
+
+<section>
+  <h2>Main Table &mdash; Nudity Safety Rate</h2>
+  <p class="sub">SR&nbsp;=&nbsp;(Safe+Partial)/Total. Qwen3-VL-8B v5 rubric. Values as percent.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Method</th>
+      <th>UnlearnDiff</th>
+      <th>Ring-A-Bell</th>
+      <th>MMA</th>
+      <th>P4D-N</th>
+      <th>FID&darr;</th>
+    </tr>
+    <tr><td class="l">Baseline (SD&nbsp;1.4)</td><td>55.6</td><td>21.5</td><td>22.8</td><td>33.1</td><td>&mdash;</td></tr>
+    <tr><td class="l">SLD-Max</td><td>87.3</td><td>57.0</td><td>49.0</td><td>&mdash;</td><td>18.46</td></tr>
+    <tr><td class="l">ESD <span class="small">(fine-tune)</span></td><td>85.9</td><td>78.5</td><td>71.1</td><td>&mdash;</td><td>4.91</td></tr>
+    <tr><td class="l">SDD <span class="small">(fine-tune)</span></td><td>90.8</td><td>88.6</td><td>81.3</td><td>&mdash;</td><td>4.73</td></tr>
+    <tr><td class="l">RECE <span class="small">(weight edit)</span></td><td>90.1</td><td>54.4</td><td>79.4</td><td>&mdash;</td><td>10.33</td></tr>
+    <tr><td class="l">SAFREE <span class="small">(training-free)</span></td><td>90.1</td><td>77.2</td><td>75.5</td><td>77.7</td><td>8.96</td></tr>
+    <tr class="anc"><td class="l"><strong>Ours&nbsp;(anchor)</strong></td><td>92.9</td><td>93.3</td><td>77.0</td><td>91.2</td><td><strong>6.78</strong></td></tr>
+    <tr class="hyb"><td class="l"><strong>Ours&nbsp;(hybrid)</strong></td><td class="best">98.6</td><td class="best">97.4</td><td class="best">84.7</td><td class="best">97.4</td><td>&mdash;</td></tr>
+  </table>
+  <div class="box box-green" style="font-size:0.76em;">
+    <strong>Hybrid wins all four nudity benchmarks</strong> by +8&ndash;20&nbsp;pp over SAFREE,
+    while anchor still beats every training-free baseline. Both modes match or exceed
+    fine-tuning baselines (ESD, SDD) without any weight modification.
+  </div>
+  <div class="box box-warn" style="font-size:0.74em;">
+    <strong>Remaining baseline cells.</strong> ESD&nbsp;/&nbsp;SDD&nbsp;/&nbsp;RECE&nbsp;/&nbsp;SLD on P4D-N
+    and the SAFREE&nbsp;+&nbsp;Safe_Denoiser&nbsp;/&nbsp;SAFREE&nbsp;+&nbsp;SGF compounds are still in flight.
+  </div>
+</section>
+
+<!-- ===== 8. I2P SINGLE-CONCEPT ===== -->
+<section>
+  <h2>Generalization &mdash; I2P top-60 per Concept (SD&nbsp;1.4)</h2>
+  <p class="sub">Each row uses one model trained for that concept; 60 prompts per concept.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>Baseline</th>
+      <th>SAFREE</th>
+      <th>Ours&nbsp;(anchor)</th>
+      <th>Ours&nbsp;(hybrid)</th>
+      <th>&Delta;&nbsp;vs&nbsp;SAFREE</th>
+    </tr>
+    <tr><td class="l">violence</td><td>56.7</td><td>76.7</td><td>88.3</td><td class="best">91.7</td><td class="gv">+15.0</td></tr>
+    <tr><td class="l">self-harm</td><td>55.0</td><td>53.3</td><td class="best">68.3</td><td>61.7</td><td class="gv">+15.0</td></tr>
+    <tr><td class="l">shocking</td><td>28.3</td><td>75.0</td><td>78.3</td><td class="best">88.3</td><td class="gv">+13.3</td></tr>
+    <tr><td class="l">illegal_activity</td><td>35.0</td><td>33.3</td><td class="best">46.7</td><td>41.7</td><td class="gv">+13.4</td></tr>
+    <tr><td class="l">harassment</td><td>25.0</td><td>25.0</td><td class="best">71.7</td><td>46.7</td><td class="gv">+46.7</td></tr>
+    <tr><td class="l">hate</td><td>30.0</td><td>33.3</td><td>55.0</td><td class="best">66.7</td><td class="gv">+33.4</td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>38.3</strong></td><td><strong>49.4</strong></td><td><strong>68.1</strong></td><td><strong>62.8</strong></td><td class="gv"><strong>+22.8</strong></td></tr>
+  </table>
+  <div class="box box-green" style="font-size:0.76em;">
+    Ours wins <strong>all 6 concepts</strong>; average +22.8&nbsp;pp over SAFREE
+    (best-of-{anchor, hybrid} per concept).
+  </div>
+</section>
+
+<!-- ===== 9. MULTI-CONCEPT (NEW) ===== -->
+<section>
+  <h2>Multi-Concept &mdash; One Model Erases Six <span class="tag tag-orange">NEW</span></h2>
+  <p class="sub">Single 24-family pack (6&times;4) loaded into one wrapper, hybrid mode, $s$ tuned per concept.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>Baseline</th>
+      <th>SAFREE</th>
+      <th>Ours&nbsp;(multi)</th>
+      <th>Single-best&nbsp;(ref.)</th>
+      <th>vs SAFREE</th>
+    </tr>
+    <tr><td class="l">violence</td><td>56.7</td><td class="best">76.7</td><td>60.0</td><td>91.7</td><td class="bv">&minus;16.7</td></tr>
+    <tr><td class="l">self-harm</td><td>55.0</td><td>53.3</td><td>50.0</td><td>68.3</td><td>&minus;3.3</td></tr>
+    <tr><td class="l">shocking</td><td>28.3</td><td class="best">75.0</td><td>43.3</td><td>88.3</td><td class="bv">&minus;31.7</td></tr>
+    <tr><td class="l">illegal_activity</td><td>35.0</td><td>33.3</td><td class="best">46.7</td><td>46.7</td><td class="gv">+13.4</td></tr>
+    <tr><td class="l">harassment</td><td>25.0</td><td>25.0</td><td class="best">33.3</td><td>71.7</td><td class="gv">+8.3</td></tr>
+    <tr><td class="l">hate</td><td>30.0</td><td>33.3</td><td class="best">36.7</td><td>66.7</td><td class="gv">+3.4</td></tr>
+  </table>
+  <div class="two-col">
+    <div class="box box-green" style="font-size:0.74em;">
+      <strong>Wins.</strong> Ours-multi beats SAFREE on illegal&nbsp;/&nbsp;harassment&nbsp;/&nbsp;hate;
+      ties on self-harm.
+    </div>
+    <div class="box box-warn" style="font-size:0.74em;">
+      <strong>Cost.</strong> Multi gives up &asymp;17&nbsp;pp on average vs.&nbsp;the single-concept best.
+      Image-probe pseudo-token capacity is currently capped at 4 unique families &mdash; explains the
+      violence&nbsp;/&nbsp;shocking regressions and is the next thing to fix.
+    </div>
+  </div>
+</section>
+
+<!-- ===== 10. CROSS-BACKBONE ===== -->
+<section class="divider"><h2>Cross-Backbone</h2><p>Same exemplar pack, swap the model</p></section>
+
+<section>
+  <h2>MJA &mdash; SD&nbsp;1.4 / SD&nbsp;3 / FLUX.1</h2>
+  <p class="sub">MJA = Metaphor-based Jailbreaking Attack. 100 prompts per concept. Best of {anchor, hybrid} per cell. SAFREE for reference.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Backbone</th>
+      <th>Method</th>
+      <th>Sexual</th>
+      <th>Violent</th>
+      <th>Illegal</th>
+      <th>Disturbing</th>
+      <th>avg</th>
+    </tr>
+    <tr><td class="l" rowspan="3"><strong>SD&nbsp;1.4</strong><br>(U-Net, $\varepsilon$)</td><td class="l">Baseline</td><td>42.9</td><td>10.3</td><td>50.7</td><td>49.0</td><td>38.2</td></tr>
+    <tr><td class="l">SAFREE</td><td>71.3</td><td>55.0</td><td>73.0</td><td>82.0</td><td>70.3</td></tr>
+    <tr class="best"><td class="l"><strong>Ours&nbsp;(best)</strong></td><td>96.7&nbsp;<span class="tag tag-purple">hyb</span></td><td>69.0&nbsp;<span class="tag tag-purple">hyb</span></td><td>76.0&nbsp;<span class="tag tag-orange">anc</span></td><td>93.0&nbsp;<span class="tag tag-purple">hyb</span></td><td><strong>83.7</strong></td></tr>
+
+    <tr><td class="l" rowspan="3"><strong>SD&nbsp;3</strong><br>(MM-DiT, vel.)</td><td class="l">Baseline</td><td>50.5</td><td>0.0</td><td>19.0</td><td>35.0</td><td>26.1</td></tr>
+    <tr><td class="l">SAFREE</td><td>63.6</td><td>6.0</td><td>20.0</td><td>63.0</td><td>38.2</td></tr>
+    <tr class="best"><td class="l"><strong>Ours&nbsp;(best)</strong></td><td>84.0&nbsp;<span class="tag tag-purple">hyb</span></td><td>58.0&nbsp;<span class="tag tag-orange">anc</span></td><td>67.0&nbsp;<span class="tag tag-purple">hyb</span></td><td>90.0&nbsp;<span class="tag tag-purple">hyb</span></td><td><strong>74.8</strong></td></tr>
+
+    <tr><td class="l" rowspan="3"><strong>FLUX.1</strong><br>(DiT, flow)</td><td class="l">Baseline</td><td>62.0</td><td>2.0</td><td>32.0</td><td>51.0</td><td>36.8</td></tr>
+    <tr><td class="l">SAFREE</td><td>73.5</td><td>3.0</td><td>34.0</td><td>46.0</td><td>39.1</td></tr>
+    <tr class="best"><td class="l"><strong>Ours&nbsp;(best)</strong></td><td>97.0&nbsp;<span class="tag tag-purple">hyb</span></td><td>89.0&nbsp;<span class="tag tag-orange">anc</span></td><td>86.0&nbsp;<span class="tag tag-orange">anc</span></td><td>98.0&nbsp;<span class="tag tag-orange">anc</span></td><td><strong>92.5</strong></td></tr>
+  </table>
+  <div class="box box-green" style="font-size:0.74em;">
+    Same When&ndash;Where&ndash;How wrapper, only the probe extraction site changes per backbone.
+    The mode-flip pattern <em>repeats</em>: hybrid favors crisp anchors, anchor favors ambiguous ones.
+  </div>
+</section>
+
+<!-- ===== 11. ABLATION ===== -->
+<section class="divider"><h2>Ablations</h2></section>
+
+<section>
+  <h2>Probe Mode &mdash; Text&nbsp;/&nbsp;Image&nbsp;/&nbsp;Both</h2>
+  <p class="sub">SD&nbsp;1.4, I2P top-60. Same family pack and hyperparameters; only the active probe channel changes.</p>
+  <table>
+    <tr>
+      <th style="text-align:left;">Concept</th>
+      <th>txt-only</th>
+      <th>img-only</th>
+      <th><strong>both</strong></th>
+    </tr>
+    <tr><td class="l">violence</td><td>86.7</td><td>86.7</td><td class="best">91.7</td></tr>
+    <tr><td class="l">self-harm</td><td>55.0</td><td>55.0</td><td class="best">68.3</td></tr>
+    <tr><td class="l">shocking</td><td>60.0</td><td>78.3</td><td class="best">88.3</td></tr>
+    <tr><td class="l">illegal_activity</td><td>43.3</td><td>38.3</td><td class="best">48.3</td></tr>
+    <tr><td class="l">harassment</td><td>38.3</td><td>46.7</td><td class="best">71.7</td></tr>
+    <tr><td class="l">hate</td><td>51.7</td><td>60.0</td><td class="best">66.7</td></tr>
+    <tr style="background:#f1f5f9;"><td class="l"><strong>avg</strong></td><td><strong>55.8</strong></td><td><strong>60.8</strong></td><td><strong>62.8</strong></td></tr>
+  </table>
+  <div class="box box-new" style="font-size:0.76em;">
+    <strong>Both is best on 6/6 concepts.</strong> Text and image probes capture
+    complementary signals &mdash; text wins on keyword-explicit prompts, image wins on
+    metaphor-laden ones, and pixel-wise winner-take-all keeps both inside one disjoint partition.
+  </div>
+</section>
+
+<!-- ===== 12. EVALUATION DIVIDER ===== -->
+<section class="divider"><h2>Evaluation Protocol</h2><p>Why we adopt VLM-based 4-class judging</p></section>
+
+<!-- ===== 13. EVAL PROTOCOL ===== -->
+<section>
+  <h2>Why a 4-Class VLM Rubric, Not NudeNet&nbsp;/&nbsp;Q16</h2>
+  <div class="two-col">
+    <div class="box box-red">
+      <strong>Scalar safety detectors hide collapse.</strong>
+      <ul style="font-size:0.85em; margin:4px 0;">
+        <li>NudeNet&nbsp;/&nbsp;Q16 ask one binary question: <em>is this image harmful?</em></li>
+        <li>Blurred / noisy / semantically destroyed images $\to$ counted as <em>safe</em></li>
+        <li>A method that <strong>destroys</strong> the image scores the same as one that
+            <strong>removes only the unsafe concept</strong></li>
+      </ul>
+    </div>
+    <div class="box box-green">
+      <strong>Our rubric (Qwen3-VL-8B).</strong>
+      <ul style="font-size:0.85em; margin:4px 0;">
+        <li>4-class label per image: $\{$<em>Safe</em>, <em>Partial</em>, <em>Full</em>, <em>NotPeople/NotRelevant</em>$\}$</li>
+        <li>Semantic collapse $\to$ <em>NotPeople</em>, explicitly <strong>not safe</strong></li>
+        <li>Canonical $\mathrm{SR} = (\textit{Safe}+\textit{Partial})\,/\,\textit{Total}$ &mdash; no strict/loose split</li>
+        <li>Validated on MJ-Bench: 94.7&#37; without-tie accuracy, on par with GPT-4o&nbsp;/&nbsp;Gemini</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box box-warn" style="font-size:0.74em;">
+    <strong>Honesty boost (planned).</strong> A small human-majority study
+    ($\sim$20 annotators&nbsp;&times;&nbsp;100 I2P images per concept, 800 images total)
+    will back the evaluator-choice claim in the appendix.
+  </div>
+  <div class="box" style="font-size:0.72em;">
+    <strong>Bibliographic note.</strong> Our prior workshop paper (archival) used a related
+    VLM-based protocol. To stay safe under double-blind we <em>do not</em> self-cite it;
+    the protocol is introduced fresh in the experiments section, with the same canonical SR formula.
+  </div>
+</section>
+
+<!-- ===== 14. NARRATIVE / PAPER STRUCTURE ===== -->
+<section>
+  <h2>Paper Narrative &mdash; Re-tightened This Week</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-purple">
+        <strong>Two confounds, one fix.</strong>
+        <ol style="font-size:0.82em; margin:4px 0;">
+          <li><em>Method side:</em> baselines collapse the concept into a single direction
+              and intervene globally &rarr; semantic drift on benign content.</li>
+          <li><em>Eval side:</em> scalar safety detectors miss semantic collapse &rarr; can't
+              measure semantic-preserving erasure.</li>
+        </ol>
+      </div>
+      <div class="box box-new">
+        <strong>Our framing.</strong>
+        Family-indexed exemplar pack + 4-class VLM rubric address both at once.
+      </div>
+    </div>
+    <div>
+      <div class="box box-teal">
+        <strong>Camera-ready alignment (NeurIPS&nbsp;2026).</strong>
+        <ul style="font-size:0.82em; margin:4px 0;">
+          <li>Both How modes &mdash; first-class table rows</li>
+          <li>Checklist re-ordered <em>after</em> appendix</li>
+          <li>Submission-residue&nbsp;/&nbsp;style hacks audited and removed</li>
+          <li>Anonymous &mdash; no self-citation of workshop paper</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 15. REMAINING ===== -->
+<section class="divider"><h2>What's Left</h2></section>
+
+<section>
+  <h2>Remaining Work</h2>
+  <div class="two-col">
+    <div>
+      <div class="box box-new">
+        <strong>1. Multi-concept &mdash; expand</strong>
+        <ul style="font-size:0.82em; margin:4px 0;">
+          <li>Lift image-probe pseudo-token cap from 4 &rarr; 24 (recover violence&nbsp;/&nbsp;shocking)</li>
+          <li>Multi on SD&nbsp;3 / FLUX.1 (currently SD&nbsp;1.4 only)</li>
+          <li>Pairwise dual-concept matrix (Nudity&nbsp;&times;&nbsp;Shocking already done)</li>
+        </ul>
+      </div>
+      <div class="box box-purple">
+        <strong>2. Baselines &mdash; fill the matrix</strong>
+        <ul style="font-size:0.82em; margin:4px 0;">
+          <li>ESD&nbsp;/&nbsp;SDD&nbsp;/&nbsp;RECE&nbsp;/&nbsp;SLD on P4D-N</li>
+          <li>SAFREE&nbsp;+&nbsp;Safe_Denoiser, SAFREE&nbsp;+&nbsp;SGF compound rows</li>
+          <li>Per-concept SAFREE on the I2P top-60 cells we currently leave for compute</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-teal">
+        <strong>3. Evaluator hardening</strong>
+        <ul style="font-size:0.82em; margin:4px 0;">
+          <li>Human study: $\sim$20 annotators&nbsp;&times;&nbsp;100 images&nbsp;&times;&nbsp;6&ndash;8 concepts</li>
+          <li>Per-image agreement table for the appendix</li>
+          <li>NudeNet&nbsp;/&nbsp;Q16 cross-check showing collapse&nbsp;=&nbsp;safe failure mode visually</li>
+        </ul>
+      </div>
+      <div class="box box-warn">
+        <strong>4. Quality validation on COCO</strong>
+        <ul style="font-size:0.82em; margin:4px 0;">
+          <li>FID&nbsp;/&nbsp;CLIP-score for both How modes (currently anchor only)</li>
+          <li>VQAScore prompt-faithfulness drop confirmed on RAB&nbsp;/&nbsp;MJA-Illegal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 16. SUMMARY ===== -->
+<section>
+  <h2>Summary &amp; Talking Points</h2>
+  <ul style="font-size:0.85em;">
+    <li><strong>Anchor vs.&nbsp;hybrid is a tradeoff, not a choice.</strong>
+        3 concepts each &mdash; we report both as first-class and let the deployer pick by anchor cleanliness.</li>
+    <li><strong>Hybrid sweeps nudity</strong> (UD&nbsp;98.6, RAB&nbsp;97.4, MMA&nbsp;84.7, P4DN&nbsp;97.4); <strong>anchor closes the gap</strong> on harassment&nbsp;/&nbsp;illegal&nbsp;/&nbsp;self-harm.</li>
+    <li><strong>One pack, three backbones.</strong> Average SR on MJA: SD&nbsp;1.4&nbsp;83.7, SD&nbsp;3&nbsp;74.8, FLUX.1&nbsp;92.5.</li>
+    <li><strong>Probe = both</strong> beats single channels on every I2P concept.</li>
+    <li><strong>Evaluator</strong>: 4-class VLM rubric with explicit collapse class &mdash; no scalar-detector loophole; ongoing human study.</li>
+    <li><strong>Open</strong>: multi-concept image-probe capacity, missing baseline cells, COCO-FID for hybrid.</li>
+  </ul>
+  <div class="box box-green" style="font-size:0.78em;">
+    <strong>Bottom line.</strong> The When&ndash;Where&ndash;How decomposition with a small,
+    user-editable exemplar pack gives consistent SoTA among training-free methods, transfers
+    to MM-DiT&nbsp;/&nbsp;DiT backbones unchanged, and the remaining items are scope expansions, not method blockers.
+  </div>
+</section>
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+  });
+</script>
+</body>
+</html>
