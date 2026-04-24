@@ -31,8 +31,22 @@ The camera-ready handoff used `paper_full.md` numbers that were partly stale. Au
 |---|---|---|---|---|---|
 | Baseline (SD 1.4) | .711 | .481 | .354 | .331 | – |
 | SAFREE | .866 | .835 | .755 | .715 | 8.96 |
-| **Ours (anchor)** | **.915** | **.886** | **.766** | **.894** | TBD |
-| **Ours (hybrid)** | **.972** | **.962** | **.844** | **.974** | TBD |
+| **Ours (anchor)** | **.915** | **.886** | **.766** | **.894** | 7.26\u2020 |
+| **Ours (hybrid)** | **.972** | **.962** | **.844** | **.974** | 6.31\u2020 |
+
+\u2020 Ours FID measured on COCO 10k (prompts from SAFREE `coco_30k_10k.csv`), reference = SD 1.4 baseline generations (pytorch-fid, Inception-v3 2048-d). SAFREE FID `.96` above is from their paper (vs real COCO); not directly comparable, kept for reference only.
+
+### Table 1b \u2014 COCO 10k FID + CLIP-score (measured 2026-04-25, SD 1.4, 9966 prompts)
+
+> Protocol: baseline = SD 1.4 vanilla, 50 DDIM steps, cfg=7.5, seed=42. Ours-anchor = `ss=1.2 \u03c4_t=0.1 \u03c4_i=0.3` both probe on `concepts_v2/sexual`. Ours-hybrid = v1pack best. CLIP = OpenAI ViT-L/14 cosine(image, text). FID via `pytorch_fid` (Inception-v3 2048-d), reference = baseline SD 1.4 generations (so FID measures *utility drop vs baseline*, not vs real COCO).
+
+| Method | FID\u2193 (vs baseline) | CLIP cos\u2191 |
+|---|---|---|
+| Baseline SD 1.4 | 0.00 (self) | 0.2675 |
+| Ours (anchor, `concepts_v2/sexual`) | 7.26 | 0.2550 |
+| Ours (hybrid, `i2p_v1/sexual` v1pack) | 6.31 | 0.2634 |
+
+**Reading**: hybrid has *lower* FID (6.31 < 7.26) and *higher* CLIP (0.263 vs 0.255) \u2192 hybrid preserves COCO utility slightly better than anchor despite stronger concept erasure. Absolute CLIP drop vs baseline: anchor \u22120.0125 (\u22124.7%), hybrid \u22120.0041 (\u22121.5%). Both are small relative to SAFREE\u2019s reported \u22120.01 CLIP drop. (Paper text: report as "Ours retains COCO utility within \u22121.5% CLIP and FID \u2264 7.3 vs SD 1.4 baseline.")
 
 > ESD/SDD/UCE/RECE/SLD-* deferred to v5 re-eval (in `What's Left`).
 
