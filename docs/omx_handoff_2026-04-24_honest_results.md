@@ -351,6 +351,37 @@ Common: `safety_checker=None`, seed=42, 1 sample/prompt.
 
 ---
 
+## 5.5. Pending — I2P Sexual (추가 확장용, 차후에 정리 예정)
+
+### Single-concept (데이터 있음, Table 2 확장 가능)
+
+| Method | I2P sexual top-60 SR (v5, n=60) | Source dir |
+|---|---|---|
+| Baseline SD1.4 | **.633** | `outputs/launch_0420_i2p/baseline_sd14/sexual` |
+| SAFREE | **.800** | `outputs/launch_0420_i2p/safree_sd14/sexual` |
+| EBSG (anchor, both probe) | **.933** | `outputs/launch_0420_i2p/ours_sd14/sexual/cas0.6_ss1.5_thr0.1_imgthr0.3_anchor_both` (ss=1.5, τ_t=0.1, τ_i=0.3, cas=0.6) |
+| EBSG (anchor, both, ss=1.0 alt) | .933 | `outputs/launch_0420_i2p/ours_sd14/sexual/cas0.6_ss1.0_thr0.1_imgthr0.3_anchor_both` |
+| **EBSG (hybrid, both probe) — best** | **.950** | `outputs/launch_0420_i2p/ours_sd14/sexual/cas0.6_ss20_thr0.1_imgthr0.3_hybrid_both` (ss=20, τ_t=0.1, τ_i=0.3, cas=0.6) |
+| EBSG (hybrid, both, ss=15 alt) | .933 | same dir with ss=15 |
+
+> All concept-correct CLI (target=`[nudity, nude_person, naked_body]`). Paper Table 2 currently lists only 6 toxic concepts (sexual excluded because it's covered by Table 1 nudity-main UD/RAB/MMA/P4DN). Adding this row → "7-concept" Table 2. Ours anchor 93.3 / hybrid 95.0 comfortably beats SAFREE 80.0.
+
+### Multi-concept I2P sexual (미실행, re-run 필요)
+
+- Current multi uses 24-family pack (6 concepts × 4 families). To include I2P sexual → 28-family pack (7 × 4) + full re-gen on I2P sexual top-60.
+- `paper_results_master/06_multi_concept_sd14/` has no `i2p_multi_sexual_hybrid` cell.
+- `outputs/v27_final/multi_all_on_i2p_sexual_ss1.0` exists but uses old v27 config — not apples-to-apples with current 6-concept multi.
+- Action: build 28-family multi pack + re-run on 7 concepts. ETA ~30 min on 8 GPUs.
+
+### Paper integration options
+- **(A)** Extend Table 2 with `sexual` as first row (single-concept only); leave multi-concept `sexual` as TBD or note "sexual covered by Table 1".
+- **(B)** Full 7-concept re-run of multi (new 28-family pack, re-gen, re-eval).
+- **(C)** Keep Table 2 as-is (6-concept); mention I2P sexual single-concept briefly in appendix narrative referencing these numbers.
+
+Decision deferred (user: "차후에 할테니까 이 부분은 너가 알아서 정리 파일에다가 잘 기록만").
+
+---
+
 ## 6. What's Left (must appear in paper "Limitations" / "Future Work" / "Pending"):
 
 1. **Multi-concept re-run with concept-aware global `target_concepts`** — current multi cells default global ε_tgt to nudity; per-pack family target_words are concept-correct, but a concept-aware multi-pack inference path is the next concrete fix. Image-probe pseudo-token cap of 4 also needs lift to 24 to recover violence/shocking on multi.
