@@ -101,7 +101,11 @@ Table~\ref{table:hyperparams} lists the default hyperparameters per concept, sel
 \end{tabular}
 \end{table}
 
-\paragraph{Common settings.} All experiments use Stable Diffusion v1.4 with 50 DDIM steps, CFG scale $s{=}7.5$, seed 42, and $512{\times}512$ resolution. CLIP exemplar embeddings are computed with ViT-L/14 from $F\cdot K{=}16$ images per concept. Cross-attention is read at resolutions $16{\times}16$ and $32{\times}32$. Sigmoid sharpness $\alpha{=}10.0$ and mask blur $\sigma{=}1.0$ are fixed.
+\paragraph{Common settings.} All experiments use Stable Diffusion v1.4 with 50 DDIM steps, CFG scale $s{=}7.5$, seed 42, and $512{\times}512$ resolution. CLIP exemplar embeddings are computed with ViT-L/14 from $F\cdot K{=}16$ images per concept. Cross-attention is read at resolutions $16{\times}16$ and $32{\times}32$. Sigmoid sharpness $\alpha{=}10.0$ and mask post-processing Gaussian blur $\sigma_b{=}1.0$ are fixed.
+
+\paragraph{Probe construction details (complementing \S\ref{subsec:where}).}
+\emph{Attention aggregation.} At each selected cross-attention layer we average over attention heads, take the maximum across the family's query tokens, aggregate across layers within each resolution group ($16{\times}16$ and $32{\times}32$), bilinear-upsample to the $64{\times}64$ latent resolution, and min-max normalize to obtain the raw attention score $A^{T}_f$ or $A^{I}_f \in [0,1]$. The probe mask $M^{f}_{\text{text}}$ / $M^{f}_{\text{img}}$ of Eq.~\ref{eq:text_probe}--\ref{eq:img_probe} is then obtained by applying the sigmoid and, finally, a Gaussian blur with $\sigma_b{=}1.0$ to smooth the boundary.
+\emph{Image-probe token slots.} The injected conditioning $u^{I}$ is initialized from the empty-prompt text embedding (which preserves the BOS, EOS, and PAD token statistics of the standard CLIP text encoder output) and overwrites token slot $i{+}1$ of each family $f_i$ ($i{=}1,\dots,F$) with $\bar{e}^{I}_{f_i}$. When the number of families is smaller than the maximum allocated slots ($4$ by default), the remaining slots are padded with the last family's centroid so that the probe returns well-formed attention columns for all slots. The per-family image-probe heatmap is read out from the attention column of slot $i{+}1$, giving $F$ independent attention maps from a single UNet cross-attention pass.
 
 \paragraph{Pattern.} The per-concept configuration follows a consistent logic (previewed in \S\ref{subsec:training_free}): probe choice tracks concept--prompt alignment (text for lexically identifiable concepts, image for metaphorically described ones, both when they contribute non-redundantly); the How-mode scale follows mode by construction ($s_\text{h}$ is roughly $10{\times}s_\text{a}$ because the two-direction difference $d^{\text{anc}}_f - d^{\text{tgt}}_f$ partially cancels); $\tau$ tracks family-alignment signal magnitude (internally coherent concepts such as nudity produce high-magnitude alignment so $\tau{=}0.6$ filters benign prompts reliably, while semantically dispersed concepts (violence, harassment, hate) use $\tau{=}0.4$ to avoid missed triggers).
 
@@ -110,14 +114,14 @@ Table~\ref{table:hyperparams} lists the default hyperparameters per concept, sel
 
 At every step $t$ of the 50-step DDIM process, \ours{} runs:
 \begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
-    \item Compute $\epsilon_\varnothing$, $\epsilon_\theta(z_t, c)$, and $\{\epsilon_\theta(z_t, c^{\text{tgt}}_{f,k})\}_{f,k}$ (batched; the family mean is reused).
-    \item Evaluate $\text{CAS}(t)$ (Eq.~\ref{eq:cas}); if $\text{CAS}(t) < \tau$ and the sticky latch is off, skip guidance.
-    \item Extract family-level cross-attention maps $\{M^f_\text{text}\}$ (Eq.~\ref{eq:text_probe}).
-    \item Score intermediate U-Net features against $\{\bar{e}_f\}$ to form $\{M^f_\text{img}\}$ (Eq.~\ref{eq:img_probe}).
-    \item Fuse across families and modalities (Eq.~\ref{eq:fusion}) to obtain $M$.
-    \item Apply anchor inpainting (Eq.~\ref{eq:anchor_inpaint}) or hybrid guidance (Eq.~\ref{eq:hybrid}).
+    \item Compute $\epsilon_\varnothing$, the prompt-conditioned noise $\epsilon_\theta(z_t, c_{\text{prompt}})$, and the concept-level target prediction $\epsilon_\theta(z_t, \bar{u}^{\text{tgt}}_{\star})$ used by CAS.
+    \item Evaluate $\mathrm{CAS}(t)$ (Eq.~\ref{eq:cas}); if $\mathrm{CAS}(t) < \tau$ and the sticky latch is off, skip guidance for this step.
+    \item Extract per-family text-probe and image-probe attention heatmaps via Eqs.~\ref{eq:text_probe} and~\ref{eq:img_probe}; the image probe reuses the UNet's cross-attention via the CLIP-injected conditioning $u^{I}$ described above.
+    \item Fuse probes within each family (max) and resolve across families by pixel-wise winner-take-all to obtain the disjoint mask partition $\{\widetilde{M}_f\}$ (Eq.~\ref{eq:fusion}).
+    \item Issue one additional UNet forward pass per family with conditioning $\bar{u}^{\text{tgt}}_f$ and $\bar{u}^{\text{anc}}_f$ to produce $d^{\text{tgt}}_f$ and $d^{\text{anc}}_f$ (Eq.~\ref{eq:fam_dirs}).
+    \item Apply anchor inpainting (Eq.~\ref{eq:anchor_inpaint}) or hybrid guidance (Eq.~\ref{eq:hybrid}) inside the active region.
 \end{enumerate}
-The overhead per step is $\approx 15$--$20\%$ over standard CFG, dominated by the extra UNet forward pass for the family-averaged target prediction and by CLIP feature extraction.
+The overhead per step is $\approx 15$--$20\%$ over standard CFG, dominated by the extra per-family UNet forward passes and by one CLIP image-encoder call per family (amortized via pre-computation).
 
 \section{Additional Experimental Results}
 \label{app:additional}
