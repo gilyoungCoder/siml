@@ -9,44 +9,55 @@ BASE=$REPO/CAS_SpatialCFG/launch_0426_full_sweep
 LOGDIR=$BASE/logs
 mkdir -p $LOGDIR
 LIST=$BASE/eval_pending.txt
-> $LIST  # empty
+> $LIST
 
-# Map cell name → eval concept rubric for v5 eval (concept arg of the eval script)
-# Phase 1 cells:
+# Phase 1 hybrid + Phase 1B anchor: same cell-base-name → rubric mapping.
+# Anchor cells use the same base concept rubric (just different mode).
 declare -A CELL2CONCEPT=(
   [nudity_ud]=nudity   [nudity_rab]=nudity   [nudity_p4dn]=nudity
   [mja_sexual]=nudity  [mja_violent]=violence  [mja_illegal]=illegal  [mja_disturbing]=shocking
   [i2p_violence]=violence  [i2p_self-harm]=self_harm  [i2p_shocking]=shocking
   [i2p_illegal]=illegal  [i2p_harassment]=harassment  [i2p_hate]=hate
+  # anchor variants
+  [nudity_ud_anchor]=nudity   [nudity_rab_anchor]=nudity   [nudity_p4dn_anchor]=nudity
+  [mja_sexual_anchor]=nudity  [mja_violent_anchor]=violence  [mja_illegal_anchor]=illegal  [mja_disturbing_anchor]=shocking
+  [i2p_violence_anchor]=violence  [i2p_self-harm_anchor]=self_harm  [i2p_shocking_anchor]=shocking
+  [i2p_illegal_anchor]=illegal  [i2p_harassment_anchor]=harassment  [i2p_hate_anchor]=hate
 )
 
-# Phase 1: enumerate single-concept dirs
-for cell in "${!CELL2CONCEPT[@]}"; do
-  dir=$BASE/outputs/phase1_single/$cell
-  if [ -d "$dir" ] && [ "$(ls $dir/*.png 2>/dev/null | wc -l)" -gt 0 ]; then
-    concept=${CELL2CONCEPT[$cell]}
-    json=$dir/categories_qwen3_vl_${concept}_v5.json
-    if [ ! -f "$json" ]; then
-      echo "$dir|$concept" >> $LIST
+# Phase 1 hybrid + Phase 1B anchor enumeration
+for phase_dir in $BASE/outputs/phase1_single $BASE/outputs/phase1b_anchor; do
+  [ -d "$phase_dir" ] || continue
+  for d in $phase_dir/*/; do
+    [ -d "$d" ] || continue
+    cell=$(basename $d)
+    if [ "$(ls $d/*.png 2>/dev/null | wc -l)" -eq 0 ]; then continue; fi
+    concept=${CELL2CONCEPT[$cell]:-}
+    if [ -z "$concept" ]; then
+      echo "[$(date)] WARN: unknown cell $cell, skipping" | tee -a $LOGDIR/eval_v5.log
+      continue
     fi
-  fi
+    json=$d/categories_qwen3_vl_${concept}_v5.json
+    if [ ! -f "$json" ]; then
+      echo "${d%/}|$concept" >> $LIST
+    fi
+  done
 done
 
-# Phase 2: enumerate multi dirs and use eval_concept from cell name.
-# Cell name pattern: <setup>__<config>__eval_<concept>
-# Map cell eval_concept → v5 rubric concept (sexual→nudity, others 1:1, but illegal_activity→illegal, self-harm→self_harm)
+# Phase 2 multi enumeration
 declare -A EVAL2RUBRIC=(
   [sexual]=nudity  [violence]=violence  [self-harm]=self_harm  [shocking]=shocking
   [illegal_activity]=illegal  [harassment]=harassment  [hate]=hate
 )
-for dir in $BASE/outputs/phase2_multi/*/; do
-  name=$(basename $dir)
-  if [ "$(ls $dir/*.png 2>/dev/null | wc -l)" -eq 0 ]; then continue; fi
+for d in $BASE/outputs/phase2_multi/*/; do
+  [ -d "$d" ] || continue
+  name=$(basename $d)
+  if [ "$(ls $d/*.png 2>/dev/null | wc -l)" -eq 0 ]; then continue; fi
   eval_part=${name##*__eval_}
   rubric=${EVAL2RUBRIC[$eval_part]:-$eval_part}
-  json=$dir/categories_qwen3_vl_${rubric}_v5.json
+  json=$d/categories_qwen3_vl_${rubric}_v5.json
   if [ ! -f "$json" ]; then
-    echo "${dir%/}|$rubric" >> $LIST
+    echo "${d%/}|$rubric" >> $LIST
   fi
 done
 
@@ -58,7 +69,7 @@ if [ "$N" -eq 0 ]; then
   exit 0
 fi
 
-# Dispatch round-robin: 8 GPUs (slot 0..7), 1 process per GPU (Qwen3-VL is heavy ~17GB).
+# Dispatch round-robin: 8 GPUs (slot 0..7), 1 process per GPU.
 NSLOTS=8
 for slot in 0 1 2 3 4 5 6 7; do
   WLOG=$LOGDIR/eval_v5_g${slot}.log
@@ -68,7 +79,7 @@ for slot in 0 1 2 3 4 5 6 7; do
       if [ $((i % NSLOTS)) -eq $slot ]; then
         json=$D/categories_qwen3_vl_${C}_v5.json
         if [ -f "$json" ]; then
-          echo "[$(date)] [eval g$slot] SKIP (exists) $D $C" >> $WLOG
+          echo "[$(date)] [eval g$slot] SKIP $D $C" >> $WLOG
         else
           echo "[$(date)] [eval g$slot] EVAL $D $C" >> $WLOG
           cd $REPO/vlm
