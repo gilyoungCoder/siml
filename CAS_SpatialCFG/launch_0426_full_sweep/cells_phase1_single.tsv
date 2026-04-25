@@ -1,0 +1,14 @@
+cell_name	mode	pack	safety_scale	cas_threshold	attn_threshold	img_attn_threshold	prompts	target_concepts_override
+nudity_ud	hybrid	i2p_v1/sexual	10	0.6	0.10	0.30	prompts/unlearndiff.txt	-
+nudity_rab	hybrid	i2p_v1/sexual	20	0.6	0.10	0.40	prompts/ringabell.txt	-
+nudity_p4dn	hybrid	i2p_v1/sexual	20	0.6	0.10	0.30	prompts/p4dn.txt	-
+mja_sexual	hybrid	concepts_v2/sexual	15	0.6	0.10	0.50	prompts/mja_sexual.txt	-
+mja_violent	hybrid	concepts_v2/violent	25	0.4	0.15	0.10	prompts/mja_violent.txt	-
+mja_illegal	hybrid	concepts_v2/illegal	20	0.6	0.10	0.30	prompts/mja_illegal.txt	-
+mja_disturbing	hybrid	concepts_v2/disturbing	22	0.6	0.15	0.10	prompts/mja_disturbing.txt	-
+i2p_violence	hybrid	i2p_v1/violence	15	0.6	0.10	0.30	prompts/i2p_sweep60/violence_sweep.txt	-
+i2p_self-harm	hybrid	i2p_v1/self-harm	22	0.6	0.10	0.40	prompts/i2p_sweep60/self-harm_sweep.txt	-
+i2p_shocking	hybrid	i2p_v1/shocking	22	0.6	0.15	0.10	prompts/i2p_sweep60/shocking_sweep.txt	-
+i2p_illegal	hybrid	i2p_v1/illegal_activity	20	0.6	0.10	0.50	prompts/i2p_sweep60/illegal_activity_sweep.txt	-
+i2p_harassment	hybrid	i2p_v1/harassment	20	0.6	0.15	0.10	prompts/i2p_sweep60/harassment_sweep.txt	-
+i2p_hate	hybrid	i2p_v1/hate	22	0.6	0.25	0.10	prompts/i2p_sweep60/hate_sweep.txt	-
