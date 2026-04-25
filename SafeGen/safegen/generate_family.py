@@ -290,11 +290,18 @@ def parse_args():
     p.add_argument("--family_guidance", action="store_true",
                    help="Enable per-family guidance (vs single-anchor)")
 
-    # Concepts (for single-anchor fallback and CAS)
-    p.add_argument("--target_concepts", nargs="+",
-                   default=["nudity", "nude person", "naked body"])
+    # Concepts (concept-level descriptor for CAS direction).
+    # NO default — must come from pack metadata (`concept_keywords`) OR be passed explicitly.
+    # The previous nudity default was a silent footgun: non-nudity packs would compute CAS
+    # against a nudity direction. Now we error out if neither source provides a descriptor.
+    p.add_argument("--target_concepts", nargs="+", default=None,
+                   help="Optional explicit override of concept-level descriptor. "
+                        "Default behavior reads pack's `concept_keywords` field. "
+                        "Required only if pack lacks concept_keywords.")
     p.add_argument("--anchor_concepts", nargs="+",
-                   default=["clothed person", "person wearing clothes"])
+                   default=["clothed person", "person wearing clothes"],
+                   help="Concept-level anchor descriptor (single-anchor fallback only). "
+                        "Family-mode uses per-family anchor_words from the pack.")
 
     p.add_argument("--save_maps", action="store_true")
 
@@ -302,8 +309,9 @@ def parse_args():
     if args.img_attn_threshold is None:
         args.img_attn_threshold = args.attn_threshold
 
-    # Auto-extract target_words
-    if args.target_words is None:
+    # Auto-extract target_words from --target_concepts only if both given via CLI;
+    # otherwise pack-loading path will derive it from concept_keywords.
+    if args.target_words is None and args.target_concepts is not None:
         words = []
         for concept in args.target_concepts:
             for w in concept.replace("_", " ").split():
@@ -346,12 +354,16 @@ def main():
     unet, vae, tok, te, sched = pipe.unet, pipe.vae, pipe.tokenizer, pipe.text_encoder, pipe.scheduler
     unet_dtype = next(unet.parameters()).dtype
 
-    # Encode global target/anchor (for CAS + single-anchor fallback)
+    # Encode anchor + null. text_tgt (concept-level CAS direction) is computed lazily after
+    # pack-load: the pack's `concept_keywords` field is the canonical source. Falling back
+    # to args.target_concepts only if pack lacks the field; if neither, raise.
     with torch.no_grad():
-        text_tgt = encode_concepts(te, tok, args.target_concepts, device)
         anchor_emb = encode_concepts(te, tok, args.anchor_concepts, device)
         unc = te(tok("", padding="max_length", max_length=tok.model_max_length,
                      truncation=True, return_tensors="pt").input_ids.to(device))[0]
+        text_tgt = None
+        if args.target_concepts is not None:
+            text_tgt = encode_concepts(te, tok, args.target_concepts, device)
 
     # ── Load family config ──
     family_names = []
@@ -368,24 +380,70 @@ def main():
         if not family_names:
             family_names = fdata.get("family_names", []) or list(family_meta.keys())
 
+        # Concept-level CAS descriptor — pack's `concept_keywords` is the authority.
+        # No silent nudity fallback: error if neither pack nor CLI provides it.
+        ckw = fdata.get("concept_keywords")
+        if not ckw:
+            if args.target_concepts is None:
+                raise ValueError(
+                    f"Pack {args.family_config} has no `concept_keywords` metadata "
+                    f"and --target_concepts was not provided. "
+                    f"Cannot determine concept-level CAS descriptor. "
+                    f"Either re-build the pack with concept_keywords, or pass "
+                    f"--target_concepts <kw1> <kw2> ...  Refusing to silently fall "
+                    f"back to nudity defaults (would compute CAS against the wrong "
+                    f"direction for non-nudity concepts)."
+                )
+            ckw = list(args.target_concepts)
+        ckw_clean = [str(w).replace("_", " ").strip() for w in ckw if str(w).strip()]
+        if not ckw_clean:
+            raise ValueError(
+                f"Pack {args.family_config} resolved to empty concept descriptor. "
+                f"Source ckw={ckw}."
+            )
+        # Override CLI args.target_concepts with pack-derived (or honor explicit CLI).
+        if args.target_concepts is None:
+            args.target_concepts = list(ckw_clean)
+            # rederive target_words so legacy txt_probe registration (line 425) works
+            words = []
+            for concept in args.target_concepts:
+                for w in concept.replace("_", " ").split():
+                    w_clean = w.strip().lower()
+                    if len(w_clean) >= 3 and w_clean not in words:
+                        words.append(w_clean)
+            args.target_words = words
+        # Re-encode text_tgt with the resolved descriptor (pack-derived or CLI-provided).
+        with torch.no_grad():
+            text_tgt = encode_concepts(te, tok, ckw_clean, device)
+        print(f"  Concept descriptor (CAS): {ckw_clean}")
+
         # Per-family target/anchor embeddings
         target_feats = fdata.get("target_clip_features", {})
         anchor_feats = fdata.get("anchor_clip_features", {})
 
         for fname in family_names:
-            # Target: encode family-specific target words
+            # Target: encode family-specific target words (use up to 5 keywords to align
+            # with mask construction's `fw[:5]` token-index window)
             tw = family_meta.get(fname, {}).get("target_words") or family_meta.get(fname, {}).get("target_prompts") or args.target_concepts
             family_target_words[fname] = tw
-            family_target_embeds[fname] = encode_concepts(te, tok, tw[:3], device)
+            family_target_embeds[fname] = encode_concepts(te, tok, tw[:5], device)
 
             # Anchor: encode family-specific anchor words
             aw = family_meta.get(fname, {}).get("anchor_words") or family_meta.get(fname, {}).get("anchor_prompts") or args.anchor_concepts
-            family_anchor_embeds[fname] = encode_concepts(te, tok, aw[:3], device)
+            family_anchor_embeds[fname] = encode_concepts(te, tok, aw[:5], device)
 
         print(f"  Families: {family_names}")
         for fn in family_names:
-            print(f"    {fn}: target={family_target_words[fn][:3]}, "
-                  f"anchor={family_meta.get(fn, {}).get('anchor_words', [])[:3]}")
+            print(f"    {fn}: target={family_target_words[fn][:5]}, "
+                  f"anchor={family_meta.get(fn, {}).get('anchor_words', [])[:5]}")
+    else:
+        # No pack loaded — must have explicit --target_concepts.
+        if args.target_concepts is None:
+            raise ValueError(
+                "No --family_config provided AND --target_concepts not given. "
+                "Cannot determine concept-level CAS descriptor. "
+                "Either pass --family_config <pack.pt> or pass --target_concepts <kw1> <kw2> ..."
+            )
 
     # ── Setup image probe ──
     img_probe = None

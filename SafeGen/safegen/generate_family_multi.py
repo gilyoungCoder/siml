@@ -313,11 +313,18 @@ def parse_args():
     p.add_argument("--family_guidance", action="store_true",
                    help="Enable per-family guidance (vs single-anchor)")
 
-    # Concepts (for single-anchor fallback and CAS)
-    p.add_argument("--target_concepts", nargs="+",
-                   default=["nudity", "nude person", "naked body"])
+    # Concepts (concept-level descriptor for CAS direction).
+    # NO default — must come from pack metadata (`concept_keywords`) OR be passed explicitly.
+    # The previous nudity default was a silent footgun: non-nudity packs would compute CAS
+    # against a nudity direction. Now we error out if neither source provides a descriptor.
+    p.add_argument("--target_concepts", nargs="+", default=None,
+                   help="Optional explicit override of concept-level descriptor. "
+                        "Default behavior reads pack's `concept_keywords` field. "
+                        "Required only if pack lacks concept_keywords.")
     p.add_argument("--anchor_concepts", nargs="+",
-                   default=["clothed person", "person wearing clothes"])
+                   default=["clothed person", "person wearing clothes"],
+                   help="Concept-level anchor descriptor (single-anchor fallback only). "
+                        "Family-mode uses per-family anchor_words from the pack.")
 
     p.add_argument("--save_maps", action="store_true")
 
@@ -331,8 +338,9 @@ def parse_args():
         if m not in _valid_modes:
             raise ValueError(f"--how_mode '{m}' invalid. Choose from {sorted(_valid_modes)}")
 
-    # Auto-extract target_words
-    if args.target_words is None:
+    # Auto-extract target_words from --target_concepts if both given via CLI;
+    # otherwise leave None and let pack-loading derive it from concept_keywords.
+    if args.target_words is None and args.target_concepts is not None:
         words = []
         for concept in args.target_concepts:
             for w in concept.replace("_", " ").split():
@@ -376,12 +384,15 @@ def main():
     unet, vae, tok, te, sched = pipe.unet, pipe.vae, pipe.tokenizer, pipe.text_encoder, pipe.scheduler
     unet_dtype = next(unet.parameters()).dtype
 
-    # Encode global target/anchor (for CAS + single-anchor fallback)
+    # Encode global anchor + null. Global text_tgt is now computed lazily after pack-loading
+    # (legacy path: only encoded if --target_concepts is explicitly given AND no pack is loaded).
     with torch.no_grad():
-        text_tgt = encode_concepts(te, tok, args.target_concepts, device)
         anchor_emb = encode_concepts(te, tok, args.anchor_concepts, device)
         unc = te(tok("", padding="max_length", max_length=tok.model_max_length,
                      truncation=True, return_tensors="pt").input_ids.to(device))[0]
+        text_tgt = None
+        if args.target_concepts is not None:
+            text_tgt = encode_concepts(te, tok, args.target_concepts, device)
 
     # ── Load family config(s) — supports multi-concept erasure with per-concept CAS ──
     family_names = []
@@ -457,11 +468,27 @@ def main():
             # Concept-level descriptor for CAS direction (ε_target_c).
             # Pack stores `concept_keywords` (e.g. ["nudity", "nude_person", "naked_body"]).
             # Underscore→space so CLIP text encoder tokenises naturally.
+            # No silent nudity fallback: error if neither pack nor CLI provides a descriptor.
             if concept not in concept_text_tgts:
-                ckw = fdata.get("concept_keywords") or args.target_concepts
+                ckw = fdata.get("concept_keywords")
+                if not ckw:
+                    if args.target_concepts is None:
+                        raise ValueError(
+                            f"Concept '{concept}' (pack {path}) has no `concept_keywords` "
+                            f"metadata and --target_concepts was not provided. "
+                            f"Cannot determine concept-level CAS descriptor. "
+                            f"Either re-build the pack with concept_keywords, or pass "
+                            f"--target_concepts <kw1> <kw2> ...  Refusing to silently fall "
+                            f"back to nudity defaults (would compute CAS against the wrong "
+                            f"direction for non-nudity concepts)."
+                        )
+                    ckw = list(args.target_concepts)
                 ckw_clean = [str(w).replace("_", " ").strip() for w in ckw if str(w).strip()]
                 if not ckw_clean:
-                    ckw_clean = list(args.target_concepts)
+                    raise ValueError(
+                        f"Concept '{concept}' (pack {path}) resolved to empty descriptor "
+                        f"after cleanup. Source ckw={ckw}."
+                    )
                 with torch.no_grad():
                     concept_text_tgts[concept] = encode_concepts(te, tok, ckw_clean, device)
                 print(f"  [concept={concept}] descriptor={ckw_clean} τ={concept_taus[concept]} "
@@ -496,6 +523,35 @@ def main():
         for fn in family_names:
             print(f"    {fn}: target={family_target_words[fn][:5]}, "
                   f"anchor={merged_family_meta.get(fn, {}).get('anchor_words', [])[:5]}")
+
+        # Backfill global text_tgt / args.target_concepts / args.target_words from first
+        # concept's descriptor for the legacy single-anchor fallback path
+        # (only used if --family_guidance is OFF). Family-mode never reads these.
+        if text_tgt is None:
+            first_concept = concept_names_ordered[0]
+            text_tgt = concept_text_tgts[first_concept]
+        if args.target_concepts is None:
+            # Materialise from first concept's descriptor (may differ from what pack loaded if
+            # multiple concepts; legacy path is single-concept anyway)
+            first_pack = torch.load(valid_paths[0], map_location="cpu", weights_only=False)
+            first_ckw = first_pack.get("concept_keywords") or []
+            args.target_concepts = [str(w).replace("_", " ").strip() for w in first_ckw if str(w).strip()]
+        if args.target_words is None:
+            words = []
+            for concept in args.target_concepts:
+                for w in concept.replace("_", " ").split():
+                    w_clean = w.strip().lower()
+                    if len(w_clean) >= 3 and w_clean not in words:
+                        words.append(w_clean)
+            args.target_words = words
+
+    # No-pack path requires explicit --target_concepts (no silent nudity default).
+    if not valid_paths and args.target_concepts is None:
+        raise ValueError(
+            "No --family_config provided AND --target_concepts not given. "
+            "Cannot determine concept-level CAS descriptor. "
+            "Either pass --family_config <pack.pt> or pass --target_concepts <kw1> <kw2> ..."
+        )
 
     # ── Setup image probe ──
     img_probe = None
