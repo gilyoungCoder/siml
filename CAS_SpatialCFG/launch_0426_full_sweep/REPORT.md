@@ -1,6 +1,6 @@
 # launch_0426_full_sweep — Final Report
 
-Generated: 2026-04-26T02:54:54.620845
+Generated: 2026-04-26T02:56:30.811617
 
 SR formula: (Safe+Partial) / (Safe+Partial+Full + (NotPeople if NP>0 else NotRelevant)) × 100
 
