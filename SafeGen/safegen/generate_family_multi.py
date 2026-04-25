@@ -289,8 +289,12 @@ def parse_args():
     p.add_argument("--clip_embeddings", default=None,
                    help="Path to single .pt file (non-family mode)")
     p.add_argument("--attn_resolutions", type=int, nargs="+", default=[16, 32])
-    p.add_argument("--attn_threshold", type=float, default=0.3)
-    p.add_argument("--img_attn_threshold", type=float, default=None)
+    p.add_argument("--attn_threshold", type=float, nargs="+", default=[0.3],
+                   help="Per-concept text-probe threshold θ_text. 1 value = broadcast; "
+                        "C values = one per --family_config in order.")
+    p.add_argument("--img_attn_threshold", type=float, nargs="+", default=None,
+                   help="Per-concept image-probe threshold θ_img. 1 value = broadcast; "
+                        "C values = one per --family_config in order. If None, copies --attn_threshold.")
     p.add_argument("--attn_sigmoid_alpha", type=float, default=10.0)
     p.add_argument("--blur_sigma", type=float, default=1.0)
     p.add_argument("--probe_fusion", default="union", choices=["union", "soft_union", "mean"])
@@ -319,7 +323,7 @@ def parse_args():
 
     args = p.parse_args()
     if args.img_attn_threshold is None:
-        args.img_attn_threshold = args.attn_threshold
+        args.img_attn_threshold = list(args.attn_threshold)
 
     # Validate per-concept how_mode list (argparse `choices` cannot be used with nargs="+")
     _valid_modes = {"anchor_inpaint", "hybrid", "target_sub"}
@@ -351,9 +355,9 @@ def main():
     print(f"\n{'=' * 60}")
     print(f"SafeGen: Family-Guided Generation (per-concept CAS)")
     print(f"{'=' * 60}")
-    print(f"  WHEN:   CAS thresholds={args.cas_threshold}")
+    print(f"  WHEN:   CAS τ={args.cas_threshold}")
     print(f"  WHERE:  probe={args.probe_mode}, res={args.attn_resolutions}, "
-          f"n_img_tokens={args.n_img_tokens}")
+          f"n_img_tokens={args.n_img_tokens}, θ_text={args.attn_threshold}, θ_img={args.img_attn_threshold}")
     print(f"  HOW:    modes={args.how_mode}, scales={args.safety_scale}")
     print(f"  FAMILY: {args.family_guidance}")
     print(f"{'=' * 60}\n")
@@ -393,6 +397,8 @@ def main():
     concept_taus = {}                   # {concept: float}
     concept_modes = {}                  # {concept: 'anchor_inpaint'/'hybrid'/'target_sub'}
     concept_scales = {}                 # {concept: float}
+    concept_attn_thrs = {}              # {concept: float} θ_text per concept (Eq. 5)
+    concept_img_attn_thrs = {}          # {concept: float} θ_img per concept (Eq. 6)
     concept_of_family = {}              # {gname: concept}
 
     config_paths = args.family_config if args.family_config else []
@@ -424,10 +430,17 @@ def main():
         cas_thr_list = _broadcast(args.cas_threshold, n_conc, "cas_threshold")
         mode_list = _broadcast(args.how_mode, n_conc, "how_mode")
         scale_list = _broadcast(args.safety_scale, n_conc, "safety_scale")
-        for c, thr, mode, scale in zip(concept_names_ordered, cas_thr_list, mode_list, scale_list):
+        attn_thr_list = _broadcast(args.attn_threshold, n_conc, "attn_threshold")
+        img_attn_thr_list = _broadcast(args.img_attn_threshold, n_conc, "img_attn_threshold")
+        for c, thr, mode, scale, atxt, aimg in zip(
+            concept_names_ordered, cas_thr_list, mode_list, scale_list,
+            attn_thr_list, img_attn_thr_list,
+        ):
             concept_taus[c] = float(thr)
             concept_modes[c] = mode
             concept_scales[c] = float(scale)
+            concept_attn_thrs[c] = float(atxt)
+            concept_img_attn_thrs[c] = float(aimg)
 
         # Second pass: per-pack family load + per-concept text-target encoding
         for path in valid_paths:
@@ -452,7 +465,8 @@ def main():
                 with torch.no_grad():
                     concept_text_tgts[concept] = encode_concepts(te, tok, ckw_clean, device)
                 print(f"  [concept={concept}] descriptor={ckw_clean} τ={concept_taus[concept]} "
-                      f"mode={concept_modes[concept]} scale={concept_scales[concept]}")
+                      f"mode={concept_modes[concept]} scale={concept_scales[concept]} "
+                      f"θ_text={concept_attn_thrs[concept]} θ_img={concept_img_attn_thrs[concept]}")
 
             target_feats = fdata.get("target_clip_features", {})
 
@@ -645,6 +659,15 @@ def main():
                                 continue
                             fm = torch.zeros(1, 1, 64, 64, device=device)
 
+                            # Per-concept thresholds (paper Table 8: θ_text, θ_img per concept)
+                            cname_fi = concept_of_family.get(fname)
+                            thr_txt_fi = concept_attn_thrs.get(cname_fi,
+                                args.attn_threshold[0] if isinstance(args.attn_threshold, list)
+                                else float(args.attn_threshold))
+                            thr_img_fi = concept_img_attn_thrs.get(cname_fi,
+                                args.img_attn_threshold[0] if isinstance(args.img_attn_threshold, list)
+                                else float(args.img_attn_threshold))
+
                             # Image probe: use family-specific token
                             if img_probe and img_probe.get_maps():
                                 fa = compute_attention_spatial_mask(
@@ -652,7 +675,7 @@ def main():
                                     target_resolution=64,
                                     resolutions_to_use=args.attn_resolutions)
                                 fm = torch.max(fm, make_probe_mask(
-                                    fa, args.img_attn_threshold,
+                                    fa, thr_img_fi,
                                     args.attn_sigmoid_alpha, args.blur_sigma, device))
 
                             # Text probe: use family-specific keywords
@@ -666,7 +689,7 @@ def main():
                                         target_resolution=64,
                                         resolutions_to_use=args.attn_resolutions)
                                     fm = torch.max(fm, make_probe_mask(
-                                        ta, args.attn_threshold,
+                                        ta, thr_txt_fi,
                                         args.attn_sigmoid_alpha, args.blur_sigma, device))
 
                             fam_masks.append(fm)
@@ -736,13 +759,18 @@ def main():
                         # Compute unified probe mask
                         probe_mask = torch.zeros(1, 1, 64, 64, device=device)
 
+                        # Legacy single-anchor fallback: collapse list-form thresholds to first value.
+                        thr_txt_fb = args.attn_threshold[0] if isinstance(args.attn_threshold, list) \
+                                     else float(args.attn_threshold)
+                        thr_img_fb = args.img_attn_threshold[0] if isinstance(args.img_attn_threshold, list) \
+                                     else float(args.img_attn_threshold)
                         if img_probe and img_probe.get_maps():
                             ia = compute_attention_spatial_mask(
                                 img_probe, token_indices=img_tok_idx,
                                 target_resolution=64,
                                 resolutions_to_use=args.attn_resolutions)
                             probe_mask = torch.max(probe_mask, make_probe_mask(
-                                ia, args.img_attn_threshold,
+                                ia, thr_img_fb,
                                 args.attn_sigmoid_alpha, args.blur_sigma, device))
 
                         if txt_probe and txt_probe.get_maps() and txt_tok_idx:
@@ -751,7 +779,7 @@ def main():
                                 target_resolution=64,
                                 resolutions_to_use=args.attn_resolutions)
                             probe_mask = torch.max(probe_mask, make_probe_mask(
-                                ta, args.attn_threshold,
+                                ta, thr_txt_fb,
                                 args.attn_sigmoid_alpha, args.blur_sigma, device))
 
                         if probe_mask.sum() == 0:
