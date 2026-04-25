@@ -1,7 +1,11 @@
 #!/bin/bash
-# Orchestrator for full sweep: Phase 1 (single repro) → Phase 2 (multi sweep) → Phase 3 (v5 eval) → Phase 4 (report).
+# Orchestrator for full sweep:
+#   Phase 1  — single-concept hybrid reproducibility (Table 8)
+#   Phase 2  — multi-concept hybrid sweep (1c/2c/3c/7c × 3 configs)
+#   Phase 1B — single-concept anchor reproducibility (master sources)
+#   Phase 3  — v5 Qwen3-VL eval over Phase 1 + Phase 2 + Phase 1B outputs
+#   Phase 4  — final REPORT.md
 # Run with: nohup bash orchestrator.sh > orchestrator.log 2>&1 &
-# Designed to run autonomously on siml-05 with 8 GPUs.
 # Slot→GPU mapping: gpu = slot % 8 (round-robin across all 8 GPUs even when N_cells < N_slots).
 set -uo pipefail
 BASE=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep
@@ -11,12 +15,8 @@ mkdir -p $LOGDIR
 START=$(date +%s)
 echo "[$(date)] === Orchestrator START ===" | tee $LOGDIR/orchestrator.log
 
-# === PHASE 1: Single-concept reproducibility (Table 8 hybrid SD v1.4) ===
-# 13 cells, 16 worker slots. With slot%8 mapping: 13 cells distribute as
-#   slot 0..7  → GPU 0..7 (one per GPU first wave)
-#   slot 8..12 → GPU 0..4 (second wave on those GPUs)
-# So all 8 GPUs are occupied through Phase 1. Slots 13,14,15 idle (no cells).
-echo "[$(date)] PHASE 1: 13 single cells × paper Table 8 hybrid hyperparams" | tee -a $LOGDIR/orchestrator.log
+# === PHASE 1: Single-concept HYBRID reproducibility (Table 8 SD v1.4) ===
+echo "[$(date)] PHASE 1: 13 single-concept hybrid cells" | tee -a $LOGDIR/orchestrator.log
 for slot in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
   gpu=$((slot % 8))
   bash $BASE/scripts/dispatch_phase1.sh $gpu $slot 16 $BASE/cells_phase1_single.tsv &
@@ -25,8 +25,7 @@ wait
 P1_END=$(date +%s)
 echo "[$(date)] PHASE 1 done (elapsed: $(((P1_END-START)/60))m)" | tee -a $LOGDIR/orchestrator.log
 
-# === PHASE 2: Multi-concept sweep ===
-# 39 cells × 16 worker slots → ~2-3 cells per slot. With slot%8: 2 workers per GPU.
+# === PHASE 2: Multi-concept HYBRID sweep ===
 echo "[$(date)] PHASE 2: 39 multi cells (1c/2c/3c/7c × 3 configs × eval-concepts)" | tee -a $LOGDIR/orchestrator.log
 for slot in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
   gpu=$((slot % 8))
@@ -36,11 +35,21 @@ wait
 P2_END=$(date +%s)
 echo "[$(date)] PHASE 2 done (elapsed: $(((P2_END-P1_END)/60))m)" | tee -a $LOGDIR/orchestrator.log
 
-# === PHASE 3: v5 Qwen3-VL eval ===
+# === PHASE 1B: Single-concept ANCHOR reproducibility ===
+echo "[$(date)] PHASE 1B: 13 single-concept anchor cells (paper / master configs)" | tee -a $LOGDIR/orchestrator.log
+for slot in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+  gpu=$((slot % 8))
+  bash $BASE/scripts/dispatch_phase1_anchor.sh $gpu $slot 16 $BASE/cells_phase1_anchor.tsv &
+done
+wait
+P1B_END=$(date +%s)
+echo "[$(date)] PHASE 1B done (elapsed: $(((P1B_END-P2_END)/60))m)" | tee -a $LOGDIR/orchestrator.log
+
+# === PHASE 3: v5 Qwen3-VL eval on all phases ===
 echo "[$(date)] PHASE 3: v5 Qwen3-VL eval" | tee -a $LOGDIR/orchestrator.log
 bash $BASE/scripts/eval_v5_dispatch.sh
 P3_END=$(date +%s)
-echo "[$(date)] PHASE 3 done (elapsed: $(((P3_END-P2_END)/60))m)" | tee -a $LOGDIR/orchestrator.log
+echo "[$(date)] PHASE 3 done (elapsed: $(((P3_END-P1B_END)/60))m)" | tee -a $LOGDIR/orchestrator.log
 
 # === PHASE 4: Report ===
 echo "[$(date)] PHASE 4: Report generation" | tee -a $LOGDIR/orchestrator.log

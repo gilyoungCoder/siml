@@ -1,0 +1,14 @@
+cell_name	mode	pack	safety_scale	cas_threshold	attn_threshold	img_attn_threshold	probe_mode	prompts
+nudity_ud_anchor	anchor_inpaint	exemplars/i2p_v1/sexual	1.2	0.6	0.10	0.30	both	prompts/unlearndiff.txt
+nudity_rab_anchor	anchor_inpaint	exemplars/i2p_v1/sexual	1.2	0.6	0.10	0.30	both	prompts/ringabell.txt
+nudity_p4dn_anchor	anchor_inpaint	exemplars/i2p_v1/sexual	1.2	0.6	0.10	0.30	both	prompts/p4dn.txt
+mja_sexual_anchor	anchor_inpaint	exemplars/concepts_v2/sexual	2.5	0.6	0.10	0.30	both	prompts/mja_sexual.txt
+mja_violent_anchor	anchor_inpaint	exemplars/concepts_v2/violent	1.8	0.6	0.10	0.30	both	prompts/mja_violent.txt
+mja_illegal_anchor	anchor_inpaint	exemplars/concepts_v2/illegal	2.5	0.4	0.10	0.30	both	prompts/mja_illegal.txt
+mja_disturbing_anchor	anchor_inpaint	exemplars/concepts_v2/disturbing	2.0	0.6	0.10	0.40	both	prompts/mja_disturbing.txt
+i2p_violence_anchor	anchor_inpaint	exemplars/i2p_v1/violence	1.0	0.6	0.10	0.40	both	prompts/i2p_sweep60/violence_sweep.txt
+i2p_self-harm_anchor	anchor_inpaint	exemplars/i2p_v1/self-harm	1.5	0.6	0.10	0.30	image	prompts/i2p_sweep60/self-harm_sweep.txt
+i2p_shocking_anchor	anchor_inpaint	exemplars/i2p_v1/shocking	2.0	0.6	0.10	0.40	both	prompts/i2p_sweep60/shocking_sweep.txt
+i2p_illegal_anchor	anchor_inpaint	exemplars/i2p_v1/illegal_activity	1.0	0.6	0.10	0.70	both	prompts/i2p_sweep60/illegal_activity_sweep.txt
+i2p_harassment_anchor	anchor_inpaint	exemplars/i2p_v1/harassment	2.5	0.5	0.10	0.30	both	prompts/i2p_sweep60/harassment_sweep.txt
+i2p_hate_anchor	anchor_inpaint	exemplars/i2p_v1/hate	2.0	0.6	0.10	0.40	both	prompts/i2p_sweep60/hate_sweep.txt

@@ -1,6 +1,7 @@
 #!/bin/bash
-# Phase 2 dispatcher: multi-concept sweep (1c/2c/3c/7c × 3 configs each).
+# Phase 2 dispatcher: multi-concept hybrid sweep.
 # Args: $1=GPU $2=slot $3=n_slots $4=TSV
+# Resume: counts existing PNGs and passes --start_idx.
 set -uo pipefail
 GPU=$1
 SLOT=$2
@@ -28,18 +29,17 @@ while IFS=$'\t' read -r name setup cfg eval_c n_c packs ss tau thr_t thr_i promp
     echo "[$(date)] [phase2 g$GPU s$SLOT] [skip $name] $existing/$prompt_count imgs" | tee -a $LOG
     continue
   fi
-  # Convert relative pack paths to absolute (space-separated list)
   packs_abs=""
   for p in $packs; do
     packs_abs="$packs_abs $REPO/CAS_SpatialCFG/$p"
   done
   mkdir -p "$outdir"
-  echo "[$(date)] [phase2 g$GPU s$SLOT] [run  $name] setup=$setup cfg=$cfg eval=$eval_c n_concepts=$n_c n_prompts=$prompt_count" | tee -a $LOG
+  echo "[$(date)] [phase2 g$GPU s$SLOT] [run  $name] setup=$setup cfg=$cfg eval=$eval_c n_concepts=$n_c start_idx=$existing n_prompts=$prompt_count" | tee -a $LOG
   cd $REPO/SafeGen
-  # Note: cas_threshold / safety_scale / attn_threshold / img_attn_threshold are space-separated lists for nargs="+"
   CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family_multi \
     --prompts "$prompts_abs" \
     --outdir "$outdir" \
+    --start_idx "$existing" \
     --family_guidance \
     --family_config $packs_abs \
     --probe_mode both --how_mode hybrid \
