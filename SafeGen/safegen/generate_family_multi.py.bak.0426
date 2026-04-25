@@ -99,11 +99,10 @@ def make_probe_mask(attn_spatial, threshold, alpha=10.0, blur=1.0, device=None):
 # ---------------------------------------------------------------------------
 def apply_family_guidance(
     eps_cfg, eps_null, family_masks, family_targets, family_anchors,
-    family_modes, family_scales, cfg_scale, device,
+    mode, safety_scale, cfg_scale, device,
 ):
     """
-    Apply per-family guidance. Each family has its own mask, target, anchor,
-    mode, and safety scale (concept-specific via per-concept m_c, s_c per paper §3.5).
+    Apply per-family guidance. Each family has its own mask, target, and anchor.
 
     Args:
         eps_cfg: [1, 4, 64, 64] CFG noise prediction
@@ -111,18 +110,17 @@ def apply_family_guidance(
         family_masks: list of [1, 1, 64, 64] masks, one per family
         family_targets: list of [1, 4, 64, 64] target predictions
         family_anchors: list of [1, 4, 64, 64] anchor predictions
-        family_modes: list of "anchor_inpaint" / "hybrid" / "target_sub" per family
-        family_scales: list of float guidance strengths per family
+        mode: "anchor_inpaint", "hybrid", "target_sub"
+        safety_scale: guidance strength
         cfg_scale: CFG scale for anchor_inpaint mode
 
     Returns:
         eps_safe: [1, 4, 64, 64]
     """
     out = eps_cfg.clone()
+    s = safety_scale
 
-    for M_fi, et_fi, ea_fi, mode, s in zip(
-        family_masks, family_targets, family_anchors, family_modes, family_scales
-    ):
+    for M_fi, et_fi, ea_fi in zip(family_masks, family_targets, family_anchors):
         m = M_fi.to(eps_cfg.dtype)
 
         if mode == "anchor_inpaint":
@@ -222,25 +220,16 @@ def build_image_probe_embeds(clip_features, text_encoder, tokenizer, device, n_t
     return result, list(range(1, 1 + n_tokens))
 
 
-def build_grouped_probe_embeds(family_features_dict, text_encoder, tokenizer, device, max_tokens=None):
+def build_grouped_probe_embeds(family_features_dict, text_encoder, tokenizer, device, max_tokens=4):
     """
     Build probe embedding with one token per family.
     Returns embeds [1,77,768], token_indices, family_names_ordered.
-
-    If max_tokens is None, uses len(family_features_dict) so every loaded family
-    gets its own probe slot. Capped at 70 to leave headroom below CLIP's 77-token
-    context (BOS + headroom for EOS/PAD positional cues UNet has implicitly learned).
     """
     dtype = next(text_encoder.parameters()).dtype
     with torch.no_grad():
         empty_ids = tokenizer("", padding="max_length", max_length=77,
                               truncation=True, return_tensors="pt").input_ids.to(device)
         baseline = text_encoder(empty_ids)[0]
-
-    n_families_total = len(family_features_dict)
-    if max_tokens is None:
-        max_tokens = n_families_total
-    max_tokens = min(max(int(max_tokens), 1), 70)
 
     result = baseline.clone()
     family_names = list(family_features_dict.keys())[:max_tokens]
@@ -252,8 +241,8 @@ def build_grouped_probe_embeds(family_features_dict, text_encoder, tokenizer, de
         result[0, i + 1] = avg.to(device=device, dtype=dtype)
         token_indices.append(i + 1)
 
-    # Pad remaining slots (only when caller asked for more slots than families) with last family avg
-    if family_names and len(family_names) < max_tokens:
+    # Pad remaining tokens with last family
+    if family_names:
         last_avg = F.normalize(family_features_dict[family_names[-1]].float().mean(dim=0), dim=-1)
         for i in range(len(family_names), max_tokens):
             result[0, i + 1] = last_avg.to(device=device, dtype=dtype)
@@ -276,16 +265,14 @@ def parse_args():
     p.add_argument("--start_idx", type=int, default=0)
     p.add_argument("--end_idx", type=int, default=-1)
 
-    # WHEN  (list-form: 1 value broadcasts to all concepts; C values = one per concept in --family_config order)
-    p.add_argument("--cas_threshold", type=float, nargs="+", default=[0.6],
-                   help="Per-concept CAS threshold τ_c. 1 value = broadcast; "
-                        "C values = one per --family_config in order.")
+    # WHEN
+    p.add_argument("--cas_threshold", type=float, default=0.6)
 
     # WHERE — Probe
     p.add_argument("--probe_mode", default="both", choices=["text", "image", "both"])
     p.add_argument("--family_config", nargs="+", default=None,
                    help="Path(s) to grouped .pt file(s). Multiple paths = multi-concept erasure "
-                        "(per-concept CAS gate, flat argmax across all triggered concept families).")
+                        "(flat argmax across all concept families).")
     p.add_argument("--clip_embeddings", default=None,
                    help="Path to single .pt file (non-family mode)")
     p.add_argument("--attn_resolutions", type=int, nargs="+", default=[16, 32])
@@ -295,17 +282,12 @@ def parse_args():
     p.add_argument("--blur_sigma", type=float, default=1.0)
     p.add_argument("--probe_fusion", default="union", choices=["union", "soft_union", "mean"])
     p.add_argument("--target_words", nargs="+", default=None)
-    p.add_argument("--n_img_tokens", type=int, default=None,
-                   help="Image probe token slots. If None, auto = total family count "
-                        "across all loaded packs (capped at 70).")
+    p.add_argument("--n_img_tokens", type=int, default=4)
 
-    # HOW  (list-form: 1 value broadcasts to all concepts; C values = one per concept)
-    p.add_argument("--how_mode", nargs="+", default=["anchor_inpaint"],
-                   help="Per-concept How mode m_c (anchor_inpaint / hybrid / target_sub). "
-                        "1 value = broadcast; C values = one per --family_config in order.")
-    p.add_argument("--safety_scale", type=float, nargs="+", default=[1.0],
-                   help="Per-concept guidance scale s_c. 1 value = broadcast; "
-                        "C values = one per --family_config in order.")
+    # HOW
+    p.add_argument("--how_mode", default="anchor_inpaint",
+                   choices=["anchor_inpaint", "hybrid", "target_sub"])
+    p.add_argument("--safety_scale", type=float, default=1.0)
     p.add_argument("--family_guidance", action="store_true",
                    help="Enable per-family guidance (vs single-anchor)")
 
@@ -320,12 +302,6 @@ def parse_args():
     args = p.parse_args()
     if args.img_attn_threshold is None:
         args.img_attn_threshold = args.attn_threshold
-
-    # Validate per-concept how_mode list (argparse `choices` cannot be used with nargs="+")
-    _valid_modes = {"anchor_inpaint", "hybrid", "target_sub"}
-    for m in args.how_mode:
-        if m not in _valid_modes:
-            raise ValueError(f"--how_mode '{m}' invalid. Choose from {sorted(_valid_modes)}")
 
     # Auto-extract target_words
     if args.target_words is None:
@@ -349,12 +325,11 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     print(f"\n{'=' * 60}")
-    print(f"SafeGen: Family-Guided Generation (per-concept CAS)")
+    print(f"SafeGen: Family-Guided Generation")
     print(f"{'=' * 60}")
-    print(f"  WHEN:   CAS thresholds={args.cas_threshold}")
-    print(f"  WHERE:  probe={args.probe_mode}, res={args.attn_resolutions}, "
-          f"n_img_tokens={args.n_img_tokens}")
-    print(f"  HOW:    modes={args.how_mode}, scales={args.safety_scale}")
+    print(f"  WHEN:   CAS threshold={args.cas_threshold}")
+    print(f"  WHERE:  probe={args.probe_mode}, res={args.attn_resolutions}")
+    print(f"  HOW:    {args.how_mode}, ss={args.safety_scale}")
     print(f"  FAMILY: {args.family_guidance}")
     print(f"{'=' * 60}\n")
 
@@ -379,21 +354,13 @@ def main():
         unc = te(tok("", padding="max_length", max_length=tok.model_max_length,
                      truncation=True, return_tensors="pt").input_ids.to(device))[0]
 
-    # ── Load family config(s) — supports multi-concept erasure with per-concept CAS ──
+    # ── Load family config(s) — supports multi-concept erasure ──
     family_names = []
     family_target_embeds = {}  # {fname: [1, 77, 768]}
     family_anchor_embeds = {}
     family_target_words = {}   # {fname: [word1, word2, ...]}
     merged_target_feats = {}   # {fname: [K, 768]} for image probe
     merged_family_meta = {}    # {fname: {...}}
-
-    # Per-concept structures (paper §3.5: per-concept τ_c, m_c, s_c, separate CAS gate)
-    concept_names_ordered = []          # order of first appearance in --family_config
-    concept_text_tgts = {}              # {concept: [1, 77, 768]} — concept-level descriptor embed
-    concept_taus = {}                   # {concept: float}
-    concept_modes = {}                  # {concept: 'anchor_inpaint'/'hybrid'/'target_sub'}
-    concept_scales = {}                 # {concept: float}
-    concept_of_family = {}              # {gname: concept}
 
     config_paths = args.family_config if args.family_config else []
     if isinstance(config_paths, str):
@@ -403,33 +370,6 @@ def main():
     if valid_paths:
         is_multi = len(valid_paths) > 1
         print(f"Loading {'multi-concept' if is_multi else 'single-concept'} family config: {valid_paths}")
-
-        # First pass: enumerate concept names in --family_config order
-        for path in valid_paths:
-            c = os.path.basename(os.path.dirname(path))
-            if c not in concept_names_ordered:
-                concept_names_ordered.append(c)
-
-        # Broadcast per-concept CLI lists (cas_threshold / how_mode / safety_scale)
-        n_conc = len(concept_names_ordered)
-        def _broadcast(vals, n, name):
-            if len(vals) == 1:
-                return vals * n
-            if len(vals) == n:
-                return list(vals)
-            raise ValueError(
-                f"--{name} got len={len(vals)}; expected 1 (broadcast) or {n} (one per concept). "
-                f"Concept order: {concept_names_ordered}"
-            )
-        cas_thr_list = _broadcast(args.cas_threshold, n_conc, "cas_threshold")
-        mode_list = _broadcast(args.how_mode, n_conc, "how_mode")
-        scale_list = _broadcast(args.safety_scale, n_conc, "safety_scale")
-        for c, thr, mode, scale in zip(concept_names_ordered, cas_thr_list, mode_list, scale_list):
-            concept_taus[c] = float(thr)
-            concept_modes[c] = mode
-            concept_scales[c] = float(scale)
-
-        # Second pass: per-pack family load + per-concept text-target encoding
         for path in valid_paths:
             fdata = torch.load(path, map_location="cpu", weights_only=False)
             family_token_map = fdata.get("family_token_map", {})
@@ -441,19 +381,6 @@ def main():
             # Concept label from path (e.g. ".../concepts_v2/sexual/clip_grouped.pt" → "sexual")
             concept = os.path.basename(os.path.dirname(path))
 
-            # Concept-level descriptor for CAS direction (ε_target_c).
-            # Pack stores `concept_keywords` (e.g. ["nudity", "nude_person", "naked_body"]).
-            # Underscore→space so CLIP text encoder tokenises naturally.
-            if concept not in concept_text_tgts:
-                ckw = fdata.get("concept_keywords") or args.target_concepts
-                ckw_clean = [str(w).replace("_", " ").strip() for w in ckw if str(w).strip()]
-                if not ckw_clean:
-                    ckw_clean = list(args.target_concepts)
-                with torch.no_grad():
-                    concept_text_tgts[concept] = encode_concepts(te, tok, ckw_clean, device)
-                print(f"  [concept={concept}] descriptor={ckw_clean} τ={concept_taus[concept]} "
-                      f"mode={concept_modes[concept]} scale={concept_scales[concept]}")
-
             target_feats = fdata.get("target_clip_features", {})
 
             for fname in local_names:
@@ -461,27 +388,26 @@ def main():
                 gname = f"{concept}/{fname}" if is_multi else fname
                 family_names.append(gname)
                 merged_family_meta[gname] = family_meta.get(fname, {})
-                concept_of_family[gname] = concept
                 if fname in target_feats:
                     merged_target_feats[gname] = target_feats[fname]
 
-                # Target words + embed (use up to 5 keywords to align with mask construction)
+                # Target words + embed
                 tw = family_meta.get(fname, {}).get("target_words") or \
                      family_meta.get(fname, {}).get("target_prompts") or \
                      args.target_concepts
                 family_target_words[gname] = tw
-                family_target_embeds[gname] = encode_concepts(te, tok, tw[:5], device)
+                family_target_embeds[gname] = encode_concepts(te, tok, tw[:3], device)
 
                 # Anchor words + embed
                 aw = family_meta.get(fname, {}).get("anchor_words") or \
                      family_meta.get(fname, {}).get("anchor_prompts") or \
                      args.anchor_concepts
-                family_anchor_embeds[gname] = encode_concepts(te, tok, aw[:5], device)
+                family_anchor_embeds[gname] = encode_concepts(te, tok, aw[:3], device)
 
-        print(f"  Total families ({len(family_names)}) across {n_conc} concept(s): {family_names}")
+        print(f"  Total families ({len(family_names)}): {family_names}")
         for fn in family_names:
-            print(f"    {fn}: target={family_target_words[fn][:5]}, "
-                  f"anchor={merged_family_meta.get(fn, {}).get('anchor_words', [])[:5]}")
+            print(f"    {fn}: target={family_target_words[fn][:3]}, "
+                  f"anchor={merged_family_meta.get(fn, {}).get('anchor_words', [])[:3]}")
 
     # ── Setup image probe ──
     img_probe = None
@@ -535,15 +461,7 @@ def main():
             txt_probe = txt_probe_store
 
     # ── Generate ──
-    # Per-concept CAS gates when packs were loaded; else single legacy CAS for non-family fallback.
-    if concept_text_tgts:
-        cas_per_concept = {c: GlobalCAS(concept_taus[c]) for c in concept_names_ordered}
-        legacy_cas = None
-    else:
-        cas_per_concept = None
-        thr0 = args.cas_threshold[0] if isinstance(args.cas_threshold, list) else float(args.cas_threshold)
-        legacy_cas = GlobalCAS(float(thr0))
-
+    cas = GlobalCAS(args.cas_threshold)
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
     if args.save_maps:
@@ -556,11 +474,7 @@ def main():
         for si in range(args.nsamples):
             seed = args.seed + pi * args.nsamples + si
             set_seed(seed)
-            if cas_per_concept:
-                for _c in cas_per_concept.values():
-                    _c.reset()
-            else:
-                legacy_cas.reset()
+            cas.reset()
             guided_count = 0
             cas_vals, mask_areas = [], []
 
@@ -592,57 +506,20 @@ def main():
                 if txt_probe:
                     txt_probe.active = False
 
+                # Target for CAS
+                with torch.no_grad():
+                    et = unet(li, t, encoder_hidden_states=text_tgt).sample
+
                 ec = en + args.cfg_scale * (ep - en)
+                cv, trig = cas.compute(ep, en, et)
+                cas_vals.append(cv)
 
-                # ── WHEN: per-concept CAS gate (paper §3.5) ──
-                # For each concept c with descriptor ε_target_c, compute one UNet forward
-                # and CAS_c = cos((ε_p - ε_∅), (ε_t_c - ε_∅)). Sticky latch is per-concept,
-                # so once CAS_c crosses τ_c it stays on for the remainder of the trajectory.
-                triggered_concepts = set()
-                fallback_et = None  # for single-anchor else-branch
-                if cas_per_concept:
-                    step_cas_max = -1.0
-                    for c in concept_names_ordered:
-                        cas_c = cas_per_concept[c]
-                        if cas_c.sticky and cas_c.triggered:
-                            triggered_concepts.add(c)
-                            step_cas_max = max(step_cas_max, 1.0)
-                            continue
-                        with torch.no_grad():
-                            et_c = unet(li, t, encoder_hidden_states=concept_text_tgts[c]).sample
-                        cv_c, trig_c = cas_c.compute(ep, en, et_c)
-                        if cv_c > step_cas_max:
-                            step_cas_max = cv_c
-                        if trig_c:
-                            triggered_concepts.add(c)
-                        fallback_et = et_c  # last one computed; used only if --family_guidance off
-                    cas_vals.append(step_cas_max if step_cas_max >= 0 else 0.0)
-                    any_triggered = bool(triggered_concepts)
-                else:
-                    with torch.no_grad():
-                        et = unet(li, t, encoder_hidden_states=text_tgt).sample
-                    cv, any_triggered = legacy_cas.compute(ep, en, et)
-                    cas_vals.append(cv)
-                    fallback_et = et
-
-                if any_triggered:
+                if trig:
                     # ── Family-specific guidance ──
                     if args.family_guidance and family_names:
-                        # Active set S(t) per paper §3.5: families whose concept's CAS gate fired.
-                        if cas_per_concept:
-                            active_family = [
-                                concept_of_family.get(fn) in triggered_concepts
-                                for fn in family_names
-                            ]
-                        else:
-                            active_family = [True] * len(family_names)
-
-                        # 1. Per-family probe masks (zero for inactive → cannot win WTA)
+                        # 1. Compute per-family probe masks
                         fam_masks = []
                         for fi, fname in enumerate(family_names):
-                            if not active_family[fi]:
-                                fam_masks.append(torch.zeros(1, 1, 64, 64, device=device))
-                                continue
                             fm = torch.zeros(1, 1, 64, 64, device=device)
 
                             # Image probe: use family-specific token
@@ -672,49 +549,26 @@ def main():
                             fam_masks.append(fm)
 
                         # 2. Resolve overlapping regions: argmax winner-take-all
-                        # Inactive families have zero mask; argmax never picks them at any pixel
-                        # where another family has positive mask.
                         if len(fam_masks) > 1:
                             stacked = torch.cat(fam_masks, dim=0)  # [N, 1, 64, 64]
                             winner = stacked.argmax(dim=0, keepdim=True)  # [1, 1, 64, 64]
                             for fi in range(len(fam_masks)):
                                 fam_masks[fi] = fam_masks[fi] * (winner == fi).float().squeeze(0)
 
-                        # 3. Per-family UNet target/anchor forwards (skip inactive families).
-                        # Inactive families get `en` placeholder (et - en = 0 → no contribution
-                        # under any How mode given their mask is zero anyway).
+                        # 3. Per-family UNet calls
                         fam_targets = []
                         fam_anchors = []
                         with torch.no_grad():
-                            for fi, fname in enumerate(family_names):
-                                if not active_family[fi]:
-                                    fam_targets.append(en)
-                                    fam_anchors.append(en)
-                                    continue
+                            for fname in family_names:
                                 ft = unet(li, t, encoder_hidden_states=family_target_embeds[fname]).sample
                                 fa = unet(li, t, encoder_hidden_states=family_anchor_embeds[fname]).sample
                                 fam_targets.append(ft)
                                 fam_anchors.append(fa)
 
-                        # 4. Per-family modes/scales (paper §3.5: m_c, s_c per concept)
-                        if cas_per_concept:
-                            family_modes_list = [
-                                concept_modes[concept_of_family[fn]] for fn in family_names
-                            ]
-                            family_scales_list = [
-                                concept_scales[concept_of_family[fn]] for fn in family_names
-                            ]
-                        else:
-                            mode0 = args.how_mode[0] if isinstance(args.how_mode, list) else args.how_mode
-                            scale0 = args.safety_scale[0] if isinstance(args.safety_scale, list) \
-                                     else float(args.safety_scale)
-                            family_modes_list = [mode0] * len(family_names)
-                            family_scales_list = [float(scale0)] * len(family_names)
-
-                        # 5. Apply family guidance
+                        # 4. Apply family guidance
                         eps_final = apply_family_guidance(
                             ec, en, fam_masks, fam_targets, fam_anchors,
-                            family_modes_list, family_scales_list, args.cfg_scale, device)
+                            args.how_mode, args.safety_scale, args.cfg_scale, device)
 
                         guided_count += 1
                         total_mask = sum(fm.mean().item() for fm in fam_masks)
@@ -722,14 +576,6 @@ def main():
 
                     else:
                         # ── Single-anchor fallback ──
-                        # If all per-concept gates were already sticky-triggered this step,
-                        # no fresh ε_target was computed; do one with the first concept's descriptor.
-                        if fallback_et is None and cas_per_concept:
-                            with torch.no_grad():
-                                fallback_et = unet(
-                                    li, t,
-                                    encoder_hidden_states=concept_text_tgts[concept_names_ordered[0]]
-                                ).sample
                         with torch.no_grad():
                             ea = unet(li, t, encoder_hidden_states=anchor_emb).sample
 
@@ -757,13 +603,9 @@ def main():
                         if probe_mask.sum() == 0:
                             probe_mask = torch.ones(1, 1, 64, 64, device=device) * 0.5
 
-                        # `fallback_et` set above (per-concept last et_c, or legacy et).
-                        mode0 = args.how_mode[0] if isinstance(args.how_mode, list) else args.how_mode
-                        scale0 = args.safety_scale[0] if isinstance(args.safety_scale, list) \
-                                 else float(args.safety_scale)
                         eps_final = apply_single_guidance(
-                            ec, en, ep, fallback_et, ea, probe_mask,
-                            mode0, float(scale0), args.cfg_scale)
+                            ec, en, ep, et, ea, probe_mask,
+                            args.how_mode, args.safety_scale, args.cfg_scale)
 
                         guided_count += 1
                         mask_areas.append(float(probe_mask.mean()))
