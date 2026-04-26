@@ -483,7 +483,7 @@ def main():
                             f"direction for non-nudity concepts)."
                         )
                     ckw = list(args.target_concepts)
-                ckw_clean = [str(w).strip() for w in ckw if str(w).strip()]
+                ckw_clean = [str(w).replace("_", " ").strip() for w in ckw if str(w).strip()]
                 if not ckw_clean:
                     raise ValueError(
                         f"Concept '{concept}' (pack {path}) resolved to empty descriptor "
@@ -511,13 +511,13 @@ def main():
                      family_meta.get(fname, {}).get("target_prompts") or \
                      args.target_concepts
                 family_target_words[gname] = tw
-                family_target_embeds[gname] = encode_concepts(te, tok, tw[:3], device)
+                family_target_embeds[gname] = encode_concepts(te, tok, tw[:5], device)
 
                 # Anchor words + embed
                 aw = family_meta.get(fname, {}).get("anchor_words") or \
                      family_meta.get(fname, {}).get("anchor_prompts") or \
                      args.anchor_concepts
-                family_anchor_embeds[gname] = encode_concepts(te, tok, aw[:3], device)
+                family_anchor_embeds[gname] = encode_concepts(te, tok, aw[:5], device)
 
         print(f"  Total families ({len(family_names)}) across {n_conc} concept(s): {family_names}")
         for fn in family_names:
@@ -535,7 +535,7 @@ def main():
             # multiple concepts; legacy path is single-concept anyway)
             first_pack = torch.load(valid_paths[0], map_location="cpu", weights_only=False)
             first_ckw = first_pack.get("concept_keywords") or []
-            args.target_concepts = [str(w).strip() for w in first_ckw if str(w).strip()]
+            args.target_concepts = [str(w).replace("_", " ").strip() for w in first_ckw if str(w).strip()]
         if args.target_words is None:
             words = []
             for concept in args.target_concepts:

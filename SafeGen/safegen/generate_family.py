@@ -380,31 +380,28 @@ def main():
         if not family_names:
             family_names = fdata.get("family_names", []) or list(family_meta.keys())
 
-        # Concept-level CAS descriptor — pack's `concept_keywords` is the authority.
-        # No silent nudity fallback: error if neither pack nor CLI provides it.
-        ckw = fdata.get("concept_keywords")
-        if not ckw:
-            if args.target_concepts is None:
+        # Concept-level CAS descriptor — CLI --target_concepts takes precedence,
+        # then pack's `concept_keywords`, error if neither.
+        if args.target_concepts is not None:
+            ckw_clean = [str(w).strip() for w in args.target_concepts if str(w).strip()]
+            source = "CLI"
+        else:
+            ckw = fdata.get("concept_keywords")
+            if not ckw:
                 raise ValueError(
                     f"Pack {args.family_config} has no `concept_keywords` metadata "
                     f"and --target_concepts was not provided. "
-                    f"Cannot determine concept-level CAS descriptor. "
                     f"Either re-build the pack with concept_keywords, or pass "
-                    f"--target_concepts <kw1> <kw2> ...  Refusing to silently fall "
-                    f"back to nudity defaults (would compute CAS against the wrong "
-                    f"direction for non-nudity concepts)."
+                    f"--target_concepts <kw1> <kw2> ..."
                 )
-            ckw = list(args.target_concepts)
-        ckw_clean = [str(w).replace("_", " ").strip() for w in ckw if str(w).strip()]
+            ckw_clean = [str(w).strip() for w in ckw if str(w).strip()]
+            source = "pack"
         if not ckw_clean:
-            raise ValueError(
-                f"Pack {args.family_config} resolved to empty concept descriptor. "
-                f"Source ckw={ckw}."
-            )
-        # Override CLI args.target_concepts with pack-derived (or honor explicit CLI).
+            raise ValueError(f"Pack {args.family_config} resolved to empty concept descriptor.")
+        # Sync args.target_concepts and args.target_words from resolved descriptor
         if args.target_concepts is None:
             args.target_concepts = list(ckw_clean)
-            # rederive target_words so legacy txt_probe registration (line 425) works
+        if args.target_words is None:
             words = []
             for concept in args.target_concepts:
                 for w in concept.replace("_", " ").split():
@@ -412,10 +409,9 @@ def main():
                     if len(w_clean) >= 3 and w_clean not in words:
                         words.append(w_clean)
             args.target_words = words
-        # Re-encode text_tgt with the resolved descriptor (pack-derived or CLI-provided).
         with torch.no_grad():
             text_tgt = encode_concepts(te, tok, ckw_clean, device)
-        print(f"  Concept descriptor (CAS): {ckw_clean}")
+        print(f"  Concept descriptor (CAS, source={source}): {ckw_clean}")
 
         # Per-family target/anchor embeddings
         target_feats = fdata.get("target_clip_features", {})
@@ -426,11 +422,11 @@ def main():
             # with mask construction's `fw[:5]` token-index window)
             tw = family_meta.get(fname, {}).get("target_words") or family_meta.get(fname, {}).get("target_prompts") or args.target_concepts
             family_target_words[fname] = tw
-            family_target_embeds[fname] = encode_concepts(te, tok, tw[:5], device)
+            family_target_embeds[fname] = encode_concepts(te, tok, tw[:3], device)
 
             # Anchor: encode family-specific anchor words
             aw = family_meta.get(fname, {}).get("anchor_words") or family_meta.get(fname, {}).get("anchor_prompts") or args.anchor_concepts
-            family_anchor_embeds[fname] = encode_concepts(te, tok, aw[:5], device)
+            family_anchor_embeds[fname] = encode_concepts(te, tok, aw[:3], device)
 
         print(f"  Families: {family_names}")
         for fn in family_names:
