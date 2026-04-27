@@ -1,0 +1,193 @@
+name	desc	sh	tau	attn_t	img_attn	n_tok	target	anchor_concepts
+i2p_self-harm_descVFpack_sh1_tau0.5_at0.02_ia0.1	VFpack	1	0.5	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.5_at0.02_ia0.5	VFpack	1	0.5	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.5_at0.1_ia0.1	VFpack	1	0.5	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.5_at0.1_ia0.5	VFpack	1	0.5	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.6_at0.02_ia0.1	VFpack	1	0.6	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.6_at0.02_ia0.5	VFpack	1	0.6	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.6_at0.1_ia0.1	VFpack	1	0.6	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.6_at0.1_ia0.5	VFpack	1	0.6	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.65_at0.02_ia0.1	VFpack	1	0.65	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.65_at0.02_ia0.5	VFpack	1	0.65	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.65_at0.1_ia0.1	VFpack	1	0.65	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.65_at0.1_ia0.5	VFpack	1	0.65	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.7_at0.02_ia0.1	VFpack	1	0.7	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.7_at0.02_ia0.5	VFpack	1	0.7	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.7_at0.1_ia0.1	VFpack	1	0.7	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh1_tau0.7_at0.1_ia0.5	VFpack	1	0.7	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.5_at0.02_ia0.1	VFpack	4	0.5	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.5_at0.02_ia0.5	VFpack	4	0.5	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.5_at0.1_ia0.1	VFpack	4	0.5	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.5_at0.1_ia0.5	VFpack	4	0.5	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.6_at0.02_ia0.1	VFpack	4	0.6	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.6_at0.02_ia0.5	VFpack	4	0.6	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.6_at0.1_ia0.1	VFpack	4	0.6	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.6_at0.1_ia0.5	VFpack	4	0.6	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.65_at0.02_ia0.1	VFpack	4	0.65	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.65_at0.02_ia0.5	VFpack	4	0.65	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.65_at0.1_ia0.1	VFpack	4	0.65	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.65_at0.1_ia0.5	VFpack	4	0.65	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.7_at0.02_ia0.1	VFpack	4	0.7	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.7_at0.02_ia0.5	VFpack	4	0.7	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.7_at0.1_ia0.1	VFpack	4	0.7	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh4_tau0.7_at0.1_ia0.5	VFpack	4	0.7	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.5_at0.02_ia0.1	VFpack	7	0.5	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.5_at0.02_ia0.5	VFpack	7	0.5	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.5_at0.1_ia0.1	VFpack	7	0.5	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.5_at0.1_ia0.5	VFpack	7	0.5	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.6_at0.02_ia0.1	VFpack	7	0.6	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.6_at0.02_ia0.5	VFpack	7	0.6	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.6_at0.1_ia0.1	VFpack	7	0.6	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.6_at0.1_ia0.5	VFpack	7	0.6	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.65_at0.02_ia0.1	VFpack	7	0.65	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.65_at0.02_ia0.5	VFpack	7	0.65	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.65_at0.1_ia0.1	VFpack	7	0.65	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.65_at0.1_ia0.5	VFpack	7	0.65	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.7_at0.02_ia0.1	VFpack	7	0.7	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.7_at0.02_ia0.5	VFpack	7	0.7	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.7_at0.1_ia0.1	VFpack	7	0.7	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh7_tau0.7_at0.1_ia0.5	VFpack	7	0.7	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.5_at0.02_ia0.1	VFpack	11	0.5	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.5_at0.02_ia0.5	VFpack	11	0.5	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.5_at0.1_ia0.1	VFpack	11	0.5	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.5_at0.1_ia0.5	VFpack	11	0.5	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.6_at0.02_ia0.1	VFpack	11	0.6	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.6_at0.02_ia0.5	VFpack	11	0.6	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.6_at0.1_ia0.1	VFpack	11	0.6	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.6_at0.1_ia0.5	VFpack	11	0.6	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.65_at0.02_ia0.1	VFpack	11	0.65	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.65_at0.02_ia0.5	VFpack	11	0.65	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.65_at0.1_ia0.1	VFpack	11	0.65	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.65_at0.1_ia0.5	VFpack	11	0.65	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.7_at0.02_ia0.1	VFpack	11	0.7	0.02	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.7_at0.02_ia0.5	VFpack	11	0.7	0.02	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.7_at0.1_ia0.1	VFpack	11	0.7	0.1	0.1	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_sh11_tau0.7_at0.1_ia0.5	VFpack	11	0.7	0.1	0.5	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.5_at0.02_ia0.1	VHact	1	0.5	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.5_at0.02_ia0.5	VHact	1	0.5	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.5_at0.1_ia0.1	VHact	1	0.5	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.5_at0.1_ia0.5	VHact	1	0.5	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.6_at0.02_ia0.1	VHact	1	0.6	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.6_at0.02_ia0.5	VHact	1	0.6	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.6_at0.1_ia0.1	VHact	1	0.6	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.6_at0.1_ia0.5	VHact	1	0.6	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.65_at0.02_ia0.1	VHact	1	0.65	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.65_at0.02_ia0.5	VHact	1	0.65	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.65_at0.1_ia0.1	VHact	1	0.65	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.65_at0.1_ia0.5	VHact	1	0.65	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.7_at0.02_ia0.1	VHact	1	0.7	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.7_at0.02_ia0.5	VHact	1	0.7	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.7_at0.1_ia0.1	VHact	1	0.7	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh1_tau0.7_at0.1_ia0.5	VHact	1	0.7	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.5_at0.02_ia0.1	VHact	4	0.5	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.5_at0.02_ia0.5	VHact	4	0.5	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.5_at0.1_ia0.1	VHact	4	0.5	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.5_at0.1_ia0.5	VHact	4	0.5	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.6_at0.02_ia0.1	VHact	4	0.6	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.6_at0.02_ia0.5	VHact	4	0.6	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.6_at0.1_ia0.1	VHact	4	0.6	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.6_at0.1_ia0.5	VHact	4	0.6	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.65_at0.02_ia0.1	VHact	4	0.65	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.65_at0.02_ia0.5	VHact	4	0.65	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.65_at0.1_ia0.1	VHact	4	0.65	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.65_at0.1_ia0.5	VHact	4	0.65	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.7_at0.02_ia0.1	VHact	4	0.7	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.7_at0.02_ia0.5	VHact	4	0.7	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.7_at0.1_ia0.1	VHact	4	0.7	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh4_tau0.7_at0.1_ia0.5	VHact	4	0.7	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.5_at0.02_ia0.1	VHact	7	0.5	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.5_at0.02_ia0.5	VHact	7	0.5	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.5_at0.1_ia0.1	VHact	7	0.5	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.5_at0.1_ia0.5	VHact	7	0.5	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.6_at0.02_ia0.1	VHact	7	0.6	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.6_at0.02_ia0.5	VHact	7	0.6	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.6_at0.1_ia0.1	VHact	7	0.6	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.6_at0.1_ia0.5	VHact	7	0.6	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.65_at0.02_ia0.1	VHact	7	0.65	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.65_at0.02_ia0.5	VHact	7	0.65	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.65_at0.1_ia0.1	VHact	7	0.65	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.65_at0.1_ia0.5	VHact	7	0.65	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.7_at0.02_ia0.1	VHact	7	0.7	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.7_at0.02_ia0.5	VHact	7	0.7	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.7_at0.1_ia0.1	VHact	7	0.7	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh7_tau0.7_at0.1_ia0.5	VHact	7	0.7	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.5_at0.02_ia0.1	VHact	11	0.5	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.5_at0.02_ia0.5	VHact	11	0.5	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.5_at0.1_ia0.1	VHact	11	0.5	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.5_at0.1_ia0.5	VHact	11	0.5	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.6_at0.02_ia0.1	VHact	11	0.6	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.6_at0.02_ia0.5	VHact	11	0.6	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.6_at0.1_ia0.1	VHact	11	0.6	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.6_at0.1_ia0.5	VHact	11	0.6	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.65_at0.02_ia0.1	VHact	11	0.65	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.65_at0.02_ia0.5	VHact	11	0.65	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.65_at0.1_ia0.1	VHact	11	0.65	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.65_at0.1_ia0.5	VHact	11	0.65	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.7_at0.02_ia0.1	VHact	11	0.7	0.02	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.7_at0.02_ia0.5	VHact	11	0.7	0.02	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.7_at0.1_ia0.1	VHact	11	0.7	0.1	0.1	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVHact_sh11_tau0.7_at0.1_ia0.5	VHact	11	0.7	0.1	0.5	16	cut wrist|hanging body|overdose	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.5_at0.02_ia0.1	VIemo	1	0.5	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.5_at0.02_ia0.5	VIemo	1	0.5	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.5_at0.1_ia0.1	VIemo	1	0.5	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.5_at0.1_ia0.5	VIemo	1	0.5	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.6_at0.02_ia0.1	VIemo	1	0.6	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.6_at0.02_ia0.5	VIemo	1	0.6	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.6_at0.1_ia0.1	VIemo	1	0.6	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.6_at0.1_ia0.5	VIemo	1	0.6	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.65_at0.02_ia0.1	VIemo	1	0.65	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.65_at0.02_ia0.5	VIemo	1	0.65	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.65_at0.1_ia0.1	VIemo	1	0.65	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.65_at0.1_ia0.5	VIemo	1	0.65	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.7_at0.02_ia0.1	VIemo	1	0.7	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.7_at0.02_ia0.5	VIemo	1	0.7	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.7_at0.1_ia0.1	VIemo	1	0.7	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh1_tau0.7_at0.1_ia0.5	VIemo	1	0.7	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.5_at0.02_ia0.1	VIemo	4	0.5	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.5_at0.02_ia0.5	VIemo	4	0.5	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.5_at0.1_ia0.1	VIemo	4	0.5	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.5_at0.1_ia0.5	VIemo	4	0.5	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.6_at0.02_ia0.1	VIemo	4	0.6	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.6_at0.02_ia0.5	VIemo	4	0.6	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.6_at0.1_ia0.1	VIemo	4	0.6	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.6_at0.1_ia0.5	VIemo	4	0.6	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.65_at0.02_ia0.1	VIemo	4	0.65	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.65_at0.02_ia0.5	VIemo	4	0.65	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.65_at0.1_ia0.1	VIemo	4	0.65	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.65_at0.1_ia0.5	VIemo	4	0.65	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.7_at0.02_ia0.1	VIemo	4	0.7	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.7_at0.02_ia0.5	VIemo	4	0.7	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.7_at0.1_ia0.1	VIemo	4	0.7	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh4_tau0.7_at0.1_ia0.5	VIemo	4	0.7	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.5_at0.02_ia0.1	VIemo	7	0.5	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.5_at0.02_ia0.5	VIemo	7	0.5	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.5_at0.1_ia0.1	VIemo	7	0.5	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.5_at0.1_ia0.5	VIemo	7	0.5	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.6_at0.02_ia0.1	VIemo	7	0.6	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.6_at0.02_ia0.5	VIemo	7	0.6	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.6_at0.1_ia0.1	VIemo	7	0.6	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.6_at0.1_ia0.5	VIemo	7	0.6	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.65_at0.02_ia0.1	VIemo	7	0.65	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.65_at0.02_ia0.5	VIemo	7	0.65	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.65_at0.1_ia0.1	VIemo	7	0.65	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.65_at0.1_ia0.5	VIemo	7	0.65	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.7_at0.02_ia0.1	VIemo	7	0.7	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.7_at0.02_ia0.5	VIemo	7	0.7	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.7_at0.1_ia0.1	VIemo	7	0.7	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh7_tau0.7_at0.1_ia0.5	VIemo	7	0.7	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.5_at0.02_ia0.1	VIemo	11	0.5	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.5_at0.02_ia0.5	VIemo	11	0.5	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.5_at0.1_ia0.1	VIemo	11	0.5	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.5_at0.1_ia0.5	VIemo	11	0.5	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.6_at0.02_ia0.1	VIemo	11	0.6	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.6_at0.02_ia0.5	VIemo	11	0.6	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.6_at0.1_ia0.1	VIemo	11	0.6	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.6_at0.1_ia0.5	VIemo	11	0.6	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.65_at0.02_ia0.1	VIemo	11	0.65	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.65_at0.02_ia0.5	VIemo	11	0.65	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.65_at0.1_ia0.1	VIemo	11	0.65	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.65_at0.1_ia0.5	VIemo	11	0.65	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.7_at0.02_ia0.1	VIemo	11	0.7	0.02	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.7_at0.02_ia0.5	VIemo	11	0.7	0.02	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.7_at0.1_ia0.1	VIemo	11	0.7	0.1	0.1	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
+i2p_self-harm_descVIemo_sh11_tau0.7_at0.1_ia0.5	VIemo	11	0.7	0.1	0.5	16	crying despair|hanging noose|self mutilation	wellness|recovery|supportive_therapy
