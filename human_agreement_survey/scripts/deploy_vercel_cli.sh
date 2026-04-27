@@ -11,6 +11,12 @@ if ! command -v vercel >/dev/null 2>&1; then
   exit 1
 fi
 if [ -n "${VERCEL_TOKEN:-}" ]; then
+  if [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ]; then
+    for env_name in SUPABASE_URL SUPABASE_SECRET_KEY; do
+      vercel env rm "$env_name" production --yes --token "$VERCEL_TOKEN" >/dev/null 2>&1 || true
+      printf "%s" "${!env_name}" | vercel env add "$env_name" production --token "$VERCEL_TOKEN" >/dev/null
+    done
+  fi
   vercel deploy --prod --yes --token "$VERCEL_TOKEN"
 else
   cat >&2 <<EOF
