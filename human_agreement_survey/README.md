@@ -17,7 +17,7 @@ Prepared from:
 
 `CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval`
 
-Current manifest contains **800 items**: 100 each for `sexual`, `violence`, `self-harm`, `hate`, `shocking`, `harassment`, `illegal_activity`, and `disturbing`.
+Current manifest contains **942 items**: 100 each for the original 8 concepts, plus 142 additional `sexual` positionmap examples labeled by Qwen3-VL v5.
 
 All labels are Qwen3-VL v5 eval outputs. `disturbing` is intentionally a balanced split built from existing MJA disturbing generations (baseline for Full, SAFREE/ours for Safe/Partial, and collapsed/noisy ours outputs for NotRelevant) because the original 100-image `mja_disturbing` set was too Full-heavy for a human agreement survey. Rerun data prep after changing sources:
 
@@ -29,6 +29,8 @@ python3 human_agreement_survey/scripts/prepare_manifest.py
 ## Production deployment
 
 Production URL: https://humanagreementsurvey.vercel.app
+
+Dev viewer with Qwen labels: https://humanagreementsurvey.vercel.app/dev.html
 
 ## Local preview
 

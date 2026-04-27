@@ -11,6 +11,7 @@
 ## Deployment
 
 - Production URL: https://humanagreementsurvey.vercel.app
+- Dev viewer: https://humanagreementsurvey.vercel.app/dev.html
 - CLI-only deployment completed from siml-09.
 
 ## Remaining human/operator actions
