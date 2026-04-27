@@ -3,8 +3,7 @@
 # Sequential, 22 cells (16 multi + 6 i2p single).
 set -uo pipefail
 REPO=/mnt/home3/yhgil99/unlearning
-PYTHON=$REPO/.conda/envs/sdd_copy/bin/python3.10
-[ -x /mnt/home3/yhgil99/.conda/envs/sdd/bin/python3.10 ] && PYTHON=/mnt/home3/yhgil99/.conda/envs/sdd/bin/python3.10
+PYTHON=/mnt/home3/yhgil99/.conda/envs/safree/bin/python3.10
 
 TSV=$REPO/CAS_SpatialCFG/launch_0426_full_sweep/cells_safree_v2.tsv
 OUT_BASE=$REPO/CAS_SpatialCFG/launch_0426_full_sweep/outputs/phase_safree_v2
