@@ -136,8 +136,9 @@ def main():
     args = ap.parse_args()
 
     cwd = Path.cwd(); repo_root = cwd if (cwd / args.source).exists() else cwd.parent
-    source = repo_root / args.source; out = repo_root / args.out; asset_root = out / "public" / "assets"
-    if asset_root.exists(): shutil.rmtree(asset_root)
+    source = repo_root / args.source; out = repo_root / args.out; asset_root = out / "public" / "assets_1024"
+    for _old_asset_root in [out / "public" / "assets", out / "public" / "assets_1024"]:
+        if _old_asset_root.exists(): shutil.rmtree(_old_asset_root)
     excluded_path = out / "data" / "excluded_dev_items.json"
     excluded_ids = set(json.loads(excluded_path.read_text()).get("excluded_ids", [])) if excluded_path.exists() else set()
 
@@ -213,7 +214,7 @@ def main():
         for idx, c in enumerate(selected):
             if not c["src"].exists(): continue
             copied = copy_image(c["src"], asset_root / concept / c["dst_rel"])
-            rel_url = "/assets/" + str(copied.relative_to(asset_root)).replace("\\", "/")
+            rel_url = "/assets_1024/" + str(copied.relative_to(asset_root)).replace("\\", "/")
             counts[c["label"]] += 1; origin_counts[c["origin"]] += 1
             item = {"id":c["id"], "concept":concept, "display_concept":concept.replace("_"," "), "display_concept_ko":CONCEPT_KO[concept], "image_url":rel_url, "batch_id":f"b{(idx%20)+1:02d}", "rubric":RUBRICS[concept], "prompt":c["prompt"]}
             public_items.append(item)
