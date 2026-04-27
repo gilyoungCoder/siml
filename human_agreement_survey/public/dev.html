@@ -50,6 +50,7 @@
       <select id="concept"><option value="">All concepts</option></select>
       <select id="label"><option value="">All Qwen labels</option><option>Full</option><option>Partial</option><option>Safe</option><option>NotRelevant</option></select>
       <input id="search" placeholder="prompt/source search" style="min-width:220px" />
+      <label class="small"><input id="focusOnly" type="checkbox" checked /> Latest replacements only</label>
     </div>
     <p class="small muted">개발자 확인용 페이지입니다. Qwen 정답 라벨과 source/prompt를 표시하며 Dataset viewer는 Supabase에 아무것도 저장하지 않습니다.</p>
   </section>
@@ -83,10 +84,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/config.js"></script>
 <script>
-let all=[], filtered=[], idx=0, client=null, annotations=[];
+let all=[], filtered=[], idx=0, client=null, annotations=[], replacementFocus=null;
 const $=id=>document.getElementById(id);
 const collapseLabel = lab => (lab === 'Safe' || lab === 'Partial') ? 'Safe/Partial' : lab;
-function applyFilter(){ const c=$('concept').value, l=$('label').value, q=$('search').value.toLowerCase().trim(); filtered=all.filter(x=>(!c||x.concept===c)&&(!l||x.qwen_label===l)&&(!q||`${x.prompt||''} ${x.source_file||''} ${x.id||''}`.toLowerCase().includes(q))); idx=0; render(); }
+function applyFilter(){ const c=$('concept').value, l=$('label').value, q=$('search').value.toLowerCase().trim(); const focusIds = replacementFocus ? new Set(replacementFocus.item_ids||[]) : null; const focusOnly = $('focusOnly') && $('focusOnly').checked && focusIds; let base=all.filter(x=>(!c||x.concept===c)&&(!l||x.qwen_label===l)&&(!q||`${x.prompt||''} ${x.source_file||''} ${x.id||''}`.toLowerCase().includes(q))); if(focusOnly){ const order=new Map((replacementFocus.item_ids||[]).map((id,i)=>[id,i])); base=base.filter(x=>focusIds.has(x.id)).sort((a,b)=>order.get(a.id)-order.get(b.id)); } else if(focusIds){ const order=new Map((replacementFocus.item_ids||[]).map((id,i)=>[id,i])); base=base.sort((a,b)=>(order.has(a.id)?order.get(a.id):-1) - (order.has(b.id)?order.get(b.id):-1)); } filtered=base; idx=0; render(); }
 function showTab(name){ const res=name==='results'; $('viewerTab').classList.toggle('active',!res); $('resultsTab').classList.toggle('active',res); $('viewerPanel').style.display=res?'none':''; $('viewerGrid').style.display=res?'none':''; $('resultsPanel').style.display=res?'':'none'; if(res && annotations.length===0) loadResults(); }
 function pct(n,d){ return d ? `${(100*n/d).toFixed(1)}%` : '—'; }
 function countsBy(arr, fn){ const m={}; for(const x of arr){ const k=fn(x); m[k]=(m[k]||0)+1; } return m; }
@@ -144,9 +145,9 @@ window.showAnnotator = function(encodedName){
 
 async function loadResults(){ try{ $('resultStatus').textContent='Loading…'; const r=await fetch('/api/results', {cache:'no-store'}); let data; try{ data=await r.json(); }catch(_){ data={error:await r.text()}; } if(!r.ok) throw new Error(data.error || JSON.stringify(data)); annotations=data||[]; $('resultStatus').textContent=`${annotations.length} responses loaded`; renderResults(); }catch(e){ $('resultStatus').textContent=e.message; } }
 function render(){ if(!filtered.length){ $('status').textContent='No items'; $('img').removeAttribute('src'); return; } idx=Math.max(0, Math.min(idx, filtered.length-1)); const x=filtered[idx]; $('status').textContent=`${idx+1}/${filtered.length} filtered · ${all.length} total`; $('counter').textContent=`${idx+1} / ${filtered.length}`; $('conceptPill').textContent=`${x.display_concept} · ${x.display_concept_ko||''}`; $('qwen').textContent=x.qwen_label; $('prompt').textContent=x.prompt||'(prompt unavailable)'; $('source').textContent=x.source_file||''; $('itemid').textContent=x.id; $('img').src=x.image_url; $('jump').value=idx+1; }
-async function init(){ const cfg=window.SURVEY_CONFIG||{}; if(cfg.supabaseUrl&&cfg.supabaseAnonKey) client=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey); const data=await (await fetch('/data/dev_items.json',{cache:'no-store'})).json(); all=data.items; for(const c of [...new Set(all.map(x=>x.concept))].sort()){ const o=document.createElement('option'); o.value=c; o.textContent=c; $('concept').appendChild(o); } filtered=all; render(); }
+async function init(){ const cfg=window.SURVEY_CONFIG||{}; if(cfg.supabaseUrl&&cfg.supabaseAnonKey) client=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey); const data=await (await fetch('/data/dev_items.json',{cache:'no-store'})).json(); all=data.items; try{ replacementFocus=await (await fetch('/data/replacement_focus.json',{cache:'no-store'})).json(); }catch(_){ replacementFocus=null; if($('focusOnly')) $('focusOnly').checked=false; } for(const c of [...new Set(all.map(x=>x.concept))].sort()){ const o=document.createElement('option'); o.value=c; o.textContent=c; $('concept').appendChild(o); } if(replacementFocus && $('focusOnly')) $('focusOnly').parentElement.append(` (${(replacementFocus.item_ids||[]).length})`); applyFilter(); }
 $('prev').onclick=()=>{idx--; render();}; $('next').onclick=()=>{idx++; render();}; $('go').onclick=()=>{idx=Number($('jump').value||1)-1; render();};
-$('concept').onchange=applyFilter; $('label').onchange=applyFilter; $('search').oninput=applyFilter; $('viewerTab').onclick=()=>showTab('viewer'); $('resultsTab').onclick=()=>showTab('results'); $('refreshResults').onclick=loadResults;
+$('concept').onchange=applyFilter; $('label').onchange=applyFilter; $('search').oninput=applyFilter; $('focusOnly').onchange=applyFilter; $('viewerTab').onclick=()=>showTab('viewer'); $('resultsTab').onclick=()=>showTab('results'); $('refreshResults').onclick=loadResults;
 window.addEventListener('keydown', e=>{ if($('resultsPanel').style.display!=='none') return; if(e.key==='ArrowRight'){idx++;render();} if(e.key==='ArrowLeft'){idx--;render();} });
 init().catch(e=>$('status').textContent=e.message);
 </script>
