@@ -9,9 +9,11 @@
     * { box-sizing:border-box; }
     body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif; color:var(--fg); background:var(--bg); }
     header { padding:16px 22px; background:#101827; color:#fff; display:flex; justify-content:space-between; align-items:center; gap:12px; }
-    h1 { font-size:18px; margin:0; } main { max-width:1200px; margin:0 auto; padding:18px; }
+    h1 { font-size:18px; margin:0; } main { max-width:1240px; margin:0 auto; padding:18px; }
     .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(16,24,39,.06); }
-    .grid { display:grid; grid-template-columns:minmax(0,1fr) 380px; gap:16px; align-items:start; }
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .tab { background:#e8ecf8; color:#223; box-shadow:none; } .tab.active { background:var(--brand); color:#fff; }
+    .grid { display:grid; grid-template-columns:minmax(0,1fr) 390px; gap:16px; align-items:start; }
     .image-wrap { min-height:560px; display:flex; align-items:center; justify-content:center; background:#0b1020; border-radius:14px; overflow:hidden; }
     img { max-width:100%; max-height:78vh; object-fit:contain; }
     button, select, input { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:14px; }
@@ -21,13 +23,23 @@
     .pill { display:inline-block; background:#eef2ff; color:#263fa3; padding:6px 10px; border-radius:999px; font-size:13px; font-weight:800; margin:2px; }
     .label { font-size:22px; padding:8px 13px; }
     .muted { color:var(--muted); } .small { font-size:13px; } .mono { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; word-break:break-all; }
-    @media (max-width: 900px) { .grid { grid-template-columns:1fr; } .image-wrap { min-height:360px; } }
+    .stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:12px 0; }
+    .stat { padding:14px; border-radius:14px; background:#f8faff; border:1px solid var(--line); }
+    .stat strong { display:block; font-size:24px; } .stat span { color:var(--muted); font-size:12px; font-weight:800; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th,td { border-bottom:1px solid var(--line); padding:8px; text-align:left; vertical-align:top; }
+    th { background:#f8faff; position:sticky; top:0; z-index:1; }
+    .tablewrap { max-height:500px; overflow:auto; border:1px solid var(--line); border-radius:12px; margin:10px 0 18px; }
+    .barbox { height:9px; background:#e8ecf8; border-radius:99px; overflow:hidden; min-width:80px; margin-top:4px; }
+    .barfill { height:100%; background:linear-gradient(90deg,#3457d5,#06b6d4); }
+    @media (max-width: 900px) { .grid { grid-template-columns:1fr; } .image-wrap { min-height:360px; } .stats { grid-template-columns:1fr 1fr; } }
   </style>
 </head>
 <body>
 <header><h1>Human Agreement Study — Dev Viewer</h1><div id="status">Loading…</div></header>
 <main>
-  <section class="card">
+  <div class="tabs"><button id="viewerTab" class="tab active">Dataset viewer</button><button id="resultsTab" class="tab">Human results</button></div>
+  <section id="viewerPanel" class="card">
     <div class="row">
       <button id="prev">Prev</button><button id="next">Next</button>
       <input id="jump" type="number" min="1" style="width:90px" /><button id="go" class="secondary">Go</button>
@@ -35,9 +47,20 @@
       <select id="label"><option value="">All Qwen labels</option><option>Full</option><option>Partial</option><option>Safe</option><option>NotRelevant</option></select>
       <input id="search" placeholder="prompt/source search" style="min-width:220px" />
     </div>
-    <p class="small muted">개발자 확인용 페이지입니다. Qwen 정답 라벨과 source/prompt를 표시하며 Supabase에 아무것도 저장하지 않습니다.</p>
+    <p class="small muted">개발자 확인용 페이지입니다. Qwen 정답 라벨과 source/prompt를 표시하며 Dataset viewer는 Supabase에 아무것도 저장하지 않습니다.</p>
   </section>
-  <section class="grid" style="margin-top:16px">
+  <section id="resultsPanel" class="card" style="display:none">
+    <div class="row"><button id="refreshResults">Refresh Supabase results</button><span id="resultStatus" class="small muted">설문 응답을 불러오지 않았습니다.</span></div>
+    <div id="statCards" class="stats"></div>
+    <h2>Paper Table 16 후보 요약: Qwen vs Human majority</h2>
+    <div class="tablewrap"><table id="conceptTable"></table></div>
+    <h2>Item-level agreement</h2>
+    <p class="small muted">각 이미지별 human majority label, Qwen label, agreement 여부, 응답 분포를 표시합니다. Appendix Table 16에는 concept별 agreement와 label별 confusion을 이 집계에서 옮기면 됩니다.</p>
+    <div class="tablewrap"><table id="itemTable"></table></div>
+    <h2>Annotator progress</h2>
+    <div class="tablewrap"><table id="annotatorTable"></table></div>
+  </section>
+  <section id="viewerGrid" class="grid" style="margin-top:16px">
     <div class="card image-wrap"><img id="img" alt="stimulus" /></div>
     <aside class="card">
       <div><span id="counter" class="pill"></span> <span id="conceptPill" class="pill label"></span></div>
@@ -48,35 +71,35 @@
     </aside>
   </section>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/config.js"></script>
 <script>
-let all=[], filtered=[], idx=0;
+let all=[], filtered=[], idx=0, client=null, annotations=[];
 const $=id=>document.getElementById(id);
-function applyFilter(){
-  const c=$('concept').value, l=$('label').value, q=$('search').value.toLowerCase().trim();
-  filtered=all.filter(x=>(!c||x.concept===c)&&(!l||x.qwen_label===l)&&(!q||`${x.prompt||''} ${x.source_file||''} ${x.id||''}`.toLowerCase().includes(q)));
-  idx=0; render();
+function applyFilter(){ const c=$('concept').value, l=$('label').value, q=$('search').value.toLowerCase().trim(); filtered=all.filter(x=>(!c||x.concept===c)&&(!l||x.qwen_label===l)&&(!q||`${x.prompt||''} ${x.source_file||''} ${x.id||''}`.toLowerCase().includes(q))); idx=0; render(); }
+function showTab(name){ const res=name==='results'; $('viewerTab').classList.toggle('active',!res); $('resultsTab').classList.toggle('active',res); $('viewerPanel').style.display=res?'none':''; $('viewerGrid').style.display=res?'none':''; $('resultsPanel').style.display=res?'':'none'; if(res && annotations.length===0) loadResults(); }
+function pct(n,d){ return d ? `${(100*n/d).toFixed(1)}%` : '—'; }
+function countsBy(arr, fn){ const m={}; for(const x of arr){ const k=fn(x); m[k]=(m[k]||0)+1; } return m; }
+function majority(rows){ const c=countsBy(rows,r=>r.label); const e=Object.entries(c).sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0])); return {label:e[0]?.[0]||'', count:e[0]?.[1]||0, counts:c}; }
+function renderResults(){
+  const byItem=new Map(); for(const r of annotations){ if(!byItem.has(r.item_id)) byItem.set(r.item_id,[]); byItem.get(r.item_id).push(r); }
+  const itemMap=new Map(all.map(x=>[x.id,x])); const itemRows=[];
+  for(const [item_id, rows] of byItem){ const item=itemMap.get(item_id); if(!item) continue; const maj=majority(rows); itemRows.push({item,n:rows.length,majority:maj,agree:maj.label===item.qwen_label}); }
+  const total=annotations.length, annotators=new Set(annotations.map(r=>r.annotator_code)).size, completed=itemRows.length, agree=itemRows.filter(x=>x.agree).length;
+  $('statCards').innerHTML=[['Responses',total],['Annotators',annotators],['Items with labels',completed],['Majority agreement',pct(agree,completed)]].map(([k,v])=>`<div class="stat"><strong>${v}</strong><span>${k}</span></div>`).join('');
+  const byConcept={}; for(const r of itemRows){ (byConcept[r.item.concept] ||= []).push(r); }
+  $('conceptTable').innerHTML='<thead><tr><th>Concept</th><th>Items</th><th>Human-Qwen majority agreement</th><th>Avg responses/item</th><th>Majority label counts</th></tr></thead><tbody>'+Object.keys(byConcept).sort().map(c=>{ const rows=byConcept[c]; const ag=rows.filter(x=>x.agree).length; const avg=rows.reduce((a,b)=>a+b.n,0)/rows.length; const labs=countsBy(rows,r=>r.majority.label); return `<tr><td><b>${c}</b><br><span class="muted">${rows[0].item.display_concept_ko||''}</span></td><td>${rows.length}</td><td>${ag}/${rows.length} (${pct(ag,rows.length)})<div class="barbox"><div class="barfill" style="width:${rows.length?100*ag/rows.length:0}%"></div></div></td><td>${avg.toFixed(2)}</td><td>${Object.entries(labs).map(([k,v])=>`${k}:${v}`).join(', ')}</td></tr>`; }).join('')+'</tbody>';
+  itemRows.sort((a,b)=>a.item.concept.localeCompare(b.item.concept)||a.item.qwen_label.localeCompare(b.item.qwen_label)||a.item.id.localeCompare(b.item.id));
+  $('itemTable').innerHTML='<thead><tr><th>#</th><th>Concept</th><th>Qwen</th><th>Human majority</th><th>n</th><th>Distribution</th><th>Agree</th></tr></thead><tbody>'+itemRows.map((r,i)=>`<tr><td>${i+1}</td><td>${r.item.concept}</td><td><b>${r.item.qwen_label}</b></td><td><b>${r.majority.label}</b> (${r.majority.count})</td><td>${r.n}</td><td>${Object.entries(r.majority.counts).map(([k,v])=>`${k}:${v}`).join(', ')}</td><td>${r.agree?'✅':'❌'}</td></tr>`).join('')+'</tbody>';
+  const byAnn={}; for(const r of annotations){ (byAnn[r.annotator_code] ||= []).push(r); }
+  $('annotatorTable').innerHTML='<thead><tr><th>Annotator</th><th>Responses</th><th>Concepts</th><th>Last update</th></tr></thead><tbody>'+Object.entries(byAnn).sort((a,b)=>b[1].length-a[1].length).map(([a,rows])=>`<tr><td>${a}</td><td>${rows.length}</td><td>${Object.entries(countsBy(rows,r=>r.concept)).map(([k,v])=>`${k}:${v}`).join(', ')}</td><td>${rows.map(r=>r.created_at||'').sort().at(-1)||''}</td></tr>`).join('')+'</tbody>';
 }
-function render(){
-  if(!filtered.length){ $('status').textContent='No items'; $('img').removeAttribute('src'); return; }
-  idx=Math.max(0, Math.min(idx, filtered.length-1)); const x=filtered[idx];
-  $('status').textContent=`${idx+1}/${filtered.length} filtered · ${all.length} total`;
-  $('counter').textContent=`${idx+1} / ${filtered.length}`;
-  $('conceptPill').textContent=`${x.display_concept} · ${x.display_concept_ko||''}`;
-  $('qwen').textContent=x.qwen_label;
-  $('prompt').textContent=x.prompt||'(prompt unavailable)';
-  $('source').textContent=x.source_file||'';
-  $('itemid').textContent=x.id;
-  $('img').src=x.image_url;
-  $('jump').value=idx+1;
-}
-async function init(){
-  const data=await (await fetch('/data/dev_items.json', {cache:'no-store'})).json(); all=data.items;
-  for(const c of [...new Set(all.map(x=>x.concept))].sort()){ const o=document.createElement('option'); o.value=c; o.textContent=c; $('concept').appendChild(o); }
-  filtered=all; render();
-}
+async function loadResults(){ try{ const cfg=window.SURVEY_CONFIG||{}; if(!cfg.supabaseUrl||!cfg.supabaseAnonKey) throw new Error('config.js Supabase 설정이 없습니다.'); if(!client) client=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey); $('resultStatus').textContent='Loading…'; const {data,error}=await client.from('human_agreement_annotations').select('annotator_code,item_id,concept,label,batch_id,response_ms,created_at').order('created_at',{ascending:false}).limit(10000); if(error) throw error; annotations=data||[]; $('resultStatus').textContent=`${annotations.length} responses loaded`; renderResults(); }catch(e){ $('resultStatus').textContent=e.message; } }
+function render(){ if(!filtered.length){ $('status').textContent='No items'; $('img').removeAttribute('src'); return; } idx=Math.max(0, Math.min(idx, filtered.length-1)); const x=filtered[idx]; $('status').textContent=`${idx+1}/${filtered.length} filtered · ${all.length} total`; $('counter').textContent=`${idx+1} / ${filtered.length}`; $('conceptPill').textContent=`${x.display_concept} · ${x.display_concept_ko||''}`; $('qwen').textContent=x.qwen_label; $('prompt').textContent=x.prompt||'(prompt unavailable)'; $('source').textContent=x.source_file||''; $('itemid').textContent=x.id; $('img').src=x.image_url; $('jump').value=idx+1; }
+async function init(){ const cfg=window.SURVEY_CONFIG||{}; if(cfg.supabaseUrl&&cfg.supabaseAnonKey) client=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey); const data=await (await fetch('/data/dev_items.json',{cache:'no-store'})).json(); all=data.items; for(const c of [...new Set(all.map(x=>x.concept))].sort()){ const o=document.createElement('option'); o.value=c; o.textContent=c; $('concept').appendChild(o); } filtered=all; render(); }
 $('prev').onclick=()=>{idx--; render();}; $('next').onclick=()=>{idx++; render();}; $('go').onclick=()=>{idx=Number($('jump').value||1)-1; render();};
-$('concept').onchange=applyFilter; $('label').onchange=applyFilter; $('search').oninput=applyFilter;
-window.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'){idx++;render();} if(e.key==='ArrowLeft'){idx--;render();} });
+$('concept').onchange=applyFilter; $('label').onchange=applyFilter; $('search').oninput=applyFilter; $('viewerTab').onclick=()=>showTab('viewer'); $('resultsTab').onclick=()=>showTab('results'); $('refreshResults').onclick=loadResults;
+window.addEventListener('keydown', e=>{ if($('resultsPanel').style.display!=='none') return; if(e.key==='ArrowRight'){idx++;render();} if(e.key==='ArrowLeft'){idx--;render();} });
 init().catch(e=>$('status').textContent=e.message);
 </script>
 </body>
