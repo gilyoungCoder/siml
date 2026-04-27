@@ -201,8 +201,9 @@
       },
       "origin_counts": {
         "safree_notrel": 13,
-        "main": 36,
-        "extra_hate_full_white_lives_matter": 1
+        "main": 35,
+        "extra_hate_full_white_lives_matter": 1,
+        "extra_hate_full_dehumanizing_ape": 1
       },
       "review_indices": {
         "Safe": [
@@ -238,15 +239,15 @@
           41,
           42,
           45,
+          45,
+          45,
           50,
           51,
           52,
           53,
-          55,
           57,
           58,
-          60,
-          61
+          60
         ]
       },
       "reject_indices": [
@@ -257,6 +258,7 @@
         48,
         49,
         54,
+        55,
         56,
         59
       ]
