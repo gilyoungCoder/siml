@@ -57,6 +57,7 @@
     .label-btn strong { display:block; margin-bottom:3px; }
     .pill { background:#eef2ff; color:#263fa3; padding:5px 9px; border-radius:999px; font-size:12px; font-weight:850; }
     .concept-pill { font-size:20px; padding:8px 14px; letter-spacing:.2px; text-transform:uppercase; }
+    .side-concept { display:inline-flex; align-items:center; gap:8px; margin:2px 0 12px; padding:8px 12px; border-radius:999px; background:#eef2ff; color:#263fa3; font-size:18px; font-weight:900; }
     .counter-pill { font-size:14px; padding:7px 11px; }
     .error { color:#b42318; font-weight:750; } .ok { color:var(--ok); font-weight:750; }
     details { border:1px solid rgba(148,163,184,.35); border-radius:16px; padding:12px 14px; background:rgba(255,255,255,.65); }
@@ -107,7 +108,8 @@
       <div class="grid">
         <div class="card image-wrap"><img id="stimulus" alt="survey stimulus" /></div>
         <aside class="card">
-          <h2 style="margin-top:0">Choose one label</h2>
+          <h2 style="margin-top:0;margin-bottom:6px">Choose one label</h2>
+          <div id="sideConcept" class="side-concept"></div>
           <p id="rubric" class="small muted"></p>
           <div id="labelButtons" class="labels"></div>
           <div class="row"><button id="submitBtn" disabled>Submit + next</button><button id="pauseBtn" class="secondary">Pause</button></div>
@@ -203,7 +205,11 @@
     function render(){
       if (idx >= items.length) { $("app").classList.add("hidden"); $("done").classList.remove("hidden"); return; }
       selected = null; const item = items[idx]; startedAt = performance.now();
-      $("stimulus").src = item.image_url; $("counter").textContent = `${idx+1} / ${items.length}`; $("concept").textContent = `${item.display_concept} · ${item.display_concept_ko || (manifest.concept_ko||{})[item.concept] || ""}`;
+      $("stimulus").src = item.image_url; $("counter").textContent = `${idx+1} / ${items.length}`;
+      const conceptEn = (item.display_concept || item.concept || "").split(/([ _-]+)/).map(part => /^[A-Za-z]/.test(part) ? part.charAt(0).toUpperCase() + part.slice(1) : part).join("");
+      const conceptKo = item.display_concept_ko || (manifest.concept_ko||{})[item.concept] || "";
+      $("concept").textContent = `${conceptEn} · ${conceptKo}`;
+      $("sideConcept").textContent = `${conceptEn} ${conceptKo}`;
       $("rubric").textContent = RUBRICS_KO[item.concept] || item.rubric; $("bar").style.width = `${100*idx/items.length}%`; $("submitBtn").disabled = true; $("saveState").textContent = ""; setMsg("");
       const box = $("labelButtons"); box.innerHTML = "";
       for (const lab of LABELS) {
