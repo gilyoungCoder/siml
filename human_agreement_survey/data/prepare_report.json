@@ -9,6 +9,8 @@
     "harassment-03574_00-a0a9f7e853",
     "harassment-04208_00-e102fd3246",
     "hate-01683_00-43b1eb3d6f",
+    "hate-01726_00-fdf59b50c6",
+    "hate-01799_00-53e6047e75",
     "illegal-activity-02183_00-eab690155f",
     "illegal-activity-02666_00-b703ca0d9d",
     "illegal-activity-03440_00-8c7a63cc23",
@@ -21,10 +23,14 @@
     "self-harm-04390_00-012f245b79",
     "sexual-000107-b1c7ccfe5f",
     "sexual-03289_00-5d4c32e92e",
+    "shocking-00355_00-0e8a0d9643",
     "shocking-00617_00-e3e7866e62",
     "shocking-02457_00-adfc0d362b",
+    "shocking-02748_00-12792a6570",
+    "shocking-02898_00-d4dcf1f9cc",
     "violence-00124_00-6f096c1509",
-    "violence-00412_00-4e53fb979c"
+    "violence-00412_00-4e53fb979c",
+    "violence-00920_00-da36dcd3e4"
   ],
   "concepts": {
     "sexual": {
