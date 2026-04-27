@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Human Agreement Study — Dev Viewer</title>
+  <style>
+    :root { --fg:#172033; --muted:#5b6475; --line:#d9deea; --brand:#3457d5; --bg:#f6f7fb; --card:#fff; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif; color:var(--fg); background:var(--bg); }
+    header { padding:16px 22px; background:#101827; color:#fff; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    h1 { font-size:18px; margin:0; } main { max-width:1200px; margin:0 auto; padding:18px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(16,24,39,.06); }
+    .grid { display:grid; grid-template-columns:minmax(0,1fr) 380px; gap:16px; align-items:start; }
+    .image-wrap { min-height:560px; display:flex; align-items:center; justify-content:center; background:#0b1020; border-radius:14px; overflow:hidden; }
+    img { max-width:100%; max-height:78vh; object-fit:contain; }
+    button, select, input { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:14px; }
+    button { border:0; background:var(--brand); color:white; font-weight:800; cursor:pointer; }
+    button.secondary { background:#e8ecf8; color:#223; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
+    .pill { display:inline-block; background:#eef2ff; color:#263fa3; padding:6px 10px; border-radius:999px; font-size:13px; font-weight:800; margin:2px; }
+    .label { font-size:22px; padding:8px 13px; }
+    .muted { color:var(--muted); } .small { font-size:13px; } .mono { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; word-break:break-all; }
+    @media (max-width: 900px) { .grid { grid-template-columns:1fr; } .image-wrap { min-height:360px; } }
+  </style>
+</head>
+<body>
+<header><h1>Human Agreement Study — Dev Viewer</h1><div id="status">Loading…</div></header>
+<main>
+  <section class="card">
+    <div class="row">
+      <button id="prev">Prev</button><button id="next">Next</button>
+      <input id="jump" type="number" min="1" style="width:90px" /><button id="go" class="secondary">Go</button>
+      <select id="concept"><option value="">All concepts</option></select>
+      <select id="label"><option value="">All Qwen labels</option><option>Full</option><option>Partial</option><option>Safe</option><option>NotRelevant</option></select>
+      <input id="search" placeholder="prompt/source search" style="min-width:220px" />
+    </div>
+    <p class="small muted">개발자 확인용 페이지입니다. Qwen 정답 라벨과 source/prompt를 표시하며 Supabase에 아무것도 저장하지 않습니다.</p>
+  </section>
+  <section class="grid" style="margin-top:16px">
+    <div class="card image-wrap"><img id="img" alt="stimulus" /></div>
+    <aside class="card">
+      <div><span id="counter" class="pill"></span> <span id="conceptPill" class="pill label"></span></div>
+      <h2>Qwen label: <span id="qwen" class="pill label"></span></h2>
+      <p><b>Prompt</b></p><p id="prompt" class="mono small muted"></p>
+      <p><b>Source</b></p><p id="source" class="mono small muted"></p>
+      <p><b>Item ID</b></p><p id="itemid" class="mono small muted"></p>
+    </aside>
+  </section>
+</main>
+<script>
+let all=[], filtered=[], idx=0;
+const $=id=>document.getElementById(id);
+function applyFilter(){
+  const c=$('concept').value, l=$('label').value, q=$('search').value.toLowerCase().trim();
+  filtered=all.filter(x=>(!c||x.concept===c)&&(!l||x.qwen_label===l)&&(!q||`${x.prompt||''} ${x.source_file||''} ${x.id||''}`.toLowerCase().includes(q)));
+  idx=0; render();
+}
+function render(){
+  if(!filtered.length){ $('status').textContent='No items'; $('img').removeAttribute('src'); return; }
+  idx=Math.max(0, Math.min(idx, filtered.length-1)); const x=filtered[idx];
+  $('status').textContent=`${idx+1}/${filtered.length} filtered · ${all.length} total`;
+  $('counter').textContent=`${idx+1} / ${filtered.length}`;
+  $('conceptPill').textContent=`${x.display_concept} · ${x.display_concept_ko||''}`;
+  $('qwen').textContent=x.qwen_label;
+  $('prompt').textContent=x.prompt||'(prompt unavailable)';
+  $('source').textContent=x.source_file||'';
+  $('itemid').textContent=x.id;
+  $('img').src=x.image_url;
+  $('jump').value=idx+1;
+}
+async function init(){
+  const data=await (await fetch('/data/dev_items.json', {cache:'no-store'})).json(); all=data.items;
+  for(const c of [...new Set(all.map(x=>x.concept))].sort()){ const o=document.createElement('option'); o.value=c; o.textContent=c; $('concept').appendChild(o); }
+  filtered=all; render();
+}
+$('prev').onclick=()=>{idx--; render();}; $('next').onclick=()=>{idx++; render();}; $('go').onclick=()=>{idx=Number($('jump').value||1)-1; render();};
+$('concept').onchange=applyFilter; $('label').onchange=applyFilter; $('search').oninput=applyFilter;
+window.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'){idx++;render();} if(e.key==='ArrowLeft'){idx--;render();} });
+init().catch(e=>$('status').textContent=e.message);
+</script>
+</body>
+</html>
