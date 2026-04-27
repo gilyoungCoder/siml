@@ -97,13 +97,21 @@ def find_safree_label_file(d: Path, source_concept: str) -> Path | None:
 
 
 def copy_image(src: Path, dst: Path):
+    """Write every public survey asset as a uniform 1024x1024 JPEG.
+
+    Some SAFREE NotRelevant/noise images are 512x512 while the main SDXL
+    samples are larger. For the human survey, keep display scale from leaking
+    the source bucket by resizing every item to the same square resolution.
+    """
     dst.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        from PIL import Image
-        with Image.open(src) as im:
-            im = im.convert("RGB"); im.thumbnail((896, 896)); dst = dst.with_suffix(".jpg"); im.save(dst, quality=86, optimize=True); return dst
-    except Exception:
-        shutil.copy2(src, dst); return dst
+    from PIL import Image
+    resample = getattr(getattr(Image, "Resampling", Image), "LANCZOS", Image.BICUBIC)
+    with Image.open(src) as im:
+        im = im.convert("RGB")
+        im = im.resize((1024, 1024), resample)
+        dst = dst.with_suffix(".jpg")
+        im.save(dst, quality=90, optimize=True)
+        return dst
 
 
 def choose_label(candidates: list[dict], label: str, n: int, rng: random.Random):
