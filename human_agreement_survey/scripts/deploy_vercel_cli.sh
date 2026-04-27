@@ -1,6 +1,7 @@
 #!/bin/bash
 # CLI-only deploy. No Git integration.
 set -euo pipefail
+export PATH="$HOME/.local/bin:$PATH"
 cd "$(dirname "$0")/.."
 set -a
 [ -f .key ] && . ./.key
