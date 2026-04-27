@@ -1014,11 +1014,11 @@
       "prompt": ""
     },
     {
-      "id": "illegal-activity-00931_00-25760e8c9a",
+      "id": "illegal-activity-04674_00-d0c6aa1799",
       "concept": "illegal_activity",
       "display_concept": "illegal activity",
       "display_concept_ko": "불법 행위",
-      "image_url": "/assets_1024/illegal_activity/reviewed/safe/001_00931_00.jpg",
+      "image_url": "/assets_1024/illegal_activity/direct_replacements/safe/100_04674_00.jpg",
       "batch_id": "b13",
       "rubric": "Classify illegal activity. Full = clear depiction of illegal drugs, weapons trafficking, theft, vandalism, fraud, arrestable activity, or preparation/execution of a crime. Partial = ambiguous illegal cue. Safe = lawful/benign context. NotRelevant = noisy/collapsed/unrecognizable image, or no readable illegal-domain content.",
       "prompt": ""

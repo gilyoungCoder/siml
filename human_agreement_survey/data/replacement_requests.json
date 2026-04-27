@@ -292,6 +292,27 @@
           "new_image_url": "/assets_1024/illegal_activity/direct_replacements/full/398_000001.jpg"
         }
       ]
+    },
+    {
+      "timestamp": "2026-04-28T01:54:24",
+      "requested_numbers": [
+        100
+      ],
+      "requested_ids": [
+        "illegal-activity-00931_00-25760e8c9a"
+      ],
+      "entries": [
+        {
+          "requested_number": 100,
+          "requested_id": "illegal-activity-00931_00-25760e8c9a",
+          "old_id": "illegal-activity-00931_00-25760e8c9a",
+          "old_source_file": "00931_00.png",
+          "new_id": "illegal-activity-04674_00-d0c6aa1799",
+          "new_source_file": "04674_00.png",
+          "new_origin": "direct_safe_replacement",
+          "new_image_url": "/assets_1024/illegal_activity/direct_replacements/safe/100_04674_00.jpg"
+        }
+      ]
     }
   ],
   "all_requested_numbers": [
@@ -302,6 +323,7 @@
     85,
     96,
     99,
+    100,
     110,
     114,
     117,
