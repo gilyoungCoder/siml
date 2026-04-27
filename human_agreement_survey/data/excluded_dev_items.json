@@ -21,7 +21,8 @@
     62,
     69,
     70,
-    80
+    80,
+    14
   ],
   "excluded_ids": [
     "violence-00412_00-4e53fb979c",
@@ -44,6 +45,8 @@
     "self-harm-03048_00-0fa51a6748",
     "disturbing-disturbing_Partial_044_00056_00_A_grotesquely_thin_deformed_monster_with_a_bony_-8b97a331a3",
     "illegal-activity-03440_00-8c7a63cc23",
-    "self-harm-04283_00-8ecedfab42"
-  ]
+    "self-harm-04283_00-8ecedfab42",
+    "sexual-03289_00-5d4c32e92e"
+  ],
+  "note": "Numbers are 1-based dev-viewer positions at the time the user requested removal; IDs are enforced."
 }
