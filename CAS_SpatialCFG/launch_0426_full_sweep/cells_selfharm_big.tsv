@@ -1,0 +1,193 @@
+name	desc	anchor	sh	attn_t	img_attn	tau	n_tok	target	anchor_concepts
+i2p_self-harm_descVFpack_Aabs_sh5_at0.05_ia0.3	VFpack	Aabs	5	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh5_at0.05_ia0.4	VFpack	Aabs	5	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh5_at0.1_ia0.3	VFpack	Aabs	5	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh5_at0.1_ia0.4	VFpack	Aabs	5	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh7_at0.05_ia0.3	VFpack	Aabs	7	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh7_at0.05_ia0.4	VFpack	Aabs	7	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh7_at0.1_ia0.3	VFpack	Aabs	7	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh7_at0.1_ia0.4	VFpack	Aabs	7	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh11_at0.05_ia0.3	VFpack	Aabs	11	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh11_at0.05_ia0.4	VFpack	Aabs	11	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh11_at0.1_ia0.3	VFpack	Aabs	11	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh11_at0.1_ia0.4	VFpack	Aabs	11	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh15_at0.05_ia0.3	VFpack	Aabs	15	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh15_at0.05_ia0.4	VFpack	Aabs	15	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh15_at0.1_ia0.3	VFpack	Aabs	15	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Aabs_sh15_at0.1_ia0.4	VFpack	Aabs	15	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	wellness|recovery|supportive_therapy
+i2p_self-harm_descVFpack_Acalm_sh5_at0.05_ia0.3	VFpack	Acalm	5	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh5_at0.05_ia0.4	VFpack	Acalm	5	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh5_at0.1_ia0.3	VFpack	Acalm	5	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh5_at0.1_ia0.4	VFpack	Acalm	5	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh7_at0.05_ia0.3	VFpack	Acalm	7	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh7_at0.05_ia0.4	VFpack	Acalm	7	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh7_at0.1_ia0.3	VFpack	Acalm	7	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh7_at0.1_ia0.4	VFpack	Acalm	7	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh11_at0.05_ia0.3	VFpack	Acalm	11	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh11_at0.05_ia0.4	VFpack	Acalm	11	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh11_at0.1_ia0.3	VFpack	Acalm	11	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh11_at0.1_ia0.4	VFpack	Acalm	11	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh15_at0.05_ia0.3	VFpack	Acalm	15	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh15_at0.05_ia0.4	VFpack	Acalm	15	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh15_at0.1_ia0.3	VFpack	Acalm	15	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Acalm_sh15_at0.1_ia0.4	VFpack	Acalm	15	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVFpack_Ahlth_sh5_at0.05_ia0.3	VFpack	Ahlth	5	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh5_at0.05_ia0.4	VFpack	Ahlth	5	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh5_at0.1_ia0.3	VFpack	Ahlth	5	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh5_at0.1_ia0.4	VFpack	Ahlth	5	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh7_at0.05_ia0.3	VFpack	Ahlth	7	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh7_at0.05_ia0.4	VFpack	Ahlth	7	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh7_at0.1_ia0.3	VFpack	Ahlth	7	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh7_at0.1_ia0.4	VFpack	Ahlth	7	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh11_at0.05_ia0.3	VFpack	Ahlth	11	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh11_at0.05_ia0.4	VFpack	Ahlth	11	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh11_at0.1_ia0.3	VFpack	Ahlth	11	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh11_at0.1_ia0.4	VFpack	Ahlth	11	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh15_at0.05_ia0.3	VFpack	Ahlth	15	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh15_at0.05_ia0.4	VFpack	Ahlth	15	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh15_at0.1_ia0.3	VFpack	Ahlth	15	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ahlth_sh15_at0.1_ia0.4	VFpack	Ahlth	15	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVFpack_Ajoy_sh5_at0.05_ia0.3	VFpack	Ajoy	5	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh5_at0.05_ia0.4	VFpack	Ajoy	5	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh5_at0.1_ia0.3	VFpack	Ajoy	5	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh5_at0.1_ia0.4	VFpack	Ajoy	5	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh7_at0.05_ia0.3	VFpack	Ajoy	7	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh7_at0.05_ia0.4	VFpack	Ajoy	7	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh7_at0.1_ia0.3	VFpack	Ajoy	7	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh7_at0.1_ia0.4	VFpack	Ajoy	7	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh11_at0.05_ia0.3	VFpack	Ajoy	11	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh11_at0.05_ia0.4	VFpack	Ajoy	11	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh11_at0.1_ia0.3	VFpack	Ajoy	11	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh11_at0.1_ia0.4	VFpack	Ajoy	11	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh15_at0.05_ia0.3	VFpack	Ajoy	15	0.05	0.3	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh15_at0.05_ia0.4	VFpack	Ajoy	15	0.05	0.4	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh15_at0.1_ia0.3	VFpack	Ajoy	15	0.1	0.3	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVFpack_Ajoy_sh15_at0.1_ia0.4	VFpack	Ajoy	15	0.1	0.4	0.6	16	self_harm|cutting|pills_suicide	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Aabs_sh5_at0.05_ia0.3	VEimg	Aabs	5	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh5_at0.05_ia0.4	VEimg	Aabs	5	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh5_at0.1_ia0.3	VEimg	Aabs	5	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh5_at0.1_ia0.4	VEimg	Aabs	5	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh7_at0.05_ia0.3	VEimg	Aabs	7	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh7_at0.05_ia0.4	VEimg	Aabs	7	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh7_at0.1_ia0.3	VEimg	Aabs	7	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh7_at0.1_ia0.4	VEimg	Aabs	7	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh11_at0.05_ia0.3	VEimg	Aabs	11	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh11_at0.05_ia0.4	VEimg	Aabs	11	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh11_at0.1_ia0.3	VEimg	Aabs	11	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh11_at0.1_ia0.4	VEimg	Aabs	11	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh15_at0.05_ia0.3	VEimg	Aabs	15	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh15_at0.05_ia0.4	VEimg	Aabs	15	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh15_at0.1_ia0.3	VEimg	Aabs	15	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Aabs_sh15_at0.1_ia0.4	VEimg	Aabs	15	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	wellness|recovery|supportive_therapy
+i2p_self-harm_descVEimg_Acalm_sh5_at0.05_ia0.3	VEimg	Acalm	5	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh5_at0.05_ia0.4	VEimg	Acalm	5	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh5_at0.1_ia0.3	VEimg	Acalm	5	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh5_at0.1_ia0.4	VEimg	Acalm	5	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh7_at0.05_ia0.3	VEimg	Acalm	7	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh7_at0.05_ia0.4	VEimg	Acalm	7	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh7_at0.1_ia0.3	VEimg	Acalm	7	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh7_at0.1_ia0.4	VEimg	Acalm	7	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh11_at0.05_ia0.3	VEimg	Acalm	11	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh11_at0.05_ia0.4	VEimg	Acalm	11	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh11_at0.1_ia0.3	VEimg	Acalm	11	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh11_at0.1_ia0.4	VEimg	Acalm	11	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh15_at0.05_ia0.3	VEimg	Acalm	15	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh15_at0.05_ia0.4	VEimg	Acalm	15	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh15_at0.1_ia0.3	VEimg	Acalm	15	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Acalm_sh15_at0.1_ia0.4	VEimg	Acalm	15	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVEimg_Ahlth_sh5_at0.05_ia0.3	VEimg	Ahlth	5	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh5_at0.05_ia0.4	VEimg	Ahlth	5	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh5_at0.1_ia0.3	VEimg	Ahlth	5	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh5_at0.1_ia0.4	VEimg	Ahlth	5	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh7_at0.05_ia0.3	VEimg	Ahlth	7	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh7_at0.05_ia0.4	VEimg	Ahlth	7	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh7_at0.1_ia0.3	VEimg	Ahlth	7	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh7_at0.1_ia0.4	VEimg	Ahlth	7	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh11_at0.05_ia0.3	VEimg	Ahlth	11	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh11_at0.05_ia0.4	VEimg	Ahlth	11	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh11_at0.1_ia0.3	VEimg	Ahlth	11	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh11_at0.1_ia0.4	VEimg	Ahlth	11	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh15_at0.05_ia0.3	VEimg	Ahlth	15	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh15_at0.05_ia0.4	VEimg	Ahlth	15	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh15_at0.1_ia0.3	VEimg	Ahlth	15	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ahlth_sh15_at0.1_ia0.4	VEimg	Ahlth	15	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVEimg_Ajoy_sh5_at0.05_ia0.3	VEimg	Ajoy	5	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh5_at0.05_ia0.4	VEimg	Ajoy	5	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh5_at0.1_ia0.3	VEimg	Ajoy	5	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh5_at0.1_ia0.4	VEimg	Ajoy	5	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh7_at0.05_ia0.3	VEimg	Ajoy	7	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh7_at0.05_ia0.4	VEimg	Ajoy	7	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh7_at0.1_ia0.3	VEimg	Ajoy	7	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh7_at0.1_ia0.4	VEimg	Ajoy	7	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh11_at0.05_ia0.3	VEimg	Ajoy	11	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh11_at0.05_ia0.4	VEimg	Ajoy	11	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh11_at0.1_ia0.3	VEimg	Ajoy	11	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh11_at0.1_ia0.4	VEimg	Ajoy	11	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh15_at0.05_ia0.3	VEimg	Ajoy	15	0.05	0.3	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh15_at0.05_ia0.4	VEimg	Ajoy	15	0.05	0.4	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh15_at0.1_ia0.3	VEimg	Ajoy	15	0.1	0.3	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVEimg_Ajoy_sh15_at0.1_ia0.4	VEimg	Ajoy	15	0.1	0.4	0.6	16	noose|wrist_cutting|self_cuts	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Aabs_sh5_at0.05_ia0.3	VGmix	Aabs	5	0.05	0.3	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh5_at0.05_ia0.4	VGmix	Aabs	5	0.05	0.4	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh5_at0.1_ia0.3	VGmix	Aabs	5	0.1	0.3	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh5_at0.1_ia0.4	VGmix	Aabs	5	0.1	0.4	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh7_at0.05_ia0.3	VGmix	Aabs	7	0.05	0.3	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh7_at0.05_ia0.4	VGmix	Aabs	7	0.05	0.4	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh7_at0.1_ia0.3	VGmix	Aabs	7	0.1	0.3	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh7_at0.1_ia0.4	VGmix	Aabs	7	0.1	0.4	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh11_at0.05_ia0.3	VGmix	Aabs	11	0.05	0.3	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh11_at0.05_ia0.4	VGmix	Aabs	11	0.05	0.4	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh11_at0.1_ia0.3	VGmix	Aabs	11	0.1	0.3	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh11_at0.1_ia0.4	VGmix	Aabs	11	0.1	0.4	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh15_at0.05_ia0.3	VGmix	Aabs	15	0.05	0.3	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh15_at0.05_ia0.4	VGmix	Aabs	15	0.05	0.4	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh15_at0.1_ia0.3	VGmix	Aabs	15	0.1	0.3	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Aabs_sh15_at0.1_ia0.4	VGmix	Aabs	15	0.1	0.4	0.6	16	self_harm|noose|depression	wellness|recovery|supportive_therapy
+i2p_self-harm_descVGmix_Acalm_sh5_at0.05_ia0.3	VGmix	Acalm	5	0.05	0.3	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh5_at0.05_ia0.4	VGmix	Acalm	5	0.05	0.4	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh5_at0.1_ia0.3	VGmix	Acalm	5	0.1	0.3	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh5_at0.1_ia0.4	VGmix	Acalm	5	0.1	0.4	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh7_at0.05_ia0.3	VGmix	Acalm	7	0.05	0.3	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh7_at0.05_ia0.4	VGmix	Acalm	7	0.05	0.4	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh7_at0.1_ia0.3	VGmix	Acalm	7	0.1	0.3	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh7_at0.1_ia0.4	VGmix	Acalm	7	0.1	0.4	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh11_at0.05_ia0.3	VGmix	Acalm	11	0.05	0.3	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh11_at0.05_ia0.4	VGmix	Acalm	11	0.05	0.4	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh11_at0.1_ia0.3	VGmix	Acalm	11	0.1	0.3	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh11_at0.1_ia0.4	VGmix	Acalm	11	0.1	0.4	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh15_at0.05_ia0.3	VGmix	Acalm	15	0.05	0.3	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh15_at0.05_ia0.4	VGmix	Acalm	15	0.05	0.4	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh15_at0.1_ia0.3	VGmix	Acalm	15	0.1	0.3	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Acalm_sh15_at0.1_ia0.4	VGmix	Acalm	15	0.1	0.4	0.6	16	self_harm|noose|depression	smiling person|calm portrait|peaceful meditation
+i2p_self-harm_descVGmix_Ahlth_sh5_at0.05_ia0.3	VGmix	Ahlth	5	0.05	0.3	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh5_at0.05_ia0.4	VGmix	Ahlth	5	0.05	0.4	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh5_at0.1_ia0.3	VGmix	Ahlth	5	0.1	0.3	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh5_at0.1_ia0.4	VGmix	Ahlth	5	0.1	0.4	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh7_at0.05_ia0.3	VGmix	Ahlth	7	0.05	0.3	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh7_at0.05_ia0.4	VGmix	Ahlth	7	0.05	0.4	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh7_at0.1_ia0.3	VGmix	Ahlth	7	0.1	0.3	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh7_at0.1_ia0.4	VGmix	Ahlth	7	0.1	0.4	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh11_at0.05_ia0.3	VGmix	Ahlth	11	0.05	0.3	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh11_at0.05_ia0.4	VGmix	Ahlth	11	0.05	0.4	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh11_at0.1_ia0.3	VGmix	Ahlth	11	0.1	0.3	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh11_at0.1_ia0.4	VGmix	Ahlth	11	0.1	0.4	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh15_at0.05_ia0.3	VGmix	Ahlth	15	0.05	0.3	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh15_at0.05_ia0.4	VGmix	Ahlth	15	0.05	0.4	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh15_at0.1_ia0.3	VGmix	Ahlth	15	0.1	0.3	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ahlth_sh15_at0.1_ia0.4	VGmix	Ahlth	15	0.1	0.4	0.6	16	self_harm|noose|depression	healthy body|fit lifestyle|wellness routine
+i2p_self-harm_descVGmix_Ajoy_sh5_at0.05_ia0.3	VGmix	Ajoy	5	0.05	0.3	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh5_at0.05_ia0.4	VGmix	Ajoy	5	0.05	0.4	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh5_at0.1_ia0.3	VGmix	Ajoy	5	0.1	0.3	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh5_at0.1_ia0.4	VGmix	Ajoy	5	0.1	0.4	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh7_at0.05_ia0.3	VGmix	Ajoy	7	0.05	0.3	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh7_at0.05_ia0.4	VGmix	Ajoy	7	0.05	0.4	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh7_at0.1_ia0.3	VGmix	Ajoy	7	0.1	0.3	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh7_at0.1_ia0.4	VGmix	Ajoy	7	0.1	0.4	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh11_at0.05_ia0.3	VGmix	Ajoy	11	0.05	0.3	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh11_at0.05_ia0.4	VGmix	Ajoy	11	0.05	0.4	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh11_at0.1_ia0.3	VGmix	Ajoy	11	0.1	0.3	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh11_at0.1_ia0.4	VGmix	Ajoy	11	0.1	0.4	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh15_at0.05_ia0.3	VGmix	Ajoy	15	0.05	0.3	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh15_at0.05_ia0.4	VGmix	Ajoy	15	0.05	0.4	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh15_at0.1_ia0.3	VGmix	Ajoy	15	0.1	0.3	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
+i2p_self-harm_descVGmix_Ajoy_sh15_at0.1_ia0.4	VGmix	Ajoy	15	0.1	0.4	0.6	16	self_harm|noose|depression	joyful gathering|hopeful smile|content face
