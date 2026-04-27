@@ -112,8 +112,8 @@
           <div id="sideConcept" class="side-concept"></div>
           <p id="rubric" class="small muted"></p>
           <div id="labelButtons" class="labels"></div>
-          <div class="row"><button id="submitBtn" disabled>Submit + next</button><button id="pauseBtn" class="secondary">Pause</button></div>
-          <p class="small muted">단축키: <kbd>1</kbd> Full, <kbd>2</kbd> Partial, <kbd>3</kbd> Safe, <kbd>4</kbd> NotRelevant, <kbd>Enter</kbd> 제출.</p>
+          <div class="row"><button id="backBtn" class="secondary" disabled>Back</button><button id="submitBtn" disabled>Submit + next</button><button id="pauseBtn" class="secondary">Pause</button></div>
+          <p class="small muted">단축키: <kbd>←</kbd> Back, <kbd>1</kbd> Full, <kbd>2</kbd> Partial, <kbd>3</kbd> Safe, <kbd>4</kbd> NotRelevant, <kbd>Enter</kbd> 제출.</p>
           <p id="msg" class="small"></p>
         </aside>
       </div>
@@ -210,26 +210,35 @@
       const conceptKo = item.display_concept_ko || (manifest.concept_ko||{})[item.concept] || "";
       $("concept").textContent = `${conceptEn} · ${conceptKo}`;
       $("sideConcept").textContent = `${conceptEn} ${conceptKo}`;
-      $("rubric").textContent = RUBRICS_KO[item.concept] || item.rubric; $("bar").style.width = `${100*idx/items.length}%`; $("submitBtn").disabled = true; $("saveState").textContent = ""; setMsg("");
+      $("rubric").textContent = RUBRICS_KO[item.concept] || item.rubric; $("bar").style.width = `${100*idx/items.length}%`; $("submitBtn").disabled = true; $("backBtn").disabled = idx <= 0; $("saveState").textContent = ""; setMsg("");
       const box = $("labelButtons"); box.innerHTML = "";
+      const savedLabel = session.saved && session.saved[item.id];
       for (const lab of LABELS) {
         const b=document.createElement("button"); b.className="label-btn"; b.innerHTML=`<strong>${lab}</strong><span>${LABEL_HELP_KO[lab]}</span>`;
         b.onclick=()=>{ selected=lab; [...box.children].forEach(x=>x.classList.remove("selected")); b.classList.add("selected"); $("submitBtn").disabled=false; };
         box.appendChild(b);
+        if (savedLabel === lab) b.click();
       }
+      if (savedLabel) setMsg("이전에 선택한 라벨이 표시되어 있습니다. 바꾸고 싶으면 다시 선택한 뒤 제출하세요.");
     }
     async function submit(){
       if (!selected) return; const item = items[idx]; $("submitBtn").disabled = true; $("saveState").textContent="저장 중…";
       const payload = { study_id:(window.SURVEY_CONFIG||{}).studyId || manifest.study_id, annotator_code:normalizedName(), item_id:item.id, concept:item.concept, label:selected, batch_id:session.assignmentId, response_ms:Math.round(performance.now()-startedAt), user_agent:navigator.userAgent, client_meta:{tz:Intl.DateTimeFormat().resolvedOptions().timeZone, assignment_size:items.length, grouped_by_concept:true} };
-      const {error} = await client.from("human_agreement_annotations").insert(payload);
-      if (error && error.code !== "23505") { $("submitBtn").disabled=false; $("saveState").textContent=""; return setMsg(error.message, "error"); }
+      try {
+        const r = await fetch("/api/annotate", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
+        if (!r.ok) throw new Error(await r.text());
+      } catch (apiError) {
+        const {error} = await client.from("human_agreement_annotations").insert(payload);
+        if (error && error.code !== "23505") { $("submitBtn").disabled=false; $("saveState").textContent=""; return setMsg(apiError.message || error.message, "error"); }
+      }
       session.saved = session.saved || {}; session.saved[item.id]=selected; persistSession();
       idx = items.findIndex((x, i) => i > idx && !session.saved[x.id]);
       if (idx < 0) idx = items.length;
       render();
     }
-    $("startBtn").onclick=start; $("submitBtn").onclick=submit; $("pauseBtn").onclick=()=>location.reload();
-    window.addEventListener("keydown", e => { if ($("app").classList.contains("hidden")) return; const n = Number(e.key); if(n>=1 && n<=4) $("labelButtons").children[n-1].click(); if(e.key==="Enter" && !$("submitBtn").disabled) submit(); });
+    function goBack(){ if (idx > 0) { idx -= 1; render(); } }
+    $("startBtn").onclick=start; $("submitBtn").onclick=submit; $("backBtn").onclick=goBack; $("pauseBtn").onclick=()=>location.reload();
+    window.addEventListener("keydown", e => { if ($("app").classList.contains("hidden")) return; const n = Number(e.key); if(e.key==="ArrowLeft") goBack(); if(n>=1 && n<=4) $("labelButtons").children[n-1].click(); if(e.key==="Enter" && !$("submitBtn").disabled) submit(); });
     init();
   </script>
 </body>
