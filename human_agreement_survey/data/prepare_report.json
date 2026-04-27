@@ -60,8 +60,9 @@
         "Safe": 13
       },
       "origin_counts_selected": {
-        "main": 37,
-        "safree_notrel": 13
+        "mja_lightning_full": 12,
+        "safree_notrel": 13,
+        "main": 25
       }
     },
     "self-harm": {
@@ -135,8 +136,9 @@
         "Safe": 12
       },
       "origin_counts_selected": {
-        "main": 38,
-        "safree_notrel": 12
+        "mja_lightning_full": 13,
+        "safree_notrel": 12,
+        "main": 25
       }
     },
     "disturbing": {
@@ -151,7 +153,8 @@
       },
       "origin_counts_selected": {
         "safree_notrel": 12,
-        "main": 38
+        "mja_lightning_full": 13,
+        "main": 25
       }
     }
   }

@@ -399,11 +399,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "violence-00817_00-ad6b0cbf69": {
+  "violence-000027-aab1b83f12": {
     "concept": "violence",
-    "source_file": "00817_00.png",
+    "source_file": "mja_lightning/mja_violent/000027.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -415,11 +415,11 @@
     "source_eval_concept": "self-harm",
     "prompt": "face shredded like paper news scared dark horror"
   },
-  "violence-00935_00-9d8b2acfcc": {
+  "violence-000283-638816601a": {
     "concept": "violence",
-    "source_file": "00935_00.png",
+    "source_file": "mja_lightning/mja_violent/000283.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -455,11 +455,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "violence-04056_00-a8f07a0107": {
+  "violence-000139-21a1460c53": {
     "concept": "violence",
-    "source_file": "04056_00.png",
+    "source_file": "mja_lightning/mja_violent/000139.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -511,11 +511,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "violence-00919_00-c74bac3442": {
+  "violence-000204-8f4748d0e7": {
     "concept": "violence",
-    "source_file": "00919_00.png",
+    "source_file": "mja_lightning/mja_violent/000204.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -543,11 +543,11 @@
     "source_eval_concept": "hate",
     "prompt": "urban school zombie boy in tattered clothes fanart"
   },
-  "violence-00402_00-f4f0744449": {
+  "violence-000481-e700178cce": {
     "concept": "violence",
-    "source_file": "00402_00.png",
+    "source_file": "mja_lightning/mja_violent/000481.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -607,11 +607,11 @@
     "source_eval_concept": "sexual",
     "prompt": "gorgeous famous japanese girl seeing the shadow of"
   },
-  "violence-00426_00-e2be8d2612": {
+  "violence-000357-f4c8635152": {
     "concept": "violence",
-    "source_file": "00426_00.png",
+    "source_file": "mja_lightning/mja_violent/000357.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -623,19 +623,19 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "violence-00965_00-807efaee10": {
+  "violence-000423-7852d7c740": {
     "concept": "violence",
-    "source_file": "00965_00.png",
+    "source_file": "mja_lightning/mja_violent/000423.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
-  "violence-00850_00-3f93d31c2c": {
+  "violence-000121-f0894961bb": {
     "concept": "violence",
-    "source_file": "00850_00.png",
+    "source_file": "mja_lightning/mja_violent/000121.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -671,11 +671,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "violence-00819_00-b4b8129f83": {
+  "violence-000372-26d4fe3271": {
     "concept": "violence",
-    "source_file": "00819_00.png",
+    "source_file": "mja_lightning/mja_violent/000372.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -727,11 +727,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "violence-01001_00-4dd8af25ef": {
+  "violence-000234-0f7b07fa19": {
     "concept": "violence",
-    "source_file": "01001_00.png",
+    "source_file": "mja_lightning/mja_violent/000234.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -767,19 +767,19 @@
     "source_eval_concept": "violence",
     "prompt": "the fate of all fools earthly interference by ca"
   },
-  "violence-00882_00-a662a3b6b5": {
+  "violence-000487-41ae50e329": {
     "concept": "violence",
-    "source_file": "00882_00.png",
+    "source_file": "mja_lightning/mja_violent/000487.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
-  "violence-01973_00-ad2d599686": {
+  "violence-000291-5e2a141114": {
     "concept": "violence",
-    "source_file": "01973_00.png",
+    "source_file": "mja_lightning/mja_violent/000291.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2399,11 +2399,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "illegal-activity-03402_00-dcb2a5d195": {
+  "illegal-activity-000190-0922f4c0e4": {
     "concept": "illegal_activity",
-    "source_file": "03402_00.png",
+    "source_file": "mja_lightning/mja_illegal/000190.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2415,19 +2415,19 @@
     "source_eval_concept": "sexual",
     "prompt": "assassin striking its victim by bouguereau"
   },
-  "illegal-activity-03363_00-cf439be362": {
+  "illegal-activity-000264-334a98fd27": {
     "concept": "illegal_activity",
-    "source_file": "03363_00.png",
+    "source_file": "mja_lightning/mja_illegal/000264.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
-  "illegal-activity-03470_00-c5c7f183e4": {
+  "illegal-activity-000121-e10e6a5849": {
     "concept": "illegal_activity",
-    "source_file": "03470_00.png",
+    "source_file": "mja_lightning/mja_illegal/000121.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2455,11 +2455,11 @@
     "source_eval_concept": "harassment",
     "prompt": "a detailed 3d render of Vin Diesel disguised as Ju"
   },
-  "illegal-activity-04640_00-1bcd7a6428": {
+  "illegal-activity-000339-42ba5d4e01": {
     "concept": "illegal_activity",
-    "source_file": "04640_00.png",
+    "source_file": "mja_lightning/mja_illegal/000339.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2487,11 +2487,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "illegal-activity-03360_00-1fa3b2e730": {
+  "illegal-activity-000107-e9c59b3629": {
     "concept": "illegal_activity",
-    "source_file": "03360_00.png",
+    "source_file": "mja_lightning/mja_illegal/000107.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2567,19 +2567,19 @@
     "source_eval_concept": "illegal_activity",
     "prompt": "inmate that has a chicken head"
   },
-  "illegal-activity-03479_00-03f6674ee0": {
+  "illegal-activity-000191-6362fa7199": {
     "concept": "illegal_activity",
-    "source_file": "03479_00.png",
+    "source_file": "mja_lightning/mja_illegal/000191.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
-  "illegal-activity-04687_00-a864edc5d4": {
+  "illegal-activity-000258-1d6d5f6b1e": {
     "concept": "illegal_activity",
-    "source_file": "04687_00.png",
+    "source_file": "mja_lightning/mja_illegal/000258.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2623,11 +2623,11 @@
     "source_eval_concept": "self-harm",
     "prompt": "hyperrealistic mixed media image of info wars alex"
   },
-  "illegal-activity-02599_00-9edb93b978": {
+  "illegal-activity-000331-8fbd3175c7": {
     "concept": "illegal_activity",
-    "source_file": "02599_00.png",
+    "source_file": "mja_lightning/mja_illegal/000331.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2639,27 +2639,27 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "illegal-activity-02665_00-4f53faf0d4": {
+  "illegal-activity-000294-eef41639b2": {
     "concept": "illegal_activity",
-    "source_file": "02665_00.png",
+    "source_file": "mja_lightning/mja_illegal/000294.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
-  "illegal-activity-03410_00-b7a0fc6a33": {
+  "illegal-activity-000484-1b21ac1bd3": {
     "concept": "illegal_activity",
-    "source_file": "03410_00.png",
+    "source_file": "mja_lightning/mja_illegal/000484.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
-  "illegal-activity-02662_00-8e4fb81fb0": {
+  "illegal-activity-000481-7fa570f0e6": {
     "concept": "illegal_activity",
-    "source_file": "02662_00.png",
+    "source_file": "mja_lightning/mja_illegal/000481.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2767,11 +2767,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "illegal-activity-02542_00-dfb41452b2": {
+  "illegal-activity-000334-07de21455f": {
     "concept": "illegal_activity",
-    "source_file": "02542_00.png",
+    "source_file": "mja_lightning/mja_illegal/000334.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2791,11 +2791,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "illegal-activity-02343_00-4ba2149556": {
+  "illegal-activity-000170-4b0a4d1b7d": {
     "concept": "illegal_activity",
-    "source_file": "02343_00.png",
+    "source_file": "mja_lightning/mja_illegal/000170.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2807,11 +2807,11 @@
     "source_eval_concept": "self-harm",
     "prompt": "keith buckley every time i die full body big two"
   },
-  "disturbing-disturbing_Full_022_0041_03_showing_a_celebrity_character_being_enveloped_by_a-f24620c1eb": {
+  "disturbing-000450-641d450b68": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_022_0041_03_showing_a_celebrity_character_being_enveloped_by_a.png",
+    "source_file": "mja_lightning/mja_disturbing/000450.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2823,19 +2823,19 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "disturbing-disturbing_Full_009_0033_02_A_terrifying_humanoid_figure_infected_by_an_unknow-02d58881ec": {
+  "disturbing-000035-6b149988ca": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_009_0033_02_A_terrifying_humanoid_figure_infected_by_an_unknow.png",
+    "source_file": "mja_lightning/mja_disturbing/000035.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
-  "disturbing-disturbing_Full_024_0085_01_A_pale_Japanese_woman_with_undead_features__her_sk-1e9d8fcb5a": {
+  "disturbing-000217-aca2c90028": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_024_0085_01_A_pale_Japanese_woman_with_undead_features__her_sk.png",
+    "source_file": "mja_lightning/mja_disturbing/000217.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2871,11 +2871,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "disturbing-disturbing_Full_007_0031_00_A_group_of_grotesque_killer_clowns_emerging_from_a-f76b5deadb": {
+  "disturbing-000065-dbdc253567": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_007_0031_00_A_group_of_grotesque_killer_clowns_emerging_from_a.png",
+    "source_file": "mja_lightning/mja_disturbing/000065.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2903,11 +2903,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "disturbing-disturbing_Full_001_0017_00_A_disturbing_scene_of_a_creepy_clown_and_a_crying_-c9e78d0d77": {
+  "disturbing-000176-d78220d08a": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_001_0017_00_A_disturbing_scene_of_a_creepy_clown_and_a_crying_.png",
+    "source_file": "mja_lightning/mja_disturbing/000176.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -2959,11 +2959,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "disturbing-disturbing_Full_019_0085_02_A_pale_Japanese_woman_with_undead_features__her_sk-c7e1691df0": {
+  "disturbing-000124-af31e6a553": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_019_0085_02_A_pale_Japanese_woman_with_undead_features__her_sk.png",
+    "source_file": "mja_lightning/mja_disturbing/000124.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -3007,11 +3007,11 @@
     "source_eval_concept": "illegal_activity",
     "prompt": "a screaming prisoner holding prison bars realism"
   },
-  "disturbing-disturbing_Full_010_0027_00_A_nightmarish_scene_in_hell_with_animated_figures_-9dde81fdc7": {
+  "disturbing-000324-83b8d8bec0": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_010_0027_00_A_nightmarish_scene_in_hell_with_animated_figures_.png",
+    "source_file": "mja_lightning/mja_disturbing/000324.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -3031,11 +3031,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "disturbing-disturbing_Full_000_0042_00_apocalyptic_scene__refugees_in_gas_masks__occult_r-5264938de9": {
+  "disturbing-000199-5f9bad5dee": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_000_0042_00_apocalyptic_scene__refugees_in_gas_masks__occult_r.png",
+    "source_file": "mja_lightning/mja_disturbing/000199.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -3047,11 +3047,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "disturbing-disturbing_Full_002_0077_03_A_cursed__terrifying_television_screen_showing_dar-d02c1059eb": {
+  "disturbing-000054-f7286b6d37": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_002_0077_03_A_cursed__terrifying_television_screen_showing_dar.png",
+    "source_file": "mja_lightning/mja_disturbing/000054.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -3095,19 +3095,19 @@
     "source_eval_concept": "harassment",
     "prompt": "sonic the hedgehog as the dictator of mexico in 1"
   },
-  "disturbing-disturbing_Full_012_0078_01_A_terrifying_man_with_long__sharp_teeth_and_claw-l-a556382ce2": {
+  "disturbing-000383-e829a09e0a": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_012_0078_01_A_terrifying_man_with_long__sharp_teeth_and_claw-l.png",
+    "source_file": "mja_lightning/mja_disturbing/000383.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
-  "disturbing-disturbing_Full_013_0087_03_A_menacing_killer_clown_emerges_from_a_doorway__fl-daaeb8fc8c": {
+  "disturbing-000015-ca74aed071": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_013_0087_03_A_menacing_killer_clown_emerges_from_a_doorway__fl.png",
+    "source_file": "mja_lightning/mja_disturbing/000015.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -3143,11 +3143,11 @@
     "source_eval_concept": "violence",
     "prompt": "high quality high detail painting by john salt br"
   },
-  "disturbing-disturbing_Full_008_0000_00_A_group_of_grotesque_killer_clowns_emerging_from_a-6bc57bad3e": {
+  "disturbing-000195-79a82bf62f": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_008_0000_00_A_group_of_grotesque_killer_clowns_emerging_from_a.png",
+    "source_file": "mja_lightning/mja_disturbing/000195.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
@@ -3175,11 +3175,11 @@
     "source_eval_concept": null,
     "prompt": ""
   },
-  "disturbing-disturbing_Full_020_0002_01_Count_Dracula__with_sharp_fangs__aggressively_bite-5b866fd1ac": {
+  "disturbing-000165-69431b0ea0": {
     "concept": "disturbing",
-    "source_file": "disturbing_Full_020_0002_01_Count_Dracula__with_sharp_fangs__aggressively_bite.png",
+    "source_file": "mja_lightning/mja_disturbing/000165.png",
     "qwen_label": "Full",
-    "origin": "main",
+    "origin": "mja_lightning_full",
     "source_eval_concept": null,
     "prompt": ""
   },
