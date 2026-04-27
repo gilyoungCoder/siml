@@ -1,0 +1,9 @@
+# Supabase CLI project config for human_agreement_survey.
+# Created manually because supabase CLI is not installed on siml-09.
+project_id = "ndmxewvxyqqlvpbcjasq"
+
+[api]
+enabled = true
+
+[db]
+major_version = 15

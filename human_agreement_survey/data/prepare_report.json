@@ -1,0 +1,123 @@
+{
+  "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval",
+  "per_concept_target": 100,
+  "concepts": {
+    "sexual": {
+      "status": "ok",
+      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/sexual/categories_qwen3_vl_nudity_v5.json",
+      "available": 943,
+      "selected": 242,
+      "qwen_class_counts_selected": {
+        "NotRelevant": 35,
+        "Safe": 119,
+        "Partial": 61,
+        "Full": 27
+      },
+      "positionmap_label_file": "/mnt/home3/yhgil99/guided2-safe-diffusion/positionmap/categories_qwen3_vl_nudity_v5.json",
+      "positionmap_counts_included": {
+        "Safe": 94,
+        "Partial": 36,
+        "Full": 2,
+        "NotRelevant": 10
+      }
+    },
+    "violence": {
+      "status": "ok",
+      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/violence/categories_qwen3_vl_violence_v5.json",
+      "available": 773,
+      "selected": 100,
+      "qwen_class_counts_selected": {
+        "NotRelevant": 22,
+        "Safe": 26,
+        "Partial": 26,
+        "Full": 26
+      },
+      "positionmap_label_file": null,
+      "positionmap_counts_included": {}
+    },
+    "self-harm": {
+      "status": "ok",
+      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/self-harm/categories_qwen3_vl_self_harm_v5.json",
+      "available": 815,
+      "selected": 100,
+      "qwen_class_counts_selected": {
+        "NotRelevant": 25,
+        "Safe": 25,
+        "Partial": 25,
+        "Full": 25
+      },
+      "positionmap_label_file": null,
+      "positionmap_counts_included": {}
+    },
+    "hate": {
+      "status": "ok",
+      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/hate/categories_qwen3_vl_hate_v5.json",
+      "available": 248,
+      "selected": 100,
+      "qwen_class_counts_selected": {
+        "NotRelevant": 26,
+        "Safe": 25,
+        "Partial": 24,
+        "Full": 25
+      },
+      "positionmap_label_file": null,
+      "positionmap_counts_included": {}
+    },
+    "shocking": {
+      "status": "ok",
+      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/shocking/categories_qwen3_vl_shocking_v5.json",
+      "available": 874,
+      "selected": 100,
+      "qwen_class_counts_selected": {
+        "NotRelevant": 25,
+        "Safe": 25,
+        "Partial": 25,
+        "Full": 25
+      },
+      "positionmap_label_file": null,
+      "positionmap_counts_included": {}
+    },
+    "harassment": {
+      "status": "ok",
+      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/harassment/categories_qwen3_vl_harassment_v5.json",
+      "available": 843,
+      "selected": 100,
+      "qwen_class_counts_selected": {
+        "NotRelevant": 25,
+        "Safe": 25,
+        "Partial": 25,
+        "Full": 25
+      },
+      "positionmap_label_file": null,
+      "positionmap_counts_included": {}
+    },
+    "illegal_activity": {
+      "status": "ok",
+      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/illegal_activity/categories_qwen3_vl_illegal_v5.json",
+      "available": 738,
+      "selected": 100,
+      "qwen_class_counts_selected": {
+        "NotRelevant": 25,
+        "Safe": 25,
+        "Partial": 25,
+        "Full": 25
+      },
+      "positionmap_label_file": null,
+      "positionmap_counts_included": {}
+    },
+    "disturbing": {
+      "status": "ok",
+      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/disturbing/categories_qwen3_vl_disturbing_v5.json",
+      "available": 100,
+      "selected": 100,
+      "qwen_class_counts_selected": {
+        "NotRelevant": 25,
+        "Safe": 25,
+        "Partial": 25,
+        "Full": 25
+      },
+      "positionmap_label_file": null,
+      "positionmap_counts_included": {}
+    }
+  }
+}

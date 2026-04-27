@@ -1,0 +1,7 @@
+
+*.csv
+.env
+.key
+__pycache__/
+public/config.js
+.vercel
