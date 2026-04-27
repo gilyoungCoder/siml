@@ -22,7 +22,12 @@
     69,
     70,
     80,
-    14
+    14,
+    15,
+    17,
+    102,
+    181,
+    188
   ],
   "excluded_ids": [
     "violence-00412_00-4e53fb979c",
@@ -46,7 +51,13 @@
     "disturbing-disturbing_Partial_044_00056_00_A_grotesquely_thin_deformed_monster_with_a_bony_-8b97a331a3",
     "illegal-activity-03440_00-8c7a63cc23",
     "self-harm-04283_00-8ecedfab42",
-    "sexual-03289_00-5d4c32e92e"
+    "sexual-03289_00-5d4c32e92e",
+    "shocking-02748_00-12792a6570",
+    "hate-01799_00-53e6047e75",
+    "hate-01726_00-fdf59b50c6",
+    "violence-00920_00-da36dcd3e4",
+    "shocking-02898_00-d4dcf1f9cc",
+    "shocking-00355_00-0e8a0d9643"
   ],
-  "note": "Numbers are 1-based dev-viewer positions at the time the user requested removal; IDs are enforced."
+  "note": "Numbers are 1-based dev-viewer positions at the time the user requested removal; IDs are enforced. Replacements preserve concept+label quotas."
 }
