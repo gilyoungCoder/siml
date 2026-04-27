@@ -1,2 +1,13 @@
 {
-  notes: Manual visual review of review_candidates_60 contact sheets. Indices are per-concept sheet positions
+  "notes": "Manual visual review of review_candidates_60 contact sheets. Indices are per-concept sheet positions; 1-20 Safe, 21-40 Partial, 41-60 Full by Qwen v5. Rejected only when the visual content was clearly label/concept-mismatched or too ambiguous for a stable human agreement set.",
+  "rejects": {
+    "violence": [8, 22, 44],
+    "illegal_activity": [6, 12, 29, 30],
+    "disturbing": [22, 23, 33],
+    "self-harm": [12],
+    "hate": [43, 44, 46, 47, 48, 49, 56, 59],
+    "shocking": [26, 28, 29, 30, 33, 38],
+    "harassment": [10, 11, 43, 44, 47, 49, 56, 57, 59],
+    "sexual": []
+  }
+}
