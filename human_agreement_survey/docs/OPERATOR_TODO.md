@@ -3,7 +3,7 @@
 ## Done on siml-09
 
 - Qwen3-VL v5 labels prepared for all 8 concepts.
-- Balanced public survey manifest prepared: 800 images = 8 concepts × 100.
+- Balanced public survey manifest prepared: 400-image pool = 8 concepts × 50. Annotators receive 80 random items = 10 per concept.
 - `disturbing` split rebuilt from existing SAFREE/ours/baseline MJA disturbing generations instead of the Full-heavy original 100-image set.
 - Supabase schema/RLS applied to project; REST insert target is available.
 - Static app smoke-tested locally over HTTP.

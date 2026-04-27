@@ -5,7 +5,7 @@ This is a low-cost static survey app for the Qwen3-VL-8B human-majority agreemen
 ## What it does
 
 - Shows one generated image at a time with a concept-specific four-class rubric.
-- Each browser/nickname receives 80 random items and resumes locally from the last unfinished item.
+- Each browser/nickname receives 80 random items, sampled as 10 per concept from the 400-item pool, and resumes locally from the last unfinished item.
 - Human annotator chooses exactly one of `Full`, `Partial`, `Safe`, `NotRelevant`.
 - Browser writes only the human response to Supabase.
 - Public manifest **does not include Qwen labels**; model labels are kept in `data/qwen_labels_private.json` for offline analysis.
@@ -17,7 +17,7 @@ Prepared from:
 
 `CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval`
 
-Current manifest contains **942 items**: 100 each for the original 8 concepts, plus 142 additional `sexual` positionmap examples labeled by Qwen3-VL v5.
+Current manifest contains **400 items**: 50 each for 8 concepts. The `sexual` concept pool includes selected positionmap examples labeled by Qwen3-VL v5.
 
 All labels are Qwen3-VL v5 eval outputs. `disturbing` is intentionally a balanced split built from existing MJA disturbing generations (baseline for Full, SAFREE/ours for Safe/Partial, and collapsed/noisy ours outputs for NotRelevant) because the original 100-image `mja_disturbing` set was too Full-heavy for a human agreement survey. Rerun data prep after changing sources:
 
