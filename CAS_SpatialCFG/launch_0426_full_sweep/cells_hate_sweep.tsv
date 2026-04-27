@@ -1,0 +1,193 @@
+name	desc	sh	tau	attn_t	img_attn	n_tok	target	anchor_concepts
+i2p_hate_descVHpack_sh5_tau0.4_at0.1_ia0.1	VHpack	5	0.4	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.4_at0.1_ia0.4	VHpack	5	0.4	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.4_at0.25_ia0.1	VHpack	5	0.4	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.4_at0.25_ia0.4	VHpack	5	0.4	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.5_at0.1_ia0.1	VHpack	5	0.5	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.5_at0.1_ia0.4	VHpack	5	0.5	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.5_at0.25_ia0.1	VHpack	5	0.5	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.5_at0.25_ia0.4	VHpack	5	0.5	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.6_at0.1_ia0.1	VHpack	5	0.6	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.6_at0.1_ia0.4	VHpack	5	0.6	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.6_at0.25_ia0.1	VHpack	5	0.6	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.6_at0.25_ia0.4	VHpack	5	0.6	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.7_at0.1_ia0.1	VHpack	5	0.7	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.7_at0.1_ia0.4	VHpack	5	0.7	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.7_at0.25_ia0.1	VHpack	5	0.7	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh5_tau0.7_at0.25_ia0.4	VHpack	5	0.7	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.4_at0.1_ia0.1	VHpack	11	0.4	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.4_at0.1_ia0.4	VHpack	11	0.4	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.4_at0.25_ia0.1	VHpack	11	0.4	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.4_at0.25_ia0.4	VHpack	11	0.4	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.5_at0.1_ia0.1	VHpack	11	0.5	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.5_at0.1_ia0.4	VHpack	11	0.5	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.5_at0.25_ia0.1	VHpack	11	0.5	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.5_at0.25_ia0.4	VHpack	11	0.5	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.6_at0.1_ia0.1	VHpack	11	0.6	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.6_at0.1_ia0.4	VHpack	11	0.6	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.6_at0.25_ia0.1	VHpack	11	0.6	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.6_at0.25_ia0.4	VHpack	11	0.6	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.7_at0.1_ia0.1	VHpack	11	0.7	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.7_at0.1_ia0.4	VHpack	11	0.7	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.7_at0.25_ia0.1	VHpack	11	0.7	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh11_tau0.7_at0.25_ia0.4	VHpack	11	0.7	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.4_at0.1_ia0.1	VHpack	17	0.4	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.4_at0.1_ia0.4	VHpack	17	0.4	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.4_at0.25_ia0.1	VHpack	17	0.4	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.4_at0.25_ia0.4	VHpack	17	0.4	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.5_at0.1_ia0.1	VHpack	17	0.5	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.5_at0.1_ia0.4	VHpack	17	0.5	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.5_at0.25_ia0.1	VHpack	17	0.5	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.5_at0.25_ia0.4	VHpack	17	0.5	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.6_at0.1_ia0.1	VHpack	17	0.6	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.6_at0.1_ia0.4	VHpack	17	0.6	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.6_at0.25_ia0.1	VHpack	17	0.6	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.6_at0.25_ia0.4	VHpack	17	0.6	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.7_at0.1_ia0.1	VHpack	17	0.7	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.7_at0.1_ia0.4	VHpack	17	0.7	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.7_at0.25_ia0.1	VHpack	17	0.7	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh17_tau0.7_at0.25_ia0.4	VHpack	17	0.7	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.4_at0.1_ia0.1	VHpack	22	0.4	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.4_at0.1_ia0.4	VHpack	22	0.4	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.4_at0.25_ia0.1	VHpack	22	0.4	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.4_at0.25_ia0.4	VHpack	22	0.4	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.5_at0.1_ia0.1	VHpack	22	0.5	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.5_at0.1_ia0.4	VHpack	22	0.5	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.5_at0.25_ia0.1	VHpack	22	0.5	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.5_at0.25_ia0.4	VHpack	22	0.5	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.6_at0.1_ia0.1	VHpack	22	0.6	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.6_at0.1_ia0.4	VHpack	22	0.6	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.6_at0.25_ia0.1	VHpack	22	0.6	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.6_at0.25_ia0.4	VHpack	22	0.6	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.7_at0.1_ia0.1	VHpack	22	0.7	0.1	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.7_at0.1_ia0.4	VHpack	22	0.7	0.1	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.7_at0.25_ia0.1	VHpack	22	0.7	0.25	0.1	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHpack_sh22_tau0.7_at0.25_ia0.4	VHpack	22	0.7	0.25	0.4	16	hate_symbol|discrimination|racist_imagery	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.4_at0.1_ia0.1	VHimg	5	0.4	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.4_at0.1_ia0.4	VHimg	5	0.4	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.4_at0.25_ia0.1	VHimg	5	0.4	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.4_at0.25_ia0.4	VHimg	5	0.4	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.5_at0.1_ia0.1	VHimg	5	0.5	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.5_at0.1_ia0.4	VHimg	5	0.5	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.5_at0.25_ia0.1	VHimg	5	0.5	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.5_at0.25_ia0.4	VHimg	5	0.5	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.6_at0.1_ia0.1	VHimg	5	0.6	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.6_at0.1_ia0.4	VHimg	5	0.6	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.6_at0.25_ia0.1	VHimg	5	0.6	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.6_at0.25_ia0.4	VHimg	5	0.6	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.7_at0.1_ia0.1	VHimg	5	0.7	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.7_at0.1_ia0.4	VHimg	5	0.7	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.7_at0.25_ia0.1	VHimg	5	0.7	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh5_tau0.7_at0.25_ia0.4	VHimg	5	0.7	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.4_at0.1_ia0.1	VHimg	11	0.4	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.4_at0.1_ia0.4	VHimg	11	0.4	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.4_at0.25_ia0.1	VHimg	11	0.4	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.4_at0.25_ia0.4	VHimg	11	0.4	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.5_at0.1_ia0.1	VHimg	11	0.5	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.5_at0.1_ia0.4	VHimg	11	0.5	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.5_at0.25_ia0.1	VHimg	11	0.5	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.5_at0.25_ia0.4	VHimg	11	0.5	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.6_at0.1_ia0.1	VHimg	11	0.6	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.6_at0.1_ia0.4	VHimg	11	0.6	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.6_at0.25_ia0.1	VHimg	11	0.6	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.6_at0.25_ia0.4	VHimg	11	0.6	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.7_at0.1_ia0.1	VHimg	11	0.7	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.7_at0.1_ia0.4	VHimg	11	0.7	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.7_at0.25_ia0.1	VHimg	11	0.7	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh11_tau0.7_at0.25_ia0.4	VHimg	11	0.7	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.4_at0.1_ia0.1	VHimg	17	0.4	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.4_at0.1_ia0.4	VHimg	17	0.4	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.4_at0.25_ia0.1	VHimg	17	0.4	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.4_at0.25_ia0.4	VHimg	17	0.4	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.5_at0.1_ia0.1	VHimg	17	0.5	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.5_at0.1_ia0.4	VHimg	17	0.5	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.5_at0.25_ia0.1	VHimg	17	0.5	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.5_at0.25_ia0.4	VHimg	17	0.5	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.6_at0.1_ia0.1	VHimg	17	0.6	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.6_at0.1_ia0.4	VHimg	17	0.6	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.6_at0.25_ia0.1	VHimg	17	0.6	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.6_at0.25_ia0.4	VHimg	17	0.6	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.7_at0.1_ia0.1	VHimg	17	0.7	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.7_at0.1_ia0.4	VHimg	17	0.7	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.7_at0.25_ia0.1	VHimg	17	0.7	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh17_tau0.7_at0.25_ia0.4	VHimg	17	0.7	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.4_at0.1_ia0.1	VHimg	22	0.4	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.4_at0.1_ia0.4	VHimg	22	0.4	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.4_at0.25_ia0.1	VHimg	22	0.4	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.4_at0.25_ia0.4	VHimg	22	0.4	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.5_at0.1_ia0.1	VHimg	22	0.5	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.5_at0.1_ia0.4	VHimg	22	0.5	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.5_at0.25_ia0.1	VHimg	22	0.5	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.5_at0.25_ia0.4	VHimg	22	0.5	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.6_at0.1_ia0.1	VHimg	22	0.6	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.6_at0.1_ia0.4	VHimg	22	0.6	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.6_at0.25_ia0.1	VHimg	22	0.6	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.6_at0.25_ia0.4	VHimg	22	0.6	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.7_at0.1_ia0.1	VHimg	22	0.7	0.1	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.7_at0.1_ia0.4	VHimg	22	0.7	0.1	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.7_at0.25_ia0.1	VHimg	22	0.7	0.25	0.1	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHimg_sh22_tau0.7_at0.25_ia0.4	VHimg	22	0.7	0.25	0.4	16	demon mob|angry crowd|racist symbol	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.4_at0.1_ia0.1	VHbias	5	0.4	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.4_at0.1_ia0.4	VHbias	5	0.4	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.4_at0.25_ia0.1	VHbias	5	0.4	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.4_at0.25_ia0.4	VHbias	5	0.4	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.5_at0.1_ia0.1	VHbias	5	0.5	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.5_at0.1_ia0.4	VHbias	5	0.5	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.5_at0.25_ia0.1	VHbias	5	0.5	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.5_at0.25_ia0.4	VHbias	5	0.5	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.6_at0.1_ia0.1	VHbias	5	0.6	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.6_at0.1_ia0.4	VHbias	5	0.6	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.6_at0.25_ia0.1	VHbias	5	0.6	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.6_at0.25_ia0.4	VHbias	5	0.6	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.7_at0.1_ia0.1	VHbias	5	0.7	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.7_at0.1_ia0.4	VHbias	5	0.7	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.7_at0.25_ia0.1	VHbias	5	0.7	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh5_tau0.7_at0.25_ia0.4	VHbias	5	0.7	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.4_at0.1_ia0.1	VHbias	11	0.4	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.4_at0.1_ia0.4	VHbias	11	0.4	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.4_at0.25_ia0.1	VHbias	11	0.4	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.4_at0.25_ia0.4	VHbias	11	0.4	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.5_at0.1_ia0.1	VHbias	11	0.5	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.5_at0.1_ia0.4	VHbias	11	0.5	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.5_at0.25_ia0.1	VHbias	11	0.5	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.5_at0.25_ia0.4	VHbias	11	0.5	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.6_at0.1_ia0.1	VHbias	11	0.6	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.6_at0.1_ia0.4	VHbias	11	0.6	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.6_at0.25_ia0.1	VHbias	11	0.6	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.6_at0.25_ia0.4	VHbias	11	0.6	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.7_at0.1_ia0.1	VHbias	11	0.7	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.7_at0.1_ia0.4	VHbias	11	0.7	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.7_at0.25_ia0.1	VHbias	11	0.7	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh11_tau0.7_at0.25_ia0.4	VHbias	11	0.7	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.4_at0.1_ia0.1	VHbias	17	0.4	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.4_at0.1_ia0.4	VHbias	17	0.4	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.4_at0.25_ia0.1	VHbias	17	0.4	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.4_at0.25_ia0.4	VHbias	17	0.4	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.5_at0.1_ia0.1	VHbias	17	0.5	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.5_at0.1_ia0.4	VHbias	17	0.5	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.5_at0.25_ia0.1	VHbias	17	0.5	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.5_at0.25_ia0.4	VHbias	17	0.5	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.6_at0.1_ia0.1	VHbias	17	0.6	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.6_at0.1_ia0.4	VHbias	17	0.6	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.6_at0.25_ia0.1	VHbias	17	0.6	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.6_at0.25_ia0.4	VHbias	17	0.6	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.7_at0.1_ia0.1	VHbias	17	0.7	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.7_at0.1_ia0.4	VHbias	17	0.7	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.7_at0.25_ia0.1	VHbias	17	0.7	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh17_tau0.7_at0.25_ia0.4	VHbias	17	0.7	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.4_at0.1_ia0.1	VHbias	22	0.4	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.4_at0.1_ia0.4	VHbias	22	0.4	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.4_at0.25_ia0.1	VHbias	22	0.4	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.4_at0.25_ia0.4	VHbias	22	0.4	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.5_at0.1_ia0.1	VHbias	22	0.5	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.5_at0.1_ia0.4	VHbias	22	0.5	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.5_at0.25_ia0.1	VHbias	22	0.5	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.5_at0.25_ia0.4	VHbias	22	0.5	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.6_at0.1_ia0.1	VHbias	22	0.6	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.6_at0.1_ia0.4	VHbias	22	0.6	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.6_at0.25_ia0.1	VHbias	22	0.6	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.6_at0.25_ia0.4	VHbias	22	0.6	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.7_at0.1_ia0.1	VHbias	22	0.7	0.1	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.7_at0.1_ia0.4	VHbias	22	0.7	0.1	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.7_at0.25_ia0.1	VHbias	22	0.7	0.25	0.1	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
+i2p_hate_descVHbias_sh22_tau0.7_at0.25_ia0.4	VHbias	22	0.7	0.25	0.4	16	white supremacy|racial slur|hateful gathering	respect|harmony|peaceful gathering
