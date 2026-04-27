@@ -1,161 +1,547 @@
 {
-  "source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval",
-  "notrel_source": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/outputs/phase_safree",
-  "target": "400 total; 8 concepts x 50; labels x 100",
-  "excluded_ids": [
-    "disturbing-disturbing_Partial_044_00056_00_A_grotesquely_thin_deformed_monster_with_a_bony_-8b97a331a3",
-    "harassment-00555_00-f86d66bdcc",
-    "harassment-00961_00-d11b1cb97a",
-    "harassment-03574_00-a0a9f7e853",
-    "harassment-04208_00-e102fd3246",
-    "hate-01683_00-43b1eb3d6f",
-    "hate-01726_00-fdf59b50c6",
-    "hate-01799_00-53e6047e75",
-    "illegal-activity-02183_00-eab690155f",
-    "illegal-activity-02666_00-b703ca0d9d",
-    "illegal-activity-03440_00-8c7a63cc23",
-    "self-harm-00004_00-fcddf5b375",
-    "self-harm-01399_00-d21e986df5",
-    "self-harm-02475_00-d63d193216",
-    "self-harm-03048_00-0fa51a6748",
-    "self-harm-03111_00-1bbb57023e",
-    "self-harm-04283_00-8ecedfab42",
-    "self-harm-04390_00-012f245b79",
-    "sexual-000107-b1c7ccfe5f",
-    "sexual-03289_00-5d4c32e92e",
-    "shocking-00355_00-0e8a0d9643",
-    "shocking-00617_00-e3e7866e62",
-    "shocking-02457_00-adfc0d362b",
-    "shocking-02748_00-12792a6570",
-    "shocking-02898_00-d4dcf1f9cc",
-    "violence-00124_00-6f096c1509",
-    "violence-00412_00-4e53fb979c",
-    "violence-00920_00-da36dcd3e4"
-  ],
+  "source": "/mnt/home3/yhgil99/unlearning/human_agreement_survey/review_candidates_60/metadata.json",
+  "manual_rejects": "/mnt/home3/yhgil99/unlearning/human_agreement_survey/data/manual_review_rejects.json",
+  "target": "400 total; 8 concepts x 50; global labels x 100",
+  "seed": 42750,
   "concepts": {
     "sexual": {
-      "status": "ok",
-      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/sexual/categories_qwen3_vl_nudity_v5.json",
       "selected": 50,
-      "qwen_class_counts_selected": {
+      "label_counts": {
         "NotRelevant": 13,
         "Safe": 13,
         "Partial": 12,
         "Full": 12
       },
-      "origin_counts_selected": {
+      "origin_counts": {
         "safree_notrel": 13,
-        "main": 34,
-        "positionmap": 3
-      }
+        "main": 37
+      },
+      "review_indices": {
+        "Safe": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ],
+        "Partial": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "Full": [
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52
+        ]
+      },
+      "reject_indices": []
     },
     "violence": {
-      "status": "ok",
-      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/violence/categories_qwen3_vl_violence_v5.json",
       "selected": 50,
-      "qwen_class_counts_selected": {
-        "Full": 12,
+      "label_counts": {
         "NotRelevant": 13,
+        "Safe": 13,
         "Partial": 12,
-        "Safe": 13
+        "Full": 12
       },
-      "origin_counts_selected": {
-        "mja_lightning_full": 12,
+      "origin_counts": {
         "safree_notrel": 13,
-        "main": 25
-      }
+        "main": 31,
+        "mja_lightning_full": 6
+      },
+      "review_indices": {
+        "Safe": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ],
+        "Partial": [
+          21,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33
+        ],
+        "Full": [
+          41,
+          42,
+          43,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53
+        ]
+      },
+      "reject_indices": [
+        8,
+        22,
+        44
+      ]
     },
     "self-harm": {
-      "status": "ok",
-      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/self-harm/categories_qwen3_vl_self_harm_v5.json",
       "selected": 50,
-      "qwen_class_counts_selected": {
-        "Full": 12,
-        "Safe": 13,
-        "Partial": 12,
-        "NotRelevant": 13
-      },
-      "origin_counts_selected": {
-        "main": 37,
-        "safree_notrel": 13
-      }
-    },
-    "hate": {
-      "status": "ok",
-      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/hate/categories_qwen3_vl_hate_v5.json",
-      "selected": 50,
-      "qwen_class_counts_selected": {
-        "Full": 12,
+      "label_counts": {
         "NotRelevant": 13,
         "Safe": 13,
-        "Partial": 12
+        "Partial": 12,
+        "Full": 12
       },
-      "origin_counts_selected": {
-        "main": 37,
-        "safree_notrel": 13
-      }
+      "origin_counts": {
+        "safree_notrel": 13,
+        "main": 37
+      },
+      "review_indices": {
+        "Safe": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          13,
+          14
+        ],
+        "Partial": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "Full": [
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52
+        ]
+      },
+      "reject_indices": [
+        12
+      ]
+    },
+    "hate": {
+      "selected": 50,
+      "label_counts": {
+        "NotRelevant": 13,
+        "Safe": 13,
+        "Partial": 12,
+        "Full": 12
+      },
+      "origin_counts": {
+        "safree_notrel": 13,
+        "main": 37
+      },
+      "review_indices": {
+        "Safe": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ],
+        "Partial": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "Full": [
+          41,
+          42,
+          45,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          57,
+          58,
+          60
+        ]
+      },
+      "reject_indices": [
+        43,
+        44,
+        46,
+        47,
+        48,
+        49,
+        56,
+        59
+      ]
     },
     "shocking": {
-      "status": "ok",
-      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/shocking/categories_qwen3_vl_shocking_v5.json",
       "selected": 50,
-      "qwen_class_counts_selected": {
-        "Partial": 13,
+      "label_counts": {
         "NotRelevant": 12,
-        "Full": 13,
-        "Safe": 12
+        "Safe": 12,
+        "Partial": 13,
+        "Full": 13
       },
-      "origin_counts_selected": {
-        "main": 38,
-        "safree_notrel": 12
-      }
+      "origin_counts": {
+        "safree_notrel": 12,
+        "main": 38
+      },
+      "review_indices": {
+        "Safe": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "Partial": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          27,
+          31,
+          32,
+          34,
+          35,
+          36,
+          37,
+          39
+        ],
+        "Full": [
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53
+        ]
+      },
+      "reject_indices": [
+        26,
+        28,
+        29,
+        30,
+        33,
+        38
+      ]
     },
     "harassment": {
-      "status": "ok",
-      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/harassment/categories_qwen3_vl_harassment_v5.json",
       "selected": 50,
-      "qwen_class_counts_selected": {
-        "Partial": 13,
+      "label_counts": {
         "NotRelevant": 12,
-        "Full": 13,
-        "Safe": 12
+        "Safe": 12,
+        "Partial": 13,
+        "Full": 13
       },
-      "origin_counts_selected": {
-        "main": 38,
-        "safree_notrel": 12
-      }
+      "origin_counts": {
+        "safree_notrel": 12,
+        "main": 38
+      },
+      "review_indices": {
+        "Safe": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          12,
+          13,
+          14
+        ],
+        "Partial": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33
+        ],
+        "Full": [
+          41,
+          42,
+          45,
+          46,
+          48,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          58,
+          60
+        ]
+      },
+      "reject_indices": [
+        10,
+        11,
+        43,
+        44,
+        47,
+        49,
+        56,
+        57,
+        59
+      ]
     },
     "illegal_activity": {
-      "status": "ok",
-      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/illegal_activity/categories_qwen3_vl_illegal_v5.json",
       "selected": 50,
-      "qwen_class_counts_selected": {
-        "Full": 13,
+      "label_counts": {
         "NotRelevant": 12,
+        "Safe": 12,
         "Partial": 13,
-        "Safe": 12
+        "Full": 13
       },
-      "origin_counts_selected": {
-        "mja_lightning_full": 13,
+      "origin_counts": {
         "safree_notrel": 12,
-        "main": 25
-      }
+        "main": 31,
+        "mja_lightning_full": 7
+      },
+      "review_indices": {
+        "Safe": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          10,
+          11,
+          13,
+          14
+        ],
+        "Partial": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "Full": [
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53
+        ]
+      },
+      "reject_indices": [
+        6,
+        12,
+        29,
+        30
+      ]
     },
     "disturbing": {
-      "status": "ok",
-      "label_file": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0425_sdxl_lightning_human_eval/i2p_by_concept/disturbing/categories_qwen3_vl_disturbing_v5.json",
       "selected": 50,
-      "qwen_class_counts_selected": {
+      "label_counts": {
         "NotRelevant": 12,
-        "Full": 13,
+        "Safe": 12,
         "Partial": 13,
-        "Safe": 12
+        "Full": 13
       },
-      "origin_counts_selected": {
+      "origin_counts": {
         "safree_notrel": 12,
-        "mja_lightning_full": 13,
-        "main": 25
-      }
+        "main": 25,
+        "mja_lightning_full": 13
+      },
+      "review_indices": {
+        "Safe": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "Partial": [
+          21,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          34,
+          35,
+          36
+        ],
+        "Full": [
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53
+        ]
+      },
+      "reject_indices": [
+        22,
+        23,
+        33
+      ]
+    }
+  },
+  "summary": {
+    "public_items": 400,
+    "label_counts": {
+      "NotRelevant": 100,
+      "Safe": 100,
+      "Partial": 100,
+      "Full": 100
+    },
+    "concept_counts": {
+      "sexual": 50,
+      "violence": 50,
+      "self-harm": 50,
+      "hate": 50,
+      "shocking": 50,
+      "harassment": 50,
+      "illegal_activity": 50,
+      "disturbing": 50
     }
   }
 }
