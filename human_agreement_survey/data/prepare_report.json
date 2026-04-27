@@ -20,6 +20,7 @@
     "self-harm-04283_00-8ecedfab42",
     "self-harm-04390_00-012f245b79",
     "sexual-000107-b1c7ccfe5f",
+    "sexual-03289_00-5d4c32e92e",
     "shocking-00617_00-e3e7866e62",
     "shocking-02457_00-adfc0d362b",
     "violence-00124_00-6f096c1509",
@@ -38,8 +39,8 @@
       },
       "origin_counts_selected": {
         "safree_notrel": 13,
-        "main": 33,
-        "positionmap": 4
+        "main": 34,
+        "positionmap": 3
       }
     },
     "violence": {
