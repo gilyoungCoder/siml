@@ -1,16 +1,16 @@
 #!/bin/bash
 set -uo pipefail
 METHOD=   # safedenoiser|sgf
-CONCEPT=
+DATASET=  # rab|unlearndiff|p4dn|mma
 GPU=
 ROOT=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430
 PY=/mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10
-DATA=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/prompts/i2p_q16_csv/_q16_top60.csv
-OUT=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs//i2p_q16/
+DATA=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/prompts/nudity_csv/.csv
+OUT=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs//nudity/
 EXPECTED=-1
 ALLDIR=/all
 COUNT=0
-if [ "" -ge "" ]; then echo "[SKIP /] all_count= expected="; exit 0; fi
+if [ "" -ge "" ]; then echo "[SKIP /nudity/] all_count= expected="; exit 0; fi
 rm -rf ""
 mkdir -p "/safe" "/unsafe" "/all"
 case "" in
