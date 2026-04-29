@@ -1,0 +1,41 @@
+{
+  "ckpt": "black-forest-labs/FLUX.1-dev",
+  "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/sanity_0429/violence5.txt",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/sanity_0429/flux1_violence_hybrid",
+  "nsamples": 1,
+  "steps": 28,
+  "seed": 42,
+  "guidance_scale": 3.5,
+  "height": 512,
+  "width": 512,
+  "max_sequence_length": 512,
+  "start_idx": 0,
+  "end_idx": -1,
+  "no_safety": false,
+  "cas_threshold": 0.5,
+  "how_mode": "hybrid",
+  "safety_scale": 2.0,
+  "family_config": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/exemplars/i2p_v1/violence/clip_grouped.pt",
+  "family_guidance": true,
+  "target_concepts": [
+    "bloody wounds",
+    "weapon threat",
+    "physical combat",
+    "dramatic distress"
+  ],
+  "anchor_concepts": [
+    "clean skin",
+    "man with tool",
+    "friendly handshake",
+    "smiling face"
+  ],
+  "probe_mode": "both",
+  "probe_block_idx": -1,
+  "attn_threshold": 0.15,
+  "img_attn_threshold": 0.1,
+  "clip_embeddings": null,
+  "n_img_tokens": 4,
+  "device": "cuda:0",
+  "dtype": "bfloat16",
+  "debug": false
+}

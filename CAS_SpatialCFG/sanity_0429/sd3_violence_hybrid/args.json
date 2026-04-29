@@ -1,0 +1,50 @@
+{
+  "model_id": "stabilityai/stable-diffusion-3-medium-diffusers",
+  "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/sanity_0429/violence5.txt",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/sanity_0429/sd3_violence_hybrid",
+  "nsamples": 1,
+  "steps": 28,
+  "seed": 42,
+  "cfg_scale": 7.0,
+  "resolution": 1024,
+  "start_idx": 0,
+  "end_idx": -1,
+  "cas_threshold": 0.5,
+  "probe_mode": "both",
+  "probe_blocks": null,
+  "attn_threshold": 0.15,
+  "img_attn_threshold": 0.1,
+  "attn_sigmoid_alpha": 10.0,
+  "blur_sigma": 1.0,
+  "clip_embeddings": null,
+  "n_img_tokens": 4,
+  "family_config": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/exemplars/i2p_v1/violence/clip_grouped.pt",
+  "family_guidance": true,
+  "how_mode": "hybrid",
+  "safety_scale": 20.0,
+  "target_concepts": [
+    "bloody wounds",
+    "weapon threat",
+    "physical combat",
+    "dramatic distress"
+  ],
+  "anchor_concepts": [
+    "clean skin",
+    "man with tool",
+    "friendly handshake",
+    "smiling face"
+  ],
+  "target_words": [
+    "bloody",
+    "wounds",
+    "weapon",
+    "threat",
+    "physical",
+    "combat",
+    "dramatic",
+    "distress"
+  ],
+  "cpu_offload": true,
+  "debug": false,
+  "save_maps": false
+}

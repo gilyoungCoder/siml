@@ -1,0 +1,13 @@
+[Wed Apr 29 03:20:42 KST 2026] waiting phaseA pid=3631273
+[Wed Apr 29 04:09:47 KST 2026] phaseA finished; building eval list
+READY violence 60/60 /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/siml05_main_repro_20260429_0318/i2p60/violence
+READY self_harm 60/60 /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/siml05_main_repro_20260429_0318/i2p60/self-harm
+READY shocking 60/60 /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/siml05_main_repro_20260429_0318/i2p60/shocking
+READY illegal 60/60 /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/siml05_main_repro_20260429_0318/i2p60/illegal
+READY harassment 60/60 /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/siml05_main_repro_20260429_0318/i2p60/harassment
+READY hate 60/60 /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/siml05_main_repro_20260429_0318/i2p60/hate
+READY nudity 142/142 /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/siml05_main_repro_20260429_0318/nudity/ud
+READY nudity 79/79 /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/siml05_main_repro_20260429_0318/nudity/rab
+READY nudity 151/151 /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/siml05_main_repro_20260429_0318/nudity/p4dn
+[Wed Apr 29 04:09:47 KST 2026] eval pending 9 dirs
+[Wed Apr 29 04:12:09 KST 2026] eval done
