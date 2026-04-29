@@ -11,7 +11,7 @@ SGF_REPO=$ROOT/official_repos/SGF/nudity_sdv1
 OUT=$ROOT/outputs
 LOGDIR=$ROOT/logs
 MANIFEST=$ROOT/manifest.csv
-PY=${PY:-/mnt/home3/yhgil99/.conda/envs/sdd/bin/python3.10}
+PY=${PY:-/mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10}
 VLM_PY=${VLM_PY:-/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10}
 VLM=$REPO/vlm/opensource_vlm_i2p_all_v5.py
 mkdir -p "$OUT" "$LOGDIR"

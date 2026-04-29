@@ -1,0 +1,4 @@
+Runtime compatibility note:
+- siml-09 GPU is Blackwell sm_120; older safree/sdd torch builds fail with `no kernel image`.
+- Full run uses /mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10 (torch 2.10.0+cu128, sm_120 support) with PYTHONNOUSERSITE=1.
+- Official repo clones are patched only inside this reproduction folder for seed casting, local nudenet imports, old torchvision/PyTorch 2.10 compatibility, and ORT providers.
