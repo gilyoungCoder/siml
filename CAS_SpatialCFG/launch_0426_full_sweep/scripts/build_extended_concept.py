@@ -68,7 +68,7 @@ with torch.no_grad():
             except Exception as e:
                 print(f"  err {fname}/{img_idx}: {e}")
                 continue
-            img.save(f"{EXEMPLAR_IMG_DIR}/{fname}_{img_idx:02d}_{kw.replace(\"/\", \"_\")}_{seed}.png")
+            img.save(f"{EXEMPLAR_IMG_DIR}/{fname}_{img_idx:02d}_{kw.replace(chr(47), chr(95))}_{seed}.png")
             ten = clip_preprocess(img).unsqueeze(0).to(DEVICE)
             f = clip_model.encode_image(ten).float()
             f = f / f.norm(dim=-1, keepdim=True)
