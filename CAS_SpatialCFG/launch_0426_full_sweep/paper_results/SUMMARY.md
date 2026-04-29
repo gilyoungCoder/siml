@@ -9,7 +9,7 @@
 | shocking | phase_paper_best/i2p_shocking_hybrid | 88.33% | 88.3 | +0.03 | ✅ OK |
 | illegal | phase_paper_best/i2p_illegal_hybrid | 41.67% | 41.7 | -0.03 | ✅ OK |
 | harassment | phase_paper_best/i2p_harassment_hybrid | 58.33% | 46.7 | +11.63 | ✅ OK |
-| hate | phase1_single_tw5_old/i2p_hate | 54.24% | 66.7 | -12.46 | ✅ OK |
+| hate | phase_hate_ntok4_check/i2p_hate_ntok4_sh28_at0.25_ia0.05 | 60.00% | 66.7 | -6.70 | ✅ OK (n_tok=4 final, see HATE_DECISION_2026-04-29.md) |
 
 ## Multi-concept (Table 8/9 — drop 4c per user)
 
@@ -132,29 +132,37 @@
 
 ---
 
-## 🎯 Hate v2 Sweep — Paper 66.7 BEAT 🥇
+## 🎯 Hate Sweep — 최종 결정 (2026-04-29, n_tok=4 통일)
 
-192 cells τ=0.6 fixed grid: descriptor (4) × sh (4) × attn_t (3) × img_attn (4)
+> 상세 의사결정 + ml-paper-writer 가이드: **`HATE_DECISION_2026-04-29.md`** 참조.
 
-| 순위 | Cell | SR | S/P/F/NR |
-|------|------|-----|----------|
-| 🥇 | **descVHbias_sh28_at0.25_ia0.05** | **68.33%** | 30/11/7/12 |
-| 2 | descVHbias_sh28_at0.2_ia0.05 | 66.67 | 29/11/8/12 |
-| 3 | descVHpack_sh22_at0.25_ia0.05 | 65.00 |  |
-| 4-9 | various sh∈{17,22,28} | 63-65 |  |
+### 변천사
 
-**Key finding**: VHbias = `["white supremacy","racial slur","hateful gathering"]`. sh=28 highest, attn_t=0.25 (high text-probe threshold) + ia=0.05 (very tight image probe focal).
+| 시점 | Setting | SR | 비고 |
+|---|---|---|---|
+| 초기 | tw5_old, sh=22, descriptor=`hate_symbol/...` | 54.24% | 이전 코드 슬라이싱 (`tw[:5]`) — 재현 안 보장 |
+| 0428 v2 sweep best | descVHbias sh28 at0.25 ia0.05 **n_tok=16** | 68.33% | 192 cells sweep best |
+| **0429 final** | **위와 동일하되 n_tok 16→4 통일** | **60.00%** | n_tok=16 의 +8.3pp gain 이 last-family padding 부작용 → method 균일성 위해 n_tok=4 채택 |
 
-이전 best 54.24% → **+14.1pp 도약** + paper hybrid 66.7 +1.63pp BEAT.
+### Final args
+descriptor=VHbias `["white supremacy","racial slur","hateful gathering"]`, sh=28, attn_t=0.25, ia=0.05, **n_img_tokens=4**, cas_threshold=0.6.
 
-`paper_results/single/hate/` 갱신 완료.
+### 결과
+60 prompts 분포: Safe 27 / Partial 9 / Full 8 / NotRelevant 16 → SR = 36/60 = **60.0%**.
+Paper 66.7 대비 −6.7pp 미달 (self-harm 처럼 약간 미달). 이전 `hate_n16_archived_0429/` 로 backup 보존.
+
+### 왜 n_tok 통일
+`build_grouped_probe_embeds` 가 4 family 일 때 token_indices=[1..4] 고정. n_tok>4 는 slot 5..N 을 마지막 family 평균으로 padding → softmax 정규화 분모 변형 → attention map 패턴 shift. method 의 정식 디자인이 아니라 implementation side effect → 다른 5개 concept (모두 n_tok=4) 와 통일.
+
+`paper_results/single/hate/` + `paper_results/reproduce/run_hate.sh` 모두 n_tok=4 로 갱신.
 
 ---
 
 ## 🔬 NFE Ablation Extended (132 cells)
 
 **Setup**: 11 step values × 4 concepts × 3 methods (EBSG, SAFREE w/ -svf -lra, SD1.4 baseline).
-Plot: `paper_results/figures/nfe_curve.{pdf,png}` + `nfe_table.csv`.
+- SR-only 그림: `paper_results/figures/nfe_curve.{pdf,png}` + `nfe_table.csv`
+- **확장 그림** (SR + Full% + NR%, 0429 추가): `paper_results/figures/nfe_curve_extended.{pdf,png}` + `nfe_table_extended.csv`
 
 ### Highlights
 
