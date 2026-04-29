@@ -1,0 +1,75 @@
+#!/bin/bash
+# Image-count saturation REDO with NESTED subsample (K=1 ⊂ K=2 ⊂ ... ⊂ K=16).
+# All K from same 16-img pool, taking first N.
+# probe_mode=image, n_tok=4 fixed.
+set -uo pipefail
+GPU=${1:-0}
+CONCEPT=${2:-violence}
+PY=/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10
+BASE=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep
+PACK_BASE=$BASE/exemplars_K_nested
+OUTBASE=$BASE/outputs/phase_img_sat_nested
+LOG=$BASE/logs/img_sat_nested_g${GPU}_${CONCEPT}_$(date +%m%d_%H%M).log
+mkdir -p $OUTBASE
+> $LOG
+
+JQ () { $PY -c "import json,sys; d=json.load(open(sys.argv[1])); v=d
+for k in sys.argv[2:]: v=v[k]
+print(v)" "$@"; }
+JQARR () { $PY -c "import json,sys; d=json.load(open(sys.argv[1]))
+for x in d[sys.argv[2]]: print(x)" "$@"; }
+
+declare -A CONCEPT_ARGS_DIR=(
+  [violence]=violence
+  [shocking]=shocking
+  [illegal_activity]=illegal
+  [harassment]=harassment
+  [hate]=hate
+  [self-harm]=self-harm
+  [sexual]=sexual
+)
+KS=(1 2 4 8 12 16)
+
+ARGS_DIR=${CONCEPT_ARGS_DIR[$CONCEPT]}
+ARGS=$BASE/paper_results/single/$ARGS_DIR/args.json
+[ -f "$ARGS" ] || { echo "missing args.json $CONCEPT"; exit 1; }
+
+PROMPTS=$(JQ "$ARGS" prompts)
+HOW=$(JQ "$ARGS" how_mode)
+CAS=$(JQ "$ARGS" cas_threshold)
+SS=$(JQ "$ARGS" safety_scale)
+ATT=$(JQ "$ARGS" attn_threshold)
+IATT=$(JQ "$ARGS" img_attn_threshold)
+TC_ARR=()
+while IFS= read -r line; do TC_ARR+=("$line"); done < <(JQARR "$ARGS" target_concepts)
+
+echo "[$(date)] $CONCEPT GPU=$GPU prompts=$(basename $PROMPTS) tc=${#TC_ARR[@]}" | tee -a $LOG
+
+for K in "${KS[@]}"; do
+  PACK=$PACK_BASE/$CONCEPT/clip_grouped_K${K}.pt
+  [ -f "$PACK" ] || { echo "[err] no pack K=$K" | tee -a $LOG; continue; }
+  OUTDIR=$OUTBASE/${CONCEPT}_K${K}
+  mkdir -p $OUTDIR
+  EXISTING=$(ls $OUTDIR/*.png 2>/dev/null | wc -l)
+  if [ "$EXISTING" -ge 60 ]; then
+    echo "[skip] K=$K ($EXISTING/60)" | tee -a $LOG; continue
+  fi
+  echo "[$(date +%H:%M:%S)] [$CONCEPT K=$K] gen start" | tee -a $LOG
+  cd /mnt/home3/yhgil99/unlearning/SafeGen
+  CUDA_VISIBLE_DEVICES=$GPU $PY -m safegen.generate_family \
+    --prompts "$PROMPTS" \
+    --outdir "$OUTDIR" \
+    --family_guidance --family_config "$PACK" \
+    --probe_mode image \
+    --how_mode "$HOW" \
+    --cas_threshold "$CAS" \
+    --safety_scale "$SS" \
+    --attn_threshold "$ATT" \
+    --img_attn_threshold "$IATT" \
+    --n_img_tokens 4 \
+    --steps 50 --seed 42 --cfg_scale 7.5 \
+    --target_concepts "${TC_ARR[@]}" >> $LOG 2>&1
+  final=$(ls $OUTDIR/*.png 2>/dev/null | wc -l)
+  echo "[$(date +%H:%M:%S)] [$CONCEPT K=$K] DONE imgs=$final" | tee -a $LOG
+done
+echo "[$(date)] $CONCEPT done" | tee -a $LOG
