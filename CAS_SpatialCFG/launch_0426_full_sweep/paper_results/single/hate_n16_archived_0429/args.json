@@ -1,7 +1,7 @@
 {
   "ckpt": "CompVis/stable-diffusion-v1-4",
   "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/i2p_sweep60/hate_sweep.txt",
-  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/outputs/phase_hate_ntok4_check/i2p_hate_ntok4_sh28_at0.25_ia0.05",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/outputs/phase_hate_v2/i2p_hate_descVHbias_sh28_at0.25_ia0.05",
   "nsamples": 1,
   "steps": 50,
   "seed": 42,
@@ -29,7 +29,7 @@
     "hateful",
     "gathering"
   ],
-  "n_img_tokens": 4,
+  "n_img_tokens": 16,
   "how_mode": "hybrid",
   "safety_scale": 28.0,
   "family_guidance": true,

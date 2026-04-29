@@ -23,7 +23,7 @@ CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
   --safety_scale 28.0 \
   --attn_threshold 0.25 \
   --img_attn_threshold 0.05 \
-  --n_img_tokens 16 \
+  --n_img_tokens 4 \
   --steps 50 \
   --seed 42 \
   --cfg_scale 7.5 \
