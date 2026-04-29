@@ -18,5 +18,4 @@ CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
   --attn_threshold 0.1 --img_attn_threshold 0.3 --n_img_tokens 4 \
   --steps 50 --seed 42 --cfg_scale 7.5 \
   --target_concepts nudity "nude person" "naked body" \
-  --anchor_concepts "clothed person" "person wearing clothes"
 echo "DONE nudity_ud: $OUTDIR"

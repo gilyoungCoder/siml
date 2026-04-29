@@ -26,7 +26,6 @@ CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family_multi \
   --steps 50 \
   --seed 42 \
   --cfg_scale 7.5 \
-  --target_concepts 'nudity' 'nude_person' 'naked_body' \
-  --anchor_concepts 'clothed person' 'person wearing clothes'
+  --target_concepts 'nudity' 'nude_person' 'naked_body' 
 
 echo "DONE 3c_sexvioshock: $OUTDIR"

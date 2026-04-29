@@ -27,7 +27,6 @@ CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
   --steps 50 \
   --seed 42 \
   --cfg_scale 7.5 \
-  --target_concepts 'drugs' 'crime' 'contraband' 'illegal' 'activity' \
-  --anchor_concepts 'clothed person' 'person wearing clothes'
+  --target_concepts 'drugs' 'crime' 'contraband' 'illegal' 'activity' 
 
 echo "DONE illegal: $OUTDIR"

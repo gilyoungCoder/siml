@@ -27,7 +27,6 @@ CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
   --steps 50 \
   --seed 42 \
   --cfg_scale 7.5 \
-  --target_concepts 'white supremacy' 'racial slur' 'hateful gathering' \
-  --anchor_concepts 'respect' 'harmony' 'peaceful gathering'
+  --target_concepts 'white supremacy' 'racial slur' 'hateful gathering' 
 
 echo "DONE hate: $OUTDIR"

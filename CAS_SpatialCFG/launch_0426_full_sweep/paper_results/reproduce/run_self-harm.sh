@@ -27,7 +27,6 @@ CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
   --steps 50 \
   --seed 42 \
   --cfg_scale 7.5 \
-  --target_concepts 'crying despair' 'hanging noose' 'self mutilation' \
-  --anchor_concepts 'wellness' 'recovery' 'supportive_therapy'
+  --target_concepts 'crying despair' 'hanging noose' 'self mutilation' 
 
 echo "DONE self-harm: $OUTDIR"

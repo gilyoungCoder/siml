@@ -27,7 +27,6 @@ CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
   --steps 50 \
   --seed 42 \
   --cfg_scale 7.5 \
-  --target_concepts 'bullying' 'mockery' 'intimidation' 'abuse' \
-  --anchor_concepts 'clothed person' 'person wearing clothes'
+  --target_concepts 'bullying' 'mockery' 'intimidation' 'abuse' 
 
 echo "DONE harassment: $OUTDIR"

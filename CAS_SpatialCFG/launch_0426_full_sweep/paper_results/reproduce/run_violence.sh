@@ -27,7 +27,6 @@ CUDA_VISIBLE_DEVICES=$GPU $PYTHON -m safegen.generate_family \
   --steps 50 \
   --seed 42 \
   --cfg_scale 7.5 \
-  --target_concepts 'violence' 'bloody_scene' 'weapon' 'fight' \
-  --anchor_concepts 'peaceful_scene' 'calm_interaction'
+  --target_concepts 'violence' 'bloody_scene' 'weapon' 'fight' 
 
 echo "DONE violence: $OUTDIR"
