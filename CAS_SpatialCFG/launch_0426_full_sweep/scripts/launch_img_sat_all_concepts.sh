@@ -6,7 +6,11 @@ GPU=${1:-0}
 HALF=${2:-0}
 REPO=/mnt/home3/yhgil99/unlearning
 PY=$REPO/.conda/envs/sdd_copy/bin/python3.10
-JQ=jq
+JQ () { $PY -c "import json,sys; d=json.load(open(sys.argv[1])); v=d
+for k in sys.argv[2:]: v=v[k]
+print(v)" "$@"; }
+JQARR () { $PY -c "import json,sys; d=json.load(open(sys.argv[1]))
+for x in d[sys.argv[2]]: print(x)" "$@"; }
 BASE=$REPO/CAS_SpatialCFG/launch_0426_full_sweep
 PACK_BASE=$BASE/exemplars_K_per_concept
 OUTBASE=$BASE/outputs/phase_img_sat_all
@@ -52,15 +56,14 @@ run_cell () {
   fi
   # parse args.json fields
   local PROMPTS HOW CAS SS ATT IATT
-  PROMPTS=$($JQ -r .prompts "$ARGS")
-  HOW=$($JQ -r .how_mode "$ARGS")
-  CAS=$($JQ -r .cas_threshold "$ARGS")
-  SS=$($JQ -r .safety_scale "$ARGS")
-  ATT=$($JQ -r .attn_threshold "$ARGS")
-  IATT=$($JQ -r .img_attn_threshold "$ARGS")
-  # target_concepts as space-separated quoted-args via xargs
+  PROMPTS=$(JQ "$ARGS" prompts)
+  HOW=$(JQ "$ARGS" how_mode)
+  CAS=$(JQ "$ARGS" cas_threshold)
+  SS=$(JQ "$ARGS" safety_scale)
+  ATT=$(JQ "$ARGS" attn_threshold)
+  IATT=$(JQ "$ARGS" img_attn_threshold)
   local TC_ARR=()
-  while IFS= read -r line; do TC_ARR+=("$line"); done < <($JQ -r '.target_concepts[]' "$ARGS")
+  while IFS= read -r line; do TC_ARR+=("$line"); done < <(JQARR "$ARGS" target_concepts)
   echo "[$(date +%H:%M:%S)] [$C K=$K] gen start (prompts=$(basename $PROMPTS), tc=${#TC_ARR[@]})" | tee -a $LOG
   cd $REPO/SafeGen
   CUDA_VISIBLE_DEVICES=$GPU $PY -m safegen.generate_family \
