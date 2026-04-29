@@ -100,9 +100,9 @@ for i, c in enumerate(CONCEPTS):
         if i == len(CONCEPTS)-1:
             ax.set_xlabel("Denoising steps (NFE)", fontsize=10)
         ax.grid(alpha=0.3)
-        ax.set_xscale("log")
-        ax.set_xticks([1,3,5,10,20,50])
-        ax.set_xticklabels(["1","3","5","10","20","50"])
+        # ax.set_xscale removed (linear)
+        ax.set_xticks([1, 5, 10, 20, 30, 50])
+        ax.set_xticklabels(["1","5","10","20","30","50"])
         ax.set_ylim(-5, 105)
         if i == 0 and j == 0:
             ax.legend(loc="lower right", fontsize=8)
