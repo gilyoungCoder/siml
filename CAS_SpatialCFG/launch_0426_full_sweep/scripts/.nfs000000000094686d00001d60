@@ -32,10 +32,8 @@ if [ "$HALF" = "0" ]; then
   CONCEPTS=(violence illegal_activity)
 elif [ "$HALF" = "1" ]; then
   CONCEPTS=(shocking harassment)
-elif [ "$HALF" = "3" ]; then
-  CONCEPTS=(self-harm)
 elif [ "$HALF" = "2" ]; then
-  CONCEPTS=(hate)
+  CONCEPTS=(hate self-harm)
 else
   echo "unknown HALF=$HALF" | tee -a $LOG; exit 1
 fi
