@@ -2,9 +2,9 @@
 # Re-run hate best config with n_img_tokens=4 (was 16) — isolate n_tok effect.
 # Source baseline: paper_results/single/hate/args.json (68.33% with n_tok=16)
 # Only change: n_img_tokens 16 -> 4
-# Server: siml-05 GPU 6 ONLY (do not touch other GPUs)
+# Server: siml-09 GPU 0 ONLY (siml-09 has 1 GPU) (do not touch other GPUs)
 set -uo pipefail
-GPU=${1:-6}
+GPU=${1:-0}
 PYTHON=/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10
 SAFEGEN_DIR=/mnt/home3/yhgil99/unlearning/SafeGen
 OUTDIR=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/outputs/phase_hate_ntok4_check/i2p_hate_ntok4_sh28_at0.25_ia0.05
