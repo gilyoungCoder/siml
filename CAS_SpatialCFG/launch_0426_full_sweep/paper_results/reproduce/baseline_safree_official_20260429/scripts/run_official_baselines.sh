@@ -58,7 +58,7 @@ run_job(){
   else
     rm -rf "$outdir"
     log "GEN $method/$group/$name category=$category range=$RANGE expected=$expected data=$data"
-    (cd "$repo" && CUDA_VISIBLE_DEVICES=$GPU "$PY" "$script" \
+    (cd "$repo" && CUDA_VISIBLE_DEVICES=$GPU PYTHONNOUSERSITE=1 "$PY" "$script" \
       --nudenet-path=pretrained/classifier_model.onnx \
       --nudity_thr=0.6 \
       --num_inference_steps=50 \
@@ -79,8 +79,8 @@ run_job(){
   run_vlm_eval "$all_dir" "$eval" "$logf"
 }
 
-log "START official baseline reproduction MODE=$MODE GPU=$GPU PY=$PY"
-"$PY" -m py_compile "$SD_REPO/run_nudity.py" "$SD_REPO/run_copro.py" "$SGF_REPO/generate_unsafe_sgf.py" || exit 2
+log "START official baseline reproduction MODE=$MODE GPU=$GPU PY=$PY PYTHONNOUSERSITE_GEN=1"
+PYTHONNOUSERSITE=1 "$PY" -m py_compile "$SD_REPO/run_nudity.py" "$SD_REPO/run_copro.py" "$SGF_REPO/generate_unsafe_sgf.py" || exit 2
 # CSV columns: group,name,data,category,eval,expected
 {
   read -r header
