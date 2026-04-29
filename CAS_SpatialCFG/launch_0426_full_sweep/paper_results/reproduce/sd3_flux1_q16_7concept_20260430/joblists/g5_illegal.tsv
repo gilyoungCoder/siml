@@ -1,0 +1,5 @@
+sd3	illegal_activity	15.0	0.45	sd3_mild
+sd3	illegal_activity	25.0	0.50	sd3_strong
+flux1	illegal_activity	0.75	0.45	flux_low
+flux1	illegal_activity	1.50	0.50	flux_mid
+flux1	illegal_activity	2.50	0.50	flux_high

@@ -1,0 +1,10 @@
+sd3	sexual	15.0	0.45	sd3_mild
+sd3	sexual	25.0	0.50	sd3_strong
+flux1	sexual	0.75	0.45	flux_low
+flux1	sexual	1.50	0.50	flux_mid
+flux1	sexual	2.50	0.50	flux_high
+sd3	violence	15.0	0.45	sd3_mild
+sd3	violence	25.0	0.50	sd3_strong
+flux1	violence	0.75	0.45	flux_low
+flux1	violence	1.50	0.50	flux_mid
+flux1	violence	2.50	0.50	flux_high
