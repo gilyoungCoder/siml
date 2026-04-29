@@ -41,7 +41,7 @@ a = json.load(open('$SEXUAL_ARGS'))
 cmd = ['env', 'CUDA_VISIBLE_DEVICES=$GPU', '$PY', '-m', 'safegen.generate_family',
        '--prompts', a['prompts'], '--outdir', '$OUTDIR',
        '--family_guidance', '--family_config', '$PACK',
-       '--probe_mode', 'image_only',  # ← KEY CHANGE
+       '--probe_mode', 'image',  # ← KEY CHANGE
        '--how_mode', a['how_mode'],
        '--cas_threshold', str(a['cas_threshold']),
        '--safety_scale', str(a['safety_scale']),
