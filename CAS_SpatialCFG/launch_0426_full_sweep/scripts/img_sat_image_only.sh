@@ -47,7 +47,7 @@ cmd = ['env', 'CUDA_VISIBLE_DEVICES=$GPU', '$PY', '-m', 'safegen.generate_family
        '--safety_scale', str(a['safety_scale']),
        '--attn_threshold', str(a['attn_threshold']),
        '--img_attn_threshold', str(a['img_attn_threshold']),
-       '--n_img_tokens', '$K',
+       '--n_img_tokens', '4',
        '--steps', '50', '--seed', '42', '--cfg_scale', '7.5',
        '--target_concepts', *a['target_concepts'],
        '--anchor_concepts', *a['anchor_concepts']]
