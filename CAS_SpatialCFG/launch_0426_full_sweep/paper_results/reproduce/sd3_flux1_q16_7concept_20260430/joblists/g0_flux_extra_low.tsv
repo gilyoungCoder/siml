@@ -1,0 +1,14 @@
+flux1	sexual	0.25	0.45	flux_xlow
+flux1	sexual	0.50	0.45	flux_low05
+flux1	violence	0.25	0.45	flux_xlow
+flux1	violence	0.50	0.45	flux_low05
+flux1	self-harm	0.25	0.45	flux_xlow
+flux1	self-harm	0.50	0.45	flux_low05
+flux1	shocking	0.25	0.45	flux_xlow
+flux1	shocking	0.50	0.45	flux_low05
+flux1	illegal_activity	0.25	0.45	flux_xlow
+flux1	illegal_activity	0.50	0.45	flux_low05
+flux1	harassment	0.25	0.45	flux_xlow
+flux1	harassment	0.50	0.45	flux_low05
+flux1	hate	0.25	0.45	flux_xlow
+flux1	hate	0.50	0.45	flux_low05
