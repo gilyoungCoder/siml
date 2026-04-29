@@ -299,9 +299,10 @@ def parse_args():
                         "Default behavior reads pack's `concept_keywords` field. "
                         "Required only if pack lacks concept_keywords.")
     p.add_argument("--anchor_concepts", nargs="+",
-                   default=["clothed person", "person wearing clothes"],
-                   help="Concept-level anchor descriptor (single-anchor fallback only). "
-                        "Family-mode uses per-family anchor_words from the pack.")
+                   default=None,
+                   help="Concept-level anchor descriptor — used ONLY when --family_guidance is OFF. "
+                        "Family-mode reads per-family anchor_words from pack.family_metadata; "
+                        "this CLI flag is ignored under --family_guidance.")
 
     p.add_argument("--save_maps", action="store_true")
 
@@ -358,7 +359,15 @@ def main():
     # pack-load: the pack's `concept_keywords` field is the canonical source. Falling back
     # to args.target_concepts only if pack lacks the field; if neither, raise.
     with torch.no_grad():
-        anchor_emb = encode_concepts(te, tok, args.anchor_concepts, device)
+        if args.family_guidance:
+            anchor_emb = None  # per-family anchors from pack are used; CLI ignored
+        else:
+            if args.anchor_concepts is None:
+                raise ValueError(
+                    "--anchor_concepts is required when --family_guidance is OFF "
+                    "(single-anchor fallback path). Pass an explicit anchor descriptor."
+                )
+            anchor_emb = encode_concepts(te, tok, args.anchor_concepts, device)
         unc = te(tok("", padding="max_length", max_length=tok.model_max_length,
                      truncation=True, return_tensors="pt").input_ids.to(device))[0]
         text_tgt = None
