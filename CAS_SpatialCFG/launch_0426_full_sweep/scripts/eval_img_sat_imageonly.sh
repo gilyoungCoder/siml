@@ -2,7 +2,7 @@
 set -uo pipefail
 GPU=${1:-0}
 REPO=/mnt/home3/yhgil99/unlearning
-PY=$REPO/.conda/envs/vlm/bin/python3.10
+PY=/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10
 EVAL=$REPO/vlm/opensource_vlm_i2p_all_v5.py
 BASE=$REPO/CAS_SpatialCFG/launch_0426_full_sweep
 LOG=$BASE/logs/eval_img_sat_imageonly_$(date +%m%d_%H%M).log
