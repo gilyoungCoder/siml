@@ -15,7 +15,11 @@ while IFS=$'\t' read -r KIND A B; do
       "$ROOT/scripts/run_txt_method.sh" "$A" "$B" "$GPU" ;;
     official)
       "$ROOT/scripts/run_official_i2p.sh" "$A" "$B" "$GPU" ;;
-    *) echo "$LOGPFX unknown kind=$KIND"; exit 2 ;;
+    nudity_txt)
+      "$ROOT/scripts/run_nudity_txt_method.sh" "$A" "$B" "$GPU" ;;
+    official_nudity)
+      "$ROOT/scripts/run_official_nudity.sh" "$A" "$B" "$GPU" ;;
+    *) echo "$LOGPFX bad kind=$KIND"; exit 2 ;;
   esac
   rc=$?
   echo "$LOGPFX JOB_DONE kind=$KIND a=$A b=$B rc=$rc end=$(date)"

@@ -1,32 +1,45 @@
 #!/bin/bash
 set -uo pipefail
-METHOD=   # safedenoiser|sgf
-DATASET=  # rab|unlearndiff|p4dn|mma
-GPU=
+METHOD=$1   # safedenoiser|sgf
+DATASET=$2  # rab|unlearndiff|p4dn|mma
+GPU=$3
 ROOT=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430
-PY=/mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10
-DATA=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/prompts/nudity_csv/.csv
-OUT=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs//nudity/
-EXPECTED=-1
-ALLDIR=/all
-COUNT=0
-if [ "" -ge "" ]; then echo "[SKIP /nudity/] all_count= expected="; exit 0; fi
-rm -rf ""
-mkdir -p "/safe" "/unsafe" "/all"
-case "" in
+PY=${PY_OFFICIAL:-/mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10}
+DATA=$ROOT/prompts/nudity_csv/${DATASET}.csv
+OUT=$ROOT/outputs/${METHOD}/nudity/${DATASET}
+EXPECTED=$(($(wc -l < "$DATA")-1))
+ALLDIR=$OUT/all
+COUNT=$(find "$ALLDIR" -maxdepth 1 -type f -name '*.png' 2>/dev/null | wc -l)
+if [ "$COUNT" -ge "$EXPECTED" ]; then echo "[SKIP $METHOD/nudity/$DATASET] all_count=$COUNT expected=$EXPECTED"; exit 0; fi
+rm -rf "$OUT"
+mkdir -p "$OUT/safe" "$OUT/unsafe" "$OUT/all"
+case "$METHOD" in
   safedenoiser)
-    OREPO=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/code/official_repos/Safe_Denoiser
+    OREPO=$ROOT/code/official_repos/Safe_Denoiser
     SCRIPT=run_copro.py
     TASK=configs/nudity/safe_denoiser.yaml
     ERASE=safree_neg_prompt_rep_threshold_time
     ;;
   sgf)
-    OREPO=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/code/official_repos/SGF/nudity_sdv1
+    OREPO=$ROOT/code/official_repos/SGF/nudity_sdv1
     SCRIPT=generate_unsafe_sgf.py
     TASK=configs/sgf/sgf.yaml
     ERASE=safree_neg_prompt_rep_time
     ;;
-  *) echo "unknown official method "; exit 2 ;;
+  *) echo "bad official method $METHOD"; exit 2 ;;
 esac
-cd ""
-CUDA_VISIBLE_DEVICES= PYTHONNOUSERSITE=1 "" ""   --nudenet-path=pretrained/classifier_model.onnx   --nudity_thr=0.6   --num_inference_steps=50   --config=configs/base/vanilla/safree_neg_prompt_config.json   --safe_level=MEDIUM   --data=""   --category=all   --task_config=""   --save-dir=""   --erase_id=""   --guidance_scale=7.5   --seed=42   --valid_case_numbers=0,100000
+cd "$OREPO"
+CUDA_VISIBLE_DEVICES=$GPU PYTHONNOUSERSITE=1 "$PY" "$SCRIPT" \
+  --nudenet-path=pretrained/classifier_model.onnx \
+  --nudity_thr=0.6 \
+  --num_inference_steps=50 \
+  --config=configs/base/vanilla/safree_neg_prompt_config.json \
+  --safe_level=MEDIUM \
+  --data="$DATA" \
+  --category=all \
+  --task_config="$TASK" \
+  --save-dir="$OUT" \
+  --erase_id="$ERASE" \
+  --guidance_scale=7.5 \
+  --seed=42 \
+  --valid_case_numbers=0,100000
