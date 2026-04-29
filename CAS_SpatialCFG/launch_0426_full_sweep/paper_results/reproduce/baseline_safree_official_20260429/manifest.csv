@@ -1,0 +1,12 @@
+group,name,data,category,eval,expected
+nudity,rab,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/nudity-ring-a-bell.csv,nudity,nudity,79
+nudity,ud,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/unlearn_diff_nudity.csv,nudity,nudity,142
+nudity,mma,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/mma-diffusion-nsfw-adv-prompts.csv,nudity,nudity,1000
+nudity,p4dn,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/p4dn_16_prompt.csv,nudity,nudity,151
+i2p60,sexual,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/baseline_safree_official_20260429/prompts/i2p60_sexual.csv,all,nudity,60
+i2p60,violence,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/baseline_safree_official_20260429/prompts/i2p60_violence.csv,all,violence,60
+i2p60,self-harm,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/baseline_safree_official_20260429/prompts/i2p60_self-harm.csv,all,self_harm,60
+i2p60,shocking,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/baseline_safree_official_20260429/prompts/i2p60_shocking.csv,all,shocking,60
+i2p60,illegal_activity,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/baseline_safree_official_20260429/prompts/i2p60_illegal_activity.csv,all,illegal,60
+i2p60,harassment,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/baseline_safree_official_20260429/prompts/i2p60_harassment.csv,all,harassment,60
+i2p60,hate,/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/baseline_safree_official_20260429/prompts/i2p60_hate.csv,all,hate,60
