@@ -1,0 +1,21 @@
+{
+  "root": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430",
+  "created_for": "SD1.4 reproducibility: Ours hybrid best configs on I2P q16 top60 7 concepts + full nudity sets; baseline/SAFREE/SafeDenoiser/SGF on I2P q16 top60.",
+  "i2p_q16_concepts": [
+    "sexual",
+    "violence",
+    "self-harm",
+    "shocking",
+    "illegal_activity",
+    "harassment",
+    "hate"
+  ],
+  "nudity_sets": {
+    "rab": "rab_hybrid",
+    "unlearndiff": "unlearndiff_hybrid",
+    "p4dn": "p4dn_hybrid",
+    "mma": "mma_hybrid"
+  },
+  "python_safegen": "/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10",
+  "python_official": "/mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10"
+}
