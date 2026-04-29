@@ -5,7 +5,7 @@ set -uo pipefail
 GPU=${1:-0}
 HALF=${2:-0}
 REPO=/mnt/home3/yhgil99/unlearning
-PY=$REPO/.conda/envs/sdd_copy/bin/python3.10
+PY=/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10
 JQ () { $PY -c "import json,sys; d=json.load(open(sys.argv[1])); v=d
 for k in sys.argv[2:]: v=v[k]
 print(v)" "$@"; }
