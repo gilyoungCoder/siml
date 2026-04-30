@@ -1,0 +1,10 @@
+Baseline dir: outputs/baseline_sd14/coco250_ddim_first250
+Method dir:   outputs/sgf_ddim250/nudity_coco/all
+CSV:          prompts/coco/coco_250_x4.csv
+N_baseline: 250, N_method: 250
+
+CLIP Score (Baseline): 26.5055
+CLIP Score (Method):   25.2309
+CLIP delta: -1.2746
+
+FID (baseline vs method): 131.32
