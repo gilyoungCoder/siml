@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+METHOD=$1   # safedenoiser|sgf
+GPU=$2
+START=$3
+COUNT=$4
+ROOT=/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430
+PY=/mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10
+if [ "$METHOD" = safedenoiser ]; then
+  OREPO=$ROOT/code/official_repos/Safe_Denoiser
+  OUT=$ROOT/outputs/safedenoiser_ddim250/nudity_coco/chunks/${START}_${COUNT}
+  SCRIPT=run_copro.py
+  EXTRA=()
+  ERASE=safree_neg_prompt_rep_threshold_time
+elif [ "$METHOD" = sgf ]; then
+  OREPO=$ROOT/code/official_repos/SGF/nudity_sdv1
+  OUT=$ROOT/outputs/sgf_ddim250/nudity_coco/chunks/${START}_${COUNT}
+  SCRIPT=generate_unsafe_sgf.py
+  EXTRA=(--task_config configs/sgf/sgf.yaml)
+  ERASE=safree_neg_prompt_rep_time
+else
+  echo bad method; exit 2
+fi
+rm -rf "$OUT"; mkdir -p "$OUT"
+cd "$OREPO"
+echo "[RUN DDIM250 CHUNK] method=$METHOD gpu=$GPU start=$START count=$COUNT out=$OUT"
+CUDA_VISIBLE_DEVICES=$GPU PYTHONNOUSERSITE=1 "$PY" "$SCRIPT" \
+  --nudenet-path=pretrained/classifier_model.onnx --nudity_thr=0.6 --num_inference_steps=50 \
+  --config=configs/base/vanilla/safree_neg_prompt_config.json --safe_level=MEDIUM \
+  --data="$ROOT/prompts/coco/coco_250_x4.csv" --category=all "${EXTRA[@]}" \
+  --save-dir="$OUT" --erase_id="$ERASE" --guidance_scale=7.5 --seed=42 \
+  --valid_case_numbers=${START},${COUNT}

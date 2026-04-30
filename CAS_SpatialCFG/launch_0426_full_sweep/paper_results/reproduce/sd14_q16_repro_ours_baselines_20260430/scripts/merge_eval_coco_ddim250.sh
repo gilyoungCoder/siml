@@ -11,19 +11,19 @@ from pathlib import Path
 src=Path('$CAS/prompts/coco_250.txt')
 out=Path('$PROMPTS')
 lines=[l.strip() for l in src.read_text().splitlines() if l.strip()]
-# baseline subset is first 250 images = first 62 full prompts x4 + prompt 62 samples 0/1; CLIP script expects 250 prompts.
 p=[]
 for line in lines:
     for _ in range(4): p.append(line)
 out.write_text('\n'.join(p[:250])+'\n')
-print(out, len(p[:250]))
 PY
 for name in safedenoiser sgf; do
-  if [ "$name" = safedenoiser ]; then SRC=$ROOT/outputs/safedenoiser_ddim250/nudity_coco/coco250; else SRC=$ROOT/outputs/sgf_ddim250/nudity_coco/coco250; fi
-  ALL=$SRC/all
-  COUNT=$(find "$ALL" -maxdepth 1 -type f -name '*.png' 2>/dev/null | wc -l)
-  echo "$name count=$COUNT all=$ALL"
-  if [ "$COUNT" -ne 250 ]; then echo "SKIP $name incomplete"; continue; fi
+  CH=$ROOT/outputs/${name}_ddim250/nudity_coco/chunks
+  ALL=$ROOT/outputs/${name}_ddim250/nudity_coco/all
+  rm -rf "$ALL"; mkdir -p "$ALL"
+  find "$CH" -mindepth 3 -maxdepth 3 -type f -name '*.png' | sort | while read f; do cp -n "$f" "$ALL/$(basename "$f")"; done
+  COUNT=$(find "$ALL" -maxdepth 1 -type f -name '*.png' | wc -l)
+  echo "$name merged_count=$COUNT all=$ALL"
+  if [ "$COUNT" -ne 250 ]; then echo "SKIP_EVAL incomplete $name"; continue; fi
   CUDA_VISIBLE_DEVICES=$GPU PYTHONNOUSERSITE=1 "$PY" "$ROOT/scripts/eval_fid_clip_fixed.py" "$BASE" "$ALL" "$PROMPTS" \
     | tee "$ROOT/logs/coco_ddim250/eval_${name}_ddim250.log"
   cp "$ALL/results_fid_clip_fixed.txt" "$ROOT/summaries/coco_fid_clip_${name}_nudity_ddim250_vs_sd14ddim250.txt"
