@@ -21,7 +21,7 @@ elif [ "$METHOD" = sgf ]; then
 else
   echo bad method; exit 2
 fi
-rm -rf "$OUT"; mkdir -p "$OUT"
+rm -rf "$OUT"; mkdir -p "$OUT" "$OUT/safe" "$OUT/nudity" "$OUT/unsafe" "$OUT/all"
 cd "$OREPO"
 echo "[RUN DDIM250 CHUNK] method=$METHOD gpu=$GPU start=$START count=$COUNT out=$OUT"
 CUDA_VISIBLE_DEVICES=$GPU PYTHONNOUSERSITE=1 "$PY" "$SCRIPT" \
