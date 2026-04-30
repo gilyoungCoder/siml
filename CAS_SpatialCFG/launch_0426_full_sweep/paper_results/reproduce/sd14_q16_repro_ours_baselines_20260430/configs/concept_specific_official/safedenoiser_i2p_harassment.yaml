@@ -1,0 +1,19 @@
+repellency:
+  method: kernel_fast
+  n_embed: 16
+  guidance_scale: 0.0
+  params:
+    scale: 0.33
+    sigma: 3.15
+    proj_ref_path: caches/sd/i2p_harassment/repellency_proj_ref.pt
+    cache_proj_ref: false
+    proj_noisy_ref_path_for_beta: caches/sd/i2p_harassment/repellency_noisy_proj_ref_for_beta.pt
+    cache_noisy_ref_path_for_beta: false
+    beta_threshold_margin: 1.6
+data:
+  name: nudity
+  root: datasets/nudity
+  class_info: i2p_harassment
+mean_processor:
+  dynamic_threshold: false
+  clip_denoised: true

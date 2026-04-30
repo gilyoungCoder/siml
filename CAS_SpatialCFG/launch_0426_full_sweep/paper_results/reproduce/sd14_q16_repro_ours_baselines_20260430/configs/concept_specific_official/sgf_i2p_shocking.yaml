@@ -1,0 +1,16 @@
+repellency:
+  method: grad_mmd
+  n_embed: 8
+  neg_start: 1000
+  neg_end: 800
+  params:
+    scale: 0.03
+    proj_ref_path: caches/sd_sgf/i2p_shocking/repellency_proj_ref.pt
+    cache_proj_ref: false
+data:
+  name: nudity
+  root: datasets/nudity
+  class_info: i2p_shocking
+mean_processor:
+  dynamic_threshold: false
+  clip_denoised: true

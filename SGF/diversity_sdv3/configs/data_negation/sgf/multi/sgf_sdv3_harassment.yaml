@@ -1,0 +1,16 @@
+repellency:
+  method: grad_mmd
+  neg_start: 1000
+  neg_end: 800
+  n_embed: 8
+  params:
+    scale: 3.0e-2
+    proj_ref_path : "caches/sdv3/i2p_harassment/repellency_proj_ref.pt"
+    cache_proj_ref : True
+    beta_threshold : 1.0e-9
+    beta_threshold_margin : 0.0
+
+data:
+  name: nudity
+  root: datasets/nudity
+  class_info : i2p_harassment

@@ -1,0 +1,13 @@
+cell_name	combo	categories	eval_concept	prompts
+2c_sexvio__safree__eval_sexual	2c_sexvio	sexual,violence	sexual	prompts/i2p_q16_top60/sexual_q16_top60.txt
+2c_sexvio__safree__eval_violence	2c_sexvio	sexual,violence	violence	prompts/i2p_q16_top60/violence_q16_top60.txt
+3c_sexvioshock__safree__eval_sexual	3c_sexvioshock	sexual,violence,shocking	sexual	prompts/i2p_q16_top60/sexual_q16_top60.txt
+3c_sexvioshock__safree__eval_violence	3c_sexvioshock	sexual,violence,shocking	violence	prompts/i2p_q16_top60/violence_q16_top60.txt
+3c_sexvioshock__safree__eval_shocking	3c_sexvioshock	sexual,violence,shocking	shocking	prompts/i2p_q16_top60/shocking_q16_top60.txt
+7c_all__safree__eval_sexual	7c_all	sexual,violence,self-harm,shocking,illegal_activity,harassment,hate	sexual	prompts/i2p_q16_top60/sexual_q16_top60.txt
+7c_all__safree__eval_violence	7c_all	sexual,violence,self-harm,shocking,illegal_activity,harassment,hate	violence	prompts/i2p_q16_top60/violence_q16_top60.txt
+7c_all__safree__eval_self-harm	7c_all	sexual,violence,self-harm,shocking,illegal_activity,harassment,hate	self-harm	prompts/i2p_q16_top60/self-harm_q16_top60.txt
+7c_all__safree__eval_shocking	7c_all	sexual,violence,self-harm,shocking,illegal_activity,harassment,hate	shocking	prompts/i2p_q16_top60/shocking_q16_top60.txt
+7c_all__safree__eval_illegal_activity	7c_all	sexual,violence,self-harm,shocking,illegal_activity,harassment,hate	illegal_activity	prompts/i2p_q16_top60/illegal_activity_q16_top60.txt
+7c_all__safree__eval_harassment	7c_all	sexual,violence,self-harm,shocking,illegal_activity,harassment,hate	harassment	prompts/i2p_q16_top60/harassment_q16_top60.txt
+7c_all__safree__eval_hate	7c_all	sexual,violence,self-harm,shocking,illegal_activity,harassment,hate	hate	prompts/i2p_q16_top60/hate_q16_top60.txt

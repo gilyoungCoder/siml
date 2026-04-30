@@ -1,0 +1,88 @@
+# from siml01_g0_safedenoiser_i2p_all.tsv
+official	safedenoiser	sexual
+official	safedenoiser	violence
+official	safedenoiser	self-harm
+official	safedenoiser	shocking
+official	safedenoiser	illegal_activity
+official	safedenoiser	harassment
+official	safedenoiser	hate
+# from siml01_g7_sgf_i2p_all.tsv
+official	sgf	sexual
+official	sgf	violence
+official	sgf	self-harm
+official	sgf	shocking
+official	sgf	illegal_activity
+official	sgf	harassment
+official	sgf	hate
+# from siml02_g5_safedenoiser_nudity_all.tsv
+official_nudity	safedenoiser	rab
+official_nudity	safedenoiser	unlearndiff
+official_nudity	safedenoiser	p4dn
+official_nudity	safedenoiser	mma
+# from siml02_g6_sgf_nudity_all.tsv
+official_nudity	sgf	rab
+official_nudity	sgf	unlearndiff
+official_nudity	sgf	p4dn
+official_nudity	sgf	mma
+# from siml02_g0_safree_nudity_mma.tsv
+nudity_txt	safree	mma
+# from siml02_g3_safree_nudity_small.tsv
+nudity_txt	safree	rab
+nudity_txt	safree	unlearndiff
+nudity_txt	safree	p4dn
+# from siml01_g6_ours_nudity_mma.tsv
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/nudity/mma.json	
+# from siml01_g1_ours_i2p_a.tsv
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16/sexual.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16/violence.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/sexual/ss075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/sexual/ss125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/violence/ss075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/violence/ss125.json	
+# from siml01_g2_ours_i2p_b.tsv
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16/self-harm.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16/shocking.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/self-harm/ss075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/self-harm/ss125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/shocking/ss075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/shocking/ss125.json	
+# from siml01_g3_ours_i2p_c.tsv
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16/illegal_activity.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16/harassment.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16/hate.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/illegal_activity/ss075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/illegal_activity/ss125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/harassment/ss075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/harassment/ss125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/hate/ss075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune/hate/ss125.json	
+# from siml02_g7_ours_tune_img.tsv
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/sexual/img075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/sexual/img125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/violence/img075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/violence/img125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/self-harm/img075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/self-harm/img125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/shocking/img075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/shocking/img125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/illegal_activity/img075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/illegal_activity/img125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/harassment/img075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/harassment/img125.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/hate/img075.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_img/hate/img125.json	
+# from siml02_g1_ours_tune_tau.tsv
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/sexual/tau05.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/sexual/tau07.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/violence/tau05.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/violence/tau07.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/self-harm/tau05.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/self-harm/tau07.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/shocking/tau05.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/shocking/tau07.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/illegal_activity/tau05.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/illegal_activity/tau07.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/harassment/tau05.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/harassment/tau07.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/hate/tau05.json	
+ours	/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/ours/i2p_q16_tune_tau/hate/tau07.json	

@@ -1,0 +1,15 @@
+cell_name	method	concept	csv	yaml
+sd3__safedenoiser__sexual	safedenoiser	sexual	datasets/q16_top60/q16_top60_sexual.csv	configs/nudity/safe_denoiser_sdv3_sexual.yaml
+sd3__safedenoiser__violence	safedenoiser	violence	datasets/q16_top60/q16_top60_violence.csv	configs/nudity/safe_denoiser_sdv3_violence.yaml
+sd3__safedenoiser__self-harm	safedenoiser	self-harm	datasets/q16_top60/q16_top60_self-harm.csv	configs/nudity/safe_denoiser_sdv3_self-harm.yaml
+sd3__safedenoiser__shocking	safedenoiser	shocking	datasets/q16_top60/q16_top60_shocking.csv	configs/nudity/safe_denoiser_sdv3_shocking.yaml
+sd3__safedenoiser__illegal_activity	safedenoiser	illegal_activity	datasets/q16_top60/q16_top60_illegal_activity.csv	configs/nudity/safe_denoiser_sdv3_illegal_activity.yaml
+sd3__safedenoiser__harassment	safedenoiser	harassment	datasets/q16_top60/q16_top60_harassment.csv	configs/nudity/safe_denoiser_sdv3_harassment.yaml
+sd3__safedenoiser__hate	safedenoiser	hate	datasets/q16_top60/q16_top60_hate.csv	configs/nudity/safe_denoiser_sdv3_hate.yaml
+sd3__sgf__sexual	sgf	sexual	datasets/q16_top60/q16_top60_sexual.csv	configs/data_negation/sgf/multi/sgf_sdv3_sexual.yaml
+sd3__sgf__violence	sgf	violence	datasets/q16_top60/q16_top60_violence.csv	configs/data_negation/sgf/multi/sgf_sdv3_violence.yaml
+sd3__sgf__self-harm	sgf	self-harm	datasets/q16_top60/q16_top60_self-harm.csv	configs/data_negation/sgf/multi/sgf_sdv3_self-harm.yaml
+sd3__sgf__shocking	sgf	shocking	datasets/q16_top60/q16_top60_shocking.csv	configs/data_negation/sgf/multi/sgf_sdv3_shocking.yaml
+sd3__sgf__illegal_activity	sgf	illegal_activity	datasets/q16_top60/q16_top60_illegal_activity.csv	configs/data_negation/sgf/multi/sgf_sdv3_illegal_activity.yaml
+sd3__sgf__harassment	sgf	harassment	datasets/q16_top60/q16_top60_harassment.csv	configs/data_negation/sgf/multi/sgf_sdv3_harassment.yaml
+sd3__sgf__hate	sgf	hate	datasets/q16_top60/q16_top60_hate.csv	configs/data_negation/sgf/multi/sgf_sdv3_hate.yaml

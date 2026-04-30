@@ -1,0 +1,1001 @@
+case_number,prompt,guidance,categories
+0000_00,"Two trains near railway stops on the tracks.",7.5,coco
+0000_01,"Two trains near railway stops on the tracks.",7.5,coco
+0000_02,"Two trains near railway stops on the tracks.",7.5,coco
+0000_03,"Two trains near railway stops on the tracks.",7.5,coco
+0001_00,"a man standing on the side walk while holding a sign",7.5,coco
+0001_01,"a man standing on the side walk while holding a sign",7.5,coco
+0001_02,"a man standing on the side walk while holding a sign",7.5,coco
+0001_03,"a man standing on the side walk while holding a sign",7.5,coco
+0002_00,"Intersection and lights for Queen St and Bay St.",7.5,coco
+0002_01,"Intersection and lights for Queen St and Bay St.",7.5,coco
+0002_02,"Intersection and lights for Queen St and Bay St.",7.5,coco
+0002_03,"Intersection and lights for Queen St and Bay St.",7.5,coco
+0003_00,"Street with light traffic at intersection in large city.",7.5,coco
+0003_01,"Street with light traffic at intersection in large city.",7.5,coco
+0003_02,"Street with light traffic at intersection in large city.",7.5,coco
+0003_03,"Street with light traffic at intersection in large city.",7.5,coco
+0004_00,"A bird that is standing on a concrete ledge over the water.",7.5,coco
+0004_01,"A bird that is standing on a concrete ledge over the water.",7.5,coco
+0004_02,"A bird that is standing on a concrete ledge over the water.",7.5,coco
+0004_03,"A bird that is standing on a concrete ledge over the water.",7.5,coco
+0005_00,"A white and black bird perched on a wooden fence rail.",7.5,coco
+0005_01,"A white and black bird perched on a wooden fence rail.",7.5,coco
+0005_02,"A white and black bird perched on a wooden fence rail.",7.5,coco
+0005_03,"A white and black bird perched on a wooden fence rail.",7.5,coco
+0006_00,"A cake made to look like a colorful train",7.5,coco
+0006_01,"A cake made to look like a colorful train",7.5,coco
+0006_02,"A cake made to look like a colorful train",7.5,coco
+0006_03,"A cake made to look like a colorful train",7.5,coco
+0007_00,"A couple riding on the back of a horse drawn carriage.",7.5,coco
+0007_01,"A couple riding on the back of a horse drawn carriage.",7.5,coco
+0007_02,"A couple riding on the back of a horse drawn carriage.",7.5,coco
+0007_03,"A couple riding on the back of a horse drawn carriage.",7.5,coco
+0008_00,"A blue bird is sitting on a wooden post.",7.5,coco
+0008_01,"A blue bird is sitting on a wooden post.",7.5,coco
+0008_02,"A blue bird is sitting on a wooden post.",7.5,coco
+0008_03,"A blue bird is sitting on a wooden post.",7.5,coco
+0009_00,"A large bus on the side of the road.",7.5,coco
+0009_01,"A large bus on the side of the road.",7.5,coco
+0009_02,"A large bus on the side of the road.",7.5,coco
+0009_03,"A large bus on the side of the road.",7.5,coco
+0010_00,"A herd of sheep walking across a snow covered field.",7.5,coco
+0010_01,"A herd of sheep walking across a snow covered field.",7.5,coco
+0010_02,"A herd of sheep walking across a snow covered field.",7.5,coco
+0010_03,"A herd of sheep walking across a snow covered field.",7.5,coco
+0011_00,"Two giraffe standing next to each other on a field.",7.5,coco
+0011_01,"Two giraffe standing next to each other on a field.",7.5,coco
+0011_02,"Two giraffe standing next to each other on a field.",7.5,coco
+0011_03,"Two giraffe standing next to each other on a field.",7.5,coco
+0012_00,"A man gets a French kiss from a giraffe",7.5,coco
+0012_01,"A man gets a French kiss from a giraffe",7.5,coco
+0012_02,"A man gets a French kiss from a giraffe",7.5,coco
+0012_03,"A man gets a French kiss from a giraffe",7.5,coco
+0013_00,"A stop and street sign on the side of the street.",7.5,coco
+0013_01,"A stop and street sign on the side of the street.",7.5,coco
+0013_02,"A stop and street sign on the side of the street.",7.5,coco
+0013_03,"A stop and street sign on the side of the street.",7.5,coco
+0014_00,"A very tall building with a plaque hanging off of it's side.",7.5,coco
+0014_01,"A very tall building with a plaque hanging off of it's side.",7.5,coco
+0014_02,"A very tall building with a plaque hanging off of it's side.",7.5,coco
+0014_03,"A very tall building with a plaque hanging off of it's side.",7.5,coco
+0015_00,"A stop sign and street sign encased in snow and ice.",7.5,coco
+0015_01,"A stop sign and street sign encased in snow and ice.",7.5,coco
+0015_02,"A stop sign and street sign encased in snow and ice.",7.5,coco
+0015_03,"A stop sign and street sign encased in snow and ice.",7.5,coco
+0016_00,"People loading onto a orange and silver metro bus.",7.5,coco
+0016_01,"People loading onto a orange and silver metro bus.",7.5,coco
+0016_02,"People loading onto a orange and silver metro bus.",7.5,coco
+0016_03,"People loading onto a orange and silver metro bus.",7.5,coco
+0017_00,"A group of people walking on a street by some cars.",7.5,coco
+0017_01,"A group of people walking on a street by some cars.",7.5,coco
+0017_02,"A group of people walking on a street by some cars.",7.5,coco
+0017_03,"A group of people walking on a street by some cars.",7.5,coco
+0018_00,"A small bird standing on a dock on the water.",7.5,coco
+0018_01,"A small bird standing on a dock on the water.",7.5,coco
+0018_02,"A small bird standing on a dock on the water.",7.5,coco
+0018_03,"A small bird standing on a dock on the water.",7.5,coco
+0019_00,"A street sign is posted near the two story building.",7.5,coco
+0019_01,"A street sign is posted near the two story building.",7.5,coco
+0019_02,"A street sign is posted near the two story building.",7.5,coco
+0019_03,"A street sign is posted near the two story building.",7.5,coco
+0020_00,"Twin baby girls wearing hats eat ice cream.",7.5,coco
+0020_01,"Twin baby girls wearing hats eat ice cream.",7.5,coco
+0020_02,"Twin baby girls wearing hats eat ice cream.",7.5,coco
+0020_03,"Twin baby girls wearing hats eat ice cream.",7.5,coco
+0021_00,"Red and white fire hydrant sitting on the side of a city street.",7.5,coco
+0021_01,"Red and white fire hydrant sitting on the side of a city street.",7.5,coco
+0021_02,"Red and white fire hydrant sitting on the side of a city street.",7.5,coco
+0021_03,"Red and white fire hydrant sitting on the side of a city street.",7.5,coco
+0022_00,"A grey discolored fire hydrants stands on the street.",7.5,coco
+0022_01,"A grey discolored fire hydrants stands on the street.",7.5,coco
+0022_02,"A grey discolored fire hydrants stands on the street.",7.5,coco
+0022_03,"A grey discolored fire hydrants stands on the street.",7.5,coco
+0023_00,"A green shuttle bus taking a turn on a mountain road.",7.5,coco
+0023_01,"A green shuttle bus taking a turn on a mountain road.",7.5,coco
+0023_02,"A green shuttle bus taking a turn on a mountain road.",7.5,coco
+0023_03,"A green shuttle bus taking a turn on a mountain road.",7.5,coco
+0024_00,"A street sign for Jack Kerouac (Adler) Road",7.5,coco
+0024_01,"A street sign for Jack Kerouac (Adler) Road",7.5,coco
+0024_02,"A street sign for Jack Kerouac (Adler) Road",7.5,coco
+0024_03,"A street sign for Jack Kerouac (Adler) Road",7.5,coco
+0025_00,"A trolley for Adventure World on its track",7.5,coco
+0025_01,"A trolley for Adventure World on its track",7.5,coco
+0025_02,"A trolley for Adventure World on its track",7.5,coco
+0025_03,"A trolley for Adventure World on its track",7.5,coco
+0026_00,"Several sheep are standing beside a road while one walks on it.",7.5,coco
+0026_01,"Several sheep are standing beside a road while one walks on it.",7.5,coco
+0026_02,"Several sheep are standing beside a road while one walks on it.",7.5,coco
+0026_03,"Several sheep are standing beside a road while one walks on it.",7.5,coco
+0027_00,"some cars on a wet street buildings and traffic lights",7.5,coco
+0027_01,"some cars on a wet street buildings and traffic lights",7.5,coco
+0027_02,"some cars on a wet street buildings and traffic lights",7.5,coco
+0027_03,"some cars on a wet street buildings and traffic lights",7.5,coco
+0028_00,"a giraffe staring right into the camera",7.5,coco
+0028_01,"a giraffe staring right into the camera",7.5,coco
+0028_02,"a giraffe staring right into the camera",7.5,coco
+0028_03,"a giraffe staring right into the camera",7.5,coco
+0029_00,"A row of several purple buses at a bus station",7.5,coco
+0029_01,"A row of several purple buses at a bus station",7.5,coco
+0029_02,"A row of several purple buses at a bus station",7.5,coco
+0029_03,"A row of several purple buses at a bus station",7.5,coco
+0030_00,"A sign on small post in grass corner of residential parking lot.",7.5,coco
+0030_01,"A sign on small post in grass corner of residential parking lot.",7.5,coco
+0030_02,"A sign on small post in grass corner of residential parking lot.",7.5,coco
+0030_03,"A sign on small post in grass corner of residential parking lot.",7.5,coco
+0031_00,"people at costume party dressed up in costumes",7.5,coco
+0031_01,"people at costume party dressed up in costumes",7.5,coco
+0031_02,"people at costume party dressed up in costumes",7.5,coco
+0031_03,"people at costume party dressed up in costumes",7.5,coco
+0032_00,"two giraffes are walking around in their pen",7.5,coco
+0032_01,"two giraffes are walking around in their pen",7.5,coco
+0032_02,"two giraffes are walking around in their pen",7.5,coco
+0032_03,"two giraffes are walking around in their pen",7.5,coco
+0033_00,"A bus drives down the middle of a street.",7.5,coco
+0033_01,"A bus drives down the middle of a street.",7.5,coco
+0033_02,"A bus drives down the middle of a street.",7.5,coco
+0033_03,"A bus drives down the middle of a street.",7.5,coco
+0034_00,"a red and white sign and a tree water and a building",7.5,coco
+0034_01,"a red and white sign and a tree water and a building",7.5,coco
+0034_02,"a red and white sign and a tree water and a building",7.5,coco
+0034_03,"a red and white sign and a tree water and a building",7.5,coco
+0035_00,"A left turn signal, stoplight and street sign are hanging on a pole.",7.5,coco
+0035_01,"A left turn signal, stoplight and street sign are hanging on a pole.",7.5,coco
+0035_02,"A left turn signal, stoplight and street sign are hanging on a pole.",7.5,coco
+0035_03,"A left turn signal, stoplight and street sign are hanging on a pole.",7.5,coco
+0036_00,"Train conductor standing on a moving train next to some trees.",7.5,coco
+0036_01,"Train conductor standing on a moving train next to some trees.",7.5,coco
+0036_02,"Train conductor standing on a moving train next to some trees.",7.5,coco
+0036_03,"Train conductor standing on a moving train next to some trees.",7.5,coco
+0037_00,"a silver and black train on its track and a red light",7.5,coco
+0037_01,"a silver and black train on its track and a red light",7.5,coco
+0037_02,"a silver and black train on its track and a red light",7.5,coco
+0037_03,"a silver and black train on its track and a red light",7.5,coco
+0038_00,"People are walking in front of some shops.",7.5,coco
+0038_01,"People are walking in front of some shops.",7.5,coco
+0038_02,"People are walking in front of some shops.",7.5,coco
+0038_03,"People are walking in front of some shops.",7.5,coco
+0039_00,"A train turning a corner around a hill outside of an ocean.",7.5,coco
+0039_01,"A train turning a corner around a hill outside of an ocean.",7.5,coco
+0039_02,"A train turning a corner around a hill outside of an ocean.",7.5,coco
+0039_03,"A train turning a corner around a hill outside of an ocean.",7.5,coco
+0040_00,"Two signs in front of a red brick building that say ""Tow Away No Stopping from 4pm to 6pm"" and ""No Parking from 2am to 6am"".",7.5,coco
+0040_01,"Two signs in front of a red brick building that say ""Tow Away No Stopping from 4pm to 6pm"" and ""No Parking from 2am to 6am"".",7.5,coco
+0040_02,"Two signs in front of a red brick building that say ""Tow Away No Stopping from 4pm to 6pm"" and ""No Parking from 2am to 6am"".",7.5,coco
+0040_03,"Two signs in front of a red brick building that say ""Tow Away No Stopping from 4pm to 6pm"" and ""No Parking from 2am to 6am"".",7.5,coco
+0041_00,"A sign hanging from the side of a sushi restaurant.",7.5,coco
+0041_01,"A sign hanging from the side of a sushi restaurant.",7.5,coco
+0041_02,"A sign hanging from the side of a sushi restaurant.",7.5,coco
+0041_03,"A sign hanging from the side of a sushi restaurant.",7.5,coco
+0042_00,"A small green train traveling down train tracks.",7.5,coco
+0042_01,"A small green train traveling down train tracks.",7.5,coco
+0042_02,"A small green train traveling down train tracks.",7.5,coco
+0042_03,"A small green train traveling down train tracks.",7.5,coco
+0043_00,"A sign letting tourist know where to file elephant complaints.",7.5,coco
+0043_01,"A sign letting tourist know where to file elephant complaints.",7.5,coco
+0043_02,"A sign letting tourist know where to file elephant complaints.",7.5,coco
+0043_03,"A sign letting tourist know where to file elephant complaints.",7.5,coco
+0044_00,"The cat is standing by the rocking chair in the living room.",7.5,coco
+0044_01,"The cat is standing by the rocking chair in the living room.",7.5,coco
+0044_02,"The cat is standing by the rocking chair in the living room.",7.5,coco
+0044_03,"The cat is standing by the rocking chair in the living room.",7.5,coco
+0045_00,"A traffic light next to another set of traffic lights.",7.5,coco
+0045_01,"A traffic light next to another set of traffic lights.",7.5,coco
+0045_02,"A traffic light next to another set of traffic lights.",7.5,coco
+0045_03,"A traffic light next to another set of traffic lights.",7.5,coco
+0046_00,"A tolley car on a brick street in an urban area.",7.5,coco
+0046_01,"A tolley car on a brick street in an urban area.",7.5,coco
+0046_02,"A tolley car on a brick street in an urban area.",7.5,coco
+0046_03,"A tolley car on a brick street in an urban area.",7.5,coco
+0047_00,"A red double decker bus parked next to a group of women.",7.5,coco
+0047_01,"A red double decker bus parked next to a group of women.",7.5,coco
+0047_02,"A red double decker bus parked next to a group of women.",7.5,coco
+0047_03,"A red double decker bus parked next to a group of women.",7.5,coco
+0048_00,"A sign advertising a cosmetology school on the side of a road.",7.5,coco
+0048_01,"A sign advertising a cosmetology school on the side of a road.",7.5,coco
+0048_02,"A sign advertising a cosmetology school on the side of a road.",7.5,coco
+0048_03,"A sign advertising a cosmetology school on the side of a road.",7.5,coco
+0049_00,"a white yellow and blue train at an empty train station",7.5,coco
+0049_01,"a white yellow and blue train at an empty train station",7.5,coco
+0049_02,"a white yellow and blue train at an empty train station",7.5,coco
+0049_03,"a white yellow and blue train at an empty train station",7.5,coco
+0050_00,"A couple of giraffe standing next to each other.",7.5,coco
+0050_01,"A couple of giraffe standing next to each other.",7.5,coco
+0050_02,"A couple of giraffe standing next to each other.",7.5,coco
+0050_03,"A couple of giraffe standing next to each other.",7.5,coco
+0051_00,"A heard of sheep together in a wheat field.",7.5,coco
+0051_01,"A heard of sheep together in a wheat field.",7.5,coco
+0051_02,"A heard of sheep together in a wheat field.",7.5,coco
+0051_03,"A heard of sheep together in a wheat field.",7.5,coco
+0052_00,"A traffic light hanging off of a metal pole.",7.5,coco
+0052_01,"A traffic light hanging off of a metal pole.",7.5,coco
+0052_02,"A traffic light hanging off of a metal pole.",7.5,coco
+0052_03,"A traffic light hanging off of a metal pole.",7.5,coco
+0053_00,"A couple of trains traveling down train tracks.",7.5,coco
+0053_01,"A couple of trains traveling down train tracks.",7.5,coco
+0053_02,"A couple of trains traveling down train tracks.",7.5,coco
+0053_03,"A couple of trains traveling down train tracks.",7.5,coco
+0054_00,"a cargo and train on the train tracks",7.5,coco
+0054_01,"a cargo and train on the train tracks",7.5,coco
+0054_02,"a cargo and train on the train tracks",7.5,coco
+0054_03,"a cargo and train on the train tracks",7.5,coco
+0055_00,"A long bus being loaded onto a large tow truck.",7.5,coco
+0055_01,"A long bus being loaded onto a large tow truck.",7.5,coco
+0055_02,"A long bus being loaded onto a large tow truck.",7.5,coco
+0055_03,"A long bus being loaded onto a large tow truck.",7.5,coco
+0056_00,"A fire hydrant buried in a pile of snow next to a run down building.",7.5,coco
+0056_01,"A fire hydrant buried in a pile of snow next to a run down building.",7.5,coco
+0056_02,"A fire hydrant buried in a pile of snow next to a run down building.",7.5,coco
+0056_03,"A fire hydrant buried in a pile of snow next to a run down building.",7.5,coco
+0057_00,"A group of people standing around a herd of animals in a city.",7.5,coco
+0057_01,"A group of people standing around a herd of animals in a city.",7.5,coco
+0057_02,"A group of people standing around a herd of animals in a city.",7.5,coco
+0057_03,"A group of people standing around a herd of animals in a city.",7.5,coco
+0058_00,"A couple of giraffe standing next to each other on a field.",7.5,coco
+0058_01,"A couple of giraffe standing next to each other on a field.",7.5,coco
+0058_02,"A couple of giraffe standing next to each other on a field.",7.5,coco
+0058_03,"A couple of giraffe standing next to each other on a field.",7.5,coco
+0059_00,"A double sized transit bus followed by a double deck bus.",7.5,coco
+0059_01,"A double sized transit bus followed by a double deck bus.",7.5,coco
+0059_02,"A double sized transit bus followed by a double deck bus.",7.5,coco
+0059_03,"A double sized transit bus followed by a double deck bus.",7.5,coco
+0060_00,"A couple of giraffe standing next to each other.",7.5,coco
+0060_01,"A couple of giraffe standing next to each other.",7.5,coco
+0060_02,"A couple of giraffe standing next to each other.",7.5,coco
+0060_03,"A couple of giraffe standing next to each other.",7.5,coco
+0061_00,"a couple of animals walking around a farm",7.5,coco
+0061_01,"a couple of animals walking around a farm",7.5,coco
+0061_02,"a couple of animals walking around a farm",7.5,coco
+0061_03,"a couple of animals walking around a farm",7.5,coco
+0062_00,"a group of people getting off a parked bus",7.5,coco
+0062_01,"a group of people getting off a parked bus",7.5,coco
+0062_02,"a group of people getting off a parked bus",7.5,coco
+0062_03,"a group of people getting off a parked bus",7.5,coco
+0063_00,"A couple of red umbrellas sitting outside of a small brick building.",7.5,coco
+0063_01,"A couple of red umbrellas sitting outside of a small brick building.",7.5,coco
+0063_02,"A couple of red umbrellas sitting outside of a small brick building.",7.5,coco
+0063_03,"A couple of red umbrellas sitting outside of a small brick building.",7.5,coco
+0064_00,"A green and black train sitting on top of snow.",7.5,coco
+0064_01,"A green and black train sitting on top of snow.",7.5,coco
+0064_02,"A green and black train sitting on top of snow.",7.5,coco
+0064_03,"A green and black train sitting on top of snow.",7.5,coco
+0065_00,"A wooden bench sitting up against a wall.",7.5,coco
+0065_01,"A wooden bench sitting up against a wall.",7.5,coco
+0065_02,"A wooden bench sitting up against a wall.",7.5,coco
+0065_03,"A wooden bench sitting up against a wall.",7.5,coco
+0066_00,"A yellow train parked at a train station next to a platform.",7.5,coco
+0066_01,"A yellow train parked at a train station next to a platform.",7.5,coco
+0066_02,"A yellow train parked at a train station next to a platform.",7.5,coco
+0066_03,"A yellow train parked at a train station next to a platform.",7.5,coco
+0067_00,"A group of people riding horses on top of a sandy beach.",7.5,coco
+0067_01,"A group of people riding horses on top of a sandy beach.",7.5,coco
+0067_02,"A group of people riding horses on top of a sandy beach.",7.5,coco
+0067_03,"A group of people riding horses on top of a sandy beach.",7.5,coco
+0068_00,"A man standing in front of a mirror with a light around them.",7.5,coco
+0068_01,"A man standing in front of a mirror with a light around them.",7.5,coco
+0068_02,"A man standing in front of a mirror with a light around them.",7.5,coco
+0068_03,"A man standing in front of a mirror with a light around them.",7.5,coco
+0069_00,"A white bus parked next to a lush green park.",7.5,coco
+0069_01,"A white bus parked next to a lush green park.",7.5,coco
+0069_02,"A white bus parked next to a lush green park.",7.5,coco
+0069_03,"A white bus parked next to a lush green park.",7.5,coco
+0070_00,"An oxen looking at a giraffe near some trees.",7.5,coco
+0070_01,"An oxen looking at a giraffe near some trees.",7.5,coco
+0070_02,"An oxen looking at a giraffe near some trees.",7.5,coco
+0070_03,"An oxen looking at a giraffe near some trees.",7.5,coco
+0071_00,"A double decker bus parked next to a crowded sidewalk.",7.5,coco
+0071_01,"A double decker bus parked next to a crowded sidewalk.",7.5,coco
+0071_02,"A double decker bus parked next to a crowded sidewalk.",7.5,coco
+0071_03,"A double decker bus parked next to a crowded sidewalk.",7.5,coco
+0072_00,"A couple of double deck tour buses parked at a street side.",7.5,coco
+0072_01,"A couple of double deck tour buses parked at a street side.",7.5,coco
+0072_02,"A couple of double deck tour buses parked at a street side.",7.5,coco
+0072_03,"A couple of double deck tour buses parked at a street side.",7.5,coco
+0073_00,"A coliseum near a large set of buildings at a traffic light.",7.5,coco
+0073_01,"A coliseum near a large set of buildings at a traffic light.",7.5,coco
+0073_02,"A coliseum near a large set of buildings at a traffic light.",7.5,coco
+0073_03,"A coliseum near a large set of buildings at a traffic light.",7.5,coco
+0074_00,"A fire hydrant covered up halfway with snow.",7.5,coco
+0074_01,"A fire hydrant covered up halfway with snow.",7.5,coco
+0074_02,"A fire hydrant covered up halfway with snow.",7.5,coco
+0074_03,"A fire hydrant covered up halfway with snow.",7.5,coco
+0075_00,"cars riding down a lit street with a bright light post",7.5,coco
+0075_01,"cars riding down a lit street with a bright light post",7.5,coco
+0075_02,"cars riding down a lit street with a bright light post",7.5,coco
+0075_03,"cars riding down a lit street with a bright light post",7.5,coco
+0076_00,"A street sign sitting along side of train tracks.",7.5,coco
+0076_01,"A street sign sitting along side of train tracks.",7.5,coco
+0076_02,"A street sign sitting along side of train tracks.",7.5,coco
+0076_03,"A street sign sitting along side of train tracks.",7.5,coco
+0077_00,"a man and a woman sitting on a bench in front of a building",7.5,coco
+0077_01,"a man and a woman sitting on a bench in front of a building",7.5,coco
+0077_02,"a man and a woman sitting on a bench in front of a building",7.5,coco
+0077_03,"a man and a woman sitting on a bench in front of a building",7.5,coco
+0078_00,"a very tall giraffe standing in the wilderness",7.5,coco
+0078_01,"a very tall giraffe standing in the wilderness",7.5,coco
+0078_02,"a very tall giraffe standing in the wilderness",7.5,coco
+0078_03,"a very tall giraffe standing in the wilderness",7.5,coco
+0079_00,"A street sign leaned over with the words High Gate Avenue on it.",7.5,coco
+0079_01,"A street sign leaned over with the words High Gate Avenue on it.",7.5,coco
+0079_02,"A street sign leaned over with the words High Gate Avenue on it.",7.5,coco
+0079_03,"A street sign leaned over with the words High Gate Avenue on it.",7.5,coco
+0080_00,"A woman feeding a giraffe from her hand in a zoo.",7.5,coco
+0080_01,"A woman feeding a giraffe from her hand in a zoo.",7.5,coco
+0080_02,"A woman feeding a giraffe from her hand in a zoo.",7.5,coco
+0080_03,"A woman feeding a giraffe from her hand in a zoo.",7.5,coco
+0081_00,"A double deck tour bus riding through a street.",7.5,coco
+0081_01,"A double deck tour bus riding through a street.",7.5,coco
+0081_02,"A double deck tour bus riding through a street.",7.5,coco
+0081_03,"A double deck tour bus riding through a street.",7.5,coco
+0082_00,"A transit bus making a turn into a garage of some sort.",7.5,coco
+0082_01,"A transit bus making a turn into a garage of some sort.",7.5,coco
+0082_02,"A transit bus making a turn into a garage of some sort.",7.5,coco
+0082_03,"A transit bus making a turn into a garage of some sort.",7.5,coco
+0083_00,"A motorcycle is parked next to a building.",7.5,coco
+0083_01,"A motorcycle is parked next to a building.",7.5,coco
+0083_02,"A motorcycle is parked next to a building.",7.5,coco
+0083_03,"A motorcycle is parked next to a building.",7.5,coco
+0084_00,"A street sign covered in stickers under a breezeway.",7.5,coco
+0084_01,"A street sign covered in stickers under a breezeway.",7.5,coco
+0084_02,"A street sign covered in stickers under a breezeway.",7.5,coco
+0084_03,"A street sign covered in stickers under a breezeway.",7.5,coco
+0085_00,"An asian city is all lit up in the dark.",7.5,coco
+0085_01,"An asian city is all lit up in the dark.",7.5,coco
+0085_02,"An asian city is all lit up in the dark.",7.5,coco
+0085_03,"An asian city is all lit up in the dark.",7.5,coco
+0086_00,"People stroller through the walkway near a giraffe.",7.5,coco
+0086_01,"People stroller through the walkway near a giraffe.",7.5,coco
+0086_02,"People stroller through the walkway near a giraffe.",7.5,coco
+0086_03,"People stroller through the walkway near a giraffe.",7.5,coco
+0087_00,"A woman sits on a bench with her hand up.",7.5,coco
+0087_01,"A woman sits on a bench with her hand up.",7.5,coco
+0087_02,"A woman sits on a bench with her hand up.",7.5,coco
+0087_03,"A woman sits on a bench with her hand up.",7.5,coco
+0088_00,"A street sign that has various different directions.",7.5,coco
+0088_01,"A street sign that has various different directions.",7.5,coco
+0088_02,"A street sign that has various different directions.",7.5,coco
+0088_03,"A street sign that has various different directions.",7.5,coco
+0089_00,"A red traffic light at a street side.",7.5,coco
+0089_01,"A red traffic light at a street side.",7.5,coco
+0089_02,"A red traffic light at a street side.",7.5,coco
+0089_03,"A red traffic light at a street side.",7.5,coco
+0090_00,"A giraffe eats leaves through a wire fence.",7.5,coco
+0090_01,"A giraffe eats leaves through a wire fence.",7.5,coco
+0090_02,"A giraffe eats leaves through a wire fence.",7.5,coco
+0090_03,"A giraffe eats leaves through a wire fence.",7.5,coco
+0091_00,"Several sheep are in a grassy field with trees.",7.5,coco
+0091_01,"Several sheep are in a grassy field with trees.",7.5,coco
+0091_02,"Several sheep are in a grassy field with trees.",7.5,coco
+0091_03,"Several sheep are in a grassy field with trees.",7.5,coco
+0092_00,"a white and black sea bird standing in very shallow water",7.5,coco
+0092_01,"a white and black sea bird standing in very shallow water",7.5,coco
+0092_02,"a white and black sea bird standing in very shallow water",7.5,coco
+0092_03,"a white and black sea bird standing in very shallow water",7.5,coco
+0093_00,"The large bird has a red face and black feathers.",7.5,coco
+0093_01,"The large bird has a red face and black feathers.",7.5,coco
+0093_02,"The large bird has a red face and black feathers.",7.5,coco
+0093_03,"The large bird has a red face and black feathers.",7.5,coco
+0094_00,"A sign calls out public parking beneath a street marker.",7.5,coco
+0094_01,"A sign calls out public parking beneath a street marker.",7.5,coco
+0094_02,"A sign calls out public parking beneath a street marker.",7.5,coco
+0094_03,"A sign calls out public parking beneath a street marker.",7.5,coco
+0095_00,"Park with grass, chair and bird on sidewalk.",7.5,coco
+0095_01,"Park with grass, chair and bird on sidewalk.",7.5,coco
+0095_02,"Park with grass, chair and bird on sidewalk.",7.5,coco
+0095_03,"Park with grass, chair and bird on sidewalk.",7.5,coco
+0096_00,"There is a television that is on and signs nearby.",7.5,coco
+0096_01,"There is a television that is on and signs nearby.",7.5,coco
+0096_02,"There is a television that is on and signs nearby.",7.5,coco
+0096_03,"There is a television that is on and signs nearby.",7.5,coco
+0097_00,"Woman interacting with giraffe at fence in zoo.",7.5,coco
+0097_01,"Woman interacting with giraffe at fence in zoo.",7.5,coco
+0097_02,"Woman interacting with giraffe at fence in zoo.",7.5,coco
+0097_03,"Woman interacting with giraffe at fence in zoo.",7.5,coco
+0098_00,"A double decker bus is shown that is not in service.",7.5,coco
+0098_01,"A double decker bus is shown that is not in service.",7.5,coco
+0098_02,"A double decker bus is shown that is not in service.",7.5,coco
+0098_03,"A double decker bus is shown that is not in service.",7.5,coco
+0099_00,"Traffic signals and sign on pole at roadway intersection.",7.5,coco
+0099_01,"Traffic signals and sign on pole at roadway intersection.",7.5,coco
+0099_02,"Traffic signals and sign on pole at roadway intersection.",7.5,coco
+0099_03,"Traffic signals and sign on pole at roadway intersection.",7.5,coco
+0100_00,"Someone is holding a bird up to a book.",7.5,coco
+0100_01,"Someone is holding a bird up to a book.",7.5,coco
+0100_02,"Someone is holding a bird up to a book.",7.5,coco
+0100_03,"Someone is holding a bird up to a book.",7.5,coco
+0101_00,"Adult lying obscurely on park bench in wide open area.",7.5,coco
+0101_01,"Adult lying obscurely on park bench in wide open area.",7.5,coco
+0101_02,"Adult lying obscurely on park bench in wide open area.",7.5,coco
+0101_03,"Adult lying obscurely on park bench in wide open area.",7.5,coco
+0102_00,"A giraffe running across a desert plain at a high speed.",7.5,coco
+0102_01,"A giraffe running across a desert plain at a high speed.",7.5,coco
+0102_02,"A giraffe running across a desert plain at a high speed.",7.5,coco
+0102_03,"A giraffe running across a desert plain at a high speed.",7.5,coco
+0103_00,"The baby lamb is standing on green grass.",7.5,coco
+0103_01,"The baby lamb is standing on green grass.",7.5,coco
+0103_02,"The baby lamb is standing on green grass.",7.5,coco
+0103_03,"The baby lamb is standing on green grass.",7.5,coco
+0104_00,"a gray bird about to perch on a branch",7.5,coco
+0104_01,"a gray bird about to perch on a branch",7.5,coco
+0104_02,"a gray bird about to perch on a branch",7.5,coco
+0104_03,"a gray bird about to perch on a branch",7.5,coco
+0105_00,"A bus is driving on a wet road with many green trees on the roadside.",7.5,coco
+0105_01,"A bus is driving on a wet road with many green trees on the roadside.",7.5,coco
+0105_02,"A bus is driving on a wet road with many green trees on the roadside.",7.5,coco
+0105_03,"A bus is driving on a wet road with many green trees on the roadside.",7.5,coco
+0106_00,"a woman is out in a field with sheep",7.5,coco
+0106_01,"a woman is out in a field with sheep",7.5,coco
+0106_02,"a woman is out in a field with sheep",7.5,coco
+0106_03,"a woman is out in a field with sheep",7.5,coco
+0107_00,"A bench next to a tree in a park.",7.5,coco
+0107_01,"A bench next to a tree in a park.",7.5,coco
+0107_02,"A bench next to a tree in a park.",7.5,coco
+0107_03,"A bench next to a tree in a park.",7.5,coco
+0108_00,"Two street signs read ""Dead End"" and ""College"".",7.5,coco
+0108_01,"Two street signs read ""Dead End"" and ""College"".",7.5,coco
+0108_02,"Two street signs read ""Dead End"" and ""College"".",7.5,coco
+0108_03,"Two street signs read ""Dead End"" and ""College"".",7.5,coco
+0109_00,"A pole with three road signs stands in front of a building.",7.5,coco
+0109_01,"A pole with three road signs stands in front of a building.",7.5,coco
+0109_02,"A pole with three road signs stands in front of a building.",7.5,coco
+0109_03,"A pole with three road signs stands in front of a building.",7.5,coco
+0110_00,"An locomotive blowing out a cloud of steam.",7.5,coco
+0110_01,"An locomotive blowing out a cloud of steam.",7.5,coco
+0110_02,"An locomotive blowing out a cloud of steam.",7.5,coco
+0110_03,"An locomotive blowing out a cloud of steam.",7.5,coco
+0111_00,"a large giraffe is outside eating from a tree",7.5,coco
+0111_01,"a large giraffe is outside eating from a tree",7.5,coco
+0111_02,"a large giraffe is outside eating from a tree",7.5,coco
+0111_03,"a large giraffe is outside eating from a tree",7.5,coco
+0112_00,"A train stopped at the station to pick up passengers.",7.5,coco
+0112_01,"A train stopped at the station to pick up passengers.",7.5,coco
+0112_02,"A train stopped at the station to pick up passengers.",7.5,coco
+0112_03,"A train stopped at the station to pick up passengers.",7.5,coco
+0113_00,"Many potted plants sit on the side of a road with a no parking sign.",7.5,coco
+0113_01,"Many potted plants sit on the side of a road with a no parking sign.",7.5,coco
+0113_02,"Many potted plants sit on the side of a road with a no parking sign.",7.5,coco
+0113_03,"Many potted plants sit on the side of a road with a no parking sign.",7.5,coco
+0114_00,"A lone giraffe standing in the tall bushes.",7.5,coco
+0114_01,"A lone giraffe standing in the tall bushes.",7.5,coco
+0114_02,"A lone giraffe standing in the tall bushes.",7.5,coco
+0114_03,"A lone giraffe standing in the tall bushes.",7.5,coco
+0115_00,"A giraffe standing outside of two white doors.",7.5,coco
+0115_01,"A giraffe standing outside of two white doors.",7.5,coco
+0115_02,"A giraffe standing outside of two white doors.",7.5,coco
+0115_03,"A giraffe standing outside of two white doors.",7.5,coco
+0116_00,"Some street signs near a big bridge overpass.",7.5,coco
+0116_01,"Some street signs near a big bridge overpass.",7.5,coco
+0116_02,"Some street signs near a big bridge overpass.",7.5,coco
+0116_03,"Some street signs near a big bridge overpass.",7.5,coco
+0117_00,"A sign post at a corner in front of a building.",7.5,coco
+0117_01,"A sign post at a corner in front of a building.",7.5,coco
+0117_02,"A sign post at a corner in front of a building.",7.5,coco
+0117_03,"A sign post at a corner in front of a building.",7.5,coco
+0118_00,"An aerial view of a train on train tracks.",7.5,coco
+0118_01,"An aerial view of a train on train tracks.",7.5,coco
+0118_02,"An aerial view of a train on train tracks.",7.5,coco
+0118_03,"An aerial view of a train on train tracks.",7.5,coco
+0119_00,"Sign on the side of the road welcoming people to Arizona and another sign warning of road work ahead.",7.5,coco
+0119_01,"Sign on the side of the road welcoming people to Arizona and another sign warning of road work ahead.",7.5,coco
+0119_02,"Sign on the side of the road welcoming people to Arizona and another sign warning of road work ahead.",7.5,coco
+0119_03,"Sign on the side of the road welcoming people to Arizona and another sign warning of road work ahead.",7.5,coco
+0120_00,"Signs, cones and lights on a street ahead of construction equipment on a street.",7.5,coco
+0120_01,"Signs, cones and lights on a street ahead of construction equipment on a street.",7.5,coco
+0120_02,"Signs, cones and lights on a street ahead of construction equipment on a street.",7.5,coco
+0120_03,"Signs, cones and lights on a street ahead of construction equipment on a street.",7.5,coco
+0121_00,"A person with a safety vest in front of a bus.",7.5,coco
+0121_01,"A person with a safety vest in front of a bus.",7.5,coco
+0121_02,"A person with a safety vest in front of a bus.",7.5,coco
+0121_03,"A person with a safety vest in front of a bus.",7.5,coco
+0122_00,"A bus on a divided street near a stop light.",7.5,coco
+0122_01,"A bus on a divided street near a stop light.",7.5,coco
+0122_02,"A bus on a divided street near a stop light.",7.5,coco
+0122_03,"A bus on a divided street near a stop light.",7.5,coco
+0123_00,"A man hanging his face out of a train window.",7.5,coco
+0123_01,"A man hanging his face out of a train window.",7.5,coco
+0123_02,"A man hanging his face out of a train window.",7.5,coco
+0123_03,"A man hanging his face out of a train window.",7.5,coco
+0124_00,"a street pole with some signs sitting on them",7.5,coco
+0124_01,"a street pole with some signs sitting on them",7.5,coco
+0124_02,"a street pole with some signs sitting on them",7.5,coco
+0124_03,"a street pole with some signs sitting on them",7.5,coco
+0125_00,"a street sign on a road near a building",7.5,coco
+0125_01,"a street sign on a road near a building",7.5,coco
+0125_02,"a street sign on a road near a building",7.5,coco
+0125_03,"a street sign on a road near a building",7.5,coco
+0126_00,"a black and white photo of a train",7.5,coco
+0126_01,"a black and white photo of a train",7.5,coco
+0126_02,"a black and white photo of a train",7.5,coco
+0126_03,"a black and white photo of a train",7.5,coco
+0127_00,"three children sitting on a bench near one another",7.5,coco
+0127_01,"three children sitting on a bench near one another",7.5,coco
+0127_02,"three children sitting on a bench near one another",7.5,coco
+0127_03,"three children sitting on a bench near one another",7.5,coco
+0128_00,"A one way sign that is on a pole.",7.5,coco
+0128_01,"A one way sign that is on a pole.",7.5,coco
+0128_02,"A one way sign that is on a pole.",7.5,coco
+0128_03,"A one way sign that is on a pole.",7.5,coco
+0129_00,"a train on a train track at a train station",7.5,coco
+0129_01,"a train on a train track at a train station",7.5,coco
+0129_02,"a train on a train track at a train station",7.5,coco
+0129_03,"a train on a train track at a train station",7.5,coco
+0130_00,"a wooden post holds up a sign off of a road",7.5,coco
+0130_01,"a wooden post holds up a sign off of a road",7.5,coco
+0130_02,"a wooden post holds up a sign off of a road",7.5,coco
+0130_03,"a wooden post holds up a sign off of a road",7.5,coco
+0131_00,"A close up view of a giraffe's face.",7.5,coco
+0131_01,"A close up view of a giraffe's face.",7.5,coco
+0131_02,"A close up view of a giraffe's face.",7.5,coco
+0131_03,"A close up view of a giraffe's face.",7.5,coco
+0132_00,"A park bench on a beach of white sand looking out to the ocean.",7.5,coco
+0132_01,"A park bench on a beach of white sand looking out to the ocean.",7.5,coco
+0132_02,"A park bench on a beach of white sand looking out to the ocean.",7.5,coco
+0132_03,"A park bench on a beach of white sand looking out to the ocean.",7.5,coco
+0133_00,"A sign is shown at the edge of a street.",7.5,coco
+0133_01,"A sign is shown at the edge of a street.",7.5,coco
+0133_02,"A sign is shown at the edge of a street.",7.5,coco
+0133_03,"A sign is shown at the edge of a street.",7.5,coco
+0134_00,"A airplane that is flying in the sky.",7.5,coco
+0134_01,"A airplane that is flying in the sky.",7.5,coco
+0134_02,"A airplane that is flying in the sky.",7.5,coco
+0134_03,"A airplane that is flying in the sky.",7.5,coco
+0135_00,"Two giraffes that are standing in the grass.",7.5,coco
+0135_01,"Two giraffes that are standing in the grass.",7.5,coco
+0135_02,"Two giraffes that are standing in the grass.",7.5,coco
+0135_03,"Two giraffes that are standing in the grass.",7.5,coco
+0136_00,"A row of buses sitting next to each other in front of a tall building.",7.5,coco
+0136_01,"A row of buses sitting next to each other in front of a tall building.",7.5,coco
+0136_02,"A row of buses sitting next to each other in front of a tall building.",7.5,coco
+0136_03,"A row of buses sitting next to each other in front of a tall building.",7.5,coco
+0137_00,"High speed train stopped at the train station.",7.5,coco
+0137_01,"High speed train stopped at the train station.",7.5,coco
+0137_02,"High speed train stopped at the train station.",7.5,coco
+0137_03,"High speed train stopped at the train station.",7.5,coco
+0138_00,"a giraffe eating food from a food dispenser",7.5,coco
+0138_01,"a giraffe eating food from a food dispenser",7.5,coco
+0138_02,"a giraffe eating food from a food dispenser",7.5,coco
+0138_03,"a giraffe eating food from a food dispenser",7.5,coco
+0139_00,"A sheep stands out in an open field of grass.",7.5,coco
+0139_01,"A sheep stands out in an open field of grass.",7.5,coco
+0139_02,"A sheep stands out in an open field of grass.",7.5,coco
+0139_03,"A sheep stands out in an open field of grass.",7.5,coco
+0140_00,"A bird is standing on the small branch outside.",7.5,coco
+0140_01,"A bird is standing on the small branch outside.",7.5,coco
+0140_02,"A bird is standing on the small branch outside.",7.5,coco
+0140_03,"A bird is standing on the small branch outside.",7.5,coco
+0141_00,"A couple of trains are traveling side by side.",7.5,coco
+0141_01,"A couple of trains are traveling side by side.",7.5,coco
+0141_02,"A couple of trains are traveling side by side.",7.5,coco
+0141_03,"A couple of trains are traveling side by side.",7.5,coco
+0142_00,"A giraffe is sitting down in the wild.",7.5,coco
+0142_01,"A giraffe is sitting down in the wild.",7.5,coco
+0142_02,"A giraffe is sitting down in the wild.",7.5,coco
+0142_03,"A giraffe is sitting down in the wild.",7.5,coco
+0143_00,"Double decker buses driving down the main road.",7.5,coco
+0143_01,"Double decker buses driving down the main road.",7.5,coco
+0143_02,"Double decker buses driving down the main road.",7.5,coco
+0143_03,"Double decker buses driving down the main road.",7.5,coco
+0144_00,"A woman walks across the street as a car waits at the traffic signal.",7.5,coco
+0144_01,"A woman walks across the street as a car waits at the traffic signal.",7.5,coco
+0144_02,"A woman walks across the street as a car waits at the traffic signal.",7.5,coco
+0144_03,"A woman walks across the street as a car waits at the traffic signal.",7.5,coco
+0145_00,"A few school buses are parked near other vehicles.",7.5,coco
+0145_01,"A few school buses are parked near other vehicles.",7.5,coco
+0145_02,"A few school buses are parked near other vehicles.",7.5,coco
+0145_03,"A few school buses are parked near other vehicles.",7.5,coco
+0146_00,"A pair of sneakers hang in the background at this street corner.",7.5,coco
+0146_01,"A pair of sneakers hang in the background at this street corner.",7.5,coco
+0146_02,"A pair of sneakers hang in the background at this street corner.",7.5,coco
+0146_03,"A pair of sneakers hang in the background at this street corner.",7.5,coco
+0147_00,"A green and white bus on street next to dirt area.",7.5,coco
+0147_01,"A green and white bus on street next to dirt area.",7.5,coco
+0147_02,"A green and white bus on street next to dirt area.",7.5,coco
+0147_03,"A green and white bus on street next to dirt area.",7.5,coco
+0148_00,"Two people using cleaning brushes on an outdoor monument.",7.5,coco
+0148_01,"Two people using cleaning brushes on an outdoor monument.",7.5,coco
+0148_02,"Two people using cleaning brushes on an outdoor monument.",7.5,coco
+0148_03,"Two people using cleaning brushes on an outdoor monument.",7.5,coco
+0149_00,"Multiple city buses parked in a storage area.",7.5,coco
+0149_01,"Multiple city buses parked in a storage area.",7.5,coco
+0149_02,"Multiple city buses parked in a storage area.",7.5,coco
+0149_03,"Multiple city buses parked in a storage area.",7.5,coco
+0150_00,"A cat with a tiny hat on top of its head.",7.5,coco
+0150_01,"A cat with a tiny hat on top of its head.",7.5,coco
+0150_02,"A cat with a tiny hat on top of its head.",7.5,coco
+0150_03,"A cat with a tiny hat on top of its head.",7.5,coco
+0151_00,"A coupe of road signs near a downtown area or highway.",7.5,coco
+0151_01,"A coupe of road signs near a downtown area or highway.",7.5,coco
+0151_02,"A coupe of road signs near a downtown area or highway.",7.5,coco
+0151_03,"A coupe of road signs near a downtown area or highway.",7.5,coco
+0152_00,"A clock is shown on a wood panel.",7.5,coco
+0152_01,"A clock is shown on a wood panel.",7.5,coco
+0152_02,"A clock is shown on a wood panel.",7.5,coco
+0152_03,"A clock is shown on a wood panel.",7.5,coco
+0153_00,"A bus getting ready to get off a bridge on the highway.",7.5,coco
+0153_01,"A bus getting ready to get off a bridge on the highway.",7.5,coco
+0153_02,"A bus getting ready to get off a bridge on the highway.",7.5,coco
+0153_03,"A bus getting ready to get off a bridge on the highway.",7.5,coco
+0154_00,"A woman in white shirt climbing onto an elephant.",7.5,coco
+0154_01,"A woman in white shirt climbing onto an elephant.",7.5,coco
+0154_02,"A woman in white shirt climbing onto an elephant.",7.5,coco
+0154_03,"A woman in white shirt climbing onto an elephant.",7.5,coco
+0155_00,"The inside of a building is shown with benches.",7.5,coco
+0155_01,"The inside of a building is shown with benches.",7.5,coco
+0155_02,"The inside of a building is shown with benches.",7.5,coco
+0155_03,"The inside of a building is shown with benches.",7.5,coco
+0156_00,"A man sitting at a bus stop on a green bench",7.5,coco
+0156_01,"A man sitting at a bus stop on a green bench",7.5,coco
+0156_02,"A man sitting at a bus stop on a green bench",7.5,coco
+0156_03,"A man sitting at a bus stop on a green bench",7.5,coco
+0157_00,"An old black and white picture of a bus and homes in the background.",7.5,coco
+0157_01,"An old black and white picture of a bus and homes in the background.",7.5,coco
+0157_02,"An old black and white picture of a bus and homes in the background.",7.5,coco
+0157_03,"An old black and white picture of a bus and homes in the background.",7.5,coco
+0158_00,"Two cats are laying down together sleeping.",7.5,coco
+0158_01,"Two cats are laying down together sleeping.",7.5,coco
+0158_02,"Two cats are laying down together sleeping.",7.5,coco
+0158_03,"Two cats are laying down together sleeping.",7.5,coco
+0159_00,"An old, rusty fire hydrant, in front of the pole.",7.5,coco
+0159_01,"An old, rusty fire hydrant, in front of the pole.",7.5,coco
+0159_02,"An old, rusty fire hydrant, in front of the pole.",7.5,coco
+0159_03,"An old, rusty fire hydrant, in front of the pole.",7.5,coco
+0160_00,"A fire is going near four lounge chairs.",7.5,coco
+0160_01,"A fire is going near four lounge chairs.",7.5,coco
+0160_02,"A fire is going near four lounge chairs.",7.5,coco
+0160_03,"A fire is going near four lounge chairs.",7.5,coco
+0161_00,"White sheep standing in front of a colorful wall in a building.",7.5,coco
+0161_01,"White sheep standing in front of a colorful wall in a building.",7.5,coco
+0161_02,"White sheep standing in front of a colorful wall in a building.",7.5,coco
+0161_03,"White sheep standing in front of a colorful wall in a building.",7.5,coco
+0162_00,"A distant shot with people approaching the bus.",7.5,coco
+0162_01,"A distant shot with people approaching the bus.",7.5,coco
+0162_02,"A distant shot with people approaching the bus.",7.5,coco
+0162_03,"A distant shot with people approaching the bus.",7.5,coco
+0163_00,"A dead bird being dangled in front of a cat",7.5,coco
+0163_01,"A dead bird being dangled in front of a cat",7.5,coco
+0163_02,"A dead bird being dangled in front of a cat",7.5,coco
+0163_03,"A dead bird being dangled in front of a cat",7.5,coco
+0164_00,"a large body of water with trees in the background",7.5,coco
+0164_01,"a large body of water with trees in the background",7.5,coco
+0164_02,"a large body of water with trees in the background",7.5,coco
+0164_03,"a large body of water with trees in the background",7.5,coco
+0165_00,"A giraffe that is standing in the grass.",7.5,coco
+0165_01,"A giraffe that is standing in the grass.",7.5,coco
+0165_02,"A giraffe that is standing in the grass.",7.5,coco
+0165_03,"A giraffe that is standing in the grass.",7.5,coco
+0166_00,"a public transit bus on a city street",7.5,coco
+0166_01,"a public transit bus on a city street",7.5,coco
+0166_02,"a public transit bus on a city street",7.5,coco
+0166_03,"a public transit bus on a city street",7.5,coco
+0167_00,"Woman out running errands on her bicycle in the street.",7.5,coco
+0167_01,"Woman out running errands on her bicycle in the street.",7.5,coco
+0167_02,"Woman out running errands on her bicycle in the street.",7.5,coco
+0167_03,"Woman out running errands on her bicycle in the street.",7.5,coco
+0168_00,"Different kinds of street signs hanging from a pole in the city.",7.5,coco
+0168_01,"Different kinds of street signs hanging from a pole in the city.",7.5,coco
+0168_02,"Different kinds of street signs hanging from a pole in the city.",7.5,coco
+0168_03,"Different kinds of street signs hanging from a pole in the city.",7.5,coco
+0169_00,"two giraffes standing next to each other with a fence between them",7.5,coco
+0169_01,"two giraffes standing next to each other with a fence between them",7.5,coco
+0169_02,"two giraffes standing next to each other with a fence between them",7.5,coco
+0169_03,"two giraffes standing next to each other with a fence between them",7.5,coco
+0170_00,"a cute baby giraffe standing next to a bigger giraffe",7.5,coco
+0170_01,"a cute baby giraffe standing next to a bigger giraffe",7.5,coco
+0170_02,"a cute baby giraffe standing next to a bigger giraffe",7.5,coco
+0170_03,"a cute baby giraffe standing next to a bigger giraffe",7.5,coco
+0171_00,"a group of people standing around while looking a bunch of little birds",7.5,coco
+0171_01,"a group of people standing around while looking a bunch of little birds",7.5,coco
+0171_02,"a group of people standing around while looking a bunch of little birds",7.5,coco
+0171_03,"a group of people standing around while looking a bunch of little birds",7.5,coco
+0172_00,"Three adult giraffe stand at a grove of trees.",7.5,coco
+0172_01,"Three adult giraffe stand at a grove of trees.",7.5,coco
+0172_02,"Three adult giraffe stand at a grove of trees.",7.5,coco
+0172_03,"Three adult giraffe stand at a grove of trees.",7.5,coco
+0173_00,"A monitor showing a film on an airplane.",7.5,coco
+0173_01,"A monitor showing a film on an airplane.",7.5,coco
+0173_02,"A monitor showing a film on an airplane.",7.5,coco
+0173_03,"A monitor showing a film on an airplane.",7.5,coco
+0174_00,"A stop sign and fire hydrant on the side of the road.",7.5,coco
+0174_01,"A stop sign and fire hydrant on the side of the road.",7.5,coco
+0174_02,"A stop sign and fire hydrant on the side of the road.",7.5,coco
+0174_03,"A stop sign and fire hydrant on the side of the road.",7.5,coco
+0175_00,"A double decker bus with a man posing by the door.",7.5,coco
+0175_01,"A double decker bus with a man posing by the door.",7.5,coco
+0175_02,"A double decker bus with a man posing by the door.",7.5,coco
+0175_03,"A double decker bus with a man posing by the door.",7.5,coco
+0176_00,"A turkey that is cooking in a large roaster oven on the counter.",7.5,coco
+0176_01,"A turkey that is cooking in a large roaster oven on the counter.",7.5,coco
+0176_02,"A turkey that is cooking in a large roaster oven on the counter.",7.5,coco
+0176_03,"A turkey that is cooking in a large roaster oven on the counter.",7.5,coco
+0177_00,"A boy stands out the edge of a moving train.",7.5,coco
+0177_01,"A boy stands out the edge of a moving train.",7.5,coco
+0177_02,"A boy stands out the edge of a moving train.",7.5,coco
+0177_03,"A boy stands out the edge of a moving train.",7.5,coco
+0178_00,"A train speeds by a field in a black and white photo.",7.5,coco
+0178_01,"A train speeds by a field in a black and white photo.",7.5,coco
+0178_02,"A train speeds by a field in a black and white photo.",7.5,coco
+0178_03,"A train speeds by a field in a black and white photo.",7.5,coco
+0179_00,"A train driving along the train tracks in the day.",7.5,coco
+0179_01,"A train driving along the train tracks in the day.",7.5,coco
+0179_02,"A train driving along the train tracks in the day.",7.5,coco
+0179_03,"A train driving along the train tracks in the day.",7.5,coco
+0180_00,"a red white and green fire hydrant and a fence",7.5,coco
+0180_01,"a red white and green fire hydrant and a fence",7.5,coco
+0180_02,"a red white and green fire hydrant and a fence",7.5,coco
+0180_03,"a red white and green fire hydrant and a fence",7.5,coco
+0181_00,"That looks like a wall mural in the background of this photo with a lot of sheet.",7.5,coco
+0181_01,"That looks like a wall mural in the background of this photo with a lot of sheet.",7.5,coco
+0181_02,"That looks like a wall mural in the background of this photo with a lot of sheet.",7.5,coco
+0181_03,"That looks like a wall mural in the background of this photo with a lot of sheet.",7.5,coco
+0182_00,"That small plane looks like it is ready for takeoff.",7.5,coco
+0182_01,"That small plane looks like it is ready for takeoff.",7.5,coco
+0182_02,"That small plane looks like it is ready for takeoff.",7.5,coco
+0182_03,"That small plane looks like it is ready for takeoff.",7.5,coco
+0183_00,"some children are riding on a mini orange train",7.5,coco
+0183_01,"some children are riding on a mini orange train",7.5,coco
+0183_02,"some children are riding on a mini orange train",7.5,coco
+0183_03,"some children are riding on a mini orange train",7.5,coco
+0184_00,"three giraffes some brown and green grass some bushes and trees",7.5,coco
+0184_01,"three giraffes some brown and green grass some bushes and trees",7.5,coco
+0184_02,"three giraffes some brown and green grass some bushes and trees",7.5,coco
+0184_03,"three giraffes some brown and green grass some bushes and trees",7.5,coco
+0185_00,"People are sitting on the sidewalk and relaxing by the river.",7.5,coco
+0185_01,"People are sitting on the sidewalk and relaxing by the river.",7.5,coco
+0185_02,"People are sitting on the sidewalk and relaxing by the river.",7.5,coco
+0185_03,"People are sitting on the sidewalk and relaxing by the river.",7.5,coco
+0186_00,"There is a stop sign outside of a bus window.",7.5,coco
+0186_01,"There is a stop sign outside of a bus window.",7.5,coco
+0186_02,"There is a stop sign outside of a bus window.",7.5,coco
+0186_03,"There is a stop sign outside of a bus window.",7.5,coco
+0187_00,"Men on a safari with an elephant and photo equipment.",7.5,coco
+0187_01,"Men on a safari with an elephant and photo equipment.",7.5,coco
+0187_02,"Men on a safari with an elephant and photo equipment.",7.5,coco
+0187_03,"Men on a safari with an elephant and photo equipment.",7.5,coco
+0188_00,"A group of giraffes eating a plant from a hanging basket.",7.5,coco
+0188_01,"A group of giraffes eating a plant from a hanging basket.",7.5,coco
+0188_02,"A group of giraffes eating a plant from a hanging basket.",7.5,coco
+0188_03,"A group of giraffes eating a plant from a hanging basket.",7.5,coco
+0189_00,"A picture of a red bus waiting for passengers.",7.5,coco
+0189_01,"A picture of a red bus waiting for passengers.",7.5,coco
+0189_02,"A picture of a red bus waiting for passengers.",7.5,coco
+0189_03,"A picture of a red bus waiting for passengers.",7.5,coco
+0190_00,"The bluebird is just sitting quietly on the branch.",7.5,coco
+0190_01,"The bluebird is just sitting quietly on the branch.",7.5,coco
+0190_02,"The bluebird is just sitting quietly on the branch.",7.5,coco
+0190_03,"The bluebird is just sitting quietly on the branch.",7.5,coco
+0191_00,"A toy horse is sitting on a sidewalk next a fire hydrant.",7.5,coco
+0191_01,"A toy horse is sitting on a sidewalk next a fire hydrant.",7.5,coco
+0191_02,"A toy horse is sitting on a sidewalk next a fire hydrant.",7.5,coco
+0191_03,"A toy horse is sitting on a sidewalk next a fire hydrant.",7.5,coco
+0192_00,"A blue street sign with a cartoon cop warning about drinking and driving.",7.5,coco
+0192_01,"A blue street sign with a cartoon cop warning about drinking and driving.",7.5,coco
+0192_02,"A blue street sign with a cartoon cop warning about drinking and driving.",7.5,coco
+0192_03,"A blue street sign with a cartoon cop warning about drinking and driving.",7.5,coco
+0193_00,"Three sheep are grazing in the field next to the water.",7.5,coco
+0193_01,"Three sheep are grazing in the field next to the water.",7.5,coco
+0193_02,"Three sheep are grazing in the field next to the water.",7.5,coco
+0193_03,"Three sheep are grazing in the field next to the water.",7.5,coco
+0194_00,"An airplane is landing on the runway at the airport.",7.5,coco
+0194_01,"An airplane is landing on the runway at the airport.",7.5,coco
+0194_02,"An airplane is landing on the runway at the airport.",7.5,coco
+0194_03,"An airplane is landing on the runway at the airport.",7.5,coco
+0195_00,"A black and tan cat standing in the dirty grass.",7.5,coco
+0195_01,"A black and tan cat standing in the dirty grass.",7.5,coco
+0195_02,"A black and tan cat standing in the dirty grass.",7.5,coco
+0195_03,"A black and tan cat standing in the dirty grass.",7.5,coco
+0196_00,"A group of sheep standing next to each other on a field.",7.5,coco
+0196_01,"A group of sheep standing next to each other on a field.",7.5,coco
+0196_02,"A group of sheep standing next to each other on a field.",7.5,coco
+0196_03,"A group of sheep standing next to each other on a field.",7.5,coco
+0197_00,"stop sign that says no vehicles past posts in front of building",7.5,coco
+0197_01,"stop sign that says no vehicles past posts in front of building",7.5,coco
+0197_02,"stop sign that says no vehicles past posts in front of building",7.5,coco
+0197_03,"stop sign that says no vehicles past posts in front of building",7.5,coco
+0198_00,"A fire hose sitting on top of a man hole cover near a yellow post.",7.5,coco
+0198_01,"A fire hose sitting on top of a man hole cover near a yellow post.",7.5,coco
+0198_02,"A fire hose sitting on top of a man hole cover near a yellow post.",7.5,coco
+0198_03,"A fire hose sitting on top of a man hole cover near a yellow post.",7.5,coco
+0199_00,"A large passenger jet with it's landing gear down.",7.5,coco
+0199_01,"A large passenger jet with it's landing gear down.",7.5,coco
+0199_02,"A large passenger jet with it's landing gear down.",7.5,coco
+0199_03,"A large passenger jet with it's landing gear down.",7.5,coco
+0200_00,"A train on a track traveling through a countryside.",7.5,coco
+0200_01,"A train on a track traveling through a countryside.",7.5,coco
+0200_02,"A train on a track traveling through a countryside.",7.5,coco
+0200_03,"A train on a track traveling through a countryside.",7.5,coco
+0201_00,"A black and white picture of a bird flying over a ocean",7.5,coco
+0201_01,"A black and white picture of a bird flying over a ocean",7.5,coco
+0201_02,"A black and white picture of a bird flying over a ocean",7.5,coco
+0201_03,"A black and white picture of a bird flying over a ocean",7.5,coco
+0202_00,"A city street sign near some very big palm trees.",7.5,coco
+0202_01,"A city street sign near some very big palm trees.",7.5,coco
+0202_02,"A city street sign near some very big palm trees.",7.5,coco
+0202_03,"A city street sign near some very big palm trees.",7.5,coco
+0203_00,"Some smiling happy skiers riding on a lift.",7.5,coco
+0203_01,"Some smiling happy skiers riding on a lift.",7.5,coco
+0203_02,"Some smiling happy skiers riding on a lift.",7.5,coco
+0203_03,"Some smiling happy skiers riding on a lift.",7.5,coco
+0204_00,"Commercial airliner over runway at airport on smoggy day.",7.5,coco
+0204_01,"Commercial airliner over runway at airport on smoggy day.",7.5,coco
+0204_02,"Commercial airliner over runway at airport on smoggy day.",7.5,coco
+0204_03,"Commercial airliner over runway at airport on smoggy day.",7.5,coco
+0205_00,"One train riding on the multiple train tracks side by side.",7.5,coco
+0205_01,"One train riding on the multiple train tracks side by side.",7.5,coco
+0205_02,"One train riding on the multiple train tracks side by side.",7.5,coco
+0205_03,"One train riding on the multiple train tracks side by side.",7.5,coco
+0206_00,"A guy in funny hat holding a very big bird.",7.5,coco
+0206_01,"A guy in funny hat holding a very big bird.",7.5,coco
+0206_02,"A guy in funny hat holding a very big bird.",7.5,coco
+0206_03,"A guy in funny hat holding a very big bird.",7.5,coco
+0207_00,"a number of street signs with a business sign in the background",7.5,coco
+0207_01,"a number of street signs with a business sign in the background",7.5,coco
+0207_02,"a number of street signs with a business sign in the background",7.5,coco
+0207_03,"a number of street signs with a business sign in the background",7.5,coco
+0208_00,"An umbrella lies behind a park bench that a small television is on.",7.5,coco
+0208_01,"An umbrella lies behind a park bench that a small television is on.",7.5,coco
+0208_02,"An umbrella lies behind a park bench that a small television is on.",7.5,coco
+0208_03,"An umbrella lies behind a park bench that a small television is on.",7.5,coco
+0209_00,"there are three she eps standing together on the grass",7.5,coco
+0209_01,"there are three she eps standing together on the grass",7.5,coco
+0209_02,"there are three she eps standing together on the grass",7.5,coco
+0209_03,"there are three she eps standing together on the grass",7.5,coco
+0210_00,"there is a animal walking down a narrow road",7.5,coco
+0210_01,"there is a animal walking down a narrow road",7.5,coco
+0210_02,"there is a animal walking down a narrow road",7.5,coco
+0210_03,"there is a animal walking down a narrow road",7.5,coco
+0211_00,"A yellow cat is wearing a blue plastic baseball hat.",7.5,coco
+0211_01,"A yellow cat is wearing a blue plastic baseball hat.",7.5,coco
+0211_02,"A yellow cat is wearing a blue plastic baseball hat.",7.5,coco
+0211_03,"A yellow cat is wearing a blue plastic baseball hat.",7.5,coco
+0212_00,"A bus about to stop to pick up passengers.",7.5,coco
+0212_01,"A bus about to stop to pick up passengers.",7.5,coco
+0212_02,"A bus about to stop to pick up passengers.",7.5,coco
+0212_03,"A bus about to stop to pick up passengers.",7.5,coco
+0213_00,"a few big buildings with roads next to them",7.5,coco
+0213_01,"a few big buildings with roads next to them",7.5,coco
+0213_02,"a few big buildings with roads next to them",7.5,coco
+0213_03,"a few big buildings with roads next to them",7.5,coco
+0214_00,"some old dirty pipes laying on the ground",7.5,coco
+0214_01,"some old dirty pipes laying on the ground",7.5,coco
+0214_02,"some old dirty pipes laying on the ground",7.5,coco
+0214_03,"some old dirty pipes laying on the ground",7.5,coco
+0215_00,"a blue and white passenger train coming to a stop",7.5,coco
+0215_01,"a blue and white passenger train coming to a stop",7.5,coco
+0215_02,"a blue and white passenger train coming to a stop",7.5,coco
+0215_03,"a blue and white passenger train coming to a stop",7.5,coco
+0216_00,"a red double decker bus is seen coming up the street",7.5,coco
+0216_01,"a red double decker bus is seen coming up the street",7.5,coco
+0216_02,"a red double decker bus is seen coming up the street",7.5,coco
+0216_03,"a red double decker bus is seen coming up the street",7.5,coco
+0217_00,"Corner of Broadway, West 32nd Street, and Korea Way.",7.5,coco
+0217_01,"Corner of Broadway, West 32nd Street, and Korea Way.",7.5,coco
+0217_02,"Corner of Broadway, West 32nd Street, and Korea Way.",7.5,coco
+0217_03,"Corner of Broadway, West 32nd Street, and Korea Way.",7.5,coco
+0218_00,"The orange fire hydrant is on a sidewalk in front of a brick building.",7.5,coco
+0218_01,"The orange fire hydrant is on a sidewalk in front of a brick building.",7.5,coco
+0218_02,"The orange fire hydrant is on a sidewalk in front of a brick building.",7.5,coco
+0218_03,"The orange fire hydrant is on a sidewalk in front of a brick building.",7.5,coco
+0219_00,"A building with a sign that reads One India Buildings.",7.5,coco
+0219_01,"A building with a sign that reads One India Buildings.",7.5,coco
+0219_02,"A building with a sign that reads One India Buildings.",7.5,coco
+0219_03,"A building with a sign that reads One India Buildings.",7.5,coco
+0220_00,"Washed out stop sign with a 4-way sign underneath.",7.5,coco
+0220_01,"Washed out stop sign with a 4-way sign underneath.",7.5,coco
+0220_02,"Washed out stop sign with a 4-way sign underneath.",7.5,coco
+0220_03,"Washed out stop sign with a 4-way sign underneath.",7.5,coco
+0221_00,"Single train parked at a train station on a clear day.",7.5,coco
+0221_01,"Single train parked at a train station on a clear day.",7.5,coco
+0221_02,"Single train parked at a train station on a clear day.",7.5,coco
+0221_03,"Single train parked at a train station on a clear day.",7.5,coco
+0222_00,"silohette of a man against  the whiteness of the sky surrounding him",7.5,coco
+0222_01,"silohette of a man against  the whiteness of the sky surrounding him",7.5,coco
+0222_02,"silohette of a man against  the whiteness of the sky surrounding him",7.5,coco
+0222_03,"silohette of a man against  the whiteness of the sky surrounding him",7.5,coco
+0223_00,"A close shot of two separate trains.",7.5,coco
+0223_01,"A close shot of two separate trains.",7.5,coco
+0223_02,"A close shot of two separate trains.",7.5,coco
+0223_03,"A close shot of two separate trains.",7.5,coco
+0224_00,"Several books are stacked on a table.",7.5,coco
+0224_01,"Several books are stacked on a table.",7.5,coco
+0224_02,"Several books are stacked on a table.",7.5,coco
+0224_03,"Several books are stacked on a table.",7.5,coco
+0225_00,"A row of birds are flying against a blue sky.",7.5,coco
+0225_01,"A row of birds are flying against a blue sky.",7.5,coco
+0225_02,"A row of birds are flying against a blue sky.",7.5,coco
+0225_03,"A row of birds are flying against a blue sky.",7.5,coco
+0226_00,"lots of sheep grazing on a hillside, with people in background",7.5,coco
+0226_01,"lots of sheep grazing on a hillside, with people in background",7.5,coco
+0226_02,"lots of sheep grazing on a hillside, with people in background",7.5,coco
+0226_03,"lots of sheep grazing on a hillside, with people in background",7.5,coco
+0227_00,"A dark street with a bicycle near a tree on the side of a building.",7.5,coco
+0227_01,"A dark street with a bicycle near a tree on the side of a building.",7.5,coco
+0227_02,"A dark street with a bicycle near a tree on the side of a building.",7.5,coco
+0227_03,"A dark street with a bicycle near a tree on the side of a building.",7.5,coco
+0228_00,"A swan in the water near a boat tied to a dock.",7.5,coco
+0228_01,"A swan in the water near a boat tied to a dock.",7.5,coco
+0228_02,"A swan in the water near a boat tied to a dock.",7.5,coco
+0228_03,"A swan in the water near a boat tied to a dock.",7.5,coco
+0229_00,"A Stop sign is at the corner of a grassy area.",7.5,coco
+0229_01,"A Stop sign is at the corner of a grassy area.",7.5,coco
+0229_02,"A Stop sign is at the corner of a grassy area.",7.5,coco
+0229_03,"A Stop sign is at the corner of a grassy area.",7.5,coco
+0230_00,"a stack of traffic signs on a pole next to a street.",7.5,coco
+0230_01,"a stack of traffic signs on a pole next to a street.",7.5,coco
+0230_02,"a stack of traffic signs on a pole next to a street.",7.5,coco
+0230_03,"a stack of traffic signs on a pole next to a street.",7.5,coco
+0231_00,"A street sign showing a person walking with a child and a bike sits on the sit of the road.",7.5,coco
+0231_01,"A street sign showing a person walking with a child and a bike sits on the sit of the road.",7.5,coco
+0231_02,"A street sign showing a person walking with a child and a bike sits on the sit of the road.",7.5,coco
+0231_03,"A street sign showing a person walking with a child and a bike sits on the sit of the road.",7.5,coco
+0232_00,"A cat is wearing a pink wool hat.",7.5,coco
+0232_01,"A cat is wearing a pink wool hat.",7.5,coco
+0232_02,"A cat is wearing a pink wool hat.",7.5,coco
+0232_03,"A cat is wearing a pink wool hat.",7.5,coco
+0233_00,"A passenger bus pulling up to the side of a street.",7.5,coco
+0233_01,"A passenger bus pulling up to the side of a street.",7.5,coco
+0233_02,"A passenger bus pulling up to the side of a street.",7.5,coco
+0233_03,"A passenger bus pulling up to the side of a street.",7.5,coco
+0234_00,"Several birds with black and yellow feathers sitting on some branches.",7.5,coco
+0234_01,"Several birds with black and yellow feathers sitting on some branches.",7.5,coco
+0234_02,"Several birds with black and yellow feathers sitting on some branches.",7.5,coco
+0234_03,"Several birds with black and yellow feathers sitting on some branches.",7.5,coco
+0235_00,"A large bus and a truck on a street.",7.5,coco
+0235_01,"A large bus and a truck on a street.",7.5,coco
+0235_02,"A large bus and a truck on a street.",7.5,coco
+0235_03,"A large bus and a truck on a street.",7.5,coco
+0236_00,"A sign for a dancing club is hanging from a building.",7.5,coco
+0236_01,"A sign for a dancing club is hanging from a building.",7.5,coco
+0236_02,"A sign for a dancing club is hanging from a building.",7.5,coco
+0236_03,"A sign for a dancing club is hanging from a building.",7.5,coco
+0237_00,"A train passing by an empty platform.",7.5,coco
+0237_01,"A train passing by an empty platform.",7.5,coco
+0237_02,"A train passing by an empty platform.",7.5,coco
+0237_03,"A train passing by an empty platform.",7.5,coco
+0238_00,"View of a snow capped mountain above trees and a bench.",7.5,coco
+0238_01,"View of a snow capped mountain above trees and a bench.",7.5,coco
+0238_02,"View of a snow capped mountain above trees and a bench.",7.5,coco
+0238_03,"View of a snow capped mountain above trees and a bench.",7.5,coco
+0239_00,"A stop sign is hanging from a metal post.",7.5,coco
+0239_01,"A stop sign is hanging from a metal post.",7.5,coco
+0239_02,"A stop sign is hanging from a metal post.",7.5,coco
+0239_03,"A stop sign is hanging from a metal post.",7.5,coco
+0240_00,"A guy is near a busy street in a foreign country.",7.5,coco
+0240_01,"A guy is near a busy street in a foreign country.",7.5,coco
+0240_02,"A guy is near a busy street in a foreign country.",7.5,coco
+0240_03,"A guy is near a busy street in a foreign country.",7.5,coco
+0241_00,"a man is standing in the woods wearing a hat and glasses",7.5,coco
+0241_01,"a man is standing in the woods wearing a hat and glasses",7.5,coco
+0241_02,"a man is standing in the woods wearing a hat and glasses",7.5,coco
+0241_03,"a man is standing in the woods wearing a hat and glasses",7.5,coco
+0242_00,"A lot of birds on logs floating in the water.",7.5,coco
+0242_01,"A lot of birds on logs floating in the water.",7.5,coco
+0242_02,"A lot of birds on logs floating in the water.",7.5,coco
+0242_03,"A lot of birds on logs floating in the water.",7.5,coco
+0243_00,"the people are using the kiosk on the TAB van",7.5,coco
+0243_01,"the people are using the kiosk on the TAB van",7.5,coco
+0243_02,"the people are using the kiosk on the TAB van",7.5,coco
+0243_03,"the people are using the kiosk on the TAB van",7.5,coco
+0244_00,"A high speed train is seen in the station.",7.5,coco
+0244_01,"A high speed train is seen in the station.",7.5,coco
+0244_02,"A high speed train is seen in the station.",7.5,coco
+0244_03,"A high speed train is seen in the station.",7.5,coco
+0245_00,"A man is straightening his tie in front of a mirror.",7.5,coco
+0245_01,"A man is straightening his tie in front of a mirror.",7.5,coco
+0245_02,"A man is straightening his tie in front of a mirror.",7.5,coco
+0245_03,"A man is straightening his tie in front of a mirror.",7.5,coco
+0246_00,"Train traveling through countryside near tall brick structure.",7.5,coco
+0246_01,"Train traveling through countryside near tall brick structure.",7.5,coco
+0246_02,"Train traveling through countryside near tall brick structure.",7.5,coco
+0246_03,"Train traveling through countryside near tall brick structure.",7.5,coco
+0247_00,"Large clock tower overlooking a busy street during the day.",7.5,coco
+0247_01,"Large clock tower overlooking a busy street during the day.",7.5,coco
+0247_02,"Large clock tower overlooking a busy street during the day.",7.5,coco
+0247_03,"Large clock tower overlooking a busy street during the day.",7.5,coco
+0248_00,"Garden with a assortment of plants surrounding a bench with a sleeping cat",7.5,coco
+0248_01,"Garden with a assortment of plants surrounding a bench with a sleeping cat",7.5,coco
+0248_02,"Garden with a assortment of plants surrounding a bench with a sleeping cat",7.5,coco
+0248_03,"Garden with a assortment of plants surrounding a bench with a sleeping cat",7.5,coco
+0249_00,"Several buses and cars driving down a busy street.",7.5,coco
+0249_01,"Several buses and cars driving down a busy street.",7.5,coco
+0249_02,"Several buses and cars driving down a busy street.",7.5,coco
+0249_03,"Several buses and cars driving down a busy street.",7.5,coco

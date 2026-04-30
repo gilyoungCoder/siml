@@ -1,0 +1,18 @@
+repellency:
+  method: kernel_fast
+  n_embed: 4
+  guidance_scale : 0.0
+  params:
+    sigma : 2.75
+    scale: 0.03
+    proj_ref_path : "caches/sdv3/i2p_hate/repellency_proj_ref.pt"
+    cache_proj_ref : True
+
+data:
+  name: nudity
+  root: datasets/nudity
+  class_info : i2p_hate
+
+mean_processor:
+  dynamic_threshold: False
+  clip_denoised: True

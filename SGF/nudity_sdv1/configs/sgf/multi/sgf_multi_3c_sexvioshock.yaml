@@ -1,0 +1,18 @@
+repellency:
+  method: grad_mmd
+  n_embed: 8
+  neg_start: 1000
+  neg_end: 800
+  params:
+    scale: 0.03
+    proj_ref_path : "caches/sd_sgf/multi_3c_sexvioshock/repellency_proj_ref.pt"
+    cache_proj_ref : False
+
+data:
+  name: nudity
+  root: datasets/nudity
+  class_info : multi_3c_sexvioshock
+
+mean_processor:
+  dynamic_threshold: False
+  clip_denoised: True
