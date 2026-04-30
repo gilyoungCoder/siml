@@ -1,0 +1,16 @@
+data:
+  class_info: i2p_shocking
+  name: nudity
+  root: /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/code/official_repos/SGF/diversity_sdv3/datasets/nudity
+mean_processor:
+  clip_denoised: true
+  dynamic_threshold: false
+repellency:
+  method: grad_mmd
+  n_embed: 8
+  neg_end: 800
+  neg_start: 1000
+  params:
+    cache_proj_ref: false
+    proj_ref_path: /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/caches/sd3/sgf/i2p_shocking/repellency_proj_ref.pt
+    scale: 0.03
