@@ -1,0 +1,9 @@
+Baseline dir: /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs/baseline_sd14/coco250_ddim_first250
+Method dir:   /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs/safedenoiser_ddim250/nudity_coco/all
+N_baseline: 250, N_method: 250
+
+CLIP Score (Baseline): 9.2441
+CLIP Score (Method):   8.9206
+CLIP delta: -0.3235
+
+FID (baseline vs method): 71.17
