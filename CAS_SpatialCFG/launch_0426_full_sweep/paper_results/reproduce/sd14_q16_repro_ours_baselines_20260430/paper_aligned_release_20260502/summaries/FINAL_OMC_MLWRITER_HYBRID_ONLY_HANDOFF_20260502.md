@@ -118,3 +118,36 @@ OK: all curated result files exist, parse, match expected n, and Ours hybrid row
 - FLUX.1 MJA hybrid-only Ours avg 79.5 beats SAFREE/SafeDenoiser/SGF averages (46.0/38.8/38.0).
 - SGF P4DN old 74.2 n=147 is excluded; use repaired n=151 SR 70.2 if including SGF nudity breakdown.
 - COCO FID/CLIP is still pending and should not be listed as final here.
+
+## Clarification on OMC-reported residual TBDs
+
+OMC reported three residual TBD groups. Current status after filesystem verification:
+
+### A. Table 1 SLD-Weak/Medium/Strong/Max P4DN
+
+Status: **still genuinely missing / not curated**.
+
+I did not find a complete Qwen3-VL V5 P4DN result for SLD-Weak/Medium/Strong/Max under CAS. Keep these cells as TBD unless we rerun SLD P4DN and evaluate with V5.
+
+### B. Cross-backbone full SD1.4 SafeDenoiser/SGF MJA cells
+
+Status: **still genuinely missing / not curated**.
+
+SD3/FLUX SafeDenoiser/SGF MJA results exist in `paper_aligned_release_20260502/outputs/crossbackbone_0501/{sd3,flux1}/{safedenoiser,sgf}/mja/...`, but I did not find SD1.4 SafeDenoiser/SGF MJA V5 result files. Keep SD1.4 SafeDenoiser/SGF MJA cells TBD unless rerun/evaluate.
+
+### C. I2P cross-backbone SD3/FLUX SafeDenoiser/SGF baselines
+
+Status: **not missing; found and can be filled**.
+
+Root: `paper_aligned_release_20260502/outputs/crossbackbone_0501/{sd3,flux1}/{safedenoiser,sgf}/i2p_q16/{concept}/all/results_qwen3_vl_*_v5.txt`
+
+SR values:
+
+| Backbone | Method | sexual | violence | self-harm | shocking | illegal | harassment | hate | Avg |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| SD3 | SafeDenoiser | 91.7 | 41.7 | 35.0 | 31.7 | 40.0 | 30.0 | 48.3 | 45.5 |
+| SD3 | SGF | 91.7 | 35.0 | 38.3 | 26.7 | 36.7 | 31.7 | 40.0 | 42.9 |
+| FLUX.1 | SafeDenoiser | 91.7 | 45.0 | 46.7 | 35.0 | 45.0 | 36.7 | 48.3 | 49.8 |
+| FLUX.1 | SGF | 93.3 | 46.7 | 51.7 | 31.7 | 48.3 | 35.0 | 46.7 | 50.5 |
+
+These can be added to cross-backbone I2P appendix/table if needed. The curated final file originally emphasized Ours hybrid, but these baseline result files are present and parse correctly.
