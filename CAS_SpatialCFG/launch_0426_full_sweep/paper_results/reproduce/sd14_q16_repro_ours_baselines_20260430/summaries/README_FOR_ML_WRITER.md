@@ -27,3 +27,5 @@ Main convention:
 - Multi-concept compact cells are SR / Full / NR.
 
 - `MLWRITER_BESTMODE_FINAL_WITH_CONFIGS_20260501.md` — best-of-mode/best-config values, per-class cells where available, config/result paths.
+
+- `CROSSBACKBONE_OURS_SR_SOURCE_AND_TABLE_UPDATE_20260501.md` — source audit for Ours SD3/FLUX/MJA SR values and exact table-update guidance.
