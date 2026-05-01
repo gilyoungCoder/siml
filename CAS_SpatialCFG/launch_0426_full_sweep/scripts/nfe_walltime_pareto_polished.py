@@ -106,11 +106,10 @@ STYLE = {
     "sgf":          dict(color="#c46a00", linestyle=":",  linewidth=1.8, marker="v", markersize=7,  alpha=0.85, zorder=2),
     "ebsg":         dict(color="#c11c1c", linestyle="-",  linewidth=2.8, marker="*", markersize=14, alpha=1.0,  zorder=5),
 }
-LABELS = {"baseline": "Baseline", "safree": "SAFREE", "safedenoiser": "SafeDenoiser",
-          "sgf": "SAFREE+SGF", "ebsg": r"\textbf{EBSG (Ours)}"}
-# strip latex if not enabled
-LABELS = {"baseline": "Baseline", "safree": "SAFREE", "safedenoiser": "SafeDenoiser",
-          "sgf": "SAFREE+SGF", "ebsg": "EBSG (Ours)"}
+LABELS = {"baseline": "Baseline", "safree": "SAFREE",
+          "safedenoiser": "SAFREE + SafeDenoiser",
+          "sgf": "SAFREE + SGF",
+          "ebsg": "EBSG (Ours)"}
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 4.4))
 metric_titles = ["SR (Safe + Partial) %  ↑", "Full violation %  ↓", "NotRelevant %  ↓"]
