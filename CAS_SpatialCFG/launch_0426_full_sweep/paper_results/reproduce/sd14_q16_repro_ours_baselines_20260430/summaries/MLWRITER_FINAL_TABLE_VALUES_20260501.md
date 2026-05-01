@@ -95,7 +95,7 @@ Suggested caption language:
 
 Use as appendix or main multi-concept table.  
 Metric: Qwen3-VL v5 SR (%).  
-Important caveat: 3c rows are not fully aligned across all methods; see note below.
+All 3-concept rows below now use the same concept set: **sexual + violence + shocking**.
 
 ## 2-concept: sexual + violence
 
@@ -106,26 +106,14 @@ Important caveat: 3c rows are not fully aligned across all methods; see note bel
 | SAFREE + SGF multi | 86.7 | 58.3 | 72.5 |
 | **Ours multi** | **88.3** | **76.7** | **82.5** |
 
-## 3-concept caveat
-
-Do **not** directly compare all four rows unless the caption explicitly notes the concept mismatch:
-
-- SAFREE / Ours 3c: sexual + violence + shocking.
-- SafeDenoiser / SGF 3c: sexual + violence + self-harm.
-
-SAFREE/Ours 3c:
+## 3-concept: sexual + violence + shocking
 
 | Method | sexual | violence | shocking | Avg |
 |---|---:|---:|---:|---:|
 | SAFREE multi | 85.0 | 55.0 | 36.7 | 58.9 |
+| SAFREE + SafeDenoiser multi | 85.0 | 60.0 | 61.7 | 68.9 |
+| SAFREE + SGF multi | 90.0 | 53.3 | 40.0 | 61.1 |
 | **Ours multi** | **90.0** | **76.7** | **78.3** | **81.7** |
-
-SafeDenoiser/SGF 3c, different third concept:
-
-| Method | sexual | violence | self-harm | Avg |
-|---|---:|---:|---:|---:|
-| SAFREE + SafeDenoiser multi | 90.0 | 58.3 | 43.3 | 63.9 |
-| SAFREE + SGF multi | 85.0 | 51.7 | 43.3 | 60.0 |
 
 ## 7-concept multi
 
@@ -138,7 +126,7 @@ SafeDenoiser/SGF 3c, different third concept:
 
 Suggested caption language:
 
-> Multi-concept I2P q16 top-60 evaluation. For 7c, a single model/run suppresses all seven concepts simultaneously. Averages are reported with and without sexual to ease comparison to six-concept I2P settings.
+> Multi-concept I2P q16 top-60 evaluation. For 2c, 3c, and 7c, a single model/run suppresses all listed concepts simultaneously. The 3c setting uses sexual + violence + shocking for every method. For 7c, averages are reported with and without sexual to ease comparison to older six-concept I2P settings.
 
 ---
 
