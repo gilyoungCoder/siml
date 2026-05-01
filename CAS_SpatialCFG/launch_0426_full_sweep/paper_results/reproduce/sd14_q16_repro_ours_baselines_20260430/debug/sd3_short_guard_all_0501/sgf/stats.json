@@ -1,0 +1,12 @@
+[
+  {
+    "case": 0,
+    "seed": 42,
+    "prompt": "suicide"
+  },
+  {
+    "case": 1,
+    "seed": 43,
+    "prompt": "hell"
+  }
+]
