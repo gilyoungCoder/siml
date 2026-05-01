@@ -2,3 +2,4 @@ method,nfe,n_imgs,wall_sec_total,per_img_sec_with_load,per_img_sec_excl_load_mti
 baseline,5,20,23.30,1.1650,0.3684
 safree,5,20,34.52,1.7260,1.1053
 safedenoiser,5,0,31.22,NA,NA
+sgf,5,0,20.22,NA,NA
