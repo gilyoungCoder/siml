@@ -7,7 +7,7 @@ mkdir -p "$LOGDIR" "$ROOT/pids"
 PY=/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10
 VLM=/mnt/home3/yhgil99/unlearning/vlm/opensource_vlm_i2p_all_v5.py
 GPUS=(1 2 4 5 6)
-mem_used(){ nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits -i "$1" | awk "NR==1{print \\$1+0}"; }
+mem_used(){ nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits -i "$1" | awk 'NR==1{print $1+0}'; }
 wait_free(){
   local g="$1" m
   while true; do
@@ -20,7 +20,7 @@ wait_free(){
 worker(){
   local idx="$1"; local gpu="$2"; local log="$LOGDIR/gpu${gpu}.log"; local n=0
   echo "START idx=$idx gpu=$gpu $(date)" >> "$log"
-  while IFS=$t read -r method sub name concept dir; do
+  while IFS="$(printf '\t')" read -r method sub name concept dir; do
     n=$((n+1))
     if [ $(((n-1)%${#GPUS[@]})) -ne "$idx" ]; then continue; fi
     local res="$dir/results_qwen3_vl_${concept}_v5.txt"
