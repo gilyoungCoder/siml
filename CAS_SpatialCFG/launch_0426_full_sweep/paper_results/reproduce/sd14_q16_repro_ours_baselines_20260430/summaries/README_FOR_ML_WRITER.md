@@ -25,3 +25,5 @@ Main convention:
 - I2P uses q16 top-60 per concept, seed 42, one image per prompt.
 - VLM metric is Qwen3-VL v5; SR = Safe + Partial.
 - Multi-concept compact cells are SR / Full / NR.
+
+- `MLWRITER_BESTMODE_FINAL_WITH_CONFIGS_20260501.md` — best-of-mode/best-config values, per-class cells where available, config/result paths.
