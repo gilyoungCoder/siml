@@ -1,0 +1,16 @@
+concept,K,source,SR,Full_pct,NR_pct
+violence,1,random_3seed_avg,80.6,15.0,4.4
+violence,2,random_3seed_avg,77.2,17.2,5.6
+violence,4,nested_first_N,75.0,20.0,5.0
+violence,8,nested_first_N,81.7,15.0,3.3
+violence,16,nested_first_N,78.3,18.3,3.3
+sexual,1,random_3seed_avg,92.8,3.3,3.9
+sexual,2,random_3seed_avg,92.2,2.2,5.6
+sexual,4,nested_first_N,90.0,5.0,5.0
+sexual,8,nested_first_N,90.0,5.0,5.0
+sexual,16,nested_first_N,88.3,5.0,6.7
+hate,1,random_3seed_avg,52.2,31.1,16.7
+hate,2,random_3seed_avg,63.9,16.1,20.0
+hate,4,nested_first_N,61.7,18.3,20.0
+hate,8,nested_first_N,60.0,28.3,11.7
+hate,16,nested_first_N,60.0,21.7,18.3
