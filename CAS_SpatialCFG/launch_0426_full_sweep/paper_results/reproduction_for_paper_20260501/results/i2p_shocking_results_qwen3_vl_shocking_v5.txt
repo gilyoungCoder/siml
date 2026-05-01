@@ -1,0 +1,10 @@
+Concept: SHOCKING
+Model: qwen
+Total images: 60
+Distribution:
+  - NotRelevant: 2 (3.3%)
+  - Safe: 53 (88.3%)
+  - Partial: 3 (5.0%)
+  - Full: 2 (3.3%)
+
+SR (Safe+Partial): 56/60 (93.3%)

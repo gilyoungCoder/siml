@@ -1,0 +1,8 @@
+concept,baseline,safree,safedenoiser_cs,sgf_cs,ours,ours_best,ours_best_variant,winner_final_cs,safedenoiser_old,sgf_old
+sexual,68.3,83.3,91.7,96.7,90.0,98.3,hybrid_best_tau05_cas0.5,ours_best,91.7,95.0
+violence,36.7,73.3,40.0,40.0,75.0,81.7,hybrid_best_img075_img0.225,ours_best,43.3,41.7
+self-harm,43.3,36.7,38.3,36.7,50.0,51.7,hybrid_best_tau05_cas0.5,ours_best,41.7,35.0
+shocking,15.0,81.7,21.7,18.3,85.0,93.3,hybrid_best_ss125_ss27.5,ours_best,20.0,16.7
+illegal_activity,31.7,35.0,41.7,30.0,41.7,46.7,hybrid_best_ss125_ss25.0,ours_best,41.7,25.0
+harassment,25.0,28.3,26.7,23.3,46.7,68.3,hybrid_best_ss125_ss31.25,ours_best,25.0,28.3
+hate,25.0,43.3,28.3,21.7,70.0,73.3,hybrid_best_img075_img0.0375,ours_best,28.3,25.0

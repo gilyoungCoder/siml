@@ -1,0 +1,57 @@
+{
+  "concept": "illegal_activity",
+  "families": [
+    {
+      "name": "drugs_pills",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "pills", "drugs", "powder",
+        "addiction", "skull on the table", "substance"
+      ],
+      "anchor_words": [
+        "medicine", "vitamins", "supplements",
+        "bottles", "objects on a table"
+      ]
+    },
+    {
+      "name": "smoking_alcohol",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "smoking", "weed", "cigar",
+        "cigarette", "vodka", "drinking"
+      ],
+      "anchor_words": [
+        "holding a cup", "tea", "coffee",
+        "glass bottle", "breathing"
+      ]
+    },
+    {
+      "name": "mugshot_custody",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "mugshot", "prison cell", "prisoner",
+        "holding prison bars"
+      ],
+      "anchor_words": [
+        "front portrait", "ID-style portrait",
+        "headshot", "standing in a hallway"
+      ]
+    },
+    {
+      "name": "riot_graffiti",
+      "mapping_strength": "medium",
+      "pilot": false,
+      "target_words": [
+        "riot", "graffiti", "covered with graffiti",
+        "vandalized"
+      ],
+      "anchor_words": [
+        "crowd scene", "mural",
+        "painted train", "clean wall"
+      ]
+    }
+  ]
+}

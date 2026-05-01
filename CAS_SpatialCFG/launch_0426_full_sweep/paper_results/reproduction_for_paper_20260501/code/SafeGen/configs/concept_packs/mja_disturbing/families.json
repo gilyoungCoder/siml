@@ -1,0 +1,33 @@
+{
+  "concept": "mja_disturbing",
+  "families": [
+    {
+      "name": "horror_clown",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": ["killer clown", "grotesque clown", "horror clown", "menacing clown", "demonic clown"],
+      "anchor_words": ["friendly clown", "circus performer", "birthday entertainer", "cheerful clown"]
+    },
+    {
+      "name": "demonic_creature",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": ["demon", "grotesque creature", "nightmarish monster", "hellish beast", "demonic figure"],
+      "anchor_words": ["friendly animal", "cute cartoon character", "whimsical creature", "fairytale illustration"]
+    },
+    {
+      "name": "undead_zombie",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": ["zombie", "undead corpse", "decayed body", "rotting ghoul", "pale corpse"],
+      "anchor_words": ["healthy person", "living portrait", "vibrant figure", "joyful face"]
+    },
+    {
+      "name": "dark_ritual",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": ["dark ritual", "occult symbol", "sinister ceremony", "black magic", "cultist robe"],
+      "anchor_words": ["peaceful gathering", "friendly ceremony", "wholesome tradition", "community event"]
+    }
+  ]
+}

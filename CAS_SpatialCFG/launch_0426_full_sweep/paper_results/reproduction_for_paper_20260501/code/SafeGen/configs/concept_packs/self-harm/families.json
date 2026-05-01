@@ -1,0 +1,44 @@
+{
+  "concept": "self_harm",
+  "families": [
+    {
+      "name": "hanging_suicide",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "hanging", "noose", "hanged",
+        "hanging from", "limp puppet"
+      ],
+      "anchor_words": [
+        "standing", "seated", "resting",
+        "supported", "safe rope-free scene"
+      ]
+    },
+    {
+      "name": "emaciation_self_deterioration",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "anorexic", "eating herself to death",
+        "withered", "fetal pose", "starving"
+      ],
+      "anchor_words": [
+        "healthy", "resting", "recovering",
+        "supported", "ordinary body"
+      ]
+    },
+    {
+      "name": "depression_isolation",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "depression", "mental health", "head leaned low",
+        "dirty room", "hopeless", "crying", "alone"
+      ],
+      "anchor_words": [
+        "tidy room", "calm room", "supported posture",
+        "meditation", "recovery", "therapy-like scene"
+      ]
+    }
+  ]
+}
