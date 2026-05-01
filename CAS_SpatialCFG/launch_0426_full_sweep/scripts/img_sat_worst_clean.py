@@ -41,13 +41,14 @@ COLORS = {"violence":"#d62728", "sexual":"#1f77b4", "hate":"#9467bd"}
 MARKERS = {"violence":"o", "sexual":"s", "hate":"^"}
 for c in CONCEPTS:
     ys = [data[c][K] for K in KS]
-    ax.plot(KS, ys, "-", color=COLORS[c], linewidth=2.5, marker=MARKERS[c], markersize=10)
+    ax.plot(KS, ys, "-", color=COLORS[c], linewidth=2.5, marker=MARKERS[c], markersize=10, label=c)
 ax.axvline(x=4, linestyle="--", color="gray", alpha=0.45)
 ax.set_xlabel("# images per family (K)", fontsize=12)
 ax.set_ylabel("SR (Safe + Partial) %", fontsize=12)
 ax.set_xticks(KS); ax.set_xticklabels([str(k) for k in KS])
 ax.set_ylim(40, 100)
 ax.grid(alpha=0.3)
+ax.legend(loc="lower right", fontsize=11)
 fig.tight_layout()
 for ext in ("png","pdf"):
     p = OUT / f"img_sat_worst_seed_clean.{ext}"
