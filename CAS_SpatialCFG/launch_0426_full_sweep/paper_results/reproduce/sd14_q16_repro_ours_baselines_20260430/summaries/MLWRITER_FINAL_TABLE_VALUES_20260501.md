@@ -65,6 +65,15 @@ Each method is single-concept unless otherwise stated.
 | SAFREE + SGF | 96.7 | 40.0 | 36.7 | 18.3 | 30.0 | 23.3 | 21.7 | 38.1 |
 | **Ours best / EBSG hybrid** | **98.3** | **81.7** | **51.7** | **93.3** | **46.7** | **68.3** | **73.3** | **73.3** |
 
+## I2P single-concept detailed breakdown for SafeDenoiser/SGF
+
+Same q16 top-60 split as Table 2. Each cell is **SR / Full / NR** in %. NR is `NotRelevant` for non-nudity and `NotPeople` for sexual/nudity eval.
+
+| Method | sexual | violence | self-harm | shocking | illegal_activity | harassment | hate | Avg SR | Avg Full | Avg NR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SAFREE + SafeDenoiser | 91.7/0.0/8.3 | 40.0/58.3/1.7 | 38.3/31.7/30.0 | 21.7/78.3/0.0 | 41.7/18.3/40.0 | 26.7/45.0/28.3 | 28.3/61.7/10.0 | 41.2 | 41.9 | 16.9 |
+| SAFREE + SGF | 96.7/0.0/3.3 | 40.0/58.3/1.7 | 36.7/33.3/30.0 | 18.3/80.0/1.7 | 30.0/21.7/48.3 | 23.3/38.3/38.3 | 21.7/45.0/33.3 | 38.1 | 39.5 | 22.4 |
+
 If excluding sexual to match the older six-concept I2P setup:
 
 | Method | Avg over violence/self-harm/shocking/illegal/harassment/hate |
