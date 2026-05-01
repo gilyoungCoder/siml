@@ -1,0 +1,17 @@
+data:
+  class_info: i2p_sexual
+  name: nudity
+  root: /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/code/official_repos/Safe_Denoiser/datasets/nudity
+mean_processor:
+  clip_denoised: true
+  dynamic_threshold: false
+repellency:
+  guidance_scale: 0.0
+  method: kernel_fast
+  n_embed: 16
+  params:
+    beta_threshold_margin: 1.6
+    cache_proj_ref: false
+    proj_ref_path: /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/caches/sd3/safedenoiser/i2p_sexual/repellency_proj_ref.pt
+    scale: 0.33
+    sigma: 3.15

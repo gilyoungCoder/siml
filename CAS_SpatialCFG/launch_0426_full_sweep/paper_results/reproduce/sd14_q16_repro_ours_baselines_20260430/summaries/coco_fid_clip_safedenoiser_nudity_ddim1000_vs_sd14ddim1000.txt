@@ -1,0 +1,9 @@
+Baseline dir: /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/baselines_v2/coco250
+Method dir:   /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs/safedenoiser_ddim1000/nudity_coco/all
+N_baseline: 1000, N_method: 1000
+
+CLIP Score (Baseline): 9.1967
+CLIP Score (Method):   8.7782
+CLIP delta: -0.4185
+
+FID (baseline vs method): 35.72

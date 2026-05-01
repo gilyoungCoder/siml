@@ -13,6 +13,8 @@ Root: `/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/`
 | 항목 | 상태 |
 |---|---|
 | Single-concept i2p_sweep60 (60 prompts) — 5-method 비교 | ✅ GPT 표 그대로 valid (SAFREE single 은 v2 옵션 켜져있음) |
+| **Paper Table 1 (UnlearnDiff/RAB/MMA/p4dn/COCO × 12 methods)** | ⚠️ 부분 — 외부 baseline (literature) + ESD/SDD p4dn (자체 측정) 채움. Many TBD (§1.5) |
+| **글로벌 표 정책** (ml-paper-writer 적용 필수) | 📌 모든 main 표에 **SR / Full / NotRel** 세 metric 동시 표시 권장 — NotRel 가 evaluator sanity check 역할 (§1.5e) |
 | Multi-concept i2p_sweep60 (2c/3c/4c/7c) — SAFREE vs EBSG | ⚠️ **GPT 표의 SAFREE multi 값은 잘못 (옛 crippled 버전)** — `phase_safree_v2/` 의 v2 수치로 교체 |
 | Hate single best | ⚠️ **n_tok=4 통일 (60.0%)** 로 갱신, 이전 68.33% (n_tok=16) deprecated. 상세: `HATE_DECISION_2026-04-29.md` |
 | Image-count saturation (K∈{1,2,4,8,12,16}) | ✅ Nested subsample 7 concept × 6 K = 42 cells 완료. `img_sat_nested.{pdf,png}` |
@@ -42,6 +44,81 @@ Root: `/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/`
 **Avg** (incl sexual): baseline 35.0 / SAFREE 54.5 / SafeDenoiser 41.7 / SGF 38.1 / ours main 65.5 / ours best 73.3
 
 > **Note**: SAFREE 값은 v2 (`safree=True, -svf, -lra` 모두 활성) 으로 평가됨. 옛 crippled 버전 (33% mean) 아님.
+
+---
+
+## 1.5. Paper Table 1 — Full method × dataset comparison ⚠️ 갱신 (2026-05-01)
+
+> **Format**: `SR / Full / NotRel` per dataset (paper SR aligned). Methods in gray = fine-tuning based.
+> ASCG / SAFREE+ASCG 는 제외 (paper 정책). p4dn column 추가됨 (이번 추가).
+> Numbers: `0-1 분율` (예: .649 = 64.9%). 외부 baseline 수치는 기존 paper draft 표에서 가져옴.
+
+### 1.5a. Full Table 1 (SR / Full violation / NotRelevant per dataset, COCO FID/CLIP)
+
+| Method | UnlearnDiff (SR/F/NR) | Ring-A-Bell (SR/F/NR) | MMA-Diffusion (SR/F/NR) | **p4dn (SR/F/NR)** | COCO (FID↓/CLIP↑) |
+|---|---|---|---|---|---|
+| Baseline (SD1.4) | .556 / .430 / .014 | .215 / .747 / .038 | .228 / .768 / .004 | TBD | – / .267 |
+| 〔gray〕ESD | .859 / .092 / .049 | .785 / .139 / .076 | .711 / .239 / .050 | **.649 / .311 / .040** | 4.91 / .260 |
+| 〔gray〕SDD | .908 / .042 / .049 | .886 / .076 / .038 | .813 / .164 / .023 | **.722 / .245 / .033** | 4.73 / .261 |
+| 〔gray〕UCE | .824 / .162 / .014 | .468 / .494 / .038 | .345 / .651 / .004 | TBD | 11.45 / .269 |
+| 〔gray〕RECE | .901 / .014 / .085 | .544 / .000 / .456 | .794 / .164 / .042 | TBD | 10.33 / .255 |
+| SLD-Weak | .662 / .310 / .028 | .215 / .734 / .051 | .270 / .730 / .006 | TBD | 11.09 / .264 |
+| SLD-Medium | .789 / .169 / .042 | .354 / .608 / .038 | .324 / .669 / .007 | TBD | 12.26 / .260 |
+| SLD-Strong | .873 / .085 / .042 | .494 / .456 / .051 | .419 / .572 / .009 | TBD | 14.56 / .252 |
+| SLD-Max | .873 / .063 / .063 | .570 / .316 / .114 | .490 / .461 / .049 | TBD | 18.46 / .244 |
+| SAFREE (v2) | .901 / .021 / .077 | .772 / .127 / .101 | .755 / .202 / .043 | TBD | 8.96 / .264 |
+| SafeDenoiser | TBD | TBD | TBD | TBD | TBD |
+| SGF | TBD | TBD | TBD | TBD | TBD |
+| **EBSG (ours)** | TBD | TBD | TBD | TBD | TBD |
+
+### 1.5b. 새로 채운 cell (2026-05-01)
+| Method | dataset | n | Safe | Partial | Full | NotRel | SR | Full% | NR% |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| ESD | p4dn | 151 | 22 | 76 | 47 | 6 | **.649** | .311 | .040 |
+| SDD | p4dn | 151 | 41 | 68 | 37 | 5 | **.722** | .245 | .033 |
+
+→ checkpoints: `/mnt/home3/yhgil99/guided2-safe-diffusion/Continual2/{esd,sdd}_2026-01-29_17-05-34`
+→ outputs: `outputs/phase_esd_sdd_p4dn/{esd,sdd}/`
+→ launch script: `scripts/run_esd_sdd_p4dn.sh` (sfgd env, PYTHONNOUSERSITE=1)
+
+### 1.5c. TBD list (paper Table 1 채워야 할 cell)
+
+**p4dn 새 column 채우기 (12 methods × 1 col = 12 cells)**:
+- Baseline (SD1.4) p4dn — easy: re-run SD1.4 ckpt
+- UCE / RECE p4dn — checkpoint 필요 (없으면 paper TBD 명시)
+- SLD-{Weak,Medium,Strong,Max} p4dn — 4 cells, SLD inference 코드 + safe_level 4 조합
+- SAFREE p4dn — v2 config 그대로
+- SafeDenoiser p4dn — `code/official_repos/Safe_Denoiser/run_copro.py` 사용
+- SGF p4dn — `code/official_repos/SGF/.../generate_unsafe_sgf.py` 사용
+- EBSG (ours) p4dn — `paper_results/single/sexual/args.json` (nudity_p4dn 으로 prompts 만 swap)
+
+**SafeDenoiser/SGF 5-dataset row 채우기 (2 methods × 5 datasets = 10 cells, FID/CLIP 별도)**:
+- GPT 가 siml-09 에서 진행 중 (concept-specific + COCO 1000 FID)
+- 로그: `logs/coco_ddim1000/queue_siml09_now.log`
+
+**EBSG (ours) 5-dataset row (5 datasets + COCO)**:
+- UnlearnDiff: 미실행
+- Ring-A-Bell: 미실행
+- MMA-Diffusion: 미실행
+- p4dn: paper_results/single/sexual/ 의 nudity_p4dn args 로 재실행 가능
+- COCO: 30K imgs gen 끝, FID 계산 미실시
+
+### 1.5d. ml-paper-writer 노트
+- 표는 위 1.5a 형식 그대로 paper Table 1 후보
+- ESD/SDD/UCE/RECE 4행은 LaTeX `\rowcolor{gray!20}` 적용 권장
+- ASCG / SAFREE+ASCG **포함하지 말 것** (정책)
+- p4dn column 의 ESD/SDD 두 cell 만 우리가 직접 측정한 새 데이터, 나머지 TBD 는 추가 실험 후 채움
+- COCO FID 도 EBSG / SafeDenoiser / SGF TBD — 30K 또는 1K 계산 결과 도착시 채워넣기
+
+### 1.5e. 📌 ml-paper-writer 글로벌 표 정책 (모든 main table 공통)
+- **모든 main paper 표에는 `SR / Full / NotRel` 세 metric 한 번에 표시** — SR 단독이 아니라 셋 다 같이.
+  - `SR` = paper safety claim (Safe+Partial 합치기)
+  - `Full` = clear violation rate (낮을수록 ↓ 좋음, paper 의 second-order claim)
+  - `NotRel` = off-topic detection (eval 신뢰도 sanity check; NotRel 이 dataset 별로 합리적인 분포면 evaluator 가 잘 작동 중이라는 증거)
+- 3 metric 같이 표시하는 이유: NotRel 분포가 dataset 별로 (예: COCO ≈ 0%, 안전 데이터셋 ≈ ~5%, 어려운 prompt 셋 ≈ 5-15%) 합리적인 패턴 보이는지 reviewer 가 즉시 확인 가능. SR 만 보여주면 "evaluator 가 모든 걸 NotRel 로 처리했나?" 같은 의심에 답할 수 없음.
+- 적용 대상 main 표: **Table 1 (cross-dataset)**, **Table 2/3 (i2p concept-level)**, **Table 5/6 (multi-concept)**, **Table N (ablation cells)**.
+- Appendix 표는 detail breakdown (Safe/Partial/Full/NotRel 4-way) 권장.
+- 본문에서 "Full violation rate (lower is better)" 보조 metric 도 paper claim 강도 ↑.
 
 ---
 
