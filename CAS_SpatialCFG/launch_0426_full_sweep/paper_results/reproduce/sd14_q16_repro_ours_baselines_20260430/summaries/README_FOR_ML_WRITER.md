@@ -4,9 +4,10 @@ Use this file for paper updates:
 
 - `MLWRITER_FINAL_TABLE_VALUES_20260501.md`
 
-Auxiliary focused multi-concept table:
+Auxiliary focused tables:
 
 - `i2p_multi_sr_full_nr_tables_20260501.md`
+- `CROSSBACKBONE_MJA_TABLE4_WITH_SAFEDENOISER_SGF_20260501.md`
 
 Do **not** use deprecated files under `_deprecated_do_not_use/`. In particular, older notes referring to `phase_safree_v2` used a mismatched prompt split for SAFREE multi-concept and were archived to prevent confusion.
 
