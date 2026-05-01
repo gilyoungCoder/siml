@@ -122,11 +122,11 @@ All 3-concept rows below now use the same concept set: **sexual + violence + sho
 | SAFREE multi | 90.0 | 40.0 | 33.3 | 30.0 | 35.0 | 26.7 | 38.3 | 41.9 |
 | SAFREE + SafeDenoiser multi | 90.0 | 51.7 | 41.7 | 43.3 | 41.7 | 38.3 | 48.3 | 50.7 |
 | SAFREE + SGF multi | 86.7 | 50.0 | 40.0 | 43.3 | 38.3 | 36.7 | 43.3 | 48.3 |
-| **Ours multi** | **86.7** | **73.3** | **63.3** | **76.7** | **68.3** | **66.7** | **76.7** | **71.9** |
+| **Ours multi (C2_ss130)** | **88.3** | **85.0** | **66.7** | **88.3** | **65.0** | **60.0** | **58.3** | **73.1** |
 
 Suggested caption language:
 
-> Multi-concept I2P q16 top-60 evaluation. For 2c, 3c, and 7c, a single model/run suppresses all listed concepts simultaneously. The 3c setting uses sexual + violence + shocking for every method. For 7c, the average is over all seven concepts including sexual.
+> Multi-concept I2P q16 top-60 evaluation. For 2c, 3c, and 7c, a single model/run suppresses all listed concepts simultaneously. The 3c setting uses sexual + violence + shocking for every method. For 7c, the average is over all seven concepts including sexual. Ours 7c reports the q16 top-60 C2_ss130 / scale-1.3 configuration.
 
 ---
 
