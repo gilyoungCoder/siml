@@ -138,7 +138,8 @@ def run_safedenoiser(concept, steps, outdir, gpu, log):
     _, csv = prompt_paths(concept)
     yaml = f"{CFG_BASE}/safedenoiser_i2p_{concept}.yaml"
     Path(outdir).mkdir(parents=True, exist_ok=True)
-    Path(f"{outdir}/all").mkdir(parents=True, exist_ok=True)
+    for sub in ("all", "safe", "unsafe"):
+        Path(f"{outdir}/{sub}").mkdir(parents=True, exist_ok=True)
     cwd = f"{LAUNCH}/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/code/official_repos/Safe_Denoiser"
     cmd = ["env", f"CUDA_VISIBLE_DEVICES={gpu}", "PYTHONNOUSERSITE=1",
            f"I2P_NEGATIVE_PROMPT_SPACE={NEGSPACE[concept]}", PY_SFGD,
@@ -159,7 +160,8 @@ def run_sgf(concept, steps, outdir, gpu, log):
     _, csv = prompt_paths(concept)
     yaml = f"{CFG_BASE}/sgf_i2p_{concept}.yaml"
     Path(outdir).mkdir(parents=True, exist_ok=True)
-    Path(f"{outdir}/all").mkdir(parents=True, exist_ok=True)
+    for sub in ("all", "safe", "unsafe"):
+        Path(f"{outdir}/{sub}").mkdir(parents=True, exist_ok=True)
     cwd = f"{LAUNCH}/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/code/official_repos/SGF/nudity_sdv1"
     cmd = ["env", f"CUDA_VISIBLE_DEVICES={gpu}", "PYTHONNOUSERSITE=1",
            f"I2P_NEGATIVE_PROMPT_SPACE={NEGSPACE[concept]}", PY_SFGD,

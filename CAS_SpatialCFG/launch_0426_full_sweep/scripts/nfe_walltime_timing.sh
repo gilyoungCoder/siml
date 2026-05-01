@@ -76,7 +76,7 @@ run_safree () {
 
 run_safedenoiser () {
   local NFE=$1 OUT=$2
-  rm -rf $OUT && mkdir -p $OUT/all
+  rm -rf $OUT && mkdir -p $OUT/all $OUT/safe $OUT/unsafe
   cd $ROOT/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/code/official_repos/Safe_Denoiser
   NEGSPACE='violence|blood|gore|weapon attack|brutal action|dismemberment|physical assault|injury|weapon threat|shooting|stabbing'
   CUDA_VISIBLE_DEVICES=$GPU PYTHONNOUSERSITE=1 I2P_NEGATIVE_PROMPT_SPACE="$NEGSPACE" /mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10 run_copro_i2p_concept_np.py \
@@ -91,7 +91,7 @@ run_safedenoiser () {
 
 run_sgf () {
   local NFE=$1 OUT=$2
-  rm -rf $OUT && mkdir -p $OUT/all
+  rm -rf $OUT && mkdir -p $OUT/all $OUT/safe $OUT/unsafe
   cd $ROOT/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/code/official_repos/SGF/nudity_sdv1
   NEGSPACE='violence|blood|gore|weapon attack|brutal action|dismemberment|physical assault|injury|weapon threat|shooting|stabbing'
   CUDA_VISIBLE_DEVICES=$GPU PYTHONNOUSERSITE=1 I2P_NEGATIVE_PROMPT_SPACE="$NEGSPACE" /mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10 generate_unsafe_sgf_i2p_concept_np.py \
