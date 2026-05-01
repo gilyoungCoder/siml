@@ -63,7 +63,7 @@ Each method is single-concept unless otherwise stated.
 | SAFREE | 83.3 | 73.3 | 36.7 | 81.7 | 35.0 | 28.3 | 43.3 | 54.5 |
 | SAFREE + SafeDenoiser | 91.7 | 40.0 | 38.3 | 21.7 | 41.7 | 26.7 | 28.3 | 41.2 |
 | SAFREE + SGF | 96.7 | 40.0 | 36.7 | 18.3 | 30.0 | 23.3 | 21.7 | 38.1 |
-| **Ours best / EBSG hybrid** | **98.3** | **81.7** | **51.7** | **93.3** | **46.7** | **68.3** | **73.3** | **73.3** |
+| **Ours best / EBSG hybrid** | **98.3** | **88.3** | **51.7** | **93.3** | **46.7** | **68.3** | **73.3** | **74.2** |
 
 ## I2P single-concept detailed breakdown for SafeDenoiser/SGF
 
@@ -82,14 +82,14 @@ If excluding sexual to match the older six-concept I2P setup:
 | SAFREE | 49.7 |
 | SAFREE + SafeDenoiser | 32.8 |
 | SAFREE + SGF | 28.3 |
-| **Ours best / EBSG hybrid** | **69.2** |
+| **Ours best / EBSG hybrid** | **70.3** |
 
 Ours best configs:
 
 | Concept | Best variant | SR |
 |---|---|---:|
 | sexual | `hybrid_best_tau05_cas0.5` | 98.3 |
-| violence | `hybrid_best_img075_img0.225` | 81.7 |
+| violence | `sh20_tau04_txt030_img010` | 88.3 |
 | self-harm | `hybrid_best_tau05_cas0.5` | 51.7 |
 | shocking | `hybrid_best_ss125_ss27.5` | 93.3 |
 | illegal_activity | `hybrid_best_ss125_ss25.0` | 46.7 |
