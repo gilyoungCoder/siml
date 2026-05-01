@@ -122,35 +122,41 @@ Selection rule below: best SR among complete n=60 configs; all are hybrid/both/f
 
 Note: this SD3 avg 63.8 differs from earlier text value 65.0 because this table uses strict complete n=60 best-config files found in the release bundle. Earlier 65.0 likely used a different/partial selection; prefer the breakdown-backed table unless another canonical file is specified.
 
-## 9. Ours cross-backbone MJA breakdowns located
+## 9. Ours cross-backbone MJA breakdowns located — HYBRID-ONLY paper setting
+
+Important policy: for the paper version, Ours should be reported as hybrid-only. Do not use anchor-inpaint rows for MJA even if their SR is higher.
 
 Located roots:
 - SD3 Ours MJA: `/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_sd3/`
 - FLUX.1 Ours MJA: `/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0420/ours_flux1/`
-- Extra rerun dirs checked: `/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_rerun_sd3`, `/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/outputs/launch_0424_rerun_flux1`.
 
-Selection below: best complete n=100 V5 result per concept in the located Ours MJA roots. These are breakdown-backed values.
+Selection below: best complete n=100 V5 result per concept among directories containing `hybrid` only.
 
-### SD3 Ours MJA best breakdown
+### SD3 Ours MJA hybrid-only breakdown
 
 | Concept | SR | Safe | Partial | Full | NR | Config / result file |
 |---|---:|---:|---:|---:|---:|---|
 | Sexual | 84.0 | 56.0 | 28.0 | 16.0 | 0.0 | `outputs/launch_0420/ours_sd3/mja_sexual/hybrid_ss15_thr0.1_imgthr0.3_both/results_qwen3_vl_nudity_v5.txt` |
-| Violent | 58.0 | 52.0 | 6.0 | 42.0 | 0.0 | `outputs/launch_0420/ours_sd3/mja_violent/cas0.6_ss1.5_thr0.1_anchor_inpaint_both/results_qwen3_vl_violence_v5.txt` |
-| Illegal | 53.0 | 41.0 | 12.0 | 42.0 | 5.0 | `outputs/launch_0420/ours_sd3/mja_illegal/cas0.6_ss2.5_thr0.1_anchor_inpaint_both/results_qwen3_vl_illegal_v5.txt` |
-| Disturbing | 86.0 | 18.0 | 68.0 | 14.0 | 0.0 | `outputs/launch_0420/ours_sd3/mja_disturbing/cas0.6_ss1.5_thr0.1_anchor_inpaint_both/results_qwen3_vl_disturbing_v5.txt` |
-| Avg | 70.3 | - | - | - | - | - |
+| Violent | 23.0 | 18.0 | 5.0 | 72.0 | 5.0 | `outputs/launch_0420/ours_sd3/mja_violent/cas0.5_ss25_thr0.1_imgthr0.1_hybrid_both/results_qwen3_vl_violence_v5.txt` |
+| Illegal | 50.0 | 37.0 | 13.0 | 36.0 | 14.0 | `outputs/launch_0420/ours_sd3/mja_illegal/cas0.45_ss25_thr0.1_imgthr0.1_hybrid_both/results_qwen3_vl_illegal_v5.txt` |
+| Disturbing | 47.0 | 11.0 | 36.0 | 53.0 | 0.0 | `outputs/launch_0420/ours_sd3/mja_disturbing/cas0.6_ss25_thr0.1_imgthr0.1_hybrid_both/results_qwen3_vl_disturbing_v5.txt` |
+| Avg | 51.0 | - | - | - | - | - |
 
-Note: The older manuscript value `SD3 Ours avg 69.5/69.3` is close but not exactly this strict best-of-complete-V5 breakdown selection. If preserving old table, use these rows mainly for appendix/full breakdown. If rewriting with best-of-mode, SD3 avg is 70.3.
+This is much lower than the previous best-of-mode/anchor-mixed SD3 MJA number. If the manuscript currently claims SD3 MJA Ours around 69–70 while also saying hybrid-only, that is inconsistent with the located V5 hybrid-only files and must be resolved.
 
-### FLUX.1 Ours MJA best breakdown
+### FLUX.1 Ours MJA hybrid-only breakdown
 
 | Concept | SR | Safe | Partial | Full | NR | Config / result file |
 |---|---:|---:|---:|---:|---:|---|
 | Sexual | 97.0 | 85.0 | 12.0 | 3.0 | 0.0 | `outputs/launch_0420/ours_flux1/mja_sexual/cas0.6_ss2.5_thr0.1_hybrid_both/results_qwen3_vl_nudity_v5.txt` |
-| Violent | 89.0 | 87.0 | 2.0 | 11.0 | 0.0 | `outputs/launch_0420/ours_flux1/mja_violent/cas0.6_ss2.0_thr0.1_anchor_inpaint_both/results_qwen3_vl_violence_v5.txt` |
-| Illegal | 86.0 | 80.0 | 6.0 | 13.0 | 1.0 | `outputs/launch_0420/ours_flux1/mja_illegal/cas0.6_ss3.0_thr0.1_anchor_inpaint_both/results_qwen3_vl_illegal_v5.txt` |
-| Disturbing | 98.0 | 90.0 | 8.0 | 2.0 | 0.0 | `outputs/launch_0420/ours_flux1/mja_disturbing/cas0.6_ss1.5_thr0.1_anchor_inpaint_both/results_qwen3_vl_disturbing_v5.txt` |
-| Avg | 92.5 | - | - | - | - | - |
+| Violent | 67.0 | 57.0 | 10.0 | 20.0 | 13.0 | `outputs/launch_0420/ours_flux1/mja_violent/cas0.6_ss2.0_thr0.1_hybrid_both/results_qwen3_vl_violence_v5.txt` |
+| Illegal | 58.0 | 33.0 | 25.0 | 35.0 | 7.0 | `outputs/launch_0420/ours_flux1/mja_illegal/cas0.6_ss2.0_thr0.1_hybrid_both/results_qwen3_vl_illegal_v5.txt` |
+| Disturbing | 96.0 | 74.0 | 22.0 | 4.0 | 0.0 | `outputs/launch_0420/ours_flux1/mja_disturbing/cas0.6_ss3.0_thr0.1_hybrid_both/results_qwen3_vl_disturbing_v5.txt` |
+| Avg | 79.5 | - | - | - | - | - |
 
-Note: This matches the earlier strong FLUX anchor-mode table direction (around 92.3 avg), now with full breakdown and exact result paths.
+This matches the earlier manuscript FLUX hybrid avg 79.5.
+
+## 10. Hybrid-only verification for I2P Ours
+
+- SD1.4 I2P single Ours in release is hybrid-only. The violence directory name lacks `hybrid`, but its `args.json` contains `"how_mode": "hybrid"` and `"safety_scale": 20.0`.
+- Cross-backbone I2P Ours SD3/FLUX configs are also hybrid-only; selected config directories contain `hybrid` and no anchor/inpaint directories were used for the I2P cross-backbone table.
