@@ -25,10 +25,14 @@ at every per-image latency budget we measured.
 - **Model**: SD v1.4, seed 42, CFG 7.5, 512×512, DDIM scheduler.
 - **Prompts**: I2P q16 top-60, **all 7 concepts** (sexual, violence, self-harm, shocking,
   illegal_activity, harassment, hate). 60 prompts × 1 image per cell.
-- **Methods (5)**: Baseline / SAFREE / SafeDenoiser / SAFREE+SGF / EBSG.
-  - SD/SGF use the same concept-specific YAML configs and NEGSPACE templates as the
+- **Methods (5)**: Baseline / SAFREE / **SAFREE + SafeDenoiser** / **SAFREE + SGF** / EBSG.
+  - **Both compound baselines** (SAFREE+SafeDenoiser, SAFREE + SGF) are the *stacked*
+    variants on top of SAFREE — they invoke the SafeDenoiser / SGF official scripts with
+    `--config=configs/base/vanilla/safree_neg_prompt_config.json` and
+    `--erase_id=safree_neg_prompt_rep_*_time`. This matches the Table 1 row labels.
+  - Concept-specific YAML configs and NEGSPACE templates are the same ones used in the
     main paper Table 1 single-I2P best (no per-NFE retuning).
-  - SAFREE uses `--safree -svf -lra` (the same v2 config as Table 1).
+  - SAFREE alone uses `--safree -svf -lra` (the same v2 config as Table 1).
   - EBSG uses the **per-concept best config** from the main paper (sexual ss=20 cas=0.5,
     violence ss=20 cas=0.4, self-harm ss=7 cas=0.5, shocking ss=27.5 cas=0.6,
     illegal ss=25 cas=0.6, harassment ss=31.25 cas=0.5, hate ss=28 cas=0.6).
@@ -46,13 +50,13 @@ at every per-image latency budget we measured.
 
 ## 3. Key results (concept-averaged, 7 concepts)
 
-| Method            | NFE=5  | NFE=10 | NFE=50 |
+| Method                    | NFE=5  | NFE=10 | NFE=50 |
 |---|---:|---:|---:|
-| **Baseline**       | 0.42 s · 34.8 SR · 41.4 Full | 0.63 s · 31.4 SR · 53.1 Full | 2.68 s · 35.7 SR · 51.7 Full |
-| **SAFREE**         | 1.11 s · 19.0 SR · 1.0 Full  | 2.00 s · 31.2 SR · 4.0 Full | 8.89 s · 54.3 SR · 10.5 Full |
-| **SafeDenoiser**   | 0.58 s · 46.9 SR · 13.6 Full | 1.00 s · 54.8 SR · 16.9 Full | 4.32 s · 53.1 SR · 21.2 Full |
-| **SAFREE+SGF**     | 0.58 s · **0.0** SR · 0.0 Full · 100 NotRel | 1.05 s · **0.0** SR · 0.0 Full · 100 NotRel | 4.42 s · 47.1 SR · 23.1 Full |
-| **EBSG (Ours)**    | 1.47 s · **52.4** SR · 13.8 Full | 2.79 s · **60.2** SR · 18.1 Full | 14.11 s · **70.2** SR · 11.2 Full |
+| **Baseline**               | 0.42 s · 34.8 SR · 41.4 Full | 0.63 s · 31.4 SR · 53.1 Full | 2.68 s · 35.7 SR · 51.7 Full |
+| **SAFREE**                 | 1.11 s · 19.0 SR · 1.0 Full  | 2.00 s · 31.2 SR · 4.0 Full | 8.89 s · 54.3 SR · 10.5 Full |
+| **SAFREE + SafeDenoiser**  | 0.58 s · 46.9 SR · 13.6 Full | 1.00 s · 54.8 SR · 16.9 Full | 4.32 s · 53.1 SR · 21.2 Full |
+| **SAFREE + SGF**           | 0.58 s · **0.0** SR · 0.0 Full · 100 NotRel | 1.05 s · **0.0** SR · 0.0 Full · 100 NotRel | 4.42 s · 47.1 SR · 23.1 Full |
+| **EBSG (Ours)**            | 1.47 s · **52.4** SR · 13.8 Full | 2.79 s · **60.2** SR · 18.1 Full | 14.11 s · **70.2** SR · 11.2 Full |
 
 Per-image time is `per_img_sec_excl_load_mtime` (filesystem mtime range / (N−1)).
 
@@ -65,7 +69,7 @@ Per-image time is `per_img_sec_excl_load_mtime` (filesystem mtime range / (N−1
 3. **EBSG @ NFE=50 (14.11 s/img)**: Pareto-dominant — highest SR (70.2) among all 5
    methods at any wall-clock budget we measured; also the lowest Full-violation rate
    (11.2 %) among methods with non-degenerate generation.
-4. **SGF small-NFE failure**: SAFREE+SGF at NFE ≤ 10 produces 100 % NotRelevant — i.e.
+4. **SGF small-NFE failure**: SAFREE + SGF at NFE ≤ 10 produces 100 % NotRelevant — i.e.
    the gradient-MMD repellency *destroys the image* at small NFE. SGF only becomes
    non-degenerate at NFE ≥ 25 (47 % SR at NFE=50). This is the same observation as the
    existing NFE-vs-step appendix; the wall-clock view makes it sharper because SGF
@@ -139,7 +143,7 @@ CSV header (concept_avg):
   use `n_img_tokens=4`). EBSG hate cells are slightly more expensive per step than other
   EBSG cells; the concept-averaged time bakes this in. Per-concept facet figure makes
   this visible (hate cell EBSG times are ≈ 10–15 % above the EBSG average).
-- **SAFREE+SGF NFE=5,10 SR=0** is a real measurement (NudeNet+ rubric labels every
+- **SAFREE + SGF NFE=5,10 SR=0** is a real measurement (NudeNet+ rubric labels every
   generated image NotRelevant because the image is destroyed); not a bug. We may want
   to clip those points or annotate "image destruction" in the appendix per-concept facet
   to keep the SGF curve from disappearing into y=0.
