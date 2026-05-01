@@ -23,7 +23,10 @@ PY_EBSG     = "/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10"
 PY_SAFREE   = "/mnt/home3/yhgil99/.conda/envs/safree/bin/python3.10"
 PY_BASELINE = "/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10"
 PY_SFGD     = "/mnt/home3/yhgil99/.conda/envs/sfgd/bin/python3.10"
+PY_VLM      = "/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10"
 BASELINE_SCRIPT = f"{LAUNCH}/scripts/baseline_runner.py"
+EVAL_SCRIPT = "/mnt/home3/yhgil99/unlearning/vlm/opensource_vlm_i2p_all_v5.py"
+EVAL_CWD    = "/mnt/home3/yhgil99/unlearning/vlm"
 
 # Sweep grid
 CONCEPTS = ["sexual", "violence", "self-harm", "shocking", "illegal_activity", "harassment", "hate"]
@@ -74,7 +77,6 @@ NEGSPACE = {
 CSV_BASE = f"{PR}/reproduce/sd14_q16_repro_ours_baselines_20260430/prompts/i2p_q16_csv"
 TXT_BASE = f"{REPO}/CAS_SpatialCFG/prompts/i2p_q16_top60"
 CFG_BASE = f"{PR}/reproduce/sd14_q16_repro_ours_baselines_20260430/configs/concept_specific_official"
-EVAL_SCRIPT = f"{LAUNCH}/scripts/qwen3_vl_eval_v5.py"
 
 
 def prompt_paths(concept):
@@ -201,18 +203,27 @@ def run_ebsg(concept, steps, outdir, gpu, log):
 
 
 def run_eval(concept, outdir, gpu, log):
-    """Run Qwen3-VL v5 eval if result file missing."""
-    if not os.path.isfile(EVAL_SCRIPT):
-        # Fallback: skip eval (caller can dispatch separately)
-        with open(log, "a") as f:
-            f.write(f"[eval-skip] no eval script at {EVAL_SCRIPT}\n")
-        return 0
-    cmd = ["env", f"CUDA_VISIBLE_DEVICES={gpu}", PY_EBSG, EVAL_SCRIPT,
-           "--image_dir", outdir,
-           "--concept", EVAL_NAME[concept],
-           "--output", f"{outdir}/results_qwen3_vl_{EVAL_NAME[concept]}_v5.txt"]
+    """Run Qwen3-VL v5 eval if result file missing.
+    Calls opensource_vlm_i2p_all_v5.py <dir> <rubric> qwen which writes
+    results_qwen3_vl_<rubric>_v5.txt + categories_qwen3_vl_<rubric>_v5.json into outdir.
+    For SD/SGF whose images live in <outdir>/all/, point eval there instead."""
+    target = outdir
+    if (Path(outdir) / "all").exists() and any(Path(outdir, "all").glob("*.png")):
+        target = f"{outdir}/all"
+    cmd = ["env", f"CUDA_VISIBLE_DEVICES={gpu}", PY_VLM, EVAL_SCRIPT,
+           target, EVAL_NAME[concept], "qwen"]
     with open(log, "a") as f:
-        return subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT).returncode
+        rc = subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT, cwd=EVAL_CWD).returncode
+    # If eval wrote into <outdir>/all/, mirror result file up to <outdir>/ for needs_eval check
+    if target != outdir:
+        for fn in (f"results_qwen3_vl_{EVAL_NAME[concept]}_v5.txt",
+                   f"categories_qwen3_vl_{EVAL_NAME[concept]}_v5.json"):
+            src = Path(target) / fn
+            dst = Path(outdir) / fn
+            if src.exists() and not dst.exists():
+                try: dst.write_bytes(src.read_bytes())
+                except OSError: pass
+    return rc
 
 
 METHOD_FN = {
