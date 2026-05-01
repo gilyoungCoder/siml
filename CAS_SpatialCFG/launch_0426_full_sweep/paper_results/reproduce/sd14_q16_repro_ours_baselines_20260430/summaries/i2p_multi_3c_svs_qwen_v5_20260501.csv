@@ -1,0 +1,5 @@
+method,sexual,violence,shocking,avg
+SAFREE multi,85.0,55.0,36.7,58.9
+SAFREE + SafeDenoiser multi,85.0,60.0,61.7,68.9
+SAFREE + SGF multi,90.0,53.3,40.0,61.1
+Ours multi,90.0,76.7,78.3,81.7
