@@ -14,7 +14,6 @@ echo "# Adaptive both/hybrid violence sweep (I2P q16 top-60)" > "$SUMMARY"
 echo >> "$SUMMARY"
 echo "| Variant | sh | tau | txt | img | SR | Safe | Partial | Full | NR | path |" >> "$SUMMARY"
 echo "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|" >> "$SUMMARY"
-# Wait for manually launched sh20 4-way shard to finish before reusing 4/5/6/7.
 while pgrep -af "sh20_tau04_txt030_img010.*run_from_config.py|sh20_tau04_txt030_img010.*safegen.generate_family|run_sh20_txt030_img010_siml05_4567" >/dev/null; do
   echo "[$(date)] waiting for existing sh20 4-way shard to finish" | tee -a "$LOGDIR/worker_adaptive_4567.log"
   sleep 60
@@ -23,6 +22,7 @@ run_candidate(){
   local name=$1 sh=$2 tau=$3 txt=$4 img=$5
   local out=$OUTROOT/$name
   mkdir -p "$out"
+  rm -f "$out/results_qwen3_vl_violence_v5.txt" "$out/categories_qwen3_vl_violence_v5.json"
   for spec in "4 0 15" "5 15 30" "6 30 45" "7 45 60"; do
     set -- $spec; local gpu=$1 start=$2 end=$3
     local cfg=$CFGDIR/${name}_${start}_${end}.json
@@ -67,22 +67,19 @@ JSON
   echo "[$(date)] GEN_DONE $name n=$n" | tee -a "$LOGDIR/worker_adaptive_4567.log"
   CUDA_VISIBLE_DEVICES=4 "$PYVLM" "$V5" "$out" violence qwen > "$LOGDIR/${name}_eval.log" 2>&1
   cat "$out/results_qwen3_vl_violence_v5.txt" | tee -a "$LOGDIR/worker_adaptive_4567.log"
-  python3 - "$name" "$sh" "$tau" "$txt" "$img" "$out" "$SUMMARY" <<PY
+  python3 - "$name" "$sh" "$tau" "$txt" "$img" "$out" "$SUMMARY" <<'PY'
 import sys,re,pathlib
 name,sh,tau,txt,img,out,summary=sys.argv[1:]
-t=(pathlib.Path(out)/results_qwen3_vl_violence_v5.txt).read_text()
+t=(pathlib.Path(out)/'results_qwen3_vl_violence_v5.txt').read_text()
 def get(label):
     m=re.search(rf"- {label}: \d+ \(([0-9.]+)%\)",t); return float(m.group(1)) if m else -1
 m=re.search(r"SR \(Safe\+Partial\): \d+/\d+ \(([0-9.]+)%\)",t); sr=float(m.group(1)) if m else -1
-safe,partial,full,nr=get(Safe),get(Partial),get(Full),get(NotRelevant)
-with open(summary,a) as f:
+safe,partial,full,nr=get('Safe'),get('Partial'),get('Full'),get('NotRelevant')
+with open(summary,'a') as f:
     f.write(f"| {name} | {sh} | {tau} | {txt} | {img} | {sr:.1f} | {safe:.1f} | {partial:.1f} | {full:.1f} | {nr:.1f} | `{out}` |\n")
 print(f"PARSED {name}: SR={sr} Full={full} NR={nr}")
 PY
 }
-# Candidates chosen from current evidence:
-# best so far sh25/txt.15/img.10 has Full 0 but NR 16.7 -> reduce NR by slightly lower sh / txt changes.
-# sh20/txt.30/img.20 has Full 6.7 NR 13.3 -> try img.10 and mid sh.
 run_candidate sh23_tau04_txt015_img010 23 0.4 0.15 0.10
 run_candidate sh24_tau04_txt015_img010 24 0.4 0.15 0.10
 run_candidate sh23_tau04_txt020_img010 23 0.4 0.20 0.10
@@ -95,9 +92,14 @@ run_candidate sh24_tau04_txt030_img015 24 0.4 0.30 0.15
 run_candidate sh25_tau04_txt020_img015 25 0.4 0.20 0.15
 run_candidate sh25_tau038_txt020_img010 25 0.38 0.20 0.10
 run_candidate sh25_tau042_txt020_img010 25 0.42 0.20 0.10
-# Summarize sorted by SR then lower NR/Full.
-python3 - "$SUMMARY" <<PY | tee -a "$LOGDIR/worker_adaptive_4567.log"
-import sys,re,pathlib
+python3 - "$SUMMARY" <<'PY' | tee -a "$LOGDIR/worker_adaptive_4567.log"
+import sys,pathlib
 p=pathlib.Path(sys.argv[1]); rows=[]
 for line in p.read_text().splitlines():
-    if not line.startswith(
+    if line.startswith('| sh'):
+        parts=[x.strip() for x in line.strip('|').split('|')]
+        rows.append(parts)
+rows.sort(key=lambda r:(-float(r[5]), float(r[9]), float(r[8])))
+print('\nBEST_SORTED')
+for r in rows[:12]: print(r)
+PY
