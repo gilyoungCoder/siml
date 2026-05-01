@@ -46,3 +46,7 @@ MJA cross-backbone table is **SD3.0 and FLUX1.0 only**. Do not include SD1.4 Saf
 
 - Table 1 SLD-Weak/Medium/Strong/Max P4DN remains genuinely missing unless rerun.
 - COCO FID/CLIP remains pending and should not be treated as final.
+
+## I2P cross-backbone baseline full breakdowns
+
+The final handoff file now includes SR/Safe/Partial/Full/NR for SD3/FLUX1 × SAFREE/SafeDenoiser/SGF/Ours on I2P q16 top-60. These baseline rows are not TBD.

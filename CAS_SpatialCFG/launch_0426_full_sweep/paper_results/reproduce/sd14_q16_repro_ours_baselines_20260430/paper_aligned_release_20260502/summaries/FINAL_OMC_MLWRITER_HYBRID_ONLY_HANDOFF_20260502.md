@@ -222,3 +222,29 @@ MJA cross-backbone table is **SD3.0 and FLUX1.0 only**. Do not include SD1.4 Saf
 
 - Table 1 SLD-Weak/Medium/Strong/Max P4DN remains genuinely missing unless rerun.
 - COCO FID/CLIP remains pending and should not be treated as final.
+
+## I2P cross-backbone baseline full breakdowns
+
+Format in concept cells: `SR / Safe / Partial / Full / NR` (%). All rows are Qwen3-VL V5 on I2P q16 top-60, n=60 per concept.
+
+### SD3 I2P q16 top-60 baselines
+
+| Method | sexual | violence | self-harm | shocking | illegal | harassment | hate | Avg SR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| SAFREE | 93.3 / 73.3 / 20.0 / 5.0 / 1.7 | 41.7 / 31.7 / 10.0 / 58.3 / 0.0 | 38.3 / 8.3 / 30.0 / 30.0 / 31.7 | 36.7 / 25.0 / 11.7 / 63.3 / 0.0 | 41.7 / 30.0 / 11.7 / 30.0 / 28.3 | 35.0 / 26.7 / 8.3 / 31.7 / 33.3 | 48.3 / 43.3 / 5.0 / 43.3 / 8.3 | 47.9 |
+| SafeDenoiser | 91.7 / 68.3 / 23.3 / 3.3 / 5.0 | 41.7 / 31.7 / 10.0 / 58.3 / 0.0 | 35.0 / 11.7 / 23.3 / 33.3 / 31.7 | 31.7 / 20.0 / 11.7 / 68.3 / 0.0 | 40.0 / 33.3 / 6.7 / 30.0 / 30.0 | 30.0 / 20.0 / 10.0 / 38.3 / 31.7 | 48.3 / 35.0 / 13.3 / 46.7 / 5.0 | 45.5 |
+| SGF | 91.7 / 71.7 / 20.0 / 5.0 / 3.3 | 35.0 / 28.3 / 6.7 / 65.0 / 0.0 | 38.3 / 8.3 / 30.0 / 33.3 / 28.3 | 26.7 / 18.3 / 8.3 / 73.3 / 0.0 | 36.7 / 28.3 / 8.3 / 38.3 / 25.0 | 31.7 / 23.3 / 8.3 / 41.7 / 26.7 | 40.0 / 36.7 / 3.3 / 50.0 / 10.0 | 42.9 |
+| Ours hybrid image-backed | 93.3 / 86.7 / 6.7 / 5.0 / 1.7 | 76.7 / 70.0 / 6.7 / 23.3 / 0.0 | 46.7 / 43.3 / 3.3 / 5.0 / 48.3 | 85.0 / 75.0 / 10.0 / 10.0 / 5.0 | 56.7 / 51.7 / 5.0 / 10.0 / 33.3 | 40.0 / 31.7 / 8.3 / 23.3 / 36.7 | 56.7 / 51.7 / 5.0 / 18.3 / 25.0 | 65.0 |
+
+### FLUX1 I2P q16 top-60 baselines
+
+| Method | sexual | violence | self-harm | shocking | illegal | harassment | hate | Avg SR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| SAFREE | 95.0 / 56.7 / 38.3 / 3.3 / 1.7 | 56.7 / 36.7 / 20.0 / 36.7 / 6.7 | 51.7 / 13.3 / 38.3 / 31.7 / 16.7 | 33.3 / 25.0 / 8.3 / 66.7 / 0.0 | 43.3 / 28.3 / 15.0 / 20.0 / 36.7 | 38.3 / 21.7 / 16.7 / 28.3 / 33.3 | 45.0 / 40.0 / 5.0 / 41.7 / 13.3 | 51.9 |
+| SafeDenoiser | 91.7 / 58.3 / 33.3 / 6.7 / 1.7 | 45.0 / 25.0 / 20.0 / 53.3 / 1.7 | 46.7 / 15.0 / 31.7 / 35.0 / 18.3 | 35.0 / 18.3 / 16.7 / 65.0 / 0.0 | 45.0 / 23.3 / 21.7 / 18.3 / 36.7 | 36.7 / 20.0 / 16.7 / 35.0 / 28.3 | 48.3 / 36.7 / 11.7 / 43.3 / 8.3 | 49.8 |
+| SGF | 93.3 / 60.0 / 33.3 / 3.3 / 3.3 | 46.7 / 25.0 / 21.7 / 51.7 / 1.7 | 51.7 / 10.0 / 41.7 / 28.3 / 20.0 | 31.7 / 23.3 / 8.3 / 68.3 / 0.0 | 48.3 / 26.7 / 21.7 / 18.3 / 33.3 | 35.0 / 20.0 / 15.0 / 38.3 / 26.7 | 46.7 / 36.7 / 10.0 / 46.7 / 6.7 | 50.5 |
+| Ours hybrid image-backed | 100.0 / 98.3 / 1.7 / 0.0 / 0.0 | 86.7 / 61.7 / 25.0 / 13.3 / 0.0 | 65.0 / 23.3 / 41.7 / 10.0 / 25.0 | 100.0 / 96.7 / 3.3 / 0.0 / 0.0 | 60.0 / 43.3 / 16.7 / 11.7 / 28.3 | 68.3 / 45.0 / 23.3 / 16.7 / 15.0 | 83.3 / 76.7 / 6.7 / 13.3 / 3.3 | 80.5 |
+
+Result roots:
+- Baselines: `paper_aligned_release_20260502/outputs/crossbackbone_0501/{sd3,flux1}/{safree,safedenoiser,sgf}/i2p_q16/{concept}/all/results_qwen3_vl_*_v5.txt`
+- Ours image-backed: see `summaries/CROSSBACKBONE_OURS_I2P_IMAGE_BACKED_BREAKDOWN_20260501.md` and `manifests/i2p_crossbackbone_ours_image_backed_manifest.json`.
