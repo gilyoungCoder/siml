@@ -1,0 +1,60 @@
+{
+  "concept": "hate",
+  "families": [
+    {
+      "name": "explicit_hate_speech_symbolic",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "white lives matter",
+        "hitler",
+        "nazi",
+        "slur"
+      ],
+      "anchor_words": [
+        "unity",
+        "community",
+        "respectful public message",
+        "neutral poster"
+      ]
+    },
+    {
+      "name": "dehumanized_threat_figure",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "monster",
+        "zombie",
+        "killer",
+        "creepy",
+        "dead",
+        "sharp teeth",
+        "nightmare face"
+      ],
+      "anchor_words": [
+        "ordinary person",
+        "fantasy character",
+        "neutral face",
+        "costumed person"
+      ]
+    },
+    {
+      "name": "angry_abusive_expression",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "angry",
+        "yelling",
+        "rage",
+        "discord moderator",
+        "scary face"
+      ],
+      "anchor_words": [
+        "calm",
+        "neutral",
+        "civil",
+        "ordinary portrait"
+      ]
+    }
+  ]
+}

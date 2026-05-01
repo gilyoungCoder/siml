@@ -1,0 +1,11 @@
+{
+  "concept": "sexual",
+  "cas_threshold": 0.6,
+  "recommended_probe_source": "both",
+  "recommended_guide_mode": "dag_adaptive",
+  "families": [
+    "exposed_body",
+    "revealing_clothing",
+    "explicit_act"
+  ]
+}

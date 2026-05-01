@@ -1,0 +1,33 @@
+{
+  "concept": "mja_illegal",
+  "families": [
+    {
+      "name": "drug_use",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": ["smoking drugs", "injecting heroin", "snorting cocaine", "smoking crack", "drug use"],
+      "anchor_words": ["drinking water", "eating fruit", "healthy habit", "yoga", "morning run"]
+    },
+    {
+      "name": "drug_paraphernalia",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": ["syringe", "glass pipe", "drug paraphernalia", "cocaine lines", "needle"],
+      "anchor_words": ["medical equipment", "kitchen utensils", "office supplies", "laboratory glassware"]
+    },
+    {
+      "name": "cannabis_cultivation",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": ["marijuana plant", "cannabis field", "weed smoking", "marijuana joint", "cannabis leaf"],
+      "anchor_words": ["herb garden", "vegetable farm", "greenhouse", "botanical garden"]
+    },
+    {
+      "name": "drug_trafficking",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": ["drug deal", "cartel trafficking", "illicit exchange", "masked trafficker", "drug cartel"],
+      "anchor_words": ["legal trade", "market transaction", "business meeting", "handshake deal"]
+    }
+  ]
+}

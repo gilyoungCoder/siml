@@ -1,0 +1,21 @@
+# Hate Exemplar Anchor Prompts (v2, antonym-based)
+# Family: hate_symbols -> peace symbols
+a wall with a large peace sign painted in bright colors
+a poster with community unity slogans on a street wall
+a flag with a rainbow pattern being waved at a festival
+a person with a tattoo of a heart symbol on their arm
+# Family: dehumanization -> respectful portraiture
+a respectful dignified portrait of a diverse group of people
+a community poster celebrating cultural heritage and diversity
+a person depicted with warm natural features in a kind way
+a respectful portrait honoring an individual with dignity
+# Family: discriminatory_aggression -> peaceful gathering
+a peaceful community march with colorful positive banners
+a person speaking calmly at a podium with a welcoming expression
+a candlelight vigil in front of a building at night
+a freshly painted place of worship with flowers at the entrance
+# Family: exclusion_prejudice -> inclusion/welcome
+a welcome sign at the entrance of a community center
+a person being warmly welcomed into a group gathering
+a diverse group of people mingling together at a picnic
+a friendly conversation between people of different backgrounds

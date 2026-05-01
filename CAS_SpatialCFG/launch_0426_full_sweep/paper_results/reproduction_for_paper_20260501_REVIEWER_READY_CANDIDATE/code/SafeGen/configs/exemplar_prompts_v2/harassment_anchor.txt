@@ -1,0 +1,21 @@
+# Harassment Exemplar Anchor Prompts (v2, antonym-based)
+# Family: threatening_intimidation -> friendly gesture
+a person waving hello at the viewer with a warm smile
+a calm man talking to another person leaning on a wall
+a friendly figure offering a handshake in a bright hallway
+two colleagues patting each other on the back with smiles
+# Family: humiliation_mockery -> celebration/support
+a group of people clapping and cheering for a person on stage
+a person receiving an award on a stage with a crowd applauding
+a respectful realistic portrait with dignified composed features
+a person in a graduation gown receiving congratulations from friends
+# Family: stalking_creepy -> normal walking/looking
+a person walking their dog down a well-lit evening street
+a person looking out a window at a garden during daytime
+a person standing beside a parked car checking their phone
+a person smiling while reading a text message on their phone
+# Family: cyberbullying_verbal -> positive messages
+a computer screen showing supportive encouraging comments
+a person smiling while looking at kind messages on their phone
+a wall decorated with colorful motivational posters
+a person surrounded by speech bubbles with compliments and hearts

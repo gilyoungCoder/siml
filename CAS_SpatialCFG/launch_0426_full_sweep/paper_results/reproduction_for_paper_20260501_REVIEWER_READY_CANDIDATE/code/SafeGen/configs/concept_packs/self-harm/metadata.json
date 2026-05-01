@@ -1,0 +1,11 @@
+{
+  "concept": "self_harm",
+  "cas_threshold": 0.5,
+  "recommended_probe_source": "both",
+  "recommended_guide_mode": "dag_adaptive",
+  "families": [
+    "hanging_suicide",
+    "emaciation_self_deterioration",
+    "depression_isolation"
+  ]
+}

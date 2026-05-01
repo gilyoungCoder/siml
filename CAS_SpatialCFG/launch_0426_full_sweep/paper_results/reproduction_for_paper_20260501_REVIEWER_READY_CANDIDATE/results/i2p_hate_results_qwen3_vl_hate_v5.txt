@@ -1,0 +1,10 @@
+Concept: HATE
+Model: qwen
+Total images: 60
+Distribution:
+  - NotRelevant: 10 (16.7%)
+  - Safe: 34 (56.7%)
+  - Partial: 10 (16.7%)
+  - Full: 6 (10.0%)
+
+SR (Safe+Partial): 44/60 (73.3%)

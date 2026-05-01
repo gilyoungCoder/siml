@@ -1,0 +1,22 @@
+# Core
+torch>=2.0.0
+torchvision>=0.15.0
+diffusers>=0.25.0
+transformers>=4.36.0
+accelerate>=0.25.0
+
+# CLIP
+clip @ git+https://github.com/openai/CLIP.git
+
+# Image processing
+Pillow>=9.0.0
+numpy>=1.24.0
+
+# Evaluation
+onnxruntime-gpu>=1.16.0
+pytorch-fid>=0.3.0
+torchmetrics>=1.0.0
+
+# Utilities
+tqdm>=4.64.0
+scipy>=1.10.0

@@ -1,0 +1,89 @@
+{
+  "dataset": "I2P q16 top-60, 60 prompts/concept, seed 42, SD v1.4 DDIM 50 CFG 7.5 512",
+  "best_configs": [
+    {
+      "concept": "sexual",
+      "baseline": "68.3",
+      "safree": "83.3",
+      "safedenoiser": "91.7",
+      "sgf": "95.0",
+      "ours": "90.0",
+      "ours_best": "98.3",
+      "ours_best_variant": "hybrid_best_tau05_cas0.5",
+      "winner": "ours_best",
+      "best_sr": "98.3"
+    },
+    {
+      "concept": "violence",
+      "baseline": "36.7",
+      "safree": "73.3",
+      "safedenoiser": "43.3",
+      "sgf": "41.7",
+      "ours": "75.0",
+      "ours_best": "81.7",
+      "ours_best_variant": "hybrid_best_img075_img0.225",
+      "winner": "ours_best",
+      "best_sr": "81.7"
+    },
+    {
+      "concept": "self-harm",
+      "baseline": "43.3",
+      "safree": "36.7",
+      "safedenoiser": "41.7",
+      "sgf": "35.0",
+      "ours": "50.0",
+      "ours_best": "51.7",
+      "ours_best_variant": "hybrid_best_tau05_cas0.5",
+      "winner": "ours_best",
+      "best_sr": "51.7"
+    },
+    {
+      "concept": "shocking",
+      "baseline": "15.0",
+      "safree": "81.7",
+      "safedenoiser": "20.0",
+      "sgf": "16.7",
+      "ours": "85.0",
+      "ours_best": "93.3",
+      "ours_best_variant": "hybrid_best_ss125_ss27.5",
+      "winner": "ours_best",
+      "best_sr": "93.3"
+    },
+    {
+      "concept": "illegal_activity",
+      "baseline": "31.7",
+      "safree": "35.0",
+      "safedenoiser": "41.7",
+      "sgf": "25.0",
+      "ours": "41.7",
+      "ours_best": "46.7",
+      "ours_best_variant": "hybrid_best_ss125_ss25.0",
+      "winner": "ours_best",
+      "best_sr": "46.7"
+    },
+    {
+      "concept": "harassment",
+      "baseline": "25.0",
+      "safree": "28.3",
+      "safedenoiser": "25.0",
+      "sgf": "28.3",
+      "ours": "46.7",
+      "ours_best": "68.3",
+      "ours_best_variant": "hybrid_best_ss125_ss31.25",
+      "winner": "ours_best",
+      "best_sr": "68.3"
+    },
+    {
+      "concept": "hate",
+      "baseline": "25.0",
+      "safree": "43.3",
+      "safedenoiser": "28.3",
+      "sgf": "25.0",
+      "ours": "70.0",
+      "ours_best": "73.3",
+      "ours_best_variant": "hybrid_best_img075_img0.0375",
+      "winner": "ours_best",
+      "best_sr": "73.3"
+    }
+  ]
+}

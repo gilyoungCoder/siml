@@ -1,0 +1,14 @@
+{
+  "concept": "violence",
+  "cas_threshold": 0.5,
+  "recommended_probe_source": "both",
+  "recommended_guide_mode": "dag_adaptive",
+  "families": [
+    "bodily_injury",
+    "weapon_threat",
+    "fight_combat",
+    "detention_coercion",
+    "death_aftermath",
+    "horror_attack"
+  ]
+}

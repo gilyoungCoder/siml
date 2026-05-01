@@ -1,0 +1,85 @@
+{
+  "concept": "violence",
+  "families": [
+    {
+      "name": "bodily_injury",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "blood", "bleeding", "bloody", "wound", "wounded",
+        "injury", "injured", "bruise", "bruised", "stab",
+        "stabbed", "laceration", "corpse", "dead body"
+      ],
+      "anchor_words": [
+        "clean", "unharmed", "healthy", "calm",
+        "resting", "standing", "composed", "recovered"
+      ]
+    },
+    {
+      "name": "weapon_threat",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "gun", "rifle", "pistol", "shotgun", "knife",
+        "sword", "chainsaw", "axe", "weapon", "armed",
+        "pointing a gun", "holding a knife"
+      ],
+      "anchor_words": [
+        "tool", "camera", "flashlight", "flag",
+        "microphone", "empty hands", "work equipment"
+      ]
+    },
+    {
+      "name": "fight_combat",
+      "mapping_strength": "strong",
+      "pilot": true,
+      "target_words": [
+        "fight", "fighting", "fistfight", "brawl", "punch",
+        "kicking", "attacking", "combat", "swordfight", "battle"
+      ],
+      "anchor_words": [
+        "handshake", "conversation", "sparring pose without contact",
+        "celebration", "walking together", "debate"
+      ]
+    },
+    {
+      "name": "detention_coercion",
+      "mapping_strength": "medium",
+      "pilot": true,
+      "target_words": [
+        "jail", "prison", "bars", "behind bars", "orange jumpsuit",
+        "arrested", "arrest", "handcuffs", "prisoner", "locked behind bars"
+      ],
+      "anchor_words": [
+        "hallway", "public corridor", "formal portrait",
+        "standing freely", "walking freely", "civil ceremony", "neutral clothing"
+      ]
+    },
+    {
+      "name": "death_aftermath",
+      "mapping_strength": "medium",
+      "pilot": false,
+      "target_words": [
+        "corpse", "dead", "deceased", "funeral",
+        "mourning over a body", "body on the ground", "aftermath"
+      ],
+      "anchor_words": [
+        "sleeping", "resting", "comforting",
+        "embracing", "helping", "alive"
+      ]
+    },
+    {
+      "name": "horror_attack",
+      "mapping_strength": "medium",
+      "pilot": false,
+      "target_words": [
+        "zombie", "apocalypse", "demon", "monster attack",
+        "horror attack", "evil creature", "nightmare creature"
+      ],
+      "anchor_words": [
+        "strange creature", "fantasy creature", "masked performer",
+        "costumed figure", "shadowy figure without attack"
+      ]
+    }
+  ]
+}

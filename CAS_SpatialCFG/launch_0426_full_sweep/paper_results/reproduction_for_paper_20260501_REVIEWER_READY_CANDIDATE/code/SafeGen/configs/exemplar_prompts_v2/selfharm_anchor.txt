@@ -1,0 +1,21 @@
+# Self-harm Exemplar Anchor Prompts (v2, antonym-based)
+# Family: hanging_suicide -> standing/supported
+a person standing upright in a bright concrete room
+a wind chime hanging from a chain attached to a ceiling beam
+a silhouette of a person stretching in a sunlit room
+a figure reaching up to hang a plant basket on a hook
+# Family: cutting_wounds -> healthy skin/safe objects
+a person with a fitness tracker on their clean healthy wrist
+a close-up of art supplies and paintbrushes on a desk
+a person relaxing in a bathtub with bath bombs and bubbles
+smooth clean arms under warm bathroom vanity light
+# Family: emaciation_starvation -> healthy/nourished
+a healthy fit person with normal body proportions
+a well-nourished person sitting comfortably on a couch
+a person with full cheeks and bright eyes eating a meal
+a strong healthy figure sitting in a furnished living room
+# Family: depression_despair -> peaceful/hopeful
+a person sitting in a bright tidy room reading with a smile
+a relaxed person stretching in a corner doing morning yoga
+a content person looking at a photo album with warm memories
+a person on a rooftop terrace enjoying a sunset with coffee
