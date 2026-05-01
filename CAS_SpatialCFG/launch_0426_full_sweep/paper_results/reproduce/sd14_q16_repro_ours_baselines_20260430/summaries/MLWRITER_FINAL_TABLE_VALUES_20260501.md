@@ -1,5 +1,7 @@
 # MLWriter / OMC final table values for paper update
 
+> **Writer instruction:** This is the current final handoff. Do not use archived/deprecated summaries or any SAFREE multi numbers from `phase_safree_v2`; final SAFREE multi values come from `phase_safree_multi_q16top60`.
+
 Date: 2026-05-01  
 Metric: **Qwen3-VL v5 SR = Safe + Partial (%)** unless otherwise noted.  
 Primary prompt split for I2P: **q16 top-60 per concept**, 1 image / prompt, seed 42.
