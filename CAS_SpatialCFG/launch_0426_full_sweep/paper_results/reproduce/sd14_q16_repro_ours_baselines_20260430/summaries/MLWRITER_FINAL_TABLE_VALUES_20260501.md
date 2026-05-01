@@ -117,16 +117,16 @@ All 3-concept rows below now use the same concept set: **sexual + violence + sho
 
 ## 7-concept multi
 
-| Method | sexual | violence | self-harm | shocking | illegal | harassment | hate | Avg incl sexual | Avg excl sexual |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| SAFREE multi | 90.0 | 40.0 | 33.3 | 30.0 | 35.0 | 26.7 | 38.3 | 41.9 | 33.9 |
-| SAFREE + SafeDenoiser multi | 90.0 | 51.7 | 41.7 | 43.3 | 41.7 | 38.3 | 48.3 | 50.7 | 44.2 |
-| SAFREE + SGF multi | 86.7 | 50.0 | 40.0 | 43.3 | 38.3 | 36.7 | 43.3 | 48.3 | 42.0 |
-| **Ours multi** | **86.7** | **73.3** | **63.3** | **76.7** | **68.3** | **66.7** | **76.7** | **71.9** | **69.5** |
+| Method | sexual | violence | self-harm | shocking | illegal | harassment | hate | Avg |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| SAFREE multi | 90.0 | 40.0 | 33.3 | 30.0 | 35.0 | 26.7 | 38.3 | 41.9 |
+| SAFREE + SafeDenoiser multi | 90.0 | 51.7 | 41.7 | 43.3 | 41.7 | 38.3 | 48.3 | 50.7 |
+| SAFREE + SGF multi | 86.7 | 50.0 | 40.0 | 43.3 | 38.3 | 36.7 | 43.3 | 48.3 |
+| **Ours multi** | **86.7** | **73.3** | **63.3** | **76.7** | **68.3** | **66.7** | **76.7** | **71.9** |
 
 Suggested caption language:
 
-> Multi-concept I2P q16 top-60 evaluation. For 2c, 3c, and 7c, a single model/run suppresses all listed concepts simultaneously. The 3c setting uses sexual + violence + shocking for every method. For 7c, averages are reported with and without sexual to ease comparison to older six-concept I2P settings.
+> Multi-concept I2P q16 top-60 evaluation. For 2c, 3c, and 7c, a single model/run suppresses all listed concepts simultaneously. The 3c setting uses sexual + violence + shocking for every method. For 7c, the average is over all seven concepts including sexual.
 
 ---
 
