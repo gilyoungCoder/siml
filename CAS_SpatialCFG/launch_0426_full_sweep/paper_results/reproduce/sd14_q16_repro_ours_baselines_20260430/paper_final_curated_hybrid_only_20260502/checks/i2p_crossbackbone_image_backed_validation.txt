@@ -1,0 +1,1 @@
+OK: all image-backed I2P cross-backbone Ours rows have 60 PNGs, args.json, V5 result, q16_top60 prompt, how_mode=hybrid, probe_mode=both.
