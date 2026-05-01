@@ -33,9 +33,9 @@ Metric: Qwen3-VL v5 SR = Safe + Partial (%).
 
 | Method | sexual | violence | self-harm | shocking | illegal_activity | harassment | hate | Avg completed | Completed |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| SAFREE | 95.0 | 56.7 | 51.7 | 33.3 | pending | pending | pending | 59.2 | 4/7 |
-| SafeDenoiser | pending | pending | pending | pending | pending | pending | pending | pending | 0/7 |
-| SGF | pending | pending | pending | pending | pending | pending | pending | pending | 0/7 |
+| SAFREE | 95.0 | 56.7 | 51.7 | 33.3 | 43.3 | 38.3 | 45.0 | 51.9 | 7/7 |
+| SafeDenoiser | 91.7 | 45.0 | 46.7 | 35.0 | 45.0 | 36.7 | 48.3 | 49.8 | 7/7 |
+| SGF | 93.3 | 46.7 | 51.7 | 31.7 | 48.3 | 35.0 | 46.7 | 50.5 | 7/7 |
 
 ## SD3 baseline/official methods
 
