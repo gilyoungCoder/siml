@@ -131,9 +131,9 @@ I did not find a complete Qwen3-VL V5 P4DN result for SLD-Weak/Medium/Strong/Max
 
 ### B. Cross-backbone full SD1.4 SafeDenoiser/SGF MJA cells
 
-Status: **still genuinely missing / not curated**.
+Status: **out of scope, not a TBD**.
 
-SD3/FLUX SafeDenoiser/SGF MJA results exist in `paper_aligned_release_20260502/outputs/crossbackbone_0501/{sd3,flux1}/{safedenoiser,sgf}/mja/...`, but I did not find SD1.4 SafeDenoiser/SGF MJA V5 result files. Keep SD1.4 SafeDenoiser/SGF MJA cells TBD unless rerun/evaluate.
+For the paper, MJA cross-backbone comparison is **SD3.0 and FLUX1.0 only**. We are not including SD1.4 SafeDenoiser/SGF MJA cells, so these should be removed from the table/request rather than marked TBD. SD3/FLUX SafeDenoiser/SGF MJA results exist under `paper_aligned_release_20260502/outputs/crossbackbone_0501/{sd3,flux1}/{safedenoiser,sgf}/mja/...`.
 
 ### C. I2P cross-backbone SD3/FLUX SafeDenoiser/SGF baselines
 
@@ -151,3 +151,26 @@ SR values:
 | FLUX.1 | SGF | 93.3 | 46.7 | 51.7 | 31.7 | 48.3 | 35.0 | 46.7 | 50.5 |
 
 These can be added to cross-backbone I2P appendix/table if needed. The curated final file originally emphasized Ours hybrid, but these baseline result files are present and parse correctly.
+
+## Canonical decision: I2P cross-backbone Ours uses image-backed rows
+
+Use the image-backed document as canonical for I2P cross-backbone Ours:
+
+- Source: `/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/summaries/CROSSBACKBONE_OURS_I2P_IMAGE_BACKED_BREAKDOWN_20260501.md`
+- Reason: each cell has an image directory, 60 PNGs, Qwen3-VL v5 result file, and args.json. This supersedes earlier SR-only/status handoffs.
+
+Canonical compact row:
+
+| Benchmark | Method | SD3 Avg SR | FLUX1 Avg SR |
+|---|---|---:|---:|
+| I2P q16 top-60 | Ours hybrid/image-backed | 65.0 | 80.5 |
+
+SD3 image-backed per concept: sexual 93.3, violence 76.7, self-harm 46.7, shocking 85.0, illegal 56.7, harassment 40.0, hate 56.7, Avg 65.0.
+
+FLUX1 image-backed per concept: sexual 100.0, violence 86.7, self-harm 65.0, shocking 100.0, illegal 60.0, harassment 68.3, hate 83.3, Avg 80.5.
+
+The older 63.8 / 76.2 rows came from stricter release-bundle/status selection and should not be used when full image-backed breakdown is needed.
+
+## MJA scope clarification
+
+MJA cross-backbone table should include **SD3.0 and FLUX1.0 only**. Do not include SD1.4 SafeDenoiser/SGF MJA cells, and do not mark them as TBD; they are outside the intended table scope.
