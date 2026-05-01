@@ -114,7 +114,7 @@ LABELS = {"baseline": "Baseline", "safree": "SAFREE", "safedenoiser": "SafeDenoi
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 4.4))
 metric_titles = ["SR (Safe + Partial) %  ↑", "Full violation %  ↓", "NotRelevant %  ↓"]
-ylims = [(20, 80), (0, 60), (0, 50)]
+ylims = [(0, 80), (0, 60), (0, 100)]
 
 for j, (title, ylim) in enumerate(zip(metric_titles, ylims)):
     ax = axes[j]
@@ -129,40 +129,13 @@ for j, (title, ylim) in enumerate(zip(metric_titles, ylims)):
         ax.plot(xs, ys, label=LABELS[m], **STYLE[m])
     ax.set_xlabel("per-image generation time (s)")
     ax.set_ylabel(title)
-    ax.set_xscale("log")
-    ax.set_xlim(0.3, 18)
+    ax.set_xlim(0, 15)
     ax.set_ylim(ylim)
     ax.grid(which="both", alpha=0.25, linestyle="-", linewidth=0.5)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     if j == 0:
         ax.legend(loc="lower right", framealpha=0.95, edgecolor="0.7")
-
-# Annotate the SR panel with two callouts
-ax_sr = axes[0]
-# (a) EBSG @ NFE=10 vs SAFREE @ NFE=50
-t_ebsg10, sr_ebsg10 = timing[("ebsg", 10)], agg[("ebsg", 10)][0]
-t_safree50, sr_safree50 = timing[("safree", 50)], agg[("safree", 50)][0]
-ax_sr.annotate("",
-               xy=(t_safree50, sr_safree50), xytext=(t_ebsg10, sr_ebsg10),
-               arrowprops=dict(arrowstyle="-|>", color="0.3", lw=1.0,
-                               connectionstyle="arc3,rad=-0.3"))
-ax_sr.text(t_ebsg10 * 1.15, sr_ebsg10 + 4,
-           "EBSG @ NFE=10\n3.2× faster\n+5.9pp safer than\nSAFREE @ NFE=50",
-           fontsize=8.5, color="0.15",
-           bbox=dict(facecolor="white", edgecolor="0.7", boxstyle="round,pad=0.3"))
-
-# (b) EBSG @ NFE=5 vs Baseline @ NFE=50
-t_ebsg5, sr_ebsg5 = timing[("ebsg", 5)], agg[("ebsg", 5)][0]
-t_b50, sr_b50 = timing[("baseline", 50)], agg[("baseline", 50)][0]
-ax_sr.annotate("",
-               xy=(t_b50, sr_b50), xytext=(t_ebsg5, sr_ebsg5),
-               arrowprops=dict(arrowstyle="-|>", color="0.3", lw=1.0,
-                               connectionstyle="arc3,rad=0.3"))
-ax_sr.text(t_ebsg5 * 0.42, sr_ebsg5 - 14,
-           "EBSG @ NFE=5\n1.8× faster\n+16.7pp safer than\nBaseline @ NFE=50",
-           fontsize=8.5, color="0.15",
-           bbox=dict(facecolor="white", edgecolor="0.7", boxstyle="round,pad=0.3"))
 
 fig.suptitle(
     "Wall-clock vs metric trade-off (concept-averaged across 7 I2P concepts; markers = NFE ∈ {5,10,15,20,25,30,40,50}).",
