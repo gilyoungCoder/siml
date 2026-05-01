@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 REPRO_ROOT=${REPRO_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}
-PY=${PY_VLM:-/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10}
-VLM=${VLM_SCRIPT:-/mnt/home3/yhgil99/unlearning/vlm/opensource_vlm_i2p_all_v5.py}
+PY=${PY_VLM:?Set PY_VLM=/path/to/vlm/python}
+VLM=${VLM_SCRIPT:?Set VLM_SCRIPT=/path/to/opensource_vlm_i2p_all_v5.py}
 GPU=${GPU:-0}
 run_eval(){ local dir=$1 concept=$2; [ -d "$dir" ] || { echo "[MISS] $dir"; return 0; }; CUDA_VISIBLE_DEVICES=$GPU "$PY" "$VLM" "$dir" "$concept" qwen; }
 run_eval "$REPRO_ROOT/outputs/ours_best/i2p_q16/sexual/hybrid_best_tau05_cas0.5" nudity

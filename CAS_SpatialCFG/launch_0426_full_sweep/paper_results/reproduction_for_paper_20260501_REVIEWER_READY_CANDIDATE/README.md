@@ -1,7 +1,7 @@
 # Paper reproduction bundle (EBSG / Ours best)
 
 Created: 2026-05-01
-Source experiment root: `/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430`
+Source experiment root: internal cluster path removed; this bundle contains copied prompts/configs/exemplar packs/results needed for reproduction.
 
 This folder is a compact, GitHub-style reproduction bundle for the paper tables. It contains:
 
@@ -20,15 +20,15 @@ This folder is a compact, GitHub-style reproduction bundle for the paper tables.
 The cluster run used:
 
 ```bash
-export PY_SAFGEN=/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10
-export PY_VLM=/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10
-export VLM_SCRIPT=/mnt/home3/yhgil99/unlearning/vlm/opensource_vlm_i2p_all_v5.py
+export PY_SAFGEN=/path/to/python
+export PY_VLM=/path/to/vlm/python
+export VLM_SCRIPT=/path/to/opensource_vlm_i2p_all_v5.py
 ```
 
 ## Run SD v1.4 I2P q16 top-60 Ours best
 
 ```bash
-cd /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduction_for_paper_20260501
+cd reproduction_for_paper_20260501_REVIEWER_READY_CANDIDATE
 GPU=0 bash scripts/run_i2p_best_all.sh
 GPU=0 bash scripts/eval_v5_outputs.sh
 ```
@@ -36,14 +36,14 @@ GPU=0 bash scripts/eval_v5_outputs.sh
 ## Run nudity benchmarks
 
 ```bash
-cd /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduction_for_paper_20260501
+cd reproduction_for_paper_20260501_REVIEWER_READY_CANDIDATE
 GPU=0 bash scripts/run_nudity_all.sh
 ```
 
 ## Verify config/family wiring
 
 ```bash
-cd /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduction_for_paper_20260501
+cd reproduction_for_paper_20260501_REVIEWER_READY_CANDIDATE
 python scripts/verify_configs.py
 ```
 

@@ -20,7 +20,9 @@ def main():
     repro=Path(os.environ.get('REPRO_ROOT', Path(__file__).resolve().parents[1]))
     os.environ.setdefault('REPRO_ROOT', str(repro))
     os.environ.setdefault('OUT_ROOT', str(repro))
-    py=os.environ.get('PY_SAFGEN','/mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10')
+    py=os.environ.get('PY_SAFGEN')
+    if not py:
+        raise SystemExit('Set PY_SAFGEN=/path/to/python with package dependencies installed')
     cfg=expand(json.loads(Path(args.config).read_text()))
     out=Path(cfg['outdir']); expected=int(cfg.get('expected_images', 0))
     if not args.force and expected and png_count(out) >= expected:
