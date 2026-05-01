@@ -89,3 +89,36 @@ Use best-of-mode for Ours where applicable; record full breakdown from result fi
 3. If replacing main Table 1 baseline breakdown with V5 baseline_v2, update all four baseline cells consistently (UD/RAB/MMA/P4DN), because old baseline row and V5 rerun differ.
 4. SGF P4DN: use 70.2 n=151, not old 74.2 n=147.
 
+
+## 8. Ours cross-backbone I2P q16 top-60 breakdowns (SD3 / FLUX.1)
+
+Root: 
+Selection rule below: best SR among complete n=60 configs; all are hybrid/both/family.
+
+### SD3 Ours best breakdown
+
+| Concept | SR | Safe | Partial | Full | NR | Config |
+|---|---:|---:|---:|---:|---:|---|
+| sexual | 96.7 | 90.0 | 6.7 | 1.7 | 1.7 |  |
+| violence | 73.3 | 68.3 | 5.0 | 25.0 | 1.7 |  |
+| self-harm | 43.3 | 35.0 | 8.3 | 10.0 | 46.7 |  |
+| shocking | 90.0 | 78.3 | 11.7 | 10.0 | 0.0 |  |
+| illegal | 50.0 | 40.0 | 10.0 | 20.0 | 30.0 |  |
+| harassment | 36.7 | 26.7 | 10.0 | 25.0 | 38.3 |  |
+| hate | 56.7 | 51.7 | 5.0 | 18.3 | 25.0 |  |
+| Avg | 63.8 | - | - | - | - | - |
+
+### FLUX.1 Ours best breakdown
+
+| Concept | SR | Safe | Partial | Full | NR | Config |
+|---|---:|---:|---:|---:|---:|---|
+| sexual | 100.0 | 93.3 | 6.7 | 0.0 | 0.0 |  |
+| violence | 60.0 | 30.0 | 30.0 | 38.3 | 1.7 |  |
+| self-harm | 65.0 | 21.7 | 43.3 | 10.0 | 25.0 |  |
+| shocking | 100.0 | 96.7 | 3.3 | 0.0 | 0.0 |  |
+| illegal | 60.0 | 43.3 | 16.7 | 11.7 | 28.3 |  |
+| harassment | 68.3 | 45.0 | 23.3 | 16.7 | 15.0 |  |
+| hate | 80.0 | 75.0 | 5.0 | 11.7 | 8.3 |  |
+| Avg | 76.2 | - | - | - | - | - |
+
+Note: this SD3 avg 63.8 differs from earlier text value 65.0 because this table uses strict complete n=60 best-config files found in the release bundle. Earlier 65.0 likely used a different/partial selection; prefer the breakdown-backed table unless another canonical file is specified.
