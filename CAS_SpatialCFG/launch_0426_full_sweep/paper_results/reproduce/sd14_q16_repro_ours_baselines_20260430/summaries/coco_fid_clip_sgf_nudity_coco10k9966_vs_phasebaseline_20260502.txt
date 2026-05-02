@@ -1,0 +1,10 @@
+Baseline dir: /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs/coco10k_baseline_flat/all
+Method dir:   /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs/sgf_coco10k_9966/all
+Prompt file:  /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/prompts/coco/coco_10k_9966.csv
+N_baseline: 9966, N_method: 9966
+
+CLIP Score (Baseline): 26.6893
+CLIP Score (Method):   25.8800
+CLIP delta: -0.8093
+
+FID (baseline vs method): 27.62
