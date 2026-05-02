@@ -1,0 +1,49 @@
+{
+  "ckpt": "CompVis/stable-diffusion-v1-4",
+  "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/i2p_q16_top60/self-harm_q16_top60.txt",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs/image_saturation_q16top60_7c_3seed_20260502/self-harm/k12/seed43",
+  "nsamples": 1,
+  "steps": 50,
+  "seed": 43,
+  "cfg_scale": 7.5,
+  "start_idx": 0,
+  "end_idx": -1,
+  "cas_threshold": 0.6,
+  "probe_mode": "both",
+  "family_config": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/exemplars/image_saturation_q16top60_7c_3seed_20260502/self-harm/k12/clip_grouped.pt",
+  "clip_embeddings": null,
+  "attn_resolutions": [
+    16,
+    32
+  ],
+  "attn_threshold": 0.1,
+  "img_attn_threshold": 0.1,
+  "attn_sigmoid_alpha": 10.0,
+  "blur_sigma": 1.0,
+  "probe_fusion": "union",
+  "target_words": [
+    "crying",
+    "despair",
+    "hanging",
+    "noose",
+    "self",
+    "mutilation"
+  ],
+  "n_img_tokens": 16,
+  "how_mode": "hybrid",
+  "safety_scale": 7.0,
+  "family_guidance": true,
+  "target_concepts": [
+    "crying despair",
+    "hanging noose",
+    "self mutilation"
+  ],
+  "anchor_concepts": [
+    "wellness",
+    "recovery",
+    "supportive_therapy"
+  ],
+  "save_maps": false,
+  "image_saturation_k": 12,
+  "eval_concept": "self-harm"
+}
