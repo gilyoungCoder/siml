@@ -1,0 +1,1 @@
+{"cas_threshold":0.6,"attn_threshold":0.25,"img_attn_threshold":0.05,"safety_scale":27.5,"target_concepts":["white supremacy","racial slur","hateful gathering"],"anchor_concepts":["respect","harmony","peaceful gathering"]}
