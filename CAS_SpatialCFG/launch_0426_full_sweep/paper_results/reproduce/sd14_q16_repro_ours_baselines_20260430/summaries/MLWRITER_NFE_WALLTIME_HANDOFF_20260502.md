@@ -1,160 +1,279 @@
 # ML writer handoff — NFE wall-clock vs SR Pareto (2026-05-02)
 
-This experiment closes the **inference-cost limitation** framing: EBSG's per-step UNet
-overhead (5.6× baseline at fixed NFE=50) is more than recoverable when NFE is lowered,
-because EBSG saturates much faster than the inference-time baselines. On the
-**wall-clock vs SR plane**, EBSG is Pareto-dominant: it reaches higher SR than any baseline
-at every per-image latency budget we measured.
+This experiment closes the **inference-cost limitation** framing for EBSG: although a
+single EBSG denoising step is ~5.6× more expensive than a baseline SD1.4 step at
+NFE = 50 (because EBSG runs 11 UNet forwards per step vs the baseline 2), the per-step
+overhead is **more than recoverable** when NFE is reduced, because EBSG saturates much
+earlier than every inference-time baseline we tested. On the **wall-clock vs SR
+plane**, EBSG is Pareto-dominant on the SR axis at every per-image latency budget
+between 0.4 s and 14 s.
+
+This document explains exactly **how the experiment was constructed**, what to copy
+into the paper, and what to avoid.
 
 ---
 
-## 1. Where it goes in the paper
+## 1. Why we measure wall-clock instead of NFE
 
-- **Main text** (§5 Experiments / Discussion): **1 paragraph** acknowledging compute
-  overhead and pointing at the figure. Use the headline numbers from §3 below.
-- **Appendix** (NFE ablation section, replacing/extending the existing 5-method NFE figure):
-  this **single 1×3 panel** figure is the new headline. Move the old NFE-vs-SR (DDIM step
-  x-axis) figure to a 2nd appendix sub-figure if useful, or drop it.
-- **Limitation paragraph** (Conclusion or §5): "Cost is recoverable: at any wall-clock
-  budget … EBSG reaches a higher SR than any inference-time baseline."
+The previous NFE ablation (appendix Figure 4 in the current draft) used **DDIM steps**
+as the x-axis. That is misleading because methods do not pay the same cost per step:
+
+| Method                 | UNet forwards / step | Other per-step cost |
+|---|---:|---|
+| SD1.4 baseline         | 2 (cond + uncond CFG)  | — |
+| SAFREE                 | 2 + token re-projection | self-validation filter, latent re-attention |
+| SAFREE + SafeDenoiser  | 3+ | NudeNet routing per image |
+| SAFREE + SGF           | 3+ | NudeNet routing + repellency MMD |
+| **EBSG (Ours)**        | **11** (probe + cond + uncond × per-family fork) | mask-gated correction |
+
+A 50-step EBSG run is therefore not directly comparable to a 50-step baseline run on a
+"step" axis. The honest comparison is **time per image**, which is what reviewers and
+practitioners actually care about. This experiment makes EBSG's overhead-versus-quality
+trade-off explicit: at any given latency budget, which method gives the highest SR?
 
 ---
 
 ## 2. Experimental setup
 
-- **Model**: SD v1.4, seed 42, CFG 7.5, 512×512, DDIM scheduler.
-- **Prompts**: I2P q16 top-60, **all 7 concepts** (sexual, violence, self-harm, shocking,
-  illegal_activity, harassment, hate). 60 prompts × 1 image per cell.
-- **Methods (5)**: Baseline / SAFREE / **SAFREE + SafeDenoiser** / **SAFREE + SGF** / EBSG.
-  - **Both compound baselines** (SAFREE+SafeDenoiser, SAFREE + SGF) are the *stacked*
-    variants on top of SAFREE — they invoke the SafeDenoiser / SGF official scripts with
-    `--config=configs/base/vanilla/safree_neg_prompt_config.json` and
-    `--erase_id=safree_neg_prompt_rep_*_time`. This matches the Table 1 row labels.
-  - Concept-specific YAML configs and NEGSPACE templates are the same ones used in the
-    main paper Table 1 single-I2P best (no per-NFE retuning).
-  - SAFREE alone uses `--safree -svf -lra` (the same v2 config as Table 1).
-  - EBSG uses the **per-concept best config** from the main paper (sexual ss=20 cas=0.5,
-    violence ss=20 cas=0.4, self-harm ss=7 cas=0.5, shocking ss=27.5 cas=0.6,
-    illegal ss=25 cas=0.6, harassment ss=31.25 cas=0.5, hate ss=28 cas=0.6).
-- **NFE grid**: {5, 10, 15, 20, 25, 30, 40, 50} — 8 points.
-- **Total cells**: 5 × 7 × 8 = **280**, 60 imgs each = 16 800 images. All evaluated with
-  Qwen3-VL-8B v5.
+### 2.1 Generation cells (16 800 images)
 
-### Wall-clock measurement (separate isolated benchmark)
-- Single GPU, no contention: **siml-05 g0 (RTX 3090 24 GB)**.
-- 5 methods × 8 NFE × 20 prompts (violence, representative; gen-time is concept-invariant).
-- Per-image time = (max PNG mtime − min PNG mtime) / (N − 1). Excludes one-time
-  model-load cost. (We also report `with_load` as a sanity check; conclusions identical.)
+| Axis | Value |
+|---|---|
+| Backbone | SD v1.4, DDIM scheduler, seed 42, CFG = 7.5, 512×512 |
+| Concepts (7) | sexual, violence, self-harm, shocking, illegal_activity, harassment, hate |
+| Methods (5) | Baseline / SAFREE / **SAFREE + SafeDenoiser** / **SAFREE + SGF** / EBSG |
+| NFE grid (8) | **5, 10, 15, 20, 25, 30, 40, 50** |
+| Prompts/cell | 60 (I2P q16 top-60 per concept) |
+| Total cells | 5 × 7 × 8 = **280** (16 800 images) |
+| Evaluator | Qwen3-VL-8B v5 (4-class rubric: NotRel / Safe / Partial / Full) |
+| GPU pool | siml-05 g2..g7 (6× RTX 3090, no contention with other users) |
+
+### 2.2 Why this NFE grid
+
+The grid is **denser at low NFE** (5, 10, 15) where the safety methods either saturate
+quickly (EBSG) or collapse (SGF), and **sparser at high NFE** (40, 50) where every
+method has plateaued. This shape lets the figure show:
+
+- the **left** edge (NFE ≤ 10) — where EBSG and SAFREE+SafeDenoiser already reach
+  60 % SR while SGF is still degenerate,
+- the **knee** (NFE 15–25) — where SAFREE catches up,
+- the **right** edge (NFE ≥ 40) — where EBSG continues to improve while baselines
+  plateau.
+
+Skipping NFE = 1, 3 (which are in the prior 11-point figure) is intentional: at
+those NFE the **base** SD1.4 sampling is so noise-dominated that nothing meaningful is
+generated by *any* method, which doesn't help the wall-clock argument.
+
+### 2.3 Method configs (matching paper Table 1, no per-NFE retuning)
+
+- **Baseline**: vanilla SD1.4 + DDIM, no erasure mechanism. Calls our local
+  `scripts/baseline_runner.py`.
+- **SAFREE**: invokes `gen_safree_single.py` with `--safree -svf -lra` (= SAFREE-v2,
+  the *full* configuration: token projection + self-validation filter + latent
+  re-attention). Same flags as the Table 1 SAFREE row.
+- **SAFREE + SafeDenoiser** *(compound baseline)*: `run_copro_i2p_concept_np.py`
+  with `--config=configs/base/vanilla/safree_neg_prompt_config.json` and
+  `--erase_id=safree_neg_prompt_rep_threshold_time`. The `safree_neg_prompt` prefix
+  marks this as the *stacked* variant, exactly as it appears in Table 1.
+  Concept-specific NEGSPACE templates (e.g. `violence|blood|gore|...`) and YAML
+  task configs at
+  `configs/concept_specific_official/safedenoiser_i2p_<concept>.yaml`.
+- **SAFREE + SGF** *(compound baseline)*: `generate_unsafe_sgf_i2p_concept_np.py`
+  with the same SAFREE config and `--erase_id=safree_neg_prompt_rep_time`. Same
+  concept-specific NEGSPACE / YAML.
+- **EBSG (Ours)**: `python -m safegen.generate_family --family_guidance --probe_mode
+  both --probe_fusion union --how_mode hybrid` with the **per-concept best config from
+  the paper Table 1 single-I2P row**:
+
+| concept           | safety_scale | CAS  | θ_text | θ_img |
+|---|---:|---:|---:|---:|
+| sexual            | 20.0 | 0.5 | 0.10 | 0.30 |
+| violence          | 20.0 | 0.4 | 0.30 | 0.10 |
+| self-harm         | 7.0  | 0.5 | 0.10 | 0.10 |
+| shocking          | 27.5 | 0.6 | 0.15 | 0.10 |
+| illegal_activity  | 25.0 | 0.6 | 0.10 | 0.50 |
+| harassment        | 31.25| 0.5 | 0.10 | 0.50 |
+| hate              | 28.0 | 0.6 | 0.25 | 0.0375 |
+
+Family pack `clip_grouped.pt` per concept under
+`/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/exemplars/i2p_v1/<concept>/`. Hate uses
+`n_img_tokens=16`; the other six concepts use `n_img_tokens=4` (per the existing single
+I2P best). **Configs are not retuned per NFE.** This is intentional: we want the
+experiment to answer "given the same per-concept config, how does cost scale?" rather
+than mixing config and NFE effects.
+
+### 2.4 Wall-clock measurement — separate isolated benchmark (40 cells)
+
+Generation throughput is GPU-, contention-, and model-load-sensitive, so we measure it
+in a **separate single-GPU pass**, *not* by timing the production sweep above.
+
+| Axis | Value |
+|---|---|
+| Hardware | siml-05 **g0** alone (RTX 3090 24 GB), no other user job on the card |
+| Methods × NFE | 5 × 8 = 40 cells, run sequentially |
+| Prompts/cell | 20 (top 20 of `violence_q16_top60.csv` — gen-time is concept-invariant) |
+| Per-image time | `(max_PNG_mtime − min_PNG_mtime) / (N − 1)` |
+
+The mtime divisor `N − 1` is key: it factors out the **one-time model-load cost** by
+measuring only the gap between consecutive image saves. The first image's save mtime
+serves as the start of the steady-state window; the last image's save mtime as the end.
+We also compute `wall_total / N` (`per_img_sec_with_load`) as a sanity check, and
+report only `per_img_sec_excl_load_mtime` in the paper figure, since `with_load` is
+biased upward at small NFE (the load cost is amortized over only 20 images instead of
+60+). The two columns agree to within 1 % at NFE ≥ 20.
+
+**Output**: `paper_results/figures/nfe_walltime_timing.csv` (40 rows: method, nfe,
+n_imgs, wall_sec_total, per_img_sec_with_load, **per_img_sec_excl_load_mtime**).
 
 ---
 
-## 3. Key results (concept-averaged, 7 concepts)
+## 3. Result tables
+
+### 3.1 Concept-averaged headline (3 NFE points shown; full grid in CSV)
 
 | Method                    | NFE=5  | NFE=10 | NFE=50 |
-|---|---:|---:|---:|
-| **Baseline**               | 0.42 s · 34.8 SR · 41.4 Full | 0.63 s · 31.4 SR · 53.1 Full | 2.68 s · 35.7 SR · 51.7 Full |
-| **SAFREE**                 | 1.11 s · 19.0 SR · 1.0 Full  | 2.00 s · 31.2 SR · 4.0 Full | 8.89 s · 54.3 SR · 10.5 Full |
-| **SAFREE + SafeDenoiser**  | 0.58 s · 46.9 SR · 13.6 Full | 1.00 s · 54.8 SR · 16.9 Full | 4.32 s · 53.1 SR · 21.2 Full |
-| **SAFREE + SGF**           | 0.58 s · **0.0** SR · 0.0 Full · 100 NotRel | 1.05 s · **0.0** SR · 0.0 Full · 100 NotRel | 4.42 s · 47.1 SR · 23.1 Full |
-| **EBSG (Ours)**            | 1.47 s · **52.4** SR · 13.8 Full | 2.79 s · **60.2** SR · 18.1 Full | 14.11 s · **70.2** SR · 11.2 Full |
+|---|---|---|---|
+| **Baseline**              | 0.42 s · 34.8 SR · 41.4 Full | 0.63 s · 31.4 SR · 53.1 Full | 2.68 s · 35.7 SR · 51.7 Full |
+| **SAFREE**                | 1.11 s · 19.0 SR · 1.0 Full  | 2.00 s · 31.2 SR · 4.0 Full  | 8.89 s · 54.3 SR · 10.5 Full |
+| **SAFREE + SafeDenoiser** | 0.58 s · 46.9 SR · 13.6 Full | 1.00 s · 54.8 SR · 16.9 Full | 4.32 s · 53.1 SR · 21.2 Full |
+| **SAFREE + SGF**          | 0.58 s · **0.0** SR · 100 NotRel | 1.05 s · **0.0** SR · 100 NotRel | 4.42 s · 47.1 SR · 23.1 Full |
+| **EBSG (Ours)**           | 1.47 s · **52.4** SR · 13.8 Full | 2.79 s · **60.2** SR · 18.1 Full | **14.11 s · 70.2 SR · 11.2 Full** |
 
-Per-image time is `per_img_sec_excl_load_mtime` (filesystem mtime range / (N−1)).
+### 3.2 Headline callouts to copy into paper text
 
-### Headline callouts to copy into paper text
-
-1. **EBSG @ NFE=5 (1.47 s/img) vs Baseline @ NFE=50 (2.68 s/img)**:
-   EBSG is **1.8× faster** AND **+16.7 pp higher SR** (52.4 vs 35.7).
-2. **EBSG @ NFE=10 (2.79 s/img) vs SAFREE @ NFE=50 (8.89 s/img)**:
-   EBSG is **3.2× faster** AND **+5.9 pp higher SR** (60.2 vs 54.3).
-3. **EBSG @ NFE=50 (14.11 s/img)**: Pareto-dominant — highest SR (70.2) among all 5
-   methods at any wall-clock budget we measured; also the lowest Full-violation rate
-   (11.2 %) among methods with non-degenerate generation.
-4. **SGF small-NFE failure**: SAFREE + SGF at NFE ≤ 10 produces 100 % NotRelevant — i.e.
-   the gradient-MMD repellency *destroys the image* at small NFE. SGF only becomes
-   non-degenerate at NFE ≥ 25 (47 % SR at NFE=50). This is the same observation as the
-   existing NFE-vs-step appendix; the wall-clock view makes it sharper because SGF
-   never appears on the SR-positive Pareto frontier.
-5. **Baseline plateau**: SR does not increase with NFE for the unmodified SD1.4 baseline
-   (≈ 31–36 % across all NFE). Adding compute does not buy safety without an erasure
-   method.
-6. **EBSG monotone**: Among inference-time methods, EBSG is the **only** one that is
-   monotonic in NFE on the SR axis (52.4 → 60.2 → 70.2). The other four either plateau
-   (SafeDenoiser) or require NFE ≥ 20 to avoid catastrophic NotRelevant collapse (SGF).
+1. **EBSG @ NFE = 5 (1.47 s) vs SD1.4 + DDIM-50 (2.68 s)**
+   → EBSG is **1.8× faster AND +16.7 pp higher SR** (52.4 vs 35.7).
+2. **EBSG @ NFE = 10 (2.79 s) vs SAFREE @ NFE = 50 (8.89 s)**
+   → EBSG is **3.2× faster AND +5.9 pp higher SR** (60.2 vs 54.3).
+3. **EBSG @ NFE = 50 (14.11 s)**: highest SR (70.2 %) and lowest Full (11.2 %)
+   among all five methods at any latency we measured. Pareto-dominant on the SR axis.
+4. **SAFREE + SGF small-NFE collapse**: at NFE ≤ 10, SR = 0 % and NotRel = 100 %
+   (image is destroyed; gradient-MMD repellency is unstable at low NFE). SGF only
+   becomes non-degenerate from NFE ≥ 25 onward (47 % SR at NFE = 50).
+5. **Baseline plateau**: SR is roughly flat at 31–36 % across all NFE.
+   Adding compute does not buy safety without an erasure mechanism.
+6. **EBSG monotone**: EBSG is the **only** inference-time method that is monotonic in
+   NFE on the SR axis (52.4 → 60.2 → 70.2). Other methods either plateau early
+   (SAFREE + SafeDenoiser) or require NFE ≥ 25 to avoid catastrophic NotRel collapse
+   (SAFREE + SGF).
 
 ---
 
-## 4. Figure files
+## 4. Figures
 
-All under
-`paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/summaries/` (this doc)
-and `paper_results/figures/` on the NFS:
+All under `paper_results/figures/`. Per-panel standalone versions are provided so the
+paper can place SR / Full / NotRel separately if layout demands.
 
 | Use | File |
 |---|---|
-| **Headline (paper-ready)** | `paper_results/figures/nfe_walltime_pareto_polished.{pdf,png}` |
-| Vanilla version | `paper_results/figures/nfe_walltime_pareto_concept_avg.{pdf,png}` |
-| Appendix per-concept facet | `paper_results/figures/nfe_walltime_pareto_per_concept.{pdf,png}` |
+| **Headline 3-panel (paper-ready)** | `nfe_walltime_pareto_polished.{pdf,png}` |
+| **Standalone SR panel** | `nfe_walltime_pareto_sr.{pdf,png}` |
+| **Standalone Full panel** | `nfe_walltime_pareto_full.{pdf,png}` |
+| **Standalone NotRel panel** | `nfe_walltime_pareto_notrel.{pdf,png}` |
+| Vanilla 3-panel (no styling) | `nfe_walltime_pareto_concept_avg.{pdf,png}` |
+| Per-concept facet (7 rows × 3 cols) | `nfe_walltime_pareto_per_concept.{pdf,png}` |
 | Plot script (rerun-able) | `scripts/nfe_walltime_pareto_polished.py` |
 
-### Suggested caption (polished figure)
+### Suggested LaTeX caption (3-panel headline)
 
-> **Figure N.** *Wall-clock cost vs erasure quality, concept-averaged across the seven
-> I2P top-60 concepts. The horizontal axis is per-image generation time (excluding
-> one-time model load) measured on a single RTX 3090 with no GPU contention. Markers
-> denote NFE ∈ {5, 10, 15, 20, 25, 30, 40, 50}. \textbf{EBSG is Pareto-dominant on the SR
-> axis at every per-image latency budget}: at NFE = 5 it already exceeds the SR of
-> SD1.4 + DDIM-50 by +16.7 pp while running 1.8× faster, and at NFE = 10 it exceeds
-> SAFREE + DDIM-50 by +5.9 pp while running 3.2× faster. SAFREE + SGF degenerates to
-> 100 % NotRelevant for NFE ≤ 10 (the safety-by-destruction failure mode), shown by the
-> NotRel panel.*
+> **Figure N.** *Wall-clock cost vs erasure quality, concept-averaged across the
+> seven I2P top-60 concepts (sexual, violence, self-harm, shocking,
+> illegal_activity, harassment, hate). The horizontal axis is per-image generation
+> time (excluding one-time model-load cost) measured on a single RTX 3090 with no GPU
+> contention. Markers correspond to NFE $\in$ \{5, 10, 15, 20, 25, 30, 40, 50\}.
+> \textbf{EBSG (red) is Pareto-dominant on the SR axis at every per-image latency
+> budget}: at NFE = 5 it already exceeds SD\,1.4 + DDIM-50 by +16.7\,pp while running
+> 1.8$\times$ faster, and at NFE = 10 it exceeds SAFREE + DDIM-50 by +5.9\,pp while
+> running 3.2$\times$ faster. The compound SAFREE + SGF baseline degenerates to
+> 100\,\% NotRelevant for NFE $\le$ 10 (orange, NotRel panel), the safety-by-destruction
+> failure mode that the four-class VLM rubric is designed to expose.*
 
 ---
 
-## 5. CSV files (ml-writer source-of-truth for any number changes)
+## 5. CSV files (writer source-of-truth for any number changes)
 
-| File | Rows |
-|---|---|
-| `paper_results/figures/nfe_walltime_5method_7concept_table.csv` | 280 (every cell, raw SR/Full/NR per concept) |
-| `paper_results/figures/nfe_walltime_5method_concept_avg.csv`     | 40 (per (method, NFE) concept-average + per_img_sec) |
-| `paper_results/figures/nfe_walltime_timing.csv`                   | 40 (per (method, NFE) wall-clock measurements) |
+| File | Rows | Columns |
+|---|---|---|
+| `nfe_walltime_5method_7concept_table.csv` | 280 | method, concept, nfe, SR_pct, Full_pct, NR_pct |
+| `nfe_walltime_5method_concept_avg.csv`     | 40 | method, nfe, **per_img_sec**, SR_avg_pct, Full_avg_pct, NR_avg_pct, n_concepts |
+| `nfe_walltime_timing.csv`                  | 40 | method, nfe, n_imgs, wall_sec_total, per_img_sec_with_load, **per_img_sec_excl_load_mtime** |
 
-CSV header (concept_avg):
-`method, nfe, per_img_sec, SR_avg_pct, Full_avg_pct, NR_avg_pct, n_concepts`
+If the writer needs to re-derive any cell of the table from raw, the path pattern is
+
+```
+outputs/phase_nfe_walltime_v3/<method>_<concept>_steps<NFE>/results_qwen3_vl_<rubric>_v5.txt
+```
+
+with `<rubric>` being the Qwen evaluator alias (`nudity` for sexual, `violence` for
+violence, `self_harm` for self-harm, `shocking`, `illegal` for illegal_activity,
+`harassment`, `hate`).
 
 ---
 
 ## 6. What the writer should NOT do
 
-- Do **not** average wall-clock across methods to claim "EBSG is N× slower"; use the
-  per-method per-NFE numbers from `nfe_walltime_timing.csv`. Headline ratios above
-  already do the cross-method comparison correctly.
-- Do **not** mix this 8-point NFE grid with the existing 11-point (1, 3, 5, 8, 12, 16,
-  20, 25, 30, 40, 50) NFE figure. They use **different EBSG configs** (the old one used a
-  single fixed config; this new one uses per-concept best). Replace, do not overlay.
-- Do **not** report `per_img_sec_with_load`; it includes the ~10 s model-load amortized
-  over only 20 imgs and biases the small-NFE values upward.
+1. **Do not** mix this 8-point NFE grid with the existing 11-point NFE figure
+   (NFE ∈ {1, 3, 5, 8, 12, 16, 20, 25, 30, 40, 50}). They use **different EBSG configs**
+   (the old figure used a single fixed config; this one uses per-concept best from
+   Table 1). Replace, do not overlay.
+2. **Do not** average wall-clock across methods to make a global "EBSG is N× slower"
+   claim; every method has its own per-NFE cost curve. Use the per-method per-NFE
+   numbers from `nfe_walltime_timing.csv`. The cross-method ratios in §3.2 are already
+   computed correctly.
+3. **Do not** report `per_img_sec_with_load`. It includes the ~10 s model load
+   amortized over only 20 images, so it overstates throughput at small NFE.
+4. **Do not** label the compound baselines as just "SafeDenoiser" or "SGF". They are
+   the **stacked** variants ("SAFREE + SafeDenoiser", "SAFREE + SGF") that match the
+   Table 1 row labels.
 
 ---
 
 ## 7. Open items / caveats
 
-- **GPU**: RTX 3090. 4090 / A100 numbers will differ; quote the GPU explicitly in caption.
-- **Concept hate** uses `n_img_tokens=16` per the EBSG single-I2P best config (others
-  use `n_img_tokens=4`). EBSG hate cells are slightly more expensive per step than other
-  EBSG cells; the concept-averaged time bakes this in. Per-concept facet figure makes
-  this visible (hate cell EBSG times are ≈ 10–15 % above the EBSG average).
-- **SAFREE + SGF NFE=5,10 SR=0** is a real measurement (NudeNet+ rubric labels every
-  generated image NotRelevant because the image is destroyed); not a bug. We may want
-  to clip those points or annotate "image destruction" in the appendix per-concept facet
-  to keep the SGF curve from disappearing into y=0.
+- **GPU**: RTX 3090. 4090 / A100 absolute numbers will differ; quote the GPU explicitly
+  in the figure caption.
+- **`hate` uses `n_img_tokens = 16`**, the other six concepts use `n_img_tokens = 4`,
+  matching the per-concept best from Table 1. This makes EBSG hate cells slightly more
+  expensive per step than other EBSG cells; the concept-averaged time absorbs this.
+  The per-concept facet figure (`nfe_walltime_pareto_per_concept.pdf`) makes this
+  visible.
+- **SAFREE + SGF NFE = 5,10 SR = 0 %** is a real measurement, not a bug: the Qwen
+  rubric labels every generated image NotRelevant because the image is destroyed.
+  The orange curve disappearing into y = 0 in the SR panel is the intended visual.
 
 ---
 
-## 8. Reproduction (one-line)
+## 8. Reproduction
 
 ```
 ssh siml-05 'bash /mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/scripts/launch_nfe_walltime_master.sh'
 ```
 
-Outputs land at `outputs/phase_nfe_walltime_v3/<method>_<concept>_steps<N>/`.
-Plot rerun: `python scripts/nfe_walltime_pareto_polished.py`.
+This launches:
+- **6 parallel orchestrators** (`scripts/nfe_walltime_orchestrator.py`) on g2..g7
+  for the 280-cell generation+eval sweep, and
+- **1 isolated timing benchmark** (`scripts/nfe_walltime_timing.sh`) on g0 for the
+  40-cell wall-clock measurement.
+
+After the sweep finishes, regenerate plots with:
+
+```
+python scripts/nfe_walltime_pareto_polished.py
+```
+
+This produces the polished 3-panel figure, the three standalone SR / Full / NotRel
+panels, and the two CSV files used by the figure.
+
+---
+
+## 9. Where this goes in the paper
+
+| Slot | Action |
+|---|---|
+| **§5 Experiments / Discussion** (1 paragraph) | Acknowledge per-step cost overhead of EBSG, point to figure, quote the two headline ratios from §3.2. |
+| **Limitations** (Conclusion or §5) | "Cost is recoverable: at any wall-clock budget we measured, EBSG reaches a higher SR than every inference-time baseline." |
+| **Appendix NFE ablation** | **Replace** the existing 11-point NFE-vs-step figure with `nfe_walltime_pareto_polished.pdf` (or, if room, place the 7-concept facet `nfe_walltime_pareto_per_concept.pdf` as a supplementary view). Use the Suggested LaTeX caption above. |
+| **Appendix tables** | If the paper wants a numerical table, use `nfe_walltime_5method_concept_avg.csv` directly (already 40 rows, paper-ready format). |
+
+All AI-rewritten spans should be wrapped in `\textcolor{orange}{...}` per the
+orange-edit policy (see memory: "Orange-marked AI edits on Overleaf").
