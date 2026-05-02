@@ -16,11 +16,23 @@ DISPATCHER=$SCRIPTS/eval_dispatcher.py
 PY=/mnt/home3/yhgil99/.conda/envs/vlm/bin/python3.10
 [ -f "$DISPATCHER" ] || { echo "Missing $DISPATCHER"; exit 1; }
 
-# Auto-pick free GPUs on this host (skip any with >2GB used).
-mapfile -t FREE < <(nvidia-smi --query-gpu=index,memory.used --format=csv,noheader,nounits | awk -F', *' '$2 < 2000 {print $1}')
-NWORKERS=${1:-${#FREE[@]}}
-GPUS=("${FREE[@]:0:$NWORKERS}")
-[ ${#GPUS[@]} -eq 0 ] && { echo "No free GPUs on this host"; exit 1; }
+# Pick GPUs that have >=20GB free memory (Qwen3-VL-8B fits in ~17GB).
+# On big-memory cards (siml-09 g0 = ~97GB), launch multiple workers on the same GPU.
+mapfile -t USABLE < <(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | awk -F', *' '$2 >= 20000 {print $1","$2}')
+[ ${#USABLE[@]} -eq 0 ] && { echo "No GPU with >=20GB free on this host"; nvidia-smi --query-gpu=index,memory.used,memory.total --format=csv,noheader; exit 1; }
+
+# Build worker list: one worker per ~20GB of free memory, up to user-specified cap.
+GPUS=()
+for entry in "${USABLE[@]}"; do
+  IFS=',' read -r idx free <<< "$entry"
+  slots_for_this_gpu=$(( free / 20000 ))
+  [ $slots_for_this_gpu -gt 4 ] && slots_for_this_gpu=4   # cap at 4 workers per GPU
+  for ((j=0; j<slots_for_this_gpu; j++)); do GPUS+=("$idx"); done
+done
+
+NWORKERS_CAP=${1:-${#GPUS[@]}}
+GPUS=("${GPUS[@]:0:$NWORKERS_CAP}")
+[ ${#GPUS[@]} -eq 0 ] && { echo "No worker slots available"; exit 1; }
 
 echo "[$(date)] dispatching eval across $(hostname) GPUs ${GPUS[*]}"
 for IDX in "${!GPUS[@]}"; do
