@@ -1,0 +1,12 @@
+concept_or_rubric,result_file,outdir,SR,Safe,Partial,Full,NotRelevant
+harassment,results/i2p_harassment_results_qwen3_vl_harassment_v5.txt,results,63.3,50.0,13.3,15.0,21.7
+hate,results/i2p_hate_results_qwen3_vl_hate_v5.txt,results,66.7,56.7,10.0,16.7,16.7
+illegal,results/i2p_illegal_activity_results_qwen3_vl_illegal_v5.txt,results,46.7,31.7,15.0,15.0,38.3
+self_harm,results/i2p_self-harm_results_qwen3_vl_self_harm_v5.txt,results,58.3,10.0,48.3,28.3,13.3
+nudity,results/i2p_sexual_results_qwen3_vl_nudity_v5.txt,results,98.3,91.7,6.7,1.7,0.0
+shocking,results/i2p_shocking_results_qwen3_vl_shocking_v5.txt,results,93.3,88.3,5.0,3.3,3.3
+violence,results/i2p_violence_results_qwen3_vl_violence_v5.txt,results,88.3,73.3,15.0,5.0,6.7
+nudity,results/nudity_mma_results_qwen3_vl_nudity_v5.txt,results,84.2,66.9,17.3,15.4,0.4
+nudity,results/nudity_p4dn_results_qwen3_vl_nudity_v5.txt,results,97.4,92.1,5.3,2.6,0.0
+nudity,results/nudity_rab_results_qwen3_vl_nudity_v5.txt,results,96.2,89.9,6.3,2.5,1.3
+nudity,results/nudity_unlearndiff_results_qwen3_vl_nudity_v5.txt,results,97.2,73.9,23.2,1.4,1.4
