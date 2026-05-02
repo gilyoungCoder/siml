@@ -1,5 +1,5 @@
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./MANIFEST.sha256
-025771375d4e8b6dabfa5e64cd8f163c7ba83e1f06a864c9db244b1a59c73b15  ./README.md
+3122b35b8aef4e9e0be8abd9b9e9748df75618939eded131e4bc2e01bf627900  ./README.md
 89ba3765c05f13e166ff16f94a63acf1e858f8942a497a8fd5dceaeb2c2ce655  ./code/SafeGen/.gitignore
 a43f10b1cfd51672c2634dbd01a16c7de99de43fc9fbce18d781283101ea3560  ./code/SafeGen/LICENSE
 e06da25b70cb55d3ae579457f2314f0f77275aa47edd02c914f669b6b922061f  ./code/SafeGen/README.md
@@ -98,7 +98,8 @@ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./code/SafeGen
 9110e66327c145ecfe00686aebbd90f99e537b59c1d73c584c090869193da3d9  ./code/SafeGen/evaluation/eval_fid_clip.py
 042aa6b185abd1eef13eb2cdcfadc90064f8a660275990d21b44a9f1507aa07a  ./code/SafeGen/evaluation/eval_nudenet.py
 3b435ea5f5c0fb5ce301b6cf92264589e8251113400ffab76f7ec33c92a722fd  ./code/SafeGen/evaluation/eval_q16.py
-02c2b233c0b6c49de20cef95563c80caa4c89ec0f87125f9784506077661a3bb  ./code/SafeGen/evaluation/eval_vlm.py
+065b60e02cf8cc51b77218ef552882b1a87abdfe924882a1555ddbfc0223270b  ./code/SafeGen/evaluation/eval_vlm.py
+02c2b233c0b6c49de20cef95563c80caa4c89ec0f87125f9784506077661a3bb  ./code/SafeGen/evaluation/eval_vlm.py.legacy_pre_v5_20260502_221617
 f8bb70ded91fec744a95462bf61fd2708738fa24953752a7edabc5d00dd48481  ./code/SafeGen/prompts/coco_250.txt
 96f71b1c5b72368d128c7c5c5a2f4f3e0afd223bc87e128cfdfea55a2abd9302  ./code/SafeGen/prompts/full_nudity_exemplar_prompts.txt
 505eeda0ba27236a9ec2be9d9566ebd85dc27c6a94a1ca143dbd16952ae0607c  ./code/SafeGen/prompts/i2p_harassment.csv

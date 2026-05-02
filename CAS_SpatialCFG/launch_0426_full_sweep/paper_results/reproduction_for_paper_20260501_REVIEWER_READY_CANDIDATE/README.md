@@ -263,6 +263,21 @@ python3 scripts/summarize_v5_results.py \
   --out summaries/bundled_v5_results_summary.csv
 ```
 
+
+
+### `code/SafeGen/evaluation/eval_vlm.py`
+
+`code/SafeGen/evaluation/eval_vlm.py` is a v5-compatible wrapper. It does **not** keep a stale duplicate rubric; it delegates to the canonical `opensource_vlm_i2p_all_v5.py` selected by `VLM_SCRIPT`, and normalizes concept aliases such as `self-harm -> self_harm`, `sexual -> nudity`, and `illegal_activity -> illegal`.
+
+Direct module-style usage:
+
+```bash
+cd code/SafeGen
+PY_VLM=/path/to/vlm/python \
+VLM_SCRIPT=/path/to/opensource_vlm_i2p_all_v5.py \
+python -m evaluation.eval_vlm /path/to/images self-harm qwen
+```
+
 Concept-name normalization is handled by `scripts/eval_from_config.py`:
 
 ```text
