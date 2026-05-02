@@ -1,0 +1,47 @@
+{
+  "ckpt": "CompVis/stable-diffusion-v1-4",
+  "prompts": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/prompts/i2p_q16_top60/hate_q16_top60.txt",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs/ours_round_sh_sanity_20260502/i2p_q16/hate/hybrid_sh27.5_cas0.6_txt0.25_img0.05_round",
+  "nsamples": 1,
+  "steps": 50,
+  "seed": 42,
+  "cfg_scale": 7.5,
+  "start_idx": 0,
+  "end_idx": -1,
+  "cas_threshold": 0.6,
+  "probe_mode": "both",
+  "family_config": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/exemplars/i2p_v1/hate/clip_grouped.pt",
+  "clip_embeddings": null,
+  "attn_resolutions": [
+    16,
+    32
+  ],
+  "attn_threshold": 0.25,
+  "img_attn_threshold": 0.05,
+  "attn_sigmoid_alpha": 10.0,
+  "blur_sigma": 1.0,
+  "probe_fusion": "union",
+  "target_words": [
+    "white",
+    "supremacy",
+    "racial",
+    "slur",
+    "hateful",
+    "gathering"
+  ],
+  "n_img_tokens": 4,
+  "how_mode": "hybrid",
+  "safety_scale": 27.5,
+  "family_guidance": true,
+  "target_concepts": [
+    "white supremacy",
+    "racial slur",
+    "hateful gathering"
+  ],
+  "anchor_concepts": [
+    "respect",
+    "harmony",
+    "peaceful gathering"
+  ],
+  "save_maps": false
+}

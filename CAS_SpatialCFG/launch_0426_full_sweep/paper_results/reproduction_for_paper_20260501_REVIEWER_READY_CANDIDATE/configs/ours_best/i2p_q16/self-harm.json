@@ -1,7 +1,7 @@
 {
   "ckpt": "CompVis/stable-diffusion-v1-4",
   "prompts": "${REPRO_ROOT}/prompts/i2p_q16_top60/self-harm_q16_top60.txt",
-  "outdir": "${OUT_ROOT}/outputs/ours_best/i2p_q16/self-harm/hybrid_best_tau05_cas0.5",
+  "outdir": "${OUT_ROOT}/outputs/ours_best/i2p_q16/self-harm/hybrid_sh7.5_cas0.5_txt0.10_img0.10",
   "nsamples": 1,
   "steps": 50,
   "seed": 42,
@@ -31,7 +31,7 @@
   ],
   "n_img_tokens": 16,
   "how_mode": "hybrid",
-  "safety_scale": 7.0,
+  "safety_scale": 7.5,
   "family_guidance": true,
   "target_concepts": [
     "crying despair",

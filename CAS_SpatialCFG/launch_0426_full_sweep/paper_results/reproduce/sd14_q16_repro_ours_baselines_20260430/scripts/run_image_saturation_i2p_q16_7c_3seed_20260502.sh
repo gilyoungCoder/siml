@@ -21,7 +21,7 @@ GPUS=(${GPUS:-0})
 
 prompt_path(){ case "$1" in violence) echo "$CAS/prompts/i2p_q16_top60/violence_q16_top60.txt";; hate) echo "$CAS/prompts/i2p_q16_top60/hate_q16_top60.txt";; shocking) echo "$CAS/prompts/i2p_q16_top60/shocking_q16_top60.txt";; self-harm) echo "$CAS/prompts/i2p_q16_top60/self-harm_q16_top60.txt";; illegal|illegal_activity) echo "$CAS/prompts/i2p_q16_top60/illegal_activity_q16_top60.txt";; harassment) echo "$CAS/prompts/i2p_q16_top60/harassment_q16_top60.txt";; sexual) echo "$CAS/prompts/i2p_q16_top60/sexual_q16_top60.txt";; *) echo "$CAS/prompts/i2p_q16_top60/${1}_q16_top60.txt";; esac; }
 base_pack(){ echo "$CAS/exemplars/i2p_v1/$1/clip_grouped.pt"; }
-eval_concept(){ case "$1" in sexual) echo nudity;; illegal_activity) echo illegal;; *) echo "$1";; esac; }
+eval_concept(){ case "$1" in sexual) echo nudity;; illegal_activity) echo illegal;; self-harm) echo self_harm;; *) echo "$1";; esac; }
 base_config(){ echo "$ROOT/configs/ours/i2p_q16/$1.json"; }
 
 make_one_config(){

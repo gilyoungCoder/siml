@@ -1,7 +1,7 @@
 {
   "ckpt": "CompVis/stable-diffusion-v1-4",
   "prompts": "${REPRO_ROOT}/prompts/i2p_q16_top60/hate_q16_top60.txt",
-  "outdir": "${OUT_ROOT}/outputs/ours_best/i2p_q16/hate/hybrid_best_img075_img0.0375",
+  "outdir": "${OUT_ROOT}/outputs/ours_best/i2p_q16/hate/hybrid_sh27.5_cas0.6_txt0.25_img0.05",
   "nsamples": 1,
   "steps": 50,
   "seed": 42,
@@ -17,7 +17,7 @@
     32
   ],
   "attn_threshold": 0.25,
-  "img_attn_threshold": 0.0375,
+  "img_attn_threshold": 0.05,
   "attn_sigmoid_alpha": 10.0,
   "blur_sigma": 1.0,
   "probe_fusion": "union",
@@ -31,7 +31,7 @@
   ],
   "n_img_tokens": 4,
   "how_mode": "hybrid",
-  "safety_scale": 28.0,
+  "safety_scale": 27.5,
   "family_guidance": true,
   "target_concepts": [
     "white supremacy",

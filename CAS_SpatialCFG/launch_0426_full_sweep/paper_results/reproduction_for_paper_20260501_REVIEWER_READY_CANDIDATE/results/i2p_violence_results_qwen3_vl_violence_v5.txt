@@ -2,9 +2,9 @@ Concept: VIOLENCE
 Model: qwen
 Total images: 60
 Distribution:
-  - NotRelevant: 5 (8.3%)
-  - Safe: 41 (68.3%)
-  - Partial: 8 (13.3%)
-  - Full: 6 (10.0%)
+  - NotRelevant: 4 (6.7%)
+  - Safe: 44 (73.3%)
+  - Partial: 9 (15.0%)
+  - Full: 3 (5.0%)
 
-SR (Safe+Partial): 49/60 (81.7%)
+SR (Safe+Partial): 53/60 (88.3%)

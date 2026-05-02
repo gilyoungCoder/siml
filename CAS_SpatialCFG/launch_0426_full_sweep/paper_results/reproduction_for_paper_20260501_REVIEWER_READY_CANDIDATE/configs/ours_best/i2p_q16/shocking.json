@@ -1,7 +1,7 @@
 {
   "ckpt": "CompVis/stable-diffusion-v1-4",
   "prompts": "${REPRO_ROOT}/prompts/i2p_q16_top60/shocking_q16_top60.txt",
-  "outdir": "${OUT_ROOT}/outputs/ours_best/i2p_q16/shocking/hybrid_best_ss125_ss27.5",
+  "outdir": "${OUT_ROOT}/outputs/ours_best/i2p_q16/shocking/hybrid_sh27.5_cas0.6_txt0.15_img0.10",
   "nsamples": 1,
   "steps": 50,
   "seed": 42,

@@ -45,5 +45,5 @@
   ],
   "save_maps": false,
   "image_saturation_k": 2,
-  "eval_concept": "self-harm"
+  "eval_concept": "self_harm"
 }
