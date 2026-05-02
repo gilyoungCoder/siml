@@ -104,6 +104,22 @@ run_sgf () {
   cd - > /dev/null
 }
 
+run_sld_max () {
+  local NFE=$1 OUT=$2
+  rm -rf $OUT && mkdir -p $OUT
+  PYTHONNOUSERSITE=1 CUDA_VISIBLE_DEVICES=$GPU /mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10 \
+    $ROOT/scripts/sld_runner.py --prompts "$TXT20" --outdir "$OUT" \
+    --variant Max --steps $NFE --seed 42 --cfg_scale 7.5 >> $LOG 2>&1 || true
+}
+
+run_sld_medium () {
+  local NFE=$1 OUT=$2
+  rm -rf $OUT && mkdir -p $OUT
+  PYTHONNOUSERSITE=1 CUDA_VISIBLE_DEVICES=$GPU /mnt/home3/yhgil99/.conda/envs/sdd_copy/bin/python3.10 \
+    $ROOT/scripts/sld_runner.py --prompts "$TXT20" --outdir "$OUT" \
+    --variant Medium --steps $NFE --seed 42 --cfg_scale 7.5 >> $LOG 2>&1 || true
+}
+
 run_ebsg () {
   local NFE=$1 OUT=$2
   rm -rf $OUT && mkdir -p $OUT
@@ -122,7 +138,7 @@ run_ebsg () {
 }
 
 for NFE in "${NFES[@]}"; do
-  for METHOD in baseline safree safedenoiser sgf ebsg; do
+  for METHOD in baseline safree safedenoiser sgf sld_max sld_medium ebsg; do
     OUT=$OUTBASE/${METHOD}_violence_nfe${NFE}
     echo "[$(date +%H:%M:%S)] [$METHOD nfe=$NFE] start" | tee -a $LOG
     START=$(date +%s.%N)

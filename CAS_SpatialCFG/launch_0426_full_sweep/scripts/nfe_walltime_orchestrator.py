@@ -31,7 +31,8 @@ EVAL_CWD    = "/mnt/home3/yhgil99/unlearning/vlm"
 # Sweep grid
 CONCEPTS = ["sexual", "violence", "self-harm", "shocking", "illegal_activity", "harassment", "hate"]
 STEPS = [5, 10, 15, 20, 25, 30, 40, 50]
-METHODS = ["baseline", "safree", "safedenoiser", "sgf", "ebsg"]
+METHODS = ["baseline", "safree", "safedenoiser", "sgf", "sld_max", "sld_medium", "ebsg"]
+SLD_RUNNER = f"{LAUNCH}/scripts/sld_runner.py"
 
 # concept -> args.json subdir name (note illegal_activity vs illegal)
 ARGS_DIR = {
@@ -178,6 +179,26 @@ def run_sgf(concept, steps, outdir, gpu, log):
         return subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT, cwd=cwd).returncode
 
 
+def run_sld(variant, concept, steps, outdir, gpu, log):
+    """SLD via local sld_runner.py. variant in {'Max','Medium','Strong','Weak'}."""
+    txt, _ = prompt_paths(concept)
+    cmd = ["env", f"CUDA_VISIBLE_DEVICES={gpu}", "PYTHONNOUSERSITE=1", PY_EBSG,
+           SLD_RUNNER,
+           "--prompts", txt, "--outdir", outdir,
+           "--variant", variant,
+           "--steps", str(steps), "--seed", "42", "--cfg_scale", "7.5"]
+    with open(log, "a") as f:
+        return subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT).returncode
+
+
+def run_sld_max(concept, steps, outdir, gpu, log):
+    return run_sld("Max", concept, steps, outdir, gpu, log)
+
+
+def run_sld_medium(concept, steps, outdir, gpu, log):
+    return run_sld("Medium", concept, steps, outdir, gpu, log)
+
+
 def run_ebsg(concept, steps, outdir, gpu, log):
     txt, _ = prompt_paths(concept)
     args_path = f"{PR}/single/{ARGS_DIR[concept]}/args.json"
@@ -230,7 +251,9 @@ def run_eval(concept, outdir, gpu, log):
 
 METHOD_FN = {
     "baseline": run_baseline, "safree": run_safree,
-    "safedenoiser": run_safedenoiser, "sgf": run_sgf, "ebsg": run_ebsg,
+    "safedenoiser": run_safedenoiser, "sgf": run_sgf,
+    "sld_max": run_sld_max, "sld_medium": run_sld_medium,
+    "ebsg": run_ebsg,
 }
 
 
