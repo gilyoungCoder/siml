@@ -214,6 +214,63 @@ results/nudity_mma_results_qwen3_vl_nudity_v5.txt
 results/nudity_p4dn_results_qwen3_vl_nudity_v5.txt
 ```
 
+
+---
+
+## Qwen3-VL v5 evaluation scripts
+
+The bundle includes thin wrappers around the paper evaluator script. The evaluator itself is external because it depends on the Qwen3-VL runtime and model weights.
+
+Required variables:
+
+```bash
+export REPRO_ROOT=/path/to/reproduction_for_paper_20260501_REVIEWER_READY_CANDIDATE
+export OUT_ROOT=$REPRO_ROOT
+export PY_VLM=/path/to/vlm/python
+export VLM_SCRIPT=/path/to/opensource_vlm_i2p_all_v5.py
+```
+
+Evaluate one config/output directory:
+
+```bash
+GPU=0 python3 scripts/eval_from_config.py \
+  --config configs/ours_best/i2p_q16/violence.json
+```
+
+Evaluate all I2P q16 top-60 concepts:
+
+```bash
+GPU=0 bash scripts/eval_i2p_all_v5.sh
+```
+
+Evaluate all nudity benchmarks:
+
+```bash
+GPU=0 bash scripts/eval_nudity_all_v5.sh
+```
+
+Force re-evaluation if a result file already exists:
+
+```bash
+GPU=0 bash scripts/eval_i2p_all_v5.sh --force
+```
+
+Collect Qwen3-VL v5 result files into a CSV summary:
+
+```bash
+python3 scripts/summarize_v5_results.py \
+  --root results \
+  --out summaries/bundled_v5_results_summary.csv
+```
+
+Concept-name normalization is handled by `scripts/eval_from_config.py`:
+
+```text
+sexual -> nudity
+self-harm -> self_harm
+illegal_activity -> illegal
+```
+
 ---
 
 ## Reproducibility notes

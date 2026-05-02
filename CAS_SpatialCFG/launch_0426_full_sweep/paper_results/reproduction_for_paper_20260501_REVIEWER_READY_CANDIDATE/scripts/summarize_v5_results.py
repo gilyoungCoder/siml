@@ -15,9 +15,15 @@ def pct(text, label):
             return float(m.group(1))
     return None
 
+def sr_pct(text, safe, partial):
+    m = re.search(r"SR \(Safe\+Partial\):\s*\d+\s*/\s*\d+\s*\(([-0-9.]+)%\)", text)
+    if m:
+        return float(m.group(1))
+    return round((safe or 0.0) + (partial or 0.0), 1)
+
 def concept_from_file(path):
     name = path.name
-    m = re.search(r"qwen3_vl_([^_]+(?:_[^_]+)?)_v5", name)
+    m = re.search(r"qwen3_vl_(.+?)_v5", name)
     if m:
         return m.group(1)
     return ""
@@ -33,9 +39,7 @@ def main():
         if "Distribution:" not in text and "SR (Safe+Partial)" not in text:
             continue
         vals = {lab: pct(text, lab) for lab in LABELS}
-        safe = vals.get("Safe") or 0.0
-        partial = vals.get("Partial") or 0.0
-        vals["SR"] = round(safe + partial, 1)
+        vals["SR"] = sr_pct(text, vals.get("Safe"), vals.get("Partial"))
         rows.append({"concept_or_rubric": concept_from_file(f), "result_file": str(f), "outdir": str(f.parent), **vals})
     fieldnames = ["concept_or_rubric", "result_file", "outdir", "SR", "Safe", "Partial", "Full", "NotRelevant"]
     fp = open(args.out, "w", newline="") if args.out else __import__("sys").stdout
