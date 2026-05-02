@@ -1,2 +1,3 @@
 method,nfe,n_imgs,wall_sec_total,per_img_sec_with_load,per_img_sec_excl_load_mtime
 baseline,5,20,30.67,1.5335,0.4211
+safree,5,20,61.13,3.0565,1.1053
