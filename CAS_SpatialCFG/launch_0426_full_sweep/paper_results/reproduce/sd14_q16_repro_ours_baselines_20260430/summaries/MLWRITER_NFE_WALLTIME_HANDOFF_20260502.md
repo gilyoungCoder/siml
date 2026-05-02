@@ -161,18 +161,41 @@ n_imgs, wall_sec_total, per_img_sec_with_load, **per_img_sec_excl_load_mtime**).
 
 ## 4. Figures
 
-All under `paper_results/figures/`. Per-panel standalone versions are provided so the
-paper can place SR / Full / NotRel separately if layout demands.
+All under `paper_results/figures/`. Multiple sizes provided so the paper can place
+the figure in any NeurIPS layout slot (single-column main body, full-width using
+`figure*`, half-width side-by-side appendix grid, etc.).
+
+### 4.1 Recommended file per LaTeX slot
+
+| LaTeX slot | Width | File | Notes |
+|---|---|---|---|
+| `\begin{figure*}` (full text width) | **6.75 in** | `nfe_walltime_pareto_3panel_neurips_wide.pdf` | Recommended **headline** for the appendix NFE ablation. |
+| `\begin{figure}` (single column) | **5.5 in** | `nfe_walltime_pareto_3panel_neurips_textwidth.pdf` | Compact 3-panel that fits single-column. |
+| Tight side-by-side with text | 4.8 in | `nfe_walltime_pareto_3panel_neurips_compact.pdf` | When you need to leave room for caption / text wrap. |
+| **SR-only** main body figure (single column) | 5.5 in | `nfe_walltime_pareto_sr_neurips_textwidth.pdf` | Best if you only have room for one panel; carries the headline message alone. |
+| SR / Full / NotRel side-by-side appendix grid (each cell half-width) | 2.7 in × 3 | `nfe_walltime_pareto_sr_neurips_halfwidth.pdf`, `_full_neurips_halfwidth.pdf`, `_notrel_neurips_halfwidth.pdf` | Use `\subfigure` or `minipage` to lay them out 1×3. |
+| 7-concept × 3-metric supplementary facet | 15 in × 22 in | `nfe_walltime_pareto_per_concept.pdf` | Appendix supplementary view; full-page `figure*`. |
+
+### 4.2 Other sizes available (un-styled / debug)
 
 | Use | File |
 |---|---|
-| **Headline 3-panel (paper-ready)** | `nfe_walltime_pareto_polished.{pdf,png}` |
-| **Standalone SR panel** | `nfe_walltime_pareto_sr.{pdf,png}` |
-| **Standalone Full panel** | `nfe_walltime_pareto_full.{pdf,png}` |
-| **Standalone NotRel panel** | `nfe_walltime_pareto_notrel.{pdf,png}` |
-| Vanilla 3-panel (no styling) | `nfe_walltime_pareto_concept_avg.{pdf,png}` |
-| Per-concept facet (7 rows × 3 cols) | `nfe_walltime_pareto_per_concept.{pdf,png}` |
-| Plot script (rerun-able) | `scripts/nfe_walltime_pareto_polished.py` |
+| Original 15 in × 4.4 in 3-panel (slide deck / first-pass review) | `nfe_walltime_pareto_polished.{pdf,png}` |
+| Vanilla 3-panel without NeurIPS styling | `nfe_walltime_pareto_concept_avg.{pdf,png}` |
+| Single-panel (un-resized, original 5.6 × 4.4 in) | `nfe_walltime_pareto_sr.{pdf,png}`, `_full.{pdf,png}`, `_notrel.{pdf,png}` |
+| Plot script (rerun-able, regenerates all sizes) | `scripts/nfe_walltime_pareto_polished.py` |
+
+### 4.3 Sizing notes
+
+- All NeurIPS-sized variants use **font-scale and marker-scale matched to the figure
+  width**: smaller figures get smaller fonts/markers so axis labels remain legible
+  without overlapping. The line-style hierarchy (EBSG bold red star vs others
+  dashed/dotted in muted colors) is preserved across all sizes.
+- All variants are saved at **dpi = 300** for PDF; PNGs at the same density. Vector
+  PDFs are preferred for the camera-ready paper.
+- `\textwidth` for NeurIPS 2026 is approximately 5.5 in; `figure*` width is ~6.75 in.
+  If your local style file differs, regenerate with the `SIZE_3` / `SIZE_SR` dicts in
+  `scripts/nfe_walltime_pareto_polished.py` adjusted.
 
 ### Suggested LaTeX caption (3-panel headline)
 
