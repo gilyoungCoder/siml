@@ -132,3 +132,11 @@ GPU=0 bash scripts/eval_nudity_all_v5.sh
 - This package contains evaluation code only, not generated images or model weights.
 - The v5 rubric is the one used for the final EBSG paper numbers.
 - `eval_vlm.py` is a wrapper; it delegates to `vlm/opensource_vlm_i2p_all_v5.py` through `VLM_SCRIPT` so there is no stale duplicate rubric.
+
+## Standalone submission file
+
+For review/submission, use the integrated standalone evaluator:
+
+
+
+This file bakes in the final v5  and  plus the evaluation/output logic. It does not import the historical  files at runtime. The historical files are still included for auditability and exact lineage.

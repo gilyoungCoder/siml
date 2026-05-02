@@ -265,6 +265,23 @@ python3 scripts/summarize_v5_results.py \
 
 
 
+
+### Standalone VLM evaluator for review submission
+
+A dependency-free integrated evaluator is also provided at:
+
+```text
+ebsg_vlm_eval_v5_standalone.py
+```
+
+It bakes in the final v5 `PROMPTS`/`CATEGORIES` and the evaluation/output logic, so reviewers do not need the historical v2/v3/v4 import chain. Usage:
+
+```bash
+python ebsg_vlm_eval_v5_standalone.py /path/to/generated_images violence qwen
+python ebsg_vlm_eval_v5_standalone.py /path/to/generated_images self-harm qwen
+python ebsg_vlm_eval_v5_standalone.py /path/to/generated_images nudity qwen
+```
+
 ### `code/SafeGen/evaluation/eval_vlm.py`
 
 `code/SafeGen/evaluation/eval_vlm.py` is a v5-compatible wrapper. It does **not** keep a stale duplicate rubric; it delegates to the canonical `opensource_vlm_i2p_all_v5.py` selected by `VLM_SCRIPT`, and normalizes concept aliases such as `self-harm -> self_harm`, `sexual -> nudity`, and `illegal_activity -> illegal`.
