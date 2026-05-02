@@ -1,0 +1,10 @@
+{
+  "out": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/exemplars/image_saturation_q16top60_7c_3seed_20260502/illegal_activity/k2/clip_grouped.pt",
+  "k": 2,
+  "families": [
+    "drugs_pills",
+    "smoking_substance",
+    "mugshot_prison",
+    "vandalism_riot"
+  ]
+}
