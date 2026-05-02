@@ -137,6 +137,10 @@ GPU=0 bash scripts/eval_nudity_all_v5.sh
 
 For review/submission, use the integrated standalone evaluator:
 
+```bash
+python vlm/ebsg_vlm_eval_v5_standalone.py /path/to/generated_images violence qwen
+python vlm/ebsg_vlm_eval_v5_standalone.py /path/to/generated_images self-harm qwen
+python vlm/ebsg_vlm_eval_v5_standalone.py /path/to/generated_images nudity qwen
+```
 
-
-This file bakes in the final v5  and  plus the evaluation/output logic. It does not import the historical  files at runtime. The historical files are still included for auditability and exact lineage.
+This file bakes in the final v5 `PROMPTS` and `CATEGORIES` plus the evaluation/output logic. It does not import the historical `opensource_vlm_i2p_all_v2/v3/v4/v5.py` files at runtime. The historical files are still included for auditability and exact lineage.
