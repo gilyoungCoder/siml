@@ -145,4 +145,35 @@ for ext in ("png", "pdf"):
     fig.savefig(p, dpi=200, bbox_inches="tight")
     print(f"Saved {p}")
 plt.close()
+
+
+# Per-panel standalone versions
+PANEL_NAMES = ["sr", "full", "notrel"]
+for pi, (panel, title, ylim) in enumerate(zip(PANEL_NAMES, metric_titles, ylims)):
+    fig, ax = plt.subplots(figsize=(5.6, 4.4))
+    for m in METHODS:
+        xs, ys = [], []
+        for s in STEPS:
+            v = agg.get((m, s))
+            t = timing.get((m, s))
+            if v is None or t is None: continue
+            xs.append(t); ys.append(v[pi])
+        if not xs: continue
+        ax.plot(xs, ys, label=LABELS[m], **STYLE[m])
+    ax.set_xlabel("per-image generation time (s)")
+    ax.set_ylabel(title)
+    ax.set_xlim(0, 15)
+    ax.set_ylim(ylim)
+    ax.grid(which="both", alpha=0.25, linestyle="-", linewidth=0.5)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    legloc = "lower right" if panel == "sr" else ("upper right" if panel == "full" else "upper right")
+    ax.legend(loc=legloc, framealpha=0.95, edgecolor="0.7", fontsize=9)
+    fig.tight_layout()
+    for ext in ("png", "pdf"):
+        p = OUT_DIR / f"nfe_walltime_pareto_{panel}.{ext}"
+        fig.savefig(p, dpi=200, bbox_inches="tight")
+        print(f"Saved {p}")
+    plt.close()
+
 print("Done.")
