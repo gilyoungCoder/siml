@@ -141,16 +141,8 @@ def main():
                 with open(log, "a") as f:
                     f.write(f"[gen-exc] {cell} {e}\n")
                 continue
-        if needs_eval(outdir, c) and png_count(outdir) > 0:
-            with open(log, "a") as f:
-                f.write(f"[eval] {cell}\n")
-            try:
-                rc = run_eval(c, outdir, gpu, log)
-                with open(log, "a") as f:
-                    f.write(f"[eval-done] {cell} rc={rc}\n")
-            except Exception as e:
-                with open(log, "a") as f:
-                    f.write(f"[eval-exc] {cell} {e}\n")
+        # NOTE: eval is intentionally NOT run here. Generation only on siml-05;
+        # all eval is dispatched separately on siml-09 (memory pressure on RTX 3090).
 
     with open(log, "a") as f:
         f.write(f"[end] GPU={gpu} slot={slot}\n")

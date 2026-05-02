@@ -19,7 +19,8 @@ OUT_DIR = ROOT / "paper_results/figures"
 
 CONCEPTS = ["sexual", "violence", "self-harm", "shocking", "illegal_activity", "harassment", "hate"]
 STEPS = [5, 10, 15, 20, 25, 30, 40, 50]
-METHODS = ["baseline", "safree", "safedenoiser", "sgf", "sld_max", "sld_medium", "ebsg"]
+METHODS = ["baseline", "safree", "safedenoiser", "sgf",
+           "sld_max", "sld_medium", "sld_strong", "sld_weak", "ebsg"]
 EVAL_NAME = {"sexual": "nudity", "violence": "violence", "self-harm": "self_harm",
              "shocking": "shocking", "illegal_activity": "illegal",
              "harassment": "harassment", "hate": "hate"}
@@ -104,15 +105,19 @@ STYLE = {
     "safree":       dict(color="#1f4e8a", linestyle="--", linewidth=1.6, marker="s", markersize=6,  alpha=0.85, zorder=2),
     "safedenoiser": dict(color="#2a8c4a", linestyle="-.", linewidth=1.6, marker="D", markersize=6,  alpha=0.85, zorder=2),
     "sgf":          dict(color="#c46a00", linestyle=":",  linewidth=1.8, marker="v", markersize=7,  alpha=0.85, zorder=2),
-    "sld_max":      dict(color="#8a2be2", linestyle="--", linewidth=1.6, marker="P", markersize=7,  alpha=0.85, zorder=2),
-    "sld_medium":   dict(color="#b07ad9", linestyle=":",  linewidth=1.6, marker="X", markersize=7,  alpha=0.85, zorder=2),
+    "sld_max":      dict(color="#5a009e", linestyle="--", linewidth=1.6, marker="P", markersize=7,  alpha=0.9, zorder=2),
+    "sld_strong":   dict(color="#8a2be2", linestyle="--", linewidth=1.6, marker="X", markersize=7,  alpha=0.85, zorder=2),
+    "sld_medium":   dict(color="#b07ad9", linestyle=":",  linewidth=1.6, marker="h", markersize=7,  alpha=0.85, zorder=2),
+    "sld_weak":     dict(color="#d8b3ff", linestyle=":",  linewidth=1.4, marker="p", markersize=7,  alpha=0.80, zorder=2),
     "ebsg":         dict(color="#c11c1c", linestyle="-",  linewidth=2.8, marker="*", markersize=14, alpha=1.0,  zorder=5),
 }
 LABELS = {"baseline": "Baseline", "safree": "SAFREE",
           "safedenoiser": "SAFREE + SafeDenoiser",
           "sgf": "SAFREE + SGF",
           "sld_max": "SLD-Max",
+          "sld_strong": "SLD-Strong",
           "sld_medium": "SLD-Medium",
+          "sld_weak": "SLD-Weak",
           "ebsg": "EBSG (Ours)"}
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 4.4))

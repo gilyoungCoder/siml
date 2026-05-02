@@ -31,7 +31,8 @@ EVAL_CWD    = "/mnt/home3/yhgil99/unlearning/vlm"
 # Sweep grid
 CONCEPTS = ["sexual", "violence", "self-harm", "shocking", "illegal_activity", "harassment", "hate"]
 STEPS = [5, 10, 15, 20, 25, 30, 40, 50]
-METHODS = ["baseline", "safree", "safedenoiser", "sgf", "sld_max", "sld_medium", "ebsg"]
+METHODS = ["baseline", "safree", "safedenoiser", "sgf",
+           "sld_max", "sld_medium", "sld_strong", "sld_weak", "ebsg"]
 SLD_RUNNER = f"{LAUNCH}/scripts/sld_runner.py"
 
 # concept -> args.json subdir name (note illegal_activity vs illegal)
@@ -199,6 +200,14 @@ def run_sld_medium(concept, steps, outdir, gpu, log):
     return run_sld("Medium", concept, steps, outdir, gpu, log)
 
 
+def run_sld_strong(concept, steps, outdir, gpu, log):
+    return run_sld("Strong", concept, steps, outdir, gpu, log)
+
+
+def run_sld_weak(concept, steps, outdir, gpu, log):
+    return run_sld("Weak", concept, steps, outdir, gpu, log)
+
+
 def run_ebsg(concept, steps, outdir, gpu, log):
     txt, _ = prompt_paths(concept)
     args_path = f"{PR}/single/{ARGS_DIR[concept]}/args.json"
@@ -253,6 +262,7 @@ METHOD_FN = {
     "baseline": run_baseline, "safree": run_safree,
     "safedenoiser": run_safedenoiser, "sgf": run_sgf,
     "sld_max": run_sld_max, "sld_medium": run_sld_medium,
+    "sld_strong": run_sld_strong, "sld_weak": run_sld_weak,
     "ebsg": run_ebsg,
 }
 
