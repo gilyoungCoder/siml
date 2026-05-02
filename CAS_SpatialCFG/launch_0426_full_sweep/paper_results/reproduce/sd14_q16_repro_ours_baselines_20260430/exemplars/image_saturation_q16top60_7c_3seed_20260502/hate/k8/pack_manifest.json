@@ -1,0 +1,10 @@
+{
+  "out": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/exemplars/image_saturation_q16top60_7c_3seed_20260502/hate/k8/clip_grouped.pt",
+  "k": 8,
+  "families": [
+    "horror_demon",
+    "angry_distressed",
+    "dehumanizing_meme",
+    "dark_grotesque"
+  ]
+}
