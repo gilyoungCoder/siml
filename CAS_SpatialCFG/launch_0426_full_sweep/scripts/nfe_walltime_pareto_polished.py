@@ -176,4 +176,110 @@ for pi, (panel, title, ylim) in enumerate(zip(PANEL_NAMES, metric_titles, ylims)
         print(f"Saved {p}")
     plt.close()
 
+
+
+# =================================================================================
+# NeurIPS-sized variants
+# =================================================================================
+def _draw_3panel(figsize, fontscale=1.0, marker_scale=1.0, lw_scale=1.0):
+    fig, axes = plt.subplots(1, 3, figsize=figsize)
+    for j, (title, ylim) in enumerate(zip(metric_titles, ylims)):
+        ax = axes[j]
+        for m in METHODS:
+            xs, ys = [], []
+            for s in STEPS:
+                v = agg.get((m, s)); t = timing.get((m, s))
+                if v is None or t is None: continue
+                xs.append(t); ys.append(v[j])
+            if not xs: continue
+            st = dict(STYLE[m])
+            st["linewidth"] = st["linewidth"] * lw_scale
+            st["markersize"] = st["markersize"] * marker_scale
+            ax.plot(xs, ys, label=LABELS[m], **st)
+        ax.set_xlabel("per-image generation time (s)", fontsize=9 * fontscale)
+        ax.set_ylabel(title, fontsize=9 * fontscale)
+        ax.set_xlim(0, 15); ax.set_ylim(ylim)
+        ax.tick_params(labelsize=7.5 * fontscale)
+        ax.grid(which="both", alpha=0.25, linestyle="-", linewidth=0.5)
+        ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
+        if j == 0:
+            ax.legend(loc="lower right", framealpha=0.95, edgecolor="0.7",
+                      fontsize=7.0 * fontscale, handlelength=1.8, borderpad=0.3,
+                      labelspacing=0.25)
+    fig.tight_layout(pad=0.5)
+    return fig
+
+
+def _draw_single(panel_idx, figsize, fontscale=1.0, marker_scale=1.0, lw_scale=1.0,
+                 legend=True):
+    fig, ax = plt.subplots(figsize=figsize)
+    title = metric_titles[panel_idx]; ylim = ylims[panel_idx]
+    for m in METHODS:
+        xs, ys = [], []
+        for s in STEPS:
+            v = agg.get((m, s)); t = timing.get((m, s))
+            if v is None or t is None: continue
+            xs.append(t); ys.append(v[panel_idx])
+        if not xs: continue
+        st = dict(STYLE[m])
+        st["linewidth"] = st["linewidth"] * lw_scale
+        st["markersize"] = st["markersize"] * marker_scale
+        ax.plot(xs, ys, label=LABELS[m], **st)
+    ax.set_xlabel("per-image generation time (s)", fontsize=9 * fontscale)
+    ax.set_ylabel(title, fontsize=9 * fontscale)
+    ax.set_xlim(0, 15); ax.set_ylim(ylim)
+    ax.tick_params(labelsize=7.5 * fontscale)
+    ax.grid(which="both", alpha=0.25, linestyle="-", linewidth=0.5)
+    ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
+    if legend:
+        loc = "lower right" if panel_idx == 0 else "upper right"
+        ax.legend(loc=loc, framealpha=0.95, edgecolor="0.7",
+                  fontsize=7.0 * fontscale, handlelength=1.8, borderpad=0.3,
+                  labelspacing=0.25)
+    fig.tight_layout(pad=0.4)
+    return fig
+
+
+# 3-panel variants
+SIZE_3 = {
+    "neurips_textwidth": (5.5, 2.0),  # fits in single column (\textwidth = 5.5in)
+    "neurips_wide":      (6.75, 2.5), # \begin{figure*} (full-width)
+    "neurips_compact":   (4.8, 1.8),  # very tight (e.g. side-by-side with text)
+}
+for name, sz in SIZE_3.items():
+    fs = 0.85 if sz[0] < 6 else 0.95
+    ms = 0.8 if sz[0] < 6 else 0.9
+    lws = 0.85 if sz[0] < 6 else 0.95
+    fig = _draw_3panel(sz, fontscale=fs, marker_scale=ms, lw_scale=lws)
+    for ext in ("png", "pdf"):
+        p = OUT_DIR / f"nfe_walltime_pareto_3panel_{name}.{ext}"
+        fig.savefig(p, dpi=300, bbox_inches="tight")
+        print(f"Saved {p} [{sz[0]}x{sz[1]} in]")
+    plt.close(fig)
+
+# Single-panel SR variants (most common standalone)
+SIZE_SR = {
+    "neurips_halfwidth": (2.7, 2.4),  # half text-width side-by-side appendix layout
+    "neurips_textwidth": (5.5, 3.4),  # single-column main body figure
+}
+for name, sz in SIZE_SR.items():
+    fs = 0.8 if sz[0] < 4 else 1.0
+    ms = 0.7 if sz[0] < 4 else 0.95
+    lws = 0.85 if sz[0] < 4 else 1.0
+    fig = _draw_single(0, sz, fontscale=fs, marker_scale=ms, lw_scale=lws)
+    for ext in ("png", "pdf"):
+        p = OUT_DIR / f"nfe_walltime_pareto_sr_{name}.{ext}"
+        fig.savefig(p, dpi=300, bbox_inches="tight")
+        print(f"Saved {p} [{sz[0]}x{sz[1]} in]")
+    plt.close(fig)
+
+# Full + NotRel single panels at half-width (for appendix grids)
+for pi, panel in [(1, "full"), (2, "notrel")]:
+    fig = _draw_single(pi, (2.7, 2.4), fontscale=0.8, marker_scale=0.7, lw_scale=0.85)
+    for ext in ("png", "pdf"):
+        p = OUT_DIR / f"nfe_walltime_pareto_{panel}_neurips_halfwidth.{ext}"
+        fig.savefig(p, dpi=300, bbox_inches="tight")
+        print(f"Saved {p} [2.7x2.4 in]")
+    plt.close(fig)
+
 print("Done.")
