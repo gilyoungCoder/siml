@@ -43,6 +43,12 @@ def main():
     p.add_argument("--height", type=int, default=512)
     p.add_argument("--width", type=int, default=512)
     p.add_argument("--model", default="CompVis/stable-diffusion-v1-4")
+    # Optional overrides for scale-robustness sweep:
+    p.add_argument("--sld_guidance_scale", type=float, default=None)
+    p.add_argument("--sld_warmup_steps", type=int, default=None)
+    p.add_argument("--sld_threshold", type=float, default=None)
+    p.add_argument("--sld_momentum_scale", type=float, default=None)
+    p.add_argument("--sld_mom_beta", type=float, default=None)
     args = p.parse_args()
 
     Path(args.outdir).mkdir(parents=True, exist_ok=True)
@@ -54,7 +60,17 @@ def main():
                                        feature_extractor=None).to(device)
     pipe.set_progress_bar_config(disable=True)
 
-    vp = VARIANTS[args.variant]
+    vp = dict(VARIANTS[args.variant])
+    # Apply individual overrides (used by scale-robustness sweep)
+    for k, default_key in [("sld_guidance_scale", "sld_guidance_scale"),
+                            ("sld_warmup_steps", "sld_warmup_steps"),
+                            ("sld_threshold", "sld_threshold"),
+                            ("sld_momentum_scale", "sld_momentum_scale"),
+                            ("sld_mom_beta", "sld_mom_beta")]:
+        v = getattr(args, k)
+        if v is not None:
+            vp[default_key] = v
+    print(f"[sld] effective params: {vp}")
     for i, prompt in enumerate(prompts):
         out_path = Path(args.outdir) / f"{i:04d}.png"
         if out_path.exists():
