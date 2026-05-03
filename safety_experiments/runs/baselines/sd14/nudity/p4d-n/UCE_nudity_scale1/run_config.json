@@ -1,0 +1,18 @@
+{
+  "default_guidance_scale": 7.5,
+  "default_height": 512,
+  "default_seed": 42,
+  "default_steps": 50,
+  "default_width": 512,
+  "method": "uce",
+  "model_id": "CompVis/stable-diffusion-v1-4",
+  "num_images_per_prompt": 1,
+  "output_dir": "/mnt/home3/datasets/jhpark/safety_experiments/runs/baselines/sd14/nudity/p4d-n/UCE_nudity_scale1",
+  "prompts": "/mnt/home3/datasets/jhpark/safety_experiments/runs/prompts/sd14/nudity/p4d-n.csv",
+  "rece_ckpt": "",
+  "scheduler": "DDIM",
+  "sld_repo": "",
+  "sld_variant_params": {},
+  "uce_weights": "/mnt/home2/jhpark/uce_models/nudity_scale1.safetensors",
+  "variant": ""
+}

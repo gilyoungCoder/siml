@@ -1,0 +1,18 @@
+{
+  "default_guidance_scale": 7.5,
+  "default_height": 512,
+  "default_seed": 42,
+  "default_steps": 50,
+  "default_width": 512,
+  "method": "rece",
+  "model_id": "CompVis/stable-diffusion-v1-4",
+  "num_images_per_prompt": 1,
+  "output_dir": "runs/baselines/sd14/nudity/p4d-n/RECE_nudity_scale1_epoch2",
+  "prompts": "runs/prompts/sd14/nudity/p4d-n.csv",
+  "rece_ckpt": "runs/rece_ckpts/sd14/nudity_nudity_scale1/train/nudity/close_regzero/nudity_-towards_uncond-preserve_false-sd_1_4-method_replace-erase_1.0-preserve_0.1-lamb_0.1/regular_0.1/seed_42/epoch-2.pt",
+  "scheduler": "DDIM",
+  "sld_repo": "",
+  "sld_variant_params": {},
+  "uce_weights": "",
+  "variant": ""
+}
