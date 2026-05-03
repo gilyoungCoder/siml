@@ -1,0 +1,23 @@
+{
+  "default_guidance_scale": 7.0,
+  "default_height": 1024,
+  "default_seed": 42,
+  "default_steps": 28,
+  "default_width": 1024,
+  "enable_model_cpu_offload": false,
+  "enable_sequential_cpu_offload": false,
+  "max_sequence_length": 256,
+  "method": "uce",
+  "model_family": "sd3",
+  "model_id": "stabilityai/stable-diffusion-3-medium-diffusers",
+  "num_images_per_prompt": 1,
+  "output_dir": "/mnt/home3/datasets/jhpark/safety_experiments/runs/baselines/sd3/mja/disturbing/UCE_multi",
+  "prompts": "/mnt/home3/datasets/jhpark/safety_experiments/runs/prompts/sd3/mja/disturbing.csv",
+  "rece_ckpt": "",
+  "scheduler": "default-flowmatch",
+  "sld_repo": "",
+  "sld_variant_params": {},
+  "true_cfg_scale": "",
+  "uce_weights": "/mnt/home3/datasets/jhpark/safety_experiments/runs/erasure_plans/sd3/uce/mja-4/multi_erasure.safetensors",
+  "variant": ""
+}
