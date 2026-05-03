@@ -76,16 +76,21 @@ for m in METHODS:
                            np.mean([v[1] for v in vs]),
                            np.mean([v[2] for v in vs]))
 
-# Timing
+# Timing — merge main timing CSV + SLD-only timing CSV
+TIMING_CSVS = [TIMING_CSV, ROOT / "paper_results/figures/nfe_walltime_timing_sld.csv"]
 timing = {}
-with TIMING_CSV.open() as f:
-    for row in csv.DictReader(f):
-        m = row["method"].replace("_v2", "")
-        nfe = int(row["nfe"])
-        try:
-            timing[(m, nfe)] = float(row["per_img_sec_excl_load_mtime"])
-        except (ValueError, KeyError):
-            pass
+for tcsv in TIMING_CSVS:
+    if not tcsv.exists():
+        continue
+    with tcsv.open() as f:
+        for row in csv.DictReader(f):
+            m = row["method"].replace("_v2", "")
+            try:
+                nfe = int(row["nfe"])
+                t = float(row["per_img_sec_excl_load_mtime"])
+            except (ValueError, KeyError):
+                continue
+            timing[(m, nfe)] = t  # later CSVs override on (method, nfe) collision
 
 # Style
 plt.rcParams.update({

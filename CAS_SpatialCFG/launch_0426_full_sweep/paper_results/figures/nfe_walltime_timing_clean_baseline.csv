@@ -1,0 +1,9 @@
+method,nfe,n_imgs,wall_sec_total,per_img_sec_with_load,per_img_sec_excl_load_mtime
+baseline,5,20,21.49,1.0745,0.4211
+baseline,10,20,19.00,0.9500,0.6316
+baseline,15,20,24.29,1.2145,0.8947
+baseline,20,20,29.44,1.4720,1.1053
+baseline,25,20,34.78,1.7390,1.3684
+baseline,30,20,39.32,1.9660,1.6316
+baseline,40,20,49.34,2.4670,2.1579
+baseline,50,20,59.27,2.9635,2.6316

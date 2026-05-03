@@ -53,7 +53,12 @@ def needs_eval(outdir, concept):
 
 def run_sld(concept, scale, outdir, gpu, log):
     txt = f"{TXT_BASE}/{concept}_q16_top60.txt"
-    cmd = ["env", f"CUDA_VISIBLE_DEVICES={gpu}", "PYTHONNOUSERSITE=1", PY_EBSG,
+    # SLD_CLAMP_MAX=1e6 effectively removes the internal clamp(max=1.) in
+    # sld_pipeline.py so the guidance scale really takes effect at high gs
+    # (otherwise the safety push saturates at 1.0 and the SR/NotRel curves are
+    # artificially flat — see Eq. 6 in the SLD paper).
+    cmd = ["env", f"CUDA_VISIBLE_DEVICES={gpu}", "PYTHONNOUSERSITE=1",
+           "SLD_CLAMP_MAX=1000000", PY_EBSG,
            SLD_RUNNER,
            "--prompts", txt, "--outdir", outdir,
            "--variant", "Max",
@@ -141,8 +146,17 @@ def main():
                 with open(log, "a") as f:
                     f.write(f"[gen-exc] {cell} {e}\n")
                 continue
-        # NOTE: eval is intentionally NOT run here. Generation only on siml-05;
-        # all eval is dispatched separately on siml-09 (memory pressure on RTX 3090).
+        # Eval inline (siml-05 g0/g1/g3/g4/g5; one slot per GPU, no contention)
+        if needs_eval(outdir, c) and png_count(outdir) > 0:
+            with open(log, "a") as f:
+                f.write(f"[eval] {cell}\n")
+            try:
+                rc = run_eval(c, outdir, gpu, log)
+                with open(log, "a") as f:
+                    f.write(f"[eval-done] {cell} rc={rc}\n")
+            except Exception as e:
+                with open(log, "a") as f:
+                    f.write(f"[eval-exc] {cell} {e}\n")
 
     with open(log, "a") as f:
         f.write(f"[end] GPU={gpu} slot={slot}\n")

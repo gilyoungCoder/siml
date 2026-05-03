@@ -1,0 +1,9 @@
+method,nfe,n_imgs,wall_sec_total,per_img_sec_with_load,per_img_sec_excl_load_mtime
+safedenoiser,5,20,41.03,2.0515,1.1579
+safedenoiser,10,20,57.70,2.8850,2.0526
+safedenoiser,15,20,74.96,3.7480,2.9474
+safedenoiser,20,20,92.37,4.6185,3.8421
+safedenoiser,25,20,110.92,5.5460,4.7368
+safedenoiser,30,20,127.93,6.3965,5.5789
+safedenoiser,40,20,162.48,8.1240,7.3684
+safedenoiser,50,20,197.83,9.8915,9.1053

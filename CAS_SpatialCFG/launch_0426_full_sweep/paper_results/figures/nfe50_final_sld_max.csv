@@ -1,0 +1,2 @@
+method,nfe,n_imgs,wall_sec_total,per_img_sec_with_load,per_img_sec_excl_load_mtime
+sld_max,50,20,191.65,9.5825,8.8947

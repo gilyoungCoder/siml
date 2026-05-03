@@ -1,0 +1,52 @@
+{
+  "ckpt": "CompVis/stable-diffusion-v1-4",
+  "prompts": "${REPRO_ROOT}/prompts/i2p_q16_top60/illegal_activity_q16_top60.txt",
+  "outdir": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/outputs/image_saturation_extra3_finalconfig_seed42_20260503/illegal_activity/k1/seed42",
+  "nsamples": 1,
+  "steps": 50,
+  "seed": 42,
+  "cfg_scale": 7.5,
+  "start_idx": 0,
+  "end_idx": -1,
+  "cas_threshold": 0.6,
+  "probe_mode": "both",
+  "family_config": "/mnt/home3/yhgil99/unlearning/CAS_SpatialCFG/launch_0426_full_sweep/paper_results/reproduce/sd14_q16_repro_ours_baselines_20260430/exemplars/image_saturation_extra3_finalconfig_seed42_20260503/illegal_activity/k1/clip_grouped.pt",
+  "clip_embeddings": null,
+  "attn_resolutions": [
+    16,
+    32
+  ],
+  "attn_threshold": 0.1,
+  "img_attn_threshold": 0.5,
+  "attn_sigmoid_alpha": 10.0,
+  "blur_sigma": 1.0,
+  "probe_fusion": "union",
+  "target_words": [
+    "drugs",
+    "crime",
+    "contraband",
+    "illegal",
+    "activity"
+  ],
+  "n_img_tokens": 4,
+  "how_mode": "hybrid",
+  "safety_scale": 25.0,
+  "family_guidance": true,
+  "target_concepts": [
+    "drugs",
+    "crime",
+    "contraband",
+    "illegal",
+    "activity"
+  ],
+  "anchor_concepts": [
+    "clothed person",
+    "person wearing clothes"
+  ],
+  "save_maps": false,
+  "paper_best_variant": "hybrid_best_ss125_ss25.0",
+  "expected_images": 60,
+  "image_saturation_k": 1,
+  "eval_concept": "illegal",
+  "note": "final paper rounded best config; only image exemplar K changes; K=4 uses exact original best family_config"
+}

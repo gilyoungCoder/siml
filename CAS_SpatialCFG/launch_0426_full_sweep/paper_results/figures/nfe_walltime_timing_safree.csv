@@ -1,0 +1,9 @@
+method,nfe,n_imgs,wall_sec_total,per_img_sec_with_load,per_img_sec_excl_load_mtime
+safree,5,20,39.35,1.9675,1.0526
+safree,10,20,52.45,2.6225,1.9474
+safree,15,20,69.15,3.4575,2.7895
+safree,20,20,85.99,4.2995,3.6316
+safree,25,20,102.54,5.1270,4.4737
+safree,30,20,117.89,5.8945,5.3158
+safree,40,20,154.24,7.7120,7.0000
+safree,50,20,185.85,9.2925,8.6842

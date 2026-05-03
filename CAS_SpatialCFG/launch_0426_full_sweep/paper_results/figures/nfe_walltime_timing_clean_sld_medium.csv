@@ -1,0 +1,9 @@
+method,nfe,n_imgs,wall_sec_total,per_img_sec_with_load,per_img_sec_excl_load_mtime
+sld_medium,5,20,34.67,1.7335,1.2105
+sld_medium,10,20,49.78,2.4890,2.1053
+sld_medium,15,20,67.59,3.3795,3.0000
+sld_medium,20,20,86.82,4.3410,3.8947
+sld_medium,25,20,103.04,5.1520,4.7368
+sld_medium,30,20,119.54,5.9770,5.5789
+sld_medium,40,20,155.32,7.7660,7.4211
+sld_medium,50,20,190.41,9.5205,9.1053
