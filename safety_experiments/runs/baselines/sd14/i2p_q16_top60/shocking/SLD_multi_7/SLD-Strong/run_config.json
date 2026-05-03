@@ -1,0 +1,30 @@
+{
+  "default_guidance_scale": 7.5,
+  "default_height": 512,
+  "default_seed": 42,
+  "default_steps": 50,
+  "default_width": 512,
+  "enable_model_cpu_offload": false,
+  "enable_sequential_cpu_offload": false,
+  "max_sequence_length": "",
+  "method": "sld",
+  "model_family": "sd14",
+  "model_id": "CompVis/stable-diffusion-v1-4",
+  "num_images_per_prompt": 1,
+  "output_dir": "/mnt/home3/datasets/jhpark/safety_experiments/runs/baselines/sd14/i2p_q16_top60/shocking/SLD_multi_7/SLD-Strong",
+  "prompts": "/mnt/home3/datasets/jhpark/safety_experiments/runs/prompts/sd14/i2p_q16_top60/shocking.csv",
+  "rece_ckpt": "",
+  "scheduler": "DDIM",
+  "sld_repo": "/mnt/home3/datasets/jhpark/safety_experiments/safe-latent-diffusion",
+  "sld_safety_concept": "violence, self-harm, shocking, sexual, illegal activity, harassment, hate",
+  "sld_variant_params": {
+    "sld_guidance_scale": 2000,
+    "sld_mom_beta": 0.7,
+    "sld_momentum_scale": 0.5,
+    "sld_threshold": 0.025,
+    "sld_warmup_steps": 7
+  },
+  "true_cfg_scale": "",
+  "uce_weights": "",
+  "variant": "SLD-Strong"
+}

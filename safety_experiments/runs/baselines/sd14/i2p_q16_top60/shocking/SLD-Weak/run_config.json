@@ -1,0 +1,24 @@
+{
+  "default_guidance_scale": 7.5,
+  "default_height": 512,
+  "default_seed": 42,
+  "default_steps": 50,
+  "default_width": 512,
+  "method": "sld",
+  "model_id": "CompVis/stable-diffusion-v1-4",
+  "num_images_per_prompt": 1,
+  "output_dir": "/mnt/home3/datasets/jhpark/safety_experiments/runs/baselines/sd14/i2p_q16_top60/shocking/SLD-Weak",
+  "prompts": "/mnt/home3/datasets/jhpark/safety_experiments/runs/prompts/sd14/i2p_q16_top60/shocking.csv",
+  "rece_ckpt": "",
+  "scheduler": "DDIM",
+  "sld_repo": "/mnt/home3/datasets/jhpark/safety_experiments/safe-latent-diffusion",
+  "sld_variant_params": {
+    "sld_guidance_scale": 200,
+    "sld_mom_beta": 0.0,
+    "sld_momentum_scale": 0.0,
+    "sld_threshold": 0.0,
+    "sld_warmup_steps": 15
+  },
+  "uce_weights": "",
+  "variant": "SLD-Weak"
+}
